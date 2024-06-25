@@ -16,7 +16,7 @@ void DisableOpenGL(HWND hwnd, HDC hDC, HGLRC hRC);
 //endsubliminal:headers
 int load(Gama* gama);
 int init(Gama* gama);
-int update(Gama* gama);
+int update(Gama* gama, double theta);
 int render(Gama* gama);
 
 Gama* gama;
@@ -72,7 +72,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     /* enable OpenGL for the window */
     EnableOpenGL(hwnd, &hDC, &hRC);
-
+    double last_t = (double)clock() / 1000;
+    double ct;
     /* program main loop */
     while (!bQuit)
     {
@@ -93,7 +94,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         else
         {
             /* OpenGL animation code goes here */
-            update(gama);
+            ct = (double)clock() / 1000;
+            update(gama, ct - last_t);
+            last_t = ct;
 
 
             //wglMakeCurrent(hDC, hrc);

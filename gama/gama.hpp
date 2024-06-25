@@ -6,12 +6,11 @@
 #include <gl/gl.h>
 #include <gl/glu.h>
 #include <vector>
-
+#include <time.h>
 
 //subliminal:headers
 
 //endsubliminal:headers
-
 
 class Gama
 {

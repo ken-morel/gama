@@ -1,8 +1,9 @@
 #include "Vector.hpp"
 #include "Color.hpp"
+#include <math.h>
 #include <gl/gl.h>
 #ifndef GAMA_SHAPE_HPP_INCLUDED
-#define GAMA_SHAPE_HPP_INCLUDED value
+#define GAMA_SHAPE_HPP_INCLUDED
     class Shape
     {
     protected:
@@ -123,6 +124,85 @@
                     }
                 }
             glEnd();
+        pos->disable();
+        rotation->disable();
+    }
+
+
+
+
+
+
+
+
+
+    class Sphere {
+    public:
+        Sphere():pos(nullptr), color(nullptr), rotation(nullptr)
+        {
+            rotation = new Rotation();
+            pos = new Vector();
+            color = new Color();
+            radius = 1.0;
+        }
+        Sphere(Vector* pos, double radius):pos(pos), radius(radius), color(nullptr), rotation(nullptr)
+        {
+            rotation = new Rotation();
+            color = new Color();
+        }
+        Sphere(Vector* pos, Color* color, double radius):pos(pos), radius(radius), color(color), rotation(nullptr)
+        {
+            rotation = new Rotation();
+        }
+        void update(double theta)
+        {
+            pos->update(theta);
+            rotation->update(theta);
+        }
+        void render() const;
+
+        Vector* pos;
+        double radius;
+        int tesselation = -1;
+        Color* color;
+        Rotation* rotation;
+    };
+    void Sphere::render() const
+    {
+        pos->enable();
+        rotation->enable();
+        int stacks = tesselation;
+        if(tesselation == -1)
+            stacks = radius * 25;
+        if(tesselation < 10) stacks = 10;
+        int slices = 100;
+        glColor3fv(color->array());
+        //glMaterialfv(GL_FRONT, GL_DIFFUSE, color->array());
+        glMaterialfv(GL_FRONT, GL_SPECULAR, color->array());
+        //glMaterialfv(GL_FRONT, GL_AMBIENT, color->array());
+        glBegin(GL_QUAD_STRIP);
+        for (int i = 0; i < stacks; i++) {
+            float theta1 = i * M_PI / stacks;
+            float theta2 = (i + 1) * M_PI / stacks;
+
+            for (int j = 0; j <= slices; j++) {
+                double phi = j * 2 * M_PI / slices;
+
+                double x1 = radius * sin(theta1) * cos(phi);
+                double y1 = radius * cos(theta1);
+                double z1 = radius * sin(theta1) * sin(phi);
+
+                double x2 = radius * sin(theta2) * cos(phi);
+                double y2 = radius * cos(theta2);
+                double z2 = radius * sin(theta2) * sin(phi);
+
+                glVertex3d(x1, y1, z1);
+                glVertex3d(x2, y2, z2);
+                glNormal3d((x1+x2)/2, (y1+y2)/2, (z1+z2)/2);
+            }
+        }
+        glEnd();
+        glFlush();
         pos->disable();
         rotation->disable();
     }
