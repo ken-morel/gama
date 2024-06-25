@@ -4,11 +4,6 @@
 enum class LightType {DIFFUSE=GL_DIFFUSE, SPECULAR = GL_SPECULAR, AMBIENT=GL_AMBIENT};
 class Light {
 public:
-    Vector *pos;
-    Color* color;
-    LightType type;
-    float intensity;
-    GLenum id;
     Light(int id_):pos(nullptr), color(nullptr), type(LightType::DIFFUSE)
     {
         id = Light::get(id_);
@@ -23,22 +18,22 @@ public:
         color = new Color(WHITE);
         intensity = 1.0f;
     }
-    Light(int id_, LightType type, int r, int g, int b):pos(nullptr), color(new Color(r, g, b)), type(type)
+    Light(int id_, LightType type, int r, int g, int b, float _intensity):pos(nullptr), color(new Color(r, g, b)), type(type)
     {
         id = Light::get(id_);
         pos = new Vector(0, 0, -1);
-        intensity = 1.0f;
+        intensity = _intensity;
     }
     Light(int id_, LightType type, double x, double y, double z):pos(new Vector(x, y, z)), color(nullptr), type(type)
     {
         id = Light::get(id_);
         color = new Color(WHITE);
-        intensity = 1.0f;
+        intensity = 0.1f;
     }
-    Light(int id_, LightType type, int r, int g, int b, double x, double y, double z):pos(new Vector(x, y, z)), color(new Color(r, g, b)), type(type)
+    Light(int id_, LightType type, int r, int g, int b, float _intensity, double x, double y, double z):pos(new Vector(x, y, z)), color(new Color(r, g, b)), type(type)
     {
         id = Light::get(id_);
-        intensity = 1.0f;
+        intensity = _intensity;
     }
     void enable() const
     {
@@ -71,6 +66,11 @@ public:
         }
         return GL_LIGHT0;
     }
+    Vector *pos;
+    Color* color;
+    LightType type;
+    float intensity;
+    GLenum id;
 };
 
 #endif

@@ -52,21 +52,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         return 0;
 
     /* create main window */
+    init(gama);
     hwnd = CreateWindowEx(
         0,
         "GLSample",
-        "OpenGL Sample",
+        gama -> title.c_str(),
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        WIDTH,
-        HEIGHT,
+        gama -> width,
+        gama -> height,
         NULL,
         NULL,
         hInstance,
         NULL
     );
-    init(gama);
 
     ShowWindow(hwnd, nCmdShow);
 

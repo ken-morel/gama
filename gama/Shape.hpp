@@ -32,7 +32,7 @@
         Vector *pos, *size;
         Rotation* rotation;
         Color* color;
-        bool mesh = true;
+        bool mesh = false;
     };
     void Cube::render() const {
         pos->enable();
@@ -97,7 +97,7 @@
                 glVertex3dv(points[0]);
             glEnd();
             glBegin(GL_LINES);
-                if(true)
+                if(mesh)
                 {
                     int edges[12][2] = {
                         {0, 1},
