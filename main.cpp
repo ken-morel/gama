@@ -108,7 +108,7 @@ int init(Gama *gama)
         0,                  // Light id from 0-7
         LightType::DIFFUSE, // LightType enum: DIFFUSE|AMBIENT|SPECULAR
         255, 255, 255,      // light color
-        0.01f,                // intensity
+        0.01f,              // intensity
         0.0, 0.0, -1.0      // light position
     ));
     return 1;
