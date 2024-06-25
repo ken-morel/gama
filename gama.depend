@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1719149724 source:c:\gama\main.cpp
+	"gama/gama.hpp"
+
+1719149762 c:\gama\gama\gama.hpp
+	<windows.h>
+	<gl/gl.h>
+
