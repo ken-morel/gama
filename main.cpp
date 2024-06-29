@@ -1,59 +1,24 @@
-#define GRAVITY -10
+#define GAMA_FPS_PRECESION 5000
 
 #include "gama/gama.hpp"
 #include "gama/Shape.hpp"
 
-
-Cube* ground;
-Sphere* ball;
-
-
-//subliminal:headers
-void jump();
-int render(Gama *gama);
-//endsubliminal:headers
-
-void jump()
+gRoundRectangle *r;
+FPSWidget *fps;
+ImageFont *font;
+gCircle *circ;
+int load(Gama* gama)
 {
-    ball->pos->vel->y = 5;
-}
-
-class KeyHandler: public KeyBoardEventHandler {
-public:
-    void on_arrowkeydown(ArrowKey key) {
-        switch(key) {
-        case ArrowKey::UP:
-            jump();
-            break;
-        default:
-            break;
-        }
-    };
-};
-
-
-int load(Gama* gama)//
-{
-    gama->keyboardHandler = new KeyHandler();
+    font = new ImageFont("fonts/aclonica");
     return 1;
 }
-
-int init(Gama* gama)//
+int init(Gama* gama)
 {
-    gluPerspective(2, 5, 0.5f, 10.0f);
-    gama->title = "Jumpy ball";
-    gama->width = 700;
-    gama->height = 700;
-
-    ground = new Cube(new Vector(0, -0.9, 0), new Vector(1, 0, 1));
-    ground->color->set(DARKGREEN);
-    ground->rotation->x = 350;
-    gama->clearColor->set(GRAY);
-
-    ball = new Sphere(new Vector(0, 0, 0), new Color(ORANGE), 0.1);
-    ball->color->set(BLUE);
-    ball->pos->acc->y = GRAVITY;
-    ball->pos->y = 1;
+    r = new gRoundRectangle(0, 0, 1, 1, 0.7);
+    r->color->set(BLUE);
+    fps = new FPSWidget(font);
+    circ = new gCircle(0, 0, 0.7);
+    circ->color->set(ORCHID);
 
     gama->lights.push_back(new Light(
         0,                  // Light id from 0-7
@@ -62,24 +27,18 @@ int init(Gama* gama)//
         0.01f,              // intensity
         0.0, 0.0, -1.0      // light position
     ));
-    ball->rotation->vel->x = 0.1;
-    ball->rotation->vel->y = 0.1;
     return 1;
 }
-int update(Gama* gama, double theta)//
+int update(Gama* gama, double theta)
 {
-    if((ball->pos->y-ball->radius+ball->radius/10) < ground->pos->y) {
-        if(ball->pos->vel->y < 0)
-            ball->pos->vel->y *= -0.6;
-    }
-    ball->update(theta);
-    ground->update(theta);
+    fps->update(gama->fps());
+    printf("%lf\n", gama->fps());
     return 1;
 }
-
-int render(Gama *gama)
+int render(Gama* gama)
 {
-    ground->render();
-    ball->render();
+    fps->render();
+    r -> render();
+    circ -> render();
     return 1;
 }

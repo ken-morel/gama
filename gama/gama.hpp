@@ -1,3 +1,6 @@
+#ifndef GAMA_FPS_PRECESION
+    #define GAMA_FPS_PRECESION 10
+#endif
 #include "Color.hpp"
 #include "Vector.hpp"
 #include "Light.hpp"
@@ -24,6 +27,33 @@ class Gama
         std::vector<Light*> lights;
         std::string title = "gama sample";
         KeyBoardEventHandler* keyboardHandler;
+
+        double fps_target = 60;
+
+        void add_fps_interval(double val)
+        {
+            for(int i = 0; i < GAMA_FPS_PRECESION-1; i++)
+            {
+                fps_intervals[i] = fps_intervals[i+1];
+            }
+            fps_intervals[GAMA_FPS_PRECESION-1] = val;
+        }
+        double fps() const
+        {
+            double sum = 0;
+            int n = 0;
+            for(int i = 0; i < GAMA_FPS_PRECESION; i++)
+            {
+                if(fps_intervals[i] > 0)
+                {
+                    sum += fps_intervals[i];
+                    n++;
+                }
+            }
+            return 1.0 / (sum / n);
+        }
+    private:
+        double fps_intervals[GAMA_FPS_PRECESION];
 };
 
 Gama::Gama():clearColor(0), lightColor(0)

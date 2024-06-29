@@ -1,3 +1,4 @@
+#include <windows.h>
 //subliminal:headers
 int WINAPI WinMain(
     HINSTANCE hInstance,
@@ -13,6 +14,8 @@ LRESULT CALLBACK WindowProc(
 );
 void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC);
 void DisableOpenGL(HWND hwnd, HDC hDC, HGLRC hRC);
+void jump();
+int render(Gama *gama);
 //endsubliminal:headers
 int load(Gama* gama);
 int init(Gama* gama);
@@ -96,6 +99,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
             /* OpenGL animation code goes here */
             ct = (double)clock() / 1000;
             update(gama, ct - last_t);
+            gama->add_fps_interval(ct-last_t);
             last_t = ct;
 
 
@@ -129,9 +133,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
             glDisable(GL_DEPTH_TEST);
 
             SwapBuffers(hDC);
-            //wglMakeCurrent(NULL, NULL);
-
-            Sleep (1);
         }
     }
 
@@ -156,7 +157,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return 0;
 
         case WM_KEYDOWN:
-        {
             switch (wParam)
             {
                 case VK_UP:
@@ -172,7 +172,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     gama->keyboardHandler->on_arrowkeydown(ArrowKey::RIGHT);
                     break;
             }
-        }
+        break;
+
         //PostQuitMessage(0);
         break;
 
@@ -197,8 +198,7 @@ void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
 
     pfd.nSize = sizeof(pfd);
     pfd.nVersion = 1;
-    pfd.dwFlags = PFD_DRAW_TO_WINDOW |
-                  PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 24;
     pfd.cDepthBits = 16;
@@ -221,3 +221,149 @@ void DisableOpenGL(HWND hwnd, HDC hDC, HGLRC hRC)
     ReleaseDC(hwnd, hDC);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+#define GRAVITY -20
+
+#include "gama/gama.hpp"
+#include "gama/Shape.hpp"
+#include "gama/Bitmap.hpp"
+#include <iostream>
+//glBitmap( GLsizei width, GLsizei height, GLfloat xorig, GLfloat yorig, GLfloat xmove, GLfloat ymove, const GLubyte *bitmap )
+Cube* ground;
+Sphere* ball;
+Cylinder *pipete;
+Bitmap* grass;
+
+
+//subliminal:headerse
+//endsubliminal:headers
+
+void jump()
+{
+    ball->pos->vel->y = 5;
+}
+
+class KeyHandler: public KeyBoardEventHandler {
+public:
+    void on_arrowkeydown(ArrowKey key) {
+        switch(key) {
+        case ArrowKey::UP:
+            jump();
+            break;
+        default:
+            break;
+        }
+    };
+};
+
+
+int load(Gama* gama)//
+{
+    gama->keyboardHandler = new KeyHandler();
+    return 1;
+}
+
+int init(Gama* gama)//
+{
+    gluPerspective(2, 5, 0.5f, 10.0f);
+    grass = new Bitmap("robot.png");
+    gama->title = "Jumpy ball";
+    gama->width = 700;
+    gama->height = 700;
+    pipete = new Cylinder(
+        new Vector(0, 0, 0),
+        new Color(BLUE),
+        1,
+        1
+    );
+
+    ground = new Cube(new Vector(0, -0.9, 0), new Vector(1, 0, 1));
+    ground->color->set(DARKGREEN);
+    ground->rotation->x = 350;
+    gama->clearColor->set(GRAY);
+
+    ball = new Sphere(new Vector(-0.5, 0, 0), new Color(ORANGE), 0.5);
+    ball->tesselation = 1000;
+    //ball->pos->acc->y = GRAVITY;
+
+
+    gama->lights.push_back(new Light(
+        0,                  // Light id from 0-7
+        LightType::DIFFUSE, // LightType enum: DIFFUSE|AMBIENT|SPECULAR
+        255, 255, 255,      // light color
+        0.01f,              // intensity
+        0.0, 0.0, -1.0      // light position
+    ));
+    ball->rotation->vel->x = 0.1;
+    ball->rotation->vel->y = 0.1;
+    return 1;
+}
+int update(Gama* gama, double theta)//
+{
+    if((ball->pos->y-ball->radius+ball->radius/10) < ground->pos->y) {
+        if(ball->pos->vel->y < 0)
+            ball->pos->vel->y *= -0.6;
+    }
+    ball->update(theta);
+    ground->update(theta);
+
+    return 1;
+}
+
+int render(Gama *gama)
+{
+    //ground->render();
+    //ball->render();
+    //grass -> render();
+    //pipete -> render();
+    std::cout << gama->fps() << std::endl;
+    return 1;
+}
+*/
