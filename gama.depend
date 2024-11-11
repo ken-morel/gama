@@ -1,0 +1,184 @@
+# depslib dependency file v1.0
+1732286564 source:c:\users\ndoh\desktop\njeba colbert ngala\gama\main.c
+	"gama.h"
+
+1732286622 c:\users\ndoh\desktop\njeba colbert ngala\gama\gama.h
+	<gl/gl.h>
+	<time.h>
+	"gama/color.h"
+	"gama/win32.h"
+
+1732286570 c:\users\ndoh\desktop\njeba colbert ngala\gama\gama\win32.h
+	<windows.h>
+
+1732285751 c:\users\ndoh\desktop\njeba colbert ngala\gama\gama\color.h
+
+1732617324 source:c:\users\ndoh\gama\main.c
+	"gama.h"
+	<stdarg.h>
+
+1732615880 c:\users\ndoh\gama\gama.h
+	<gl/gl.h>
+	<time.h>
+	"gama/color.h"
+	"gama/shape2d.h"
+	"gama/win32.h"
+
+1732614802 c:\users\ndoh\gama\gama\color.h
+
+1732617308 c:\users\ndoh\gama\gama\shape2d.h
+	"vector.h"
+	"color.h"
+
+1732288443 c:\users\ndoh\gama\gama\vector.h
+
+1732286570 c:\users\ndoh\gama\gama\win32.h
+	<windows.h>
+
+1731331018 source:e:\gama\main.c
+	"gama.h"
+	"gama/text2d.h"
+
+1731313094 e:\gama\gama.h
+	<gl/gl.h>
+	<time.h>
+	"gama/color.h"
+	"gama/shape2d.h"
+	"gama/win32.h"
+
+1732614804 e:\gama\gama\color.h
+
+1731327024 e:\gama\gama\shape2d.h
+	"vector.h"
+	"color.h"
+	<math.h>
+
+1732288444 e:\gama\gama\vector.h
+
+1732286572 e:\gama\gama\win32.h
+	<windows.h>
+
+1731327812 e:\gama\gama\stb_truetype.h
+	"stb_truetype.h"
+	<stdio.h>
+	"stb_truetype.h"
+	<math.h>
+	<math.h>
+	<math.h>
+	<math.h>
+	<math.h>
+	<stdlib.h>
+	<assert.h>
+	<string.h>
+	<string.h>
+
+1731331068 e:\gama\gama\text2d.h
+	<string.h>
+	"stb_truetype.h"
+
+1072917178 source:e:\ \gama\main.c
+	"gama.h"
+	"gama/text2d.h"
+
+1731313094 e:\ \gama\gama.h
+	<gl/gl.h>
+	<time.h>
+	"gama/color.h"
+	"gama/shape2d.h"
+	"gama/win32.h"
+
+1732614804 e:\ \gama\gama\color.h
+
+1731327024 e:\ \gama\gama\shape2d.h
+	"vector.h"
+	"color.h"
+	<math.h>
+
+1732288444 e:\ \gama\gama\vector.h
+
+1732286572 e:\ \gama\gama\win32.h
+	<windows.h>
+
+1072917206 e:\ \gama\gama\text2d.h
+	<string.h>
+	"stb_truetype.h"
+	"vector.h"
+
+1731327812 e:\ \gama\gama\stb_truetype.h
+	"stb_truetype.h"
+	<stdio.h>
+	"stb_truetype.h"
+	<math.h>
+	<math.h>
+	<math.h>
+	<math.h>
+	<math.h>
+	<stdlib.h>
+	<assert.h>
+	<string.h>
+	<string.h>
+
+1072917178 source:e:\__\ \gama\main.c
+	"gama.h"
+	"gama/text2d.h"
+
+1731313094 e:\__\ \gama\gama.h
+	<gl/gl.h>
+	<time.h>
+	"gama/color.h"
+	"gama/shape2d.h"
+	"gama/win32.h"
+
+1732614804 e:\__\ \gama\gama\color.h
+
+1731327024 e:\__\ \gama\gama\shape2d.h
+	"vector.h"
+	"color.h"
+	<math.h>
+
+1732288444 e:\__\ \gama\gama\vector.h
+
+1732286572 e:\__\ \gama\gama\win32.h
+	<windows.h>
+
+1072917342 e:\__\ \gama\gama\text2d.h
+	<string.h>
+	"stb_truetype.h"
+	"vector.h"
+
+1731327812 e:\__\ \gama\gama\stb_truetype.h
+	"stb_truetype.h"
+	<stdio.h>
+	"stb_truetype.h"
+	<math.h>
+	<math.h>
+	<math.h>
+	<math.h>
+	<math.h>
+	<stdlib.h>
+	<assert.h>
+	<string.h>
+	<string.h>
+
+1731339423 source:c:\users\guest\gama\main.c
+	"gama.h"
+
+1731313094 c:\users\guest\gama\gama.h
+	<gl/gl.h>
+	<time.h>
+	"gama/color.h"
+	"gama/shape2d.h"
+	"gama/win32.h"
+
+1731338975 c:\users\guest\gama\gama\color.h
+
+1731327024 c:\users\guest\gama\gama\shape2d.h
+	"vector.h"
+	"color.h"
+	<math.h>
+
+1732288444 c:\users\guest\gama\gama\vector.h
+
+1732286572 c:\users\guest\gama\gama\win32.h
+	<windows.h>
+
