@@ -27,16 +27,35 @@ void init(void);
 void update(float);
 void render(void);
 
+double fps_intervals[20];
+
 void gama_init() {
     ltime = clock();
+    fps_intervals[0] = ltime;
+    for(int i = 1; i < 20;i++)
+        fps_intervals[i] = 0;
     init();
 }
 void gama_update() {
     float dt = (float)(clock()-ltime)/1000.0f;
+    for(int i = 0; i < 19;i++)
+        fps_intervals[i] = fps_intervals[i+1];
+    fps_intervals[0] = dt;
     update(dt * SPEED);
 }
 void gama_render() {
     render();
+}
+
+double gfps() {
+    float sum = 0;
+    int n = 0;
+    for(n = 0; n < 20;n++) {
+        if(fps_intervals[n] == 0)
+            break;
+        sum += fps_intervals[n];
+    }
+    return sum / n;
 }
 
 

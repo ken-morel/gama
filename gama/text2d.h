@@ -23,6 +23,7 @@ typedef struct Text2d {
     double fontsize;
     Font font;
     Vector* pos;
+    Color color;
 } *Text2d;
 
 Font _g_make_font() {
@@ -61,7 +62,9 @@ Text2d CreateText(char* text, Font f, double x, double y) {
     return t;
 }
 
-void GRenderText(Text2d t, double x, double y) {
+void GRenderText(Text2d t) {
+    double x = t->pos->x, y = t->pos->y;
+    //glColor3fv(ColorDecomposef(t->color));
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
@@ -71,14 +74,18 @@ void GRenderText(Text2d t, double x, double y) {
         if ((int)t->text[i] >= 32 && (int)t->text[i] < 128) {
          stbtt_aligned_quad q;
          stbtt_GetBakedQuad(t->font->cdata, 512,512, (int)t->text[i]-32, &x,&y,&q,1);//1=opengl & d3d10+,0=d3d9
-         glTexCoord2f(q.s0,q.t0); glVertex2f(q.x0/5,-q.y0/5);
-         glTexCoord2f(q.s1,q.t0); glVertex2f(q.x1/5,-q.y0/5);
-         glTexCoord2f(q.s1,q.t1); glVertex2f(q.x1/5,-q.y1/5);
-         glTexCoord2f(q.s0,q.t1); glVertex2f(q.x0/5,-q.y1/5);
+         double scale = t->fontsize/20;
+         glTexCoord2f(q.s0,q.t0); glVertex2f(t->pos->x+q.x0*scale,t->pos->y-q.y0*scale);
+         glTexCoord2f(q.s1,q.t0); glVertex2f(t->pos->x+q.x1*scale,t->pos->y-q.y0*scale);
+         glTexCoord2f(q.s1,q.t1); glVertex2f(t->pos->x+q.x1*scale,t->pos->y-q.y1*scale);
+         glTexCoord2f(q.s0,q.t1); glVertex2f(t->pos->x+q.x0*scale,t->pos->y-q.y1*scale);
       }
     }
    glEnd();
+   glDisable(GL_BLEND);
+   glDisable(GL_TEXTURE_2D);
 }
 
+void GTSetText(Text2d txt, const char* txt) {}
 
 #endif // GAMA_TEXT2D_H_INCLUDED
