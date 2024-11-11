@@ -86,6 +86,14 @@ void GRenderText(Text2d t) {
    glDisable(GL_TEXTURE_2D);
 }
 
-void GTSetText(Text2d txt, const char* txt) {}
+void GTSetText(Text2d t, const char* txt) {
+    int l;
+    for(l = 0;txt[l] != '\0';l++);
+    t->len = l;
+    free(t->text);
+    t->text = (char*)malloc(l*sizeof(char));
+    for(int i = 0; i < l;i++)
+        t->text[i] = txt[i];
+}
 
 #endif // GAMA_TEXT2D_H_INCLUDED
