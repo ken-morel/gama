@@ -182,10 +182,10 @@
 1732286572 c:\users\guest\gama\gama\win32.h
 	<windows.h>
 
-1731490731 source:c:\users\guest\engon\gama\main.c
+1731507601 source:c:\users\guest\engon\gama\main.c
 	<stdio.h>
 	"gama.h"
-	"gama/text2d.h"
+	"gama/widgets/fps_view.h"
 
 1731491893 c:\users\guest\engon\gama\gama.h
 	<gl/gl.h>
@@ -224,4 +224,11 @@
 	<assert.h>
 	<string.h>
 	<string.h>
+
+1731508402 c:\users\guest\engon\gama\gama\widgets\fps_view.h
+	"../shape2d.h"
+	"../widgets.h"
+	"../text2d.h"
+
+1731507552 c:\users\guest\engon\gama\gama\widgets.h
 

@@ -37,12 +37,15 @@
 			<Add library="gdi32" />
 		</Linker>
 		<Unit filename="gama.h" />
+		<Unit filename="gama/_widget.h" />
 		<Unit filename="gama/color.h" />
 		<Unit filename="gama/shape2d.h" />
 		<Unit filename="gama/stb_image.h" />
 		<Unit filename="gama/stb_truetype.h" />
 		<Unit filename="gama/text2d.h" />
 		<Unit filename="gama/vector.h" />
+		<Unit filename="gama/widgets.h" />
+		<Unit filename="gama/widgets/fps_view.h" />
 		<Unit filename="gama/win32.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
