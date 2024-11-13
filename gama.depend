@@ -182,11 +182,12 @@
 1732286572 c:\users\guest\gama\gama\win32.h
 	<windows.h>
 
-1731342949 source:c:\users\guest\engon\gama\main.c
+1731490731 source:c:\users\guest\engon\gama\main.c
+	<stdio.h>
 	"gama.h"
 	"gama/text2d.h"
 
-1731313094 c:\users\guest\engon\gama\gama.h
+1731491893 c:\users\guest\engon\gama\gama.h
 	<gl/gl.h>
 	<time.h>
 	"gama/color.h"
@@ -205,7 +206,7 @@
 1732286572 c:\users\guest\engon\gama\gama\win32.h
 	<windows.h>
 
-1731343102 c:\users\guest\engon\gama\gama\text2d.h
+1731345087 c:\users\guest\engon\gama\gama\text2d.h
 	<string.h>
 	"stb_truetype.h"
 	"vector.h"

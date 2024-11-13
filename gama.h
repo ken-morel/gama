@@ -20,6 +20,9 @@
 #include "gama/color.h"
 #include "gama/shape2d.h"
 
+#ifndef FPS_INTERVALS
+    #define FPS_INTERVALS 500
+#endif // FPS_INTERVALS
 Color CLEARCOLOR = 0x0;
 int ltime;
 
@@ -27,35 +30,36 @@ void init(void);
 void update(float);
 void render(void);
 
-double fps_intervals[20];
+float fps_intervals[FPS_INTERVALS];
 
 void gama_init() {
     ltime = clock();
-    fps_intervals[0] = ltime;
-    for(int i = 1; i < 20;i++)
-        fps_intervals[i] = 0;
+    for(int i = 0; i < FPS_INTERVALS;i++)
+        fps_intervals[i] = 0.0f;
     init();
 }
 void gama_update() {
-    float dt = (float)(clock()-ltime)/1000.0f;
-    for(int i = 0; i < 19;i++)
-        fps_intervals[i] = fps_intervals[i+1];
+    int ctime = clock();
+    float dt = (float)(ctime-ltime)/1000.0f;
+    for(int i = FPS_INTERVALS - 1; i > 0;i--)
+        fps_intervals[i] = fps_intervals[i-1];
     fps_intervals[0] = dt;
+    ltime = ctime;
     update(dt * SPEED);
 }
 void gama_render() {
     render();
 }
 
-double gfps() {
+float gfps() {
     float sum = 0;
     int n = 0;
-    for(n = 0; n < 20;n++) {
-        if(fps_intervals[n] == 0)
+    for(n = 0; n < FPS_INTERVALS;n++) {
+        if(fps_intervals[n] == 0.0f)
             break;
         sum += fps_intervals[n];
     }
-    return sum / n;
+    return 1.0/(sum/(float)n);
 }
 
 

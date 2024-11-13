@@ -64,7 +64,7 @@ Text2d CreateText(char* text, Font f, double x, double y) {
 
 void GRenderText(Text2d t) {
     double x = t->pos->x, y = t->pos->y;
-    //glColor3fv(ColorDecomposef(t->color));
+    glColor3fv(ColorDecomposef(t->color));
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);

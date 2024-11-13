@@ -1,0 +1,6 @@
+#ifndef GAMA__WIDGET_H_INCLUDED
+#define GAMA__WIDGET_H_INCLUDED
+
+
+
+#endif // GAMA__WIDGET_H_INCLUDED
