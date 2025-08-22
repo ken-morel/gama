@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path"
+
+	"github.com/ken-morel/gama/gama/copier"
 )
 
 type CreateProjectArgs struct {
@@ -19,6 +21,7 @@ func CreateProject(args *CreateProjectArgs, log chan<- *Status) {
 	steps := []func(*CreateProjectArgs, chan<- *Status) bool{
 		createProjectDir,
 		createProjectSource,
+		createGamaDir,
 		createConfig,
 	}
 	for _, step := range steps {
@@ -105,4 +108,33 @@ func createTemplateFiles(sourceDir string, templ string) error {
 		}
 	}
 	return err
+}
+
+func createGamaDir(args *CreateProjectArgs, log chan<- *Status) bool {
+	err := os.Mkdir(path.Join(args.Name, "gama"), 0755)
+	if err != nil {
+		log <- &Status{
+			Message: "Error Creating gama folder",
+			Error:   fmt.Errorf("failed creating folder at %s: %s ", "src", err.Error()),
+		}
+		return false
+	}
+	log <- &Status{"Created gama library folder", nil}
+	copier.CopyDirec // TODO: continue here  github.com/plus3it/gorecurcopy.
+	if err != nil {
+		log <- &Status{
+			Message: "Error copying gama headers",
+			Error:   err,
+		}
+	} else {
+		log <- &Status{
+			Message: "Created gama directory and copied header files",
+			Error:   nil,
+		}
+	}
+	return true
+}
+
+func copyGama(to string) {
+	allFiles, err := os.R
 }

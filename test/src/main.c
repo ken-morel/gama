@@ -1,19 +1,32 @@
-#include <gama.h>
+#include "../../assets/gama/gama.h"
 
-// Load files, fonts, images related to your app
-// while the loading screen shows before app starts
-int load() { return 0; }
+Shape *rectangle;
 
-// Create shapes, and ther objects
-// just after the app started
-int init() { return 0; }
+int init(App *app) {
+  app->title = "My gama window";
+  app->size.x = 600;
+  app->size.y = 600;
+  return 0;
+}
 
-// update the shapes and objects
-// theta is the time since last update
-int update(float theta) { return 0; }
+int create() {
+  rectangle = createRectangle(at(0, 0), at(1, 1), GREEN);
+  SetClearColor(LIGHTBLUE);
+  return 0;
+}
 
-// render shape objects(draw them on the screen)
-int render() { return 0; }
+int update(float theta) {
+  updateShape(rectangle, theta);
+  return 0;
+}
 
-// run on app close, to free pointeers, 🤣 I'm joking
-int shutdown() { return 0; }
+int render() {
+  // glRotatef(1, 0, 1, 1);
+  renderShape(rectangle);
+  return 0;
+}
+
+int shutdown() {
+  free(rectangle);
+  return 0;
+}

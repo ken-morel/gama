@@ -1,19 +1,18 @@
-#include <gama.h>
+#include "../gama/gama.h"
 
-// Load files, fonts, images related to your app
-// while the loading screen shows before app starts
-int load() { return 0; }
+// You can define your shapes here;
 
-// Create shapes, and ther objects
-// just after the app started
-int init() { return 0; }
+// Initialize your app and load assets here
+int init(App *app) { return 0; }
 
-// update the shapes and objects
-// theta is the time since last update
+// Create shapes here
+int create() { return 0; }
+
+// Put your game logic and shape updates here
 int update(float theta) { return 0; }
 
-// render shape objects(draw them on the screen)
+// Draw the shapes
 int render() { return 0; }
 
-// run on app close, to free pointeers, 🤣 I'm joking
+// Before app closes
 int shutdown() { return 0; }
