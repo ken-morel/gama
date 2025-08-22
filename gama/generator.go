@@ -19,6 +19,7 @@ func CreateProject(args *CreateProjectArgs, log chan<- *Status) {
 	steps := []func(*CreateProjectArgs, chan<- *Status) bool{
 		createProjectDir,
 		createProjectSource,
+		createConfig,
 	}
 	for _, step := range steps {
 		if !step(args, log) {
@@ -57,7 +58,26 @@ func createProjectSource(args *CreateProjectArgs, log chan<- *Status) bool {
 			Message: "Error creating template files",
 			Error:   err,
 		}
+	} else {
+		log <- &Status{
+			Message: "Created template files",
+			Error:   nil,
+		}
 	}
+	return true
+}
+
+const templateConfig = `
+%%YAML 1.2
+---
+project:
+  name: %s
+  template: %s
+`
+
+func createConfig(args *CreateProjectArgs, log chan<- *Status) bool {
+	conf := fmt.Sprintf(templateConfig, args.Name, args.Template)
+	os.WriteFile(path.Join(args.Name, "gama.yml"), []byte(conf), 0775)
 	return true
 }
 
