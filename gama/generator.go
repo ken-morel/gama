@@ -1,0 +1,68 @@
+package gama
+
+import (
+	"fmt"
+	"os"
+	"path"
+)
+
+type CreateProjectArgs struct {
+	Name     string
+	Template string
+}
+
+func CreateProject(args *CreateProjectArgs, log chan<- *Status) {
+	steps := []func(*CreateProjectArgs, chan<- *Status) bool{
+		createProjectDir,
+		createProjectSource,
+	}
+	for _, step := range steps {
+		if !step(args, log) {
+			break
+		}
+	}
+	close(log)
+}
+
+func createProjectDir(args *CreateProjectArgs, log chan<- *Status) bool {
+	err := os.Mkdir(args.Name, 0755)
+	if err != nil {
+		log <- &Status{
+			Message: "Error Creating project folder",
+			Error:   fmt.Errorf("failed creating folder at %s: %s ", args.Name, err.Error()),
+		}
+		return false
+	}
+	log <- &Status{"Created project folder", nil}
+	return true
+}
+
+func createProjectSource(args *CreateProjectArgs, log chan<- *Status) bool {
+	err := os.Mkdir(path.Join(args.Name, "src"), 0755)
+	if err != nil {
+		log <- &Status{
+			Message: "Error Creating project source folder",
+			Error:   fmt.Errorf("failed creating folder at %s: %s ", "src", err.Error()),
+		}
+		return false
+	}
+	log <- &Status{"Created source folder folder", nil}
+	err = createTemplateFiles(path.Join(args.Name, "src"), args.Template)
+	if err != nil {
+		log <- &Status{
+			Message: "Error creating template files",
+			Error:   err,
+		}
+	}
+	return true
+}
+
+func createTemplateFiles(sourceDir string, templ string) error {
+	content, err := GetTemplate(templ)
+	if err != nil {
+		return fmt.Errorf("could not get template '%s': %s", templ, err.Error())
+	}
+
+	err = os.WriteFile(path.Join(sourceDir, "main.c"), content, 0775)
+	return err
+}
