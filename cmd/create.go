@@ -15,7 +15,7 @@ var (
 	projectName  string
 	templateName string
 	createCmd    = &cobra.Command{
-		Use:   "create",
+		Use:   "create <name>",
 		Short: "Create a new gama project",
 		Long: `Create is a command to create or start a new utility.
 

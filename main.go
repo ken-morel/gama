@@ -21,8 +21,33 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/ken-morel/gama/cmd"
+import (
+	"fmt"
+	"os"
+	"path"
+
+	"github.com/ken-morel/gama/cmd"
+	"github.com/ken-morel/gama/gama"
+)
 
 func main() {
+	installDir := os.Getenv("GAMA_DIR")
+	if installDir == "" {
+		homeDir, err := os.UserHomeDir()
+		if err == nil {
+			installDir = path.Join(homeDir, ".gama")
+		} else {
+			fmt.Println("Error getting system home directory  gama")
+			os.Exit(1)
+		}
+	}
+	_, err := os.Stat(installDir)
+	if err != nil {
+		fmt.Printf("Error: gama install folder(%s) not found, please reinstall gama: %s\n", installDir, err.Error())
+		os.Exit(1)
+	}
+	gama.Init(&gama.GamaConfig{
+		InstallPath: installDir,
+	})
 	cmd.Execute()
 }

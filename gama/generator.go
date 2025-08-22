@@ -12,6 +12,10 @@ type CreateProjectArgs struct {
 }
 
 func CreateProject(args *CreateProjectArgs, log chan<- *Status) {
+	if config == nil {
+		fmt.Println("Error: gama not initialized")
+		os.Exit(2)
+	}
 	steps := []func(*CreateProjectArgs, chan<- *Status) bool{
 		createProjectDir,
 		createProjectSource,
@@ -58,11 +62,27 @@ func createProjectSource(args *CreateProjectArgs, log chan<- *Status) bool {
 }
 
 func createTemplateFiles(sourceDir string, templ string) error {
-	content, err := GetTemplate(templ)
+	templateDir := path.Join(config.InstallPath, "templates", templ)
+	entries, err := os.ReadDir(templateDir)
 	if err != nil {
-		return fmt.Errorf("could not get template '%s': %s", templ, err.Error())
+		return fmt.Errorf("template does not exist: %s", err.Error())
 	}
-
-	err = os.WriteFile(path.Join(sourceDir, "main.c"), content, 0775)
+	for _, entry := range entries {
+		if entry.IsDir() {
+			fmt.Println("Found a directory in template, this is unexpected but not error prone.")
+		} else {
+			file := entry.Name()
+			content, err := os.ReadFile(path.Join(templateDir, file))
+			if err != nil {
+				fmt.Printf("Could not read file %s from template. This should not happen", file)
+			} else {
+				err := os.WriteFile(path.Join(sourceDir, file), content, 0755)
+				if err != nil {
+					fmt.Println("Could not put file from template to destination path")
+					return err
+				}
+			}
+		}
+	}
 	return err
 }
