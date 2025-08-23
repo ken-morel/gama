@@ -5,7 +5,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/ken-morel/gama/gama/copier"
+	"github.com/plus3it/gorecurcopy"
 )
 
 type CreateProjectArgs struct {
@@ -70,16 +70,8 @@ func createProjectSource(args *CreateProjectArgs, log chan<- *Status) bool {
 	return true
 }
 
-const templateConfig = `
-%%YAML 1.2
----
-project:
-  name: %s
-  template: %s
-`
-
 func createConfig(args *CreateProjectArgs, log chan<- *Status) bool {
-	conf := fmt.Sprintf(templateConfig, args.Name, args.Template)
+	conf := fmt.Sprintf(templateConfig, args.Name)
 	os.WriteFile(path.Join(args.Name, "gama.yml"), []byte(conf), 0775)
 	return true
 }
@@ -111,7 +103,8 @@ func createTemplateFiles(sourceDir string, templ string) error {
 }
 
 func createGamaDir(args *CreateProjectArgs, log chan<- *Status) bool {
-	err := os.Mkdir(path.Join(args.Name, "gama"), 0755)
+	dest := path.Join(args.Name, "gama")
+	err := os.Mkdir(dest, 0755)
 	if err != nil {
 		log <- &Status{
 			Message: "Error Creating gama folder",
@@ -120,7 +113,8 @@ func createGamaDir(args *CreateProjectArgs, log chan<- *Status) bool {
 		return false
 	}
 	log <- &Status{"Created gama library folder", nil}
-	copier.CopyDirec // TODO: continue here  github.com/plus3it/gorecurcopy.
+	err = gorecurcopy.CopyDirectory(path.Join(config.InstallPath, "gama"), dest)
+
 	if err != nil {
 		log <- &Status{
 			Message: "Error copying gama headers",
@@ -133,8 +127,4 @@ func createGamaDir(args *CreateProjectArgs, log chan<- *Status) bool {
 		}
 	}
 	return true
-}
-
-func copyGama(to string) {
-	allFiles, err := os.R
 }

@@ -1,6 +1,7 @@
 #ifndef GAMA_WIN32_H_INCLUDED
 #define GAMA_WIN32_H_INCLUDED
 
+#include "../app.h"
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>

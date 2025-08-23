@@ -19,60 +19,48 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"path"
 
-	"github.com/ken-morel/gama/cmd"
 	"github.com/ken-morel/gama/gama"
-	"gopkg.in/yaml.v3"
+	"github.com/spf13/cobra"
 )
 
-func getInstallDir() (string, error) {
-	installDir := os.Getenv("GAMA_DIR")
-	if installDir == "" {
-		homeDir, err := os.UserHomeDir()
-		if err == nil {
-			installDir = path.Join(homeDir, ".gama")
-		} else {
-			fmt.Println("Error getting system home directory  gama")
-			os.Exit(1)
-		}
+// buildCmd represents the build command
+var (
+	shouldRun bool
+	buildCmd  = &cobra.Command{
+		Use:   "build",
+		Short: "Build the applicaiton",
+		Long:  `Build the application into an executable in build.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			logs := make(chan *gama.Status)
+			go gama.BuildProject(&gama.BuilldProjectArgs{
+				Run: shouldRun,
+			}, logs)
+			for log := range logs {
+				fmt.Println(log.Message)
+				if log.Error != nil {
+					fmt.Println(log.Error.Error())
+				}
+			}
+		},
 	}
-	_, err := os.Stat(installDir)
-	if err != nil {
-		return "", fmt.Errorf("Error: gama install folder(%s) not found, please reinstall gama: %s\n", installDir, err.Error())
-	}
-	return installDir, nil
-}
+)
 
-func getConfig() (*gama.ProjectConfig, error) {
-	var config gama.ProjectConfig
-	file, err := os.Open("gama.yml")
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-	err = yaml.NewDecoder(file).Decode(&config)
-	return &config, err
-}
+func init() {
+	rootCmd.AddCommand(buildCmd)
+	rootCmd.PersistentFlags().BoolVarP(&shouldRun, "run", "r", false, "Run the application after building it")
 
-func main() {
-	installDir, err := getInstallDir()
-	if err != nil {
-		log.Fatal(err)
-	}
-	conf, err := getConfig()
-	if err != nil {
-		log.Println(err.Error())
-	}
-	gama.Init(&gama.GamaConfig{
-		InstallPath: installDir,
-		Config:      conf,
-	})
-	cmd.Execute()
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// buildCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// buildCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

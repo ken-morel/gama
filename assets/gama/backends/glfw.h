@@ -1,11 +1,16 @@
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
+#include <stdio.h>
+
+#include "../app.h"
 
 int init(App *);
 int create();
 int update(float theta);
 int render();
 int shutdown();
+
+App *GamaCreateApp();
 
 int main() {
   App *app = GamaCreateApp();

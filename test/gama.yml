@@ -1,6 +1,8 @@
 
-%YAML 1.2
----
 project:
   name: test
-  template: skeleton
+  version: 0.1.0
+gama:
+  version: 0.1.0
+build:
+  gcc: null
