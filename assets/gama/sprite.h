@@ -44,10 +44,12 @@ Sprite *openSprite(const char *path, unsigned int width, unsigned int height,
     freeImage(img);
     return NULL;
   }
+  float ratio = (float)height / (float)width;
+
   Sprite *sprite = (Sprite *)malloc(sizeof(Sprite));
   sprite->pos = vectorAt(pos);
   sprite->animationCurrent = 0;
-  sprite->length = img->width / img->height;
+  sprite->length = img->width / width;
   sprite->animationLen = sprite->length;
   sprite->animation =
       (unsigned int *)malloc(sprite->length * sizeof(unsigned int));
@@ -62,6 +64,8 @@ Sprite *openSprite(const char *path, unsigned int width, unsigned int height,
   for (size_t idx = 0; idx < sprite->length; idx++) {
     sprite->images[idx] = cropImage(img, idx * width, 0, width, height);
   }
+  printf("image size %dx%d slicing %dx%d. Length is %d\n", img->width,
+         img->height, width, height, sprite->length);
   return sprite;
 }
 void updateSprite(Sprite *s, float theta) {
@@ -82,6 +86,7 @@ void renderSprite(Sprite *s) {
   int currentFrame = s->animation[s->animationCurrent];
   currentFrame %= s->length;
   Image *frame = s->images[currentFrame];
+
   drawImage(
       frame,
       at(s->pos->pos->x - s->size->x / 2, s->pos->pos->y - s->size->y / 2),

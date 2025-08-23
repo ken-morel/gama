@@ -10,6 +10,7 @@ typedef enum {
   RectangleShape,
   CircleShape,
 } ShapeType;
+
 typedef struct {
   ShapeType type;
   Vector *pos;

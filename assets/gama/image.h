@@ -67,6 +67,18 @@ void bindImage(Image *image) {
 }
 
 void drawImage(Image *image, Pos *pos, Pos *size) {
+  float width = size->x, height = size->y;
+  float ratio = (float)image->height / (float)image->width;
+  if (width == 0) {
+    if (height == 0) {
+      width = 0.1;
+      height = 0.1 * ratio;
+    } else {
+      width = height / ratio;
+    }
+  } else if (height == 0) {
+    height = width * ratio;
+  }
   glColor4f(1, 1, 1, 1);
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_BLEND);
@@ -77,11 +89,11 @@ void drawImage(Image *image, Pos *pos, Pos *size) {
     glTexCoord2f(0, 1);
     glVertex2f(pos->x, pos->y);
     glTexCoord2f(1, 1);
-    glVertex2f(pos->x + size->x, pos->y);
+    glVertex2f(pos->x + width, pos->y);
     glTexCoord2f(1, 0);
-    glVertex2f(pos->x + size->x, pos->y + size->y);
+    glVertex2f(pos->x + width, pos->y + height);
     glTexCoord2f(0, 0);
-    glVertex2f(pos->x, pos->y + size->y);
+    glVertex2f(pos->x, pos->y + height);
   }
   glEnd();
   glDisable(GL_BLEND);
