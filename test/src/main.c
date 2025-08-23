@@ -1,3 +1,5 @@
+#define BACKEND_WIN32
+
 #include "../../assets/gama/gama.h"
 
 Shape *rectangle;
