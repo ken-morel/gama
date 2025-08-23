@@ -19,7 +19,8 @@ App *GamaCreateApp() {
 }
 
 void SetAppTitle(App *app, char *title) {
-  free(app->title);
+  // FIX: Fix this
+  // free(app->title);
   app->title = title;
 }
 

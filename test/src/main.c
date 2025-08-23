@@ -1,18 +1,36 @@
 #include "../../assets/gama/gama.h"
 
-// You can define your shapes here;
+Shape *ball, *earth;
 
-// Initialize your app and load assets here
-int init(App *app) { return 0; }
+int init(App *app) {
+  SetAppTitle(app, "floating");
+  return 0;
+}
 
-// Create shapes here
-int create() { return 0; }
+int create() {
+  ball = createRectangle(at(0, 1), at(1, 1), RED);
+  earth = createRectangle(at(0, -1), at(2, 0.1), DARKGREEN);
 
-// Put your game logic and shape updates here
-int update(float theta) { return 0; }
+  setShapeAcceleration(ball, at(0, -0.9));
 
-// Draw the shapes
-int render() { return 0; }
+  SetClearColor(LIGHTGRAY);
+  return 0;
+}
 
-// Before app closes
+int update(float theta) {
+  updateShape(ball, theta);
+  if (shapeBottom(ball) < shapeTop(earth)) {
+    if (getShapeVelocity(ball)->y < 0) { // shape goes down
+      bounceShape(ball, 0, 0.8);
+    }
+  }
+  return 0;
+}
+
+int render() {
+  renderShape(ball);
+  renderShape(earth);
+  return 0;
+}
+
 int shutdown() { return 0; }
