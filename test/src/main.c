@@ -2,6 +2,7 @@
 
 Sprite *robi;
 Shape *ground;
+
 int jumped = 0;
 
 Sprite *createRobi() {

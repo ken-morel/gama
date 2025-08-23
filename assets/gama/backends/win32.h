@@ -1,3 +1,4 @@
+
 #ifndef GAMA_WIN32_H_INCLUDED
 #define GAMA_WIN32_H_INCLUDED
 
@@ -11,11 +12,14 @@ LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 void DisableOpenGL(HWND, HDC, HGLRC);
 
+// Forward declarations for application-specific functions
 void init(App *);
 void create();
 void update(float);
 void render();
 void gama_click(App *, MouseClickEvent *);
+// New function to handle key events within the application
+void gama_key(App *, KeyEvent *);
 
 App *gama;
 
@@ -114,12 +118,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     return 0;
 
   case WM_KEYDOWN: {
-    switch (wParam) {
-    case VK_ESCAPE:
-      PostQuitMessage(0);
-
-      break;
+    KeyEvent event;
+    bool keyHandled = true;
+#include "_win32_handle_key.h"
+    if (keyHandled) {
+      gama_key(gama, &event);
     }
+
   } break;
 
   default:
