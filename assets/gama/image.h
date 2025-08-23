@@ -67,7 +67,7 @@ void bindImage(Image *image) {
 }
 
 void drawImage(Image *image, Pos *pos, Pos *size) {
-  // glColor4f(1, 1, 1, 0);
+  glColor4f(1, 1, 1, 1);
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

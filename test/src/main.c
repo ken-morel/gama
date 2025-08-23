@@ -55,5 +55,5 @@ void update(float theta) {
 
 void render() {
   renderSprite(robi);
-  // renderShape(ground);
+  renderShape(ground);
 }
