@@ -6,6 +6,7 @@
 
 #include "app.h"
 #include "shape.h"
+#include "image.h"
 
 #include <stdio.h>
 

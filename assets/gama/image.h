@@ -7,7 +7,7 @@
 #include "stb/image.h"
 
 typedef struct {
-  int width, height;
+  unsigned int width, height;
   unsigned char *data;
   unsigned int texture_id;
 } Image;
@@ -24,6 +24,37 @@ Image *openImageFile(const char *path) {
   img->height = height;
   glGenTextures(1, &img->texture_id);
   return img;
+}
+
+Image *newImage(unsigned int width, unsigned int height) {
+  Image *img = (Image *)malloc(sizeof(Image));
+  img->data =
+      (unsigned char *)malloc(width * height * 4 * sizeof(unsigned char));
+  img->width = width;
+  img->height = height;
+  return img;
+}
+
+Image *cropImage(const Image *img, unsigned int startx, unsigned int starty,
+                 unsigned int width, unsigned int height) {
+  Image *cropped = newImage(width, height);
+  unsigned int orig, dest;
+  // unsigned int endx = startx + width, endy = starty + height;
+
+  for (unsigned int x = 0; x < width; x++) {
+    for (unsigned int y = 0; y < height; y++) {
+      for (unsigned int p = 0; p < 4; p++) {
+        orig = ((y + starty) * img->width * 4) + (x + startx) * 4 + p;
+        dest = ((y * width) + x) * 4 + p;
+        if (orig > 4 * img->width * img->height) {
+          cropped->data[dest] = 0;
+        } else {
+          cropped->data[dest] = img->data[orig];
+        }
+      }
+    }
+  }
+  return cropped;
 }
 
 void bindImage(Image *image) {
