@@ -2,6 +2,7 @@
 #define GAMA_WIN32_H_INCLUDED
 
 #include "../app.h"
+#include <cstdio>
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
@@ -10,16 +11,18 @@ LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 void DisableOpenGL(HWND, HDC, HGLRC);
 
-int init(App *);
-int create();
-int update(float theta);
-int render();
-int shutdown();
+void init(App *);
+void create();
+void update(float);
+void render();
+void gama_click(App *, MouseClickEvent *);
+
+App *gama;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, int nCmdShow) {
-  App *app = GamaCreateApp();
-  init(app);
+  gama = GamaCreateApp();
+  init(gama);
   WNDCLASSEX wcex;
   HWND hwnd;
   HDC hDC;
@@ -45,8 +48,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     return 0;
 
   /* create main window */
-  hwnd = CreateWindowEx(0, "GLSample", app->title, WS_OVERLAPPEDWINDOW,
-                        CW_USEDEFAULT, CW_USEDEFAULT, app->size.x, app->size.y,
+  if (gama->width != gama->height) {
+    printf("Non sqare windows not yet supported");
+    exit(500);
+  }
+  hwnd = CreateWindowEx(0, "GLSample", gama->title, WS_OVERLAPPEDWINDOW,
+                        CW_USEDEFAULT, CW_USEDEFAULT, gama->width, gama->height,
                         NULL, NULL, hInstance, NULL);
 
   ShowWindow(hwnd, nCmdShow);

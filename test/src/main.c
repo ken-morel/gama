@@ -1,36 +1,59 @@
 #include "../../assets/gama/gama.h"
 
-Shape *ball, *earth;
+Sprite *robi;
+Shape *ground;
+int jumped = 0;
 
-int init(App *app) {
-  SetAppTitle(app, "floating");
-  return 0;
-}
-
-int create() {
-  ball = createRectangle(at(0, 1), at(1, 1), RED);
-  earth = createRectangle(at(0, -1), at(2, 0.1), DARKGREEN);
-
-  setShapeAcceleration(ball, at(0, -0.9));
-
-  SetClearColor(LIGHTGRAY);
-  return 0;
-}
-
-int update(float theta) {
-  updateShape(ball, theta);
-  if (shapeBottom(ball) < shapeTop(earth)) {
-    if (getShapeVelocity(ball)->y < 0) { // shape goes down
-      bounceShape(ball, 0, 0.8);
-    }
+Sprite *createRobi() {
+  Sprite *robi =
+      openSprite("assets/sprites/robi.png", 20, 20, at(-0.8, 0), at(0.2, 0.2));
+  if (robi == NULL) {
+    exit(5);
   }
-  return 0;
+  unsigned int animation[] = {0, 1, 2, 3, 2, 1};
+  SetSpriteAnimationArray(robi, animation, 10);
+  setSpriteAcceleration(robi, at(0, -1.0));
+  return robi;
 }
 
-int render() {
-  renderShape(ball);
-  renderShape(earth);
-  return 0;
+Shape *createGround() { return createRectangle(at(0, -1), at(2, 0.1), GREEN); }
+
+void jump() {
+  setSpriteVelocity(robi, at(0, 1));
+
+  //
 }
 
-int shutdown() { return 0; }
+void onclick(MouseClickEvent *e) {
+  printf("clicked\n");
+  if (jumped < 2) {
+    jump();
+    jumped++;
+  }
+}
+
+void init(App *app) {
+  SetAppTitle(app, "floating Robi game");
+  app->onclick = onclick;
+  //
+}
+
+void create() {
+  robi = createRobi();
+  ground = createGround();
+  SetClearColor(LIGHTGRAY);
+}
+
+void update(float theta) {
+
+  if (getSpritePosition(robi)->y <= -0.8) {
+    jumped = 0;
+  }
+  updateSprite(robi, theta);
+  bounceSpriteUnder(robi, -0.95, 0.4, -1);
+}
+
+void render() {
+  renderSprite(robi);
+  // renderShape(ground);
+}

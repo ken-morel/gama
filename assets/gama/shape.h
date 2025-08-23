@@ -5,7 +5,6 @@
 #include "vector.h"
 
 #include "drawshape.h"
-#include <stdlib.h>
 
 typedef enum {
   RectangleShape,
@@ -111,7 +110,7 @@ void updateShapes(ShapeList *list, float theta) {
 float shapeTop(Shape *s) {
   switch (s->type) {
   case RectangleShape:
-    return s->pos->pos->y + s->size->y;
+    return s->pos->pos->y + s->size->y / 2.0f;
   case CircleShape:
     return s->pos->pos->y + s->radius;
   }
@@ -126,6 +125,7 @@ float shapeBottom(Shape *s) {
   }
   return 0;
 }
+
 float shapeLeft(Shape *s) {
   switch (s->type) {
   case RectangleShape:

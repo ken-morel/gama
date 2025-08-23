@@ -32,6 +32,7 @@ Image *newImage(unsigned int width, unsigned int height) {
       (unsigned char *)malloc(width * height * 4 * sizeof(unsigned char));
   img->width = width;
   img->height = height;
+  glGenTextures(1, &img->texture_id);
   return img;
 }
 
@@ -66,20 +67,24 @@ void bindImage(Image *image) {
 }
 
 void drawImage(Image *image, Pos *pos, Pos *size) {
+  // glColor4f(1, 1, 1, 0);
   glEnable(GL_TEXTURE_2D);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   bindImage(image);
   glBegin(GL_QUADS);
   {
-    glTexCoord2f(0, 0);
-    glVertex2f(pos->x, pos->y);
-    glTexCoord2f(1, 0);
-    glVertex2f(pos->x + size->x, pos->y);
-    glTexCoord2f(1, 1);
-    glVertex2f(pos->x + size->x, pos->y + size->y);
     glTexCoord2f(0, 1);
+    glVertex2f(pos->x, pos->y);
+    glTexCoord2f(1, 1);
+    glVertex2f(pos->x + size->x, pos->y);
+    glTexCoord2f(1, 0);
+    glVertex2f(pos->x + size->x, pos->y + size->y);
+    glTexCoord2f(0, 0);
     glVertex2f(pos->x, pos->y + size->y);
   }
   glEnd();
+  glDisable(GL_BLEND);
   glDisable(GL_TEXTURE_2D);
 }
 

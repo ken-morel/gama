@@ -6,15 +6,24 @@
 #include <stdlib.h>
 
 typedef struct {
+  float x;
+  float y;
+  int button;
+} MouseClickEvent;
+
+typedef struct {
   char *title;
-  Pos size;
+  unsigned int width;
+  unsigned int height;
+  void (*onclick)(MouseClickEvent *);
 } App;
 
 App *GamaCreateApp() {
   App *app = (App *)malloc(sizeof(App));
   app->title = "Test gama window";
-  app->size.x = 600;
-  app->size.y = 400;
+  app->width = 600;
+  app->height = 600;
+  app->onclick = NULL;
   return app;
 }
 

@@ -5,8 +5,9 @@
 #include "color.h"
 
 #include "app.h"
-#include "shape.h"
 #include "image.h"
+#include "shape.h"
+#include "sprite.h"
 
 #include <stdio.h>
 
@@ -33,5 +34,13 @@
 #ifdef BACKEND_WIN32
 #include "backends/win32.h"
 #endif // Backend win32
+//
+void gama_click(App *app, MouseClickEvent *e) {
+  if (app->onclick != NULL) {
+    app->onclick(e);
+  }
+  //
+  //
+}
 
 #endif // GAMA_INCLUDED

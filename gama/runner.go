@@ -2,6 +2,7 @@ package gama
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"path"
 	"runtime"
@@ -17,7 +18,7 @@ func RunBuild(args *RunBuildArgs, log chan<- *Status) {
 		fmt.Println("Config not found")
 		log <- &Status{
 			Message: "Error starting",
-			Error:   fmt.Errorf("Configuration not found"),
+			Error:   fmt.Errorf("configuration not found"),
 		}
 		return
 	}
@@ -43,6 +44,9 @@ func RunBuild(args *RunBuildArgs, log chan<- *Status) {
 		Message: "Running build",
 		Error:   nil,
 	}
+	command.Stderr = os.Stderr
+	command.Stdin = os.Stdin
+	command.Stdout = os.Stdout
 	err := command.Run()
 	if err != nil {
 		log <- &Status{
