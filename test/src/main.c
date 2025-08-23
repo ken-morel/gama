@@ -24,18 +24,25 @@ void jump() {
   //
 }
 
-void onclick(MouseClickEvent *e) {
-  printf("clicked\n");
-  if (jumped < 2) {
-    jump();
-    jumped++;
+void onkey(KeyEvent *e) {
+  switch (e->key) {
+  case KeySpace:
+  case KeyUp:
+  case KeyW:
+    if (jumped < 2) {
+      jump();
+      jumped++;
+    }
+    break;
+  default:
+    break;
   }
 }
+void onclick(MouseClickEvent *e) { printf("clicked\n"); }
 
 void init(App *app) {
   SetAppTitle(app, "floating Robi game");
-  app->onclick = onclick;
-  //
+  app->onkey = onkey;
 }
 
 void create() {

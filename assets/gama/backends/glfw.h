@@ -11,6 +11,7 @@ void create();
 void update(float);
 void render();
 void gama_click(App *, MouseClickEvent *);
+void gama_key(App *, KeyEvent *);
 App *GamaCreateApp();
 
 void setGLPerspective(float width, float height) {
@@ -42,20 +43,16 @@ void __handleClick(GLFWwindow *win, int button, int action, int mode) {
   event->y = (posy - hh) / hh * -1;
   event->button = button;
   gama_click(gama, event);
+  free(event);
 }
 
 void __handleKey(GLFWwindow *win, int key, int scancode, int action, int mode) {
   KeyEvent *event = (KeyEvent *)malloc(sizeof(KeyEvent));
-  switch (key) {
-  case GLFW_KEY_LEFT:
-    event->key = KeyLeft;
-    break;
-  case GLFW_KEY_0:
-    event->key = Key0;
-    break;
-  case GLFW_KEY_A:
-    event->key = KeyA;
-  }
+  if (!event)
+    return;
+#include "_glfw_handle_key_keys.h"
+  gama_key(gama, event);
+  free(event);
 }
 
 int main() {

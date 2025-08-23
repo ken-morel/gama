@@ -15,6 +15,7 @@ typedef struct {
 
 typedef struct {
   Key key;
+
 } KeyEvent;
 
 typedef struct {
