@@ -40,7 +40,22 @@ void __handleClick(GLFWwindow *win, int button, int action, int mode) {
   MouseClickEvent *event = (MouseClickEvent *)malloc(sizeof(MouseClickEvent));
   event->x = (posx - hw) / hw;
   event->y = (posy - hh) / hh * -1;
+  event->button = button;
   gama_click(gama, event);
+}
+
+void __handleKey(GLFWwindow *win, int key, int scancode, int action, int mode) {
+  KeyEvent *event = (KeyEvent *)malloc(sizeof(KeyEvent));
+  switch (key) {
+  case GLFW_KEY_LEFT:
+    event->key = KeyLeft;
+    break;
+  case GLFW_KEY_0:
+    event->key = Key0;
+    break;
+  case GLFW_KEY_A:
+    event->key = KeyA;
+  }
 }
 
 int main() {
@@ -72,6 +87,7 @@ int main() {
     return -1;
   }
   glfwSetMouseButtonCallback(window, __handleClick);
+  glfwSetKeyCallback(window, __handleKey);
 
   /* Make the window's context current */
   glfwMakeContextCurrent(window);

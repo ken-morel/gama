@@ -39,8 +39,11 @@ void gama_click(App *app, MouseClickEvent *e) {
   if (app->onclick != NULL) {
     app->onclick(e);
   }
-  //
-  //
+}
+void gama_key(App *app, KeyEvent *e) {
+  if (app->onkey != NULL) {
+    app->onkey(e);
+  }
 }
 
 #endif // GAMA_INCLUDED

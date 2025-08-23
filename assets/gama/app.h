@@ -11,11 +11,18 @@ typedef struct {
   int button;
 } MouseClickEvent;
 
+#include "_key.h"
+
+typedef struct {
+  Key key;
+} KeyEvent;
+
 typedef struct {
   char *title;
   unsigned int width;
   unsigned int height;
   void (*onclick)(MouseClickEvent *);
+  void (*onkey)(KeyEvent *);
 } App;
 
 App *GamaCreateApp() {
@@ -24,6 +31,7 @@ App *GamaCreateApp() {
   app->width = 600;
   app->height = 600;
   app->onclick = NULL;
+  app->onkey = NULL;
   return app;
 }
 
