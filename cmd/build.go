@@ -22,6 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/ken-morel/gama/gama"
 	"github.com/spf13/cobra"
 )
@@ -35,9 +37,15 @@ var (
 		Short: "Build the applicaiton",
 		Long:  `Build the application into an executable in build.`,
 		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Running project with args:", args)
 			err := gama.BuildProject(useWine)
-			if err == nil && shouldRun {
-				err = gama.RunBuild(useWine)
+			if err != nil {
+				fmt.Printf("error building project: %s\n", err.Error())
+			} else if shouldRun {
+				err = gama.RunBuild(args, useWine)
+				if err != nil {
+					fmt.Println("Error running project build: %s", err.Error())
+				}
 			}
 		},
 	}

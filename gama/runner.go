@@ -8,18 +8,20 @@ import (
 	"runtime"
 )
 
-func runBuildWindows(name string) error {
-	command := exec.Command(path.Join("build", name+".exe"))
+func runBuildWindows(name string, args []string) error {
+	command := exec.Command(path.Join("build", name+".exe"), args...)
 	return runBuildCommand(command)
 }
 
-func runBuildLinux(name string) error {
-	command := exec.Command(path.Join("build", name))
+func runBuildLinux(name string, args []string) error {
+	command := exec.Command(path.Join("build", name), args...)
 	return runBuildCommand(command)
 }
 
-func runBuildWine(name string) error {
-	command := exec.Command("wine", path.Join("build", name+".exe"))
+func runBuildWine(name string, args []string) error {
+	bargs := []string{path.Join("build", name+".exe")}
+	bargs = append(bargs, args...)
+	command := exec.Command("wine", bargs...)
 	return runBuildCommand(command)
 }
 
@@ -30,7 +32,7 @@ func runBuildCommand(command *exec.Cmd) error {
 	return command.Run()
 }
 
-func RunBuild(wine bool) error {
+func RunBuild(args []string, wine bool) error {
 	if config.Config == nil {
 		return fmt.Errorf("configuration not found")
 	}
@@ -40,12 +42,12 @@ func RunBuild(wine bool) error {
 	}
 	switch runtime.GOOS {
 	case "windows":
-		return runBuildWindows(config.Config.Project.Name)
+		return runBuildWindows(config.Config.Project.Name, args)
 	case "linux":
 		if wine {
-			runBuildWine(name)
+			runBuildWine(name, args)
 		} else {
-			runBuildLinux(name)
+			runBuildLinux(name, args)
 		}
 	default:
 		return fmt.Errorf("unsupported system for building")
