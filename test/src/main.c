@@ -1,5 +1,5 @@
 #include "../../assets/gama/gama.h"
-#define NCACTUSSES 5
+#define NCACTUSSES 1
 
 void onkey(KeyEvent *e);
 Sprite *robi;
@@ -22,7 +22,7 @@ Sprite *createRobi() {
 Sprite *createCactus() {
   unsigned int anim[] = {0, 1};
   Sprite *cactus =
-      openSprite("assets/sprites/cactus.png", 20, 30, at(0, 0), at(0.2, 0.2));
+      openSprite("assets/sprites/cactus.png", 20, 30, at(0, 0), at(0, 0.3));
 
   if (cactus == NULL)
     exit(3);
@@ -39,21 +39,23 @@ void init(App *app) {
 }
 
 void resetCactus(Sprite *c, float around) {
-  return;
   // random float between -1 and 1
-  float offset = ((float)(rand() % 2000) / 1000.0f) - 1000.0f;
-  c->pos->pos->x = 0; // around + (1.0f * offset);
+  float offset = ((float)(rand() % 2000) / 1000.0f) - 1.0f;
+  if (offset > 1)
+    offset = 1;
+  else if (offset < -1)
+    offset = -1;
+  c->pos->pos->x = around + (1.0f * offset);
   c->pos->pos->y = -0.8;
-  //                value between 0.0f and 0.1f           | base speed
-  c->pos->vel->x = (offset < 0 ? -offset : offset) * -0.1f - 0.2f;
+  c->pos->vel->x = (offset > 0 ? -offset : offset) * 0.05f - 0.1f;
 }
 
-void create() {
+void create(App *app) {
   robi = createRobi();
   ground = createGround();
   for (size_t i = 0; i < NCACTUSSES; i++) {
     cactusses[i] = createCactus();
-    resetCactus(cactusses[i], 2.0f + 1.0f * (float)i);
+    resetCactus(cactusses[i], 5.0f + 1.5f * (float)i);
   }
   SetClearColor(LIGHTGRAY);
 }
@@ -79,8 +81,8 @@ void onkey(KeyEvent *e) {
   }
 }
 
-void update(float theta) {
-
+void update(App *app, float theta) {
+  theta *= 5.0f;
   if (getSpritePosition(robi)->y <= -0.8) {
     jumped = 0;
   }
@@ -90,7 +92,7 @@ void update(float theta) {
   bounceSpriteUnder(robi, -0.95, 0.4, -1);
 }
 
-void render() {
+void render(App *app) {
   renderSprite(robi);
   renderShape(ground);
   for (size_t i = 0; i < NCACTUSSES; i++)

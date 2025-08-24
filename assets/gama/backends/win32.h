@@ -12,21 +12,12 @@ LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 void DisableOpenGL(HWND, HDC, HGLRC);
 
-// Forward declarations for application-specific functions
-void init(App *);
-void create();
-void update(float);
-void render();
-void gama_click(App *, MouseClickEvent *);
-// New function to handle key events within the application
-void gama_key(App *, KeyEvent *);
-
 App *gama;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, int nCmdShow) {
   gama = GamaCreateApp();
-  init(gama);
+  _gama_init(gama);
   WNDCLASSEX wcex;
   HWND hwnd;
   HDC hDC;
@@ -64,9 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   /* enable OpenGL for the window */
   EnableOpenGL(hwnd, &hDC, &hRC);
-  create();
-
-  float ltime = clock();
+  _gama_create();
 
   /* program main loop */
   while (!bQuit) {
@@ -81,15 +70,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       }
     } else {
       /* OpenGL animation code goes here */
-      float ntime = clock();
-      update((ntime - ltime) / 1000.0f);
-      ltime = ntime;
+      _gama_update(gama);
       glClear(GL_COLOR_BUFFER_BIT);
 
       glPushMatrix();
       // glRotatef(theta, 0.0f, 0.0f, 1.0f);
 
-      render();
+      _gama_render(gama);
 
       glPopMatrix();
 
@@ -97,6 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       Sleep(1);
     }
   }
+  _gama_shutdown(gama);
 
   /* shutdown OpenGL */
   DisableOpenGL(hwnd, hDC, hRC);

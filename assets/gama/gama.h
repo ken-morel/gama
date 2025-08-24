@@ -10,6 +10,7 @@
 #include "sprite.h"
 
 #include <stdio.h>
+#include <time.h>
 
 ///////////////////////
 #ifndef BACKEND_GLFW
@@ -45,5 +46,29 @@ void gama_key(App *app, KeyEvent *e) {
     app->onkey(e);
   }
 }
+
+float lastTime = 0.0f;
+
+double getT() { return (double)clock() / CLOCKS_PER_SEC; }
+
+#error "convert all floats to doubles"
+
+void init(App *);
+void create(App *);
+void update(App *, float);
+void render(App *);
+
+void _gama_init(App *app) {
+  lastTime = getT();
+  init(app);
+}
+void _gama_create(App *app) { create(app); }
+void _gama_update(App *app) {
+  float now = getT();
+  update(app, now - lastTime);
+  lastTime = now;
+}
+void _gama_render(App *app) { render(app); }
+void _gama_shutdown(App *app) {}
 
 #endif // GAMA_INCLUDED

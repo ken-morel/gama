@@ -6,14 +6,6 @@
 #include "../app.h"
 #include <math.h>
 
-void init(App *app);
-void create();
-void update(float);
-void render();
-void gama_click(App *, MouseClickEvent *);
-void gama_key(App *, KeyEvent *);
-App *GamaCreateApp();
-
 void setGLPerspective(float width, float height) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -69,7 +61,7 @@ int main() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
-  init(gama);
+  _gama_init(gama);
 
   /* Create a windowed mode window and its OpenGL context */
   if (gama->width != gama->height) {
@@ -89,7 +81,7 @@ int main() {
   /* Make the window's context current */
   glfwMakeContextCurrent(window);
 
-  create();
+  _gama_create(gama);
 
   double lastFrameTime = glfwGetTime();
   while (!glfwWindowShouldClose(window)) {
@@ -99,13 +91,14 @@ int main() {
 
     // Process events (polling for events)
     glfwPollEvents();
-    update(deltaTime);
+    _gama_update(gama);
     glClear(GL_COLOR_BUFFER_BIT);
-    render();
+    _gama_render(gama);
 
     glfwSwapBuffers(window);
   }
 
+  _gama_shutdown(gama);
   glfwTerminate();
   return 0;
 }

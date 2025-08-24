@@ -69,15 +69,19 @@ Sprite *openSprite(const char *path, unsigned int width, unsigned int height,
   return sprite;
 }
 void updateSprite(Sprite *s, float theta) {
-  theta += s->_remainingTimeFrame; // time since last frame time
-  float timeForOneFrame = (1.0f / s->fps);
-  float skipping =
-      theta / timeForOneFrame; // number of frames which actually passed
-  float rounded = floor(skipping);
-  s->animationCurrent += (int)rounded;
+  float period = (1.0f / s->fps);
+  float timeSinceLastFrame = theta * s->_remainingTimeFrame;
+
+  float numberOfFramesSkipped = timeSinceLastFrame / period;
+
+  int fullNumberOfFrames = (int)floor(numberOfFramesSkipped);
+  float remainingFrames = numberOfFramesSkipped - (float)fullNumberOfFrames;
+  float remainingTime = remainingFrames * period;
+
+  s->animationCurrent += (int)fullNumberOfFrames;
   s->animationCurrent %= s->animationLen;
 
-  s->_remainingTimeFrame = theta - (rounded * timeForOneFrame);
+  s->_remainingTimeFrame = remainingTime;
   updateVector(s->pos, theta);
 }
 

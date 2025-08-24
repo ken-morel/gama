@@ -42,4 +42,13 @@ void SetAppTitle(App *app, char *title) {
   app->title = title;
 }
 
+void _gama_init(App *);
+void _gama_create(App *);
+void _gama_update(App *);
+void _gama_render(App *);
+void _gama_shutdown(App *);
+void gama_click(App *, MouseClickEvent *);
+void gama_key(App *, KeyEvent *);
+App *GamaCreateApp();
+
 #endif // GAMA_APP_INCLUDED
