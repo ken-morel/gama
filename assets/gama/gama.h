@@ -9,6 +9,7 @@
 #include "scene.h"
 #include "shape.h"
 #include "sprite.h"
+#include "text.h"
 
 #include <stdio.h>
 #include <time.h>

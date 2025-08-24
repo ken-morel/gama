@@ -7,6 +7,8 @@
 #include "stb/truetype.h"
 #include "vector.h"
 
+// Struct definitions are assumed to be the same...
+
 typedef struct {
   unsigned char ttf_buffer[1 << 20];
   unsigned char temp_bitmap[512 * 512];
@@ -24,7 +26,7 @@ typedef struct {
   Color color;
 } Text;
 
-void setText(Text *t, char *txt);
+void setText(Text *, const char *, size_t);
 
 Font *newFont() {
   Font *f = (Font *)malloc(sizeof(Font));
@@ -34,12 +36,25 @@ Font *newFont() {
 
 Text *newText() {
   Text *t = (Text *)malloc(sizeof(Text));
+  t->text = NULL;
+  t->color = BLACK;
+  t->font = NULL;
+  t->len = 0;
+  t->fontsize = 0;
   return t;
 }
 
 Font *loadFont(const char *url) {
   Font *f = newFont();
-  fread(f->ttf_buffer, 1, 1 << 20, fopen(url, "rb"));
+  // It's safer to check if fopen was successful
+  FILE *fontFile = fopen(url, "rb");
+  if (!fontFile) {
+    printf("Error: Could not open font file at %s\n", url);
+    free(f);
+    return NULL;
+  }
+  fread(f->ttf_buffer, 1, 1 << 20, fontFile);
+  fclose(fontFile);
 
   stbtt_BakeFontBitmap(f->ttf_buffer, 0, 32.0, f->temp_bitmap, 512, 512, 32, 96,
                        f->cdata); // no guarantee this fits!
@@ -53,59 +68,110 @@ Font *loadFont(const char *url) {
   return f;
 }
 
-Text *createText(char *text, Font *f, Pos *pos) {
+Text *createText(char *text, size_t length, Font *f, Pos *pos) {
   Text *t = newText();
 
-  setText(t, text);
+  setText(t, text, length);
   t->fontsize = 0.1;
   t->font = f;
   t->pos = vectorAt(pos);
   return t;
 }
 
+/**
+ * NEW HELPER FUNCTION
+ * Calculates the total width of the rendered text in your world coordinates.
+ */
+float getTextWidth(Text *t) {
+  if (!t || !t->text || !t->font) {
+    return 0.0f;
+  }
+
+  float total_width = 0.0f;
+  float x = 0.0f, y = 0.0f; // Dummy cursor position for width calculation
+
+  for (int i = 0; i < t->len; i++) {
+    if ((int)t->text[i] >= 32 && (int)t->text[i] < 128) {
+      stbtt_aligned_quad q;
+      stbtt_GetBakedQuad(t->font->cdata, 512, 512, (int)t->text[i] - 32, &x, &y,
+                         &q, 1);
+    }
+  }
+
+  double scale = t->fontsize / 20.0;
+  total_width =
+      x * scale; // The final x position is the width in pixels, so we scale it.
+
+  return total_width;
+}
+
+/**
+ * IMPROVED RENDER FUNCTION
+ * Now calculates the text width to center it and correctly renders the glyphs.
+ */
 void renderText(Text *t) {
-  float x = t->pos->pos->x, y = t->pos->pos->y;
+  if (!t || !t->text || !t->font) {
+    return; // Nothing to render
+  }
+  float x = 0, y = 0;
+
+  float totalWidth = getTextWidth(t);
+
+  float offset = totalWidth / 2.0f;
+
+  double scale = t->fontsize / 20.0;
+
   SetGLColor(t->color);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, t->font->ftex);
+
+  glTranslatef(-offset, 0, 0);
   glBegin(GL_QUADS);
   for (int i = 0; i < t->len; i++) {
     if ((int)t->text[i] >= 32 && (int)t->text[i] < 128) {
       stbtt_aligned_quad q;
+      // stbtt_GetBakedQuad updates 'x' and 'y' to position the next character
       stbtt_GetBakedQuad(t->font->cdata, 512, 512, (int)t->text[i] - 32, &x, &y,
-                         &q, 1); // 1=opengl & d3d10+,0=d3d9
-      double scale = t->fontsize / 20;
+                         &q, 1);
+
+      // 2. BUG FIX: Use the 'q' coordinates directly for the vertices.
+      // Do not add the original t->pos->pos->x to them.
+      // We apply your custom scale and y-inversion.
       glTexCoord2f(q.s0, q.t0);
-      glVertex2f(t->pos->pos->x + q.x0 * scale, t->pos->pos->y - q.y0 * scale);
+      glVertex2f(q.x0 * scale, q.y0 * -scale);
       glTexCoord2f(q.s1, q.t0);
-      glVertex2f(t->pos->pos->x + q.x1 * scale, t->pos->pos->y - q.y0 * scale);
+      glVertex2f(q.x1 * scale, q.y0 * -scale);
       glTexCoord2f(q.s1, q.t1);
-      glVertex2f(t->pos->pos->x + q.x1 * scale, t->pos->pos->y - q.y1 * scale);
+      glVertex2f(q.x1 * scale, q.y1 * -scale);
       glTexCoord2f(q.s0, q.t1);
-      glVertex2f(t->pos->pos->x + q.x0 * scale, t->pos->pos->y - q.y1 * scale);
+      glVertex2f(q.x0 * scale, q.y1 * -scale);
     }
   }
   glEnd();
+  glTranslatef(offset, 0, 0);
+
   glDisable(GL_BLEND);
   glDisable(GL_TEXTURE_2D);
 }
 
-void setText(Text *t, char *txt) {
-  char *p = txt;
-  int l;
-  while (p) {
-    ++p;
-    ++l;
-  }
-  t->len = l;
-
-  if (t->text != NULL)
+void setText(Text *t, const char *txt, size_t length) {
+  if (t->text != NULL) {
     free(t->text);
-  t->text = (char *)malloc(l * sizeof(char));
-  for (int i = 0; i < l; i++)
-    t->text[i] = txt[i];
+    t->text = NULL;
+  }
+
+  t->text = (char *)malloc(length + 1);
+  if (t->text == NULL) {
+    t->len = 0;
+    printf("Could not allocate text space");
+    return;
+  }
+
+  memcpy(t->text, txt, length);
+  t->text[length] = '\0';
+  t->len = length;
 }
 
 #endif
