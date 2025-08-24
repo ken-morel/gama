@@ -30,6 +30,7 @@ func buildProjectLinux(name string, cfiles []string) error {
 		"gcc",
 		append(
 			cfiles,
+			"-o",
 			path.Join("build", name),
 			"-g",
 			"-lglfw",
