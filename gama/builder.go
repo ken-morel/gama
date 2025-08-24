@@ -37,7 +37,7 @@ func buildLinux() error {
 	if name == "" {
 		return fmt.Errorf("invalid project name")
 	}
-	cmd := exec.Command("gcc", "src/main.c", "-o", out, "-lglfw", "-lGL", "-lm", "-lXrandr", "-lXi", "-lX11", "-lXxf86vm", "-lpthread")
+	cmd := exec.Command("gcc", "src/main.c", "-o", out, "-g", "-lglfw", "-lGL", "-lm", "-lXrandr", "-lXi", "-lX11", "-lXxf86vm", "-lpthread")
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	return cmd.Run()

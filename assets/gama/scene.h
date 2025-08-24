@@ -23,6 +23,10 @@ typedef struct sScene {
 
 Scene *createScene(struct sApp *app) {
   Scene *s = (Scene *)malloc(sizeof(Scene));
+  if (s == NULL)
+    return NULL;
+  s->sprites.sprites = NULL;
+  s->shapes.shapes = NULL;
   createSpriteList(&s->sprites);
   createShapeList(&s->shapes);
   s->app = app;
@@ -32,6 +36,7 @@ Scene *createScene(struct sApp *app) {
   s->destroy = NULL;
   s->onclick = NULL;
   s->onkey = NULL;
+  return s;
 }
 
 void addShapeToScene(Scene *scene, Shape *shape) {

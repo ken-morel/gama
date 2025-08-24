@@ -25,8 +25,11 @@ typedef struct {
 
 Sprite *newSprite() { return (Sprite *)malloc(sizeof(Sprite)); }
 
-Sprite *createSprite(Sprite *sprite, const char *path, unsigned int width,
+Sprite *createSprite(const char *path, unsigned int width,
                      unsigned int height, Pos *pos, Pos *size) {
+  Sprite *sprite = newSprite();
+  if (sprite == NULL)
+    return NULL;
   Image *img = newImage();
   openImageFile(img, path);
   if (img == NULL) {

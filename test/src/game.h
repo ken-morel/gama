@@ -3,18 +3,20 @@
 #include "../../assets/gama/gama.h"
 #define NCACTUSSES 3
 
-Sprite robi;
+Sprite *robi;
 Shape ground;
-Sprite cactusses[NCACTUSSES];
+Sprite *cactusses[NCACTUSSES];
 
 int jumped = 0;
 
 void createRobi() {
-  createSprite(&robi, "assets/sprites/robi.png", 20, 20, at(-0.8, 0),
+  robi = createSprite("assets/sprites/robi.png", 20, 20, at(-0.8, 0),
                at(0.2, 0));
+  if (robi == NULL)
+    exit(1);
   unsigned int animation[] = {0, 1, 2, 3, 2, 1};
-  SetSpriteAnimationArray(&robi, animation, 10);
-  setSpriteAcceleration(&robi, at(0, -2.0));
+  SetSpriteAnimationArray(robi, animation, 10);
+  setSpriteAcceleration(robi, at(0, -2.0));
 }
 
 void resetCactus(Sprite *c, float around) {
@@ -37,16 +39,14 @@ void resetCactus(Sprite *c, float around) {
 void createCactusses() {
 
   unsigned int anim[] = {0, 1};
-  Sprite *cactus;
   for (size_t i = 0; i < NCACTUSSES; i++) {
-    cactus = &cactusses[i];
-    createSprite(cactus, "assets/sprites/cactus.png", 20, 30, at(0, 0),
+    cactusses[i] = createSprite("assets/sprites/cactus.png", 20, 30, at(0, 0),
                  at(0, 0));
-    resetCactus(cactus, 2.0 + 1.0 * (double)i);
-
-    if (cactus == NULL)
+    if (cactusses[i] == NULL)
       exit(3);
-    SetSpriteAnimationArray(cactus, anim, 2);
+    resetCactus(cactusses[i], 2.0 + 1.0 * (double)i);
+
+    SetSpriteAnimationArray(cactusses[i], anim, 2);
   }
 }
 
@@ -57,7 +57,7 @@ void robiKey(Scene *scene, KeyEvent *e) {
   case KeyW:
   case KeyEnter:
     if (jumped < 2) {
-      setSpriteVelocity(&robi, at(0, 1));
+      setSpriteVelocity(robi, at(0, 1));
       jumped++;
     }
     break;
@@ -67,25 +67,31 @@ void robiKey(Scene *scene, KeyEvent *e) {
 }
 
 void robiUpdate(Scene *scene, double theta) {
+  if (robi == NULL)
+    return;
   Sprite *cactus;
-  if (getSpritePosition(&robi)->y <= -0.8) {
+  if (getSpritePosition(robi)->y <= -0.8) {
     jumped = 0;
   }
-  updateSprite(&robi, theta);
+  updateSprite(robi, theta);
   for (size_t i = 0; i < NCACTUSSES; i++) {
-    cactus = &cactusses[i];
+    cactus = cactusses[i];
+    if (cactus == NULL)
+      continue;
     if (getSpritePosition(cactus)->x < -2) {
       resetCactus(cactus, 2.0);
     }
     updateSprite(cactus, theta);
   }
-  bounceSpriteUnder(&robi, -0.95, 0.4, -1);
+  bounceSpriteUnder(robi, -0.95, 0.4, -1);
 }
 
 void robiRender(Scene *scene) {
   for (size_t i = 0; i < NCACTUSSES; i++)
-    renderSprite(&cactusses[i]);
-  renderSprite(&robi);
+    if (cactusses[i] != NULL)
+      renderSprite(cactusses[i]);
+  if (robi != NULL)
+    renderSprite(robi);
   renderShape(&ground);
 }
 
@@ -103,9 +109,12 @@ void robiDestroy(Scene *scene) {}
 
 Scene *createRobiScene(App *app) {
   Scene *s = createScene(app);
+  if (s == NULL)
+    return NULL;
   s->create = robiCreate;
   s->render = robiRender;
   s->update = robiUpdate;
   s->onkey = robiKey;
   s->destroy = robiDestroy;
+  return s;
 }
