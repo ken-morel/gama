@@ -4,10 +4,8 @@
 Text *welcomeText;
 
 void welcomeCreate(Scene *scene) {
-
   welcomeText = createTextNulled("Press p to play\n", ubuntu, at(0, 0));
   welcomeText->color = DARKBLUE;
-  // welcomeText->fontsize = 0.1;
 }
 
 void welcomeRender(Scene *scene) {
