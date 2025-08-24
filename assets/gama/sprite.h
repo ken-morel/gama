@@ -3,6 +3,7 @@
 
 #include "math.h"
 #include "vector.h"
+#include <stdio.h>
 #include <time.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "image.h"
@@ -23,30 +24,36 @@ typedef struct {
   double _remainingTimeFrame;
 } Sprite;
 
-Sprite *newSprite() { return (Sprite *)malloc(sizeof(Sprite)); }
+Sprite *newSprite() {
+  Sprite *s = (Sprite *)malloc(sizeof(Sprite));
+  return s;
+}
 
-Sprite *createSprite(const char *path, unsigned int width,
-                     unsigned int height, Pos *pos, Pos *size) {
+Sprite *createSprite(const char *path, unsigned int width, unsigned int height,
+                     Pos *pos, Pos *size) {
   Sprite *sprite = newSprite();
-  if (sprite == NULL)
+  if (sprite == NULL) {
+    printf("Could not create sprite object");
     return NULL;
+  }
   Image *img = newImage();
   openImageFile(img, path);
   if (img == NULL) {
     printf("Failed to load image at %s to create sprite", path);
+    fflush(stdout);
     return NULL;
-  }
-  if (img->width % width != 0) {
+  } else if (img->width % width != 0) {
     printf("Invalid sprite file width %d not multiple specified width %d."
            " Thus the image cannot be equaly cut, when loading %s",
            img->width, width, path);
+    fflush(stdout);
     freeImage(img);
     return NULL;
-  }
-  if (img->height != height) {
+  } else if (img->height != height) {
     printf("Image height %d does not match specified height %d. Cannot slice "
            "sprite %s",
            img->height, height, path);
+    fflush(stdout);
     freeImage(img);
     return NULL;
   }
@@ -65,11 +72,12 @@ Sprite *createSprite(const char *path, unsigned int width,
   sprite->_remainingTimeFrame = 1.0 / sprite->fps;
   sprite->width = width;
   sprite->height = height;
+  // printf("image size %dx%d cropping %dx%d. Length is %d\n", img->width,
+  //        img->height, width, height, sprite->length);
+  //
   for (size_t idx = 0; idx < sprite->length; idx++) {
     sprite->images[idx] = cropImage(img, idx * width, 0, width, height);
   }
-  printf("image size %dx%d slicing %dx%d. Length is %d\n", img->width,
-         img->height, width, height, sprite->length);
   return sprite;
 }
 void updateSprite(Sprite *s, double theta) {

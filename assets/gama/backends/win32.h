@@ -1,23 +1,25 @@
-
 #ifndef GAMA_WIN32_H_INCLUDED
 #define GAMA_WIN32_H_INCLUDED
 
 #include "../app.h"
-#include <cstdio>
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
+#include <windowsx.h> // Required for GET_X_LPARAM and GET_Y_LPARAM
 
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 void DisableOpenGL(HWND, HDC, HGLRC);
 
-App *gama;
+// No longer need a global App pointer
+// App *gama;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, int nCmdShow) {
-  gama = GamaCreateApp();
+  // Create the app structure on the stack or heap as you prefer.
+  App *gama = GamaCreateApp();
   _gama_init(gama);
+
   WNDCLASSEX wcex;
   HWND hwnd;
   HDC hDC;
@@ -51,11 +53,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                         CW_USEDEFAULT, CW_USEDEFAULT, gama->width, gama->height,
                         NULL, NULL, hInstance, NULL);
 
+  // ***IMPROVEMENT: Associate the 'gama' pointer with the window***
+  // This allows us to retrieve it inside WindowProc without using a global.
+  SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)gama);
+
   ShowWindow(hwnd, nCmdShow);
 
   /* enable OpenGL for the window */
   EnableOpenGL(hwnd, &hDC, &hRC);
-  _gama_create();
+  _gama_create(gama); // Pass gama to create
 
   /* program main loop */
   while (!bQuit) {
@@ -72,14 +78,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       /* OpenGL animation code goes here */
       _gama_update(gama);
       glClear(GL_COLOR_BUFFER_BIT);
-
-      glPushMatrix();
-      // glRotatef(theta, 0.0f, 0.0f, 1.0f);
-
       _gama_render(gama);
-
-      glPopMatrix();
-
       SwapBuffers(hDC);
       Sleep(1);
     }
@@ -92,28 +91,70 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   /* destroy the window explicitly */
   DestroyWindow(hwnd);
 
+  // Remember to free the app struct if it was dynamically allocated
+
   return msg.wParam;
 }
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                             LPARAM lParam) {
+  // Retrieve the app pointer associated with this window.
+  App *gama = (App *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+  if (!gama) {
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+  }
+
+  MouseClickEvent event;
+  event.down = 0;
   switch (uMsg) {
   case WM_CLOSE:
     PostQuitMessage(0);
     break;
+
+  case WM_LBUTTONDOWN:
+  case WM_RBUTTONDOWN:
+  case WM_MBUTTONDOWN:
+    event.down = 1;
+  case WM_LBUTTONUP:
+  case WM_RBUTTONUP:
+  case WM_MBUTTONUP:
+    if (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP)
+      event.button = 0; // Left
+    if (uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP)
+      event.button = 1; // Right
+    if (uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP)
+      event.button = 2; // Middle
+
+    RECT rect;
+    GetClientRect(hwnd, &rect);
+    float hw = (float)rect.right / 2.0f;
+    float hh = (float)rect.bottom / 2.0f;
+
+    int posx = GET_X_LPARAM(lParam);
+    int posy = GET_Y_LPARAM(lParam);
+
+    event.x = (posx - hw) / hw;
+    event.y = (posy - hh) / hh * -1.0f;
+
+    gama_click(gama, &event);
 
   case WM_DESTROY:
     return 0;
 
   case WM_KEYDOWN: {
     KeyEvent event;
-    bool keyHandled = true;
+    // ***CORRECTION: Changed from 'bool' and 'true' to 'int' and '1' for C
+    // compatibility.***
+    int keyHandled = 1;
+
 #include "_win32_handle_key.h"
-    if (keyHandled) {
+
+    if (keyHandled) { // This condition works correctly with an int (non-zero is
+                      // true)
       gama_key(gama, &event);
     }
-
-  } break;
+    break;
+  }
 
   default:
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -124,15 +165,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
 void EnableOpenGL(HWND hwnd, HDC *hDC, HGLRC *hRC) {
   PIXELFORMATDESCRIPTOR pfd;
-
   int iFormat;
-
-  /* get the device context (DC) */
   *hDC = GetDC(hwnd);
-
-  /* set the pixel format for the DC */
   ZeroMemory(&pfd, sizeof(pfd));
-
   pfd.nSize = sizeof(pfd);
   pfd.nVersion = 1;
   pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
@@ -140,14 +175,9 @@ void EnableOpenGL(HWND hwnd, HDC *hDC, HGLRC *hRC) {
   pfd.cColorBits = 24;
   pfd.cDepthBits = 16;
   pfd.iLayerType = PFD_MAIN_PLANE;
-
   iFormat = ChoosePixelFormat(*hDC, &pfd);
-
   SetPixelFormat(*hDC, iFormat, &pfd);
-
-  /* create and enable the render context (RC) */
   *hRC = wglCreateContext(*hDC);
-
   wglMakeCurrent(*hDC, *hRC);
 }
 

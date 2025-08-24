@@ -5,6 +5,7 @@ typedef struct {
   double x;
   double y;
   int button;
+  int down;
 } MouseClickEvent;
 
 #include "_key.h"

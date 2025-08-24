@@ -19,7 +19,15 @@ typedef struct {
   double radius;
 } Shape;
 
-Shape *newSpape() { return (Shape *)malloc(sizeof(Shape)); }
+Shape *newShape() {
+  Shape *s = (Shape *)malloc(sizeof(Shape));
+  s->color = BLACK;
+  s->pos = NULL;
+  s->radius = 0;
+  s->size = NULL;
+  s->type = CircleShape;
+  return s;
+}
 
 Shape *createRectangle(Shape *s, Pos *pos, Pos *size, Color col) {
   s->type = RectangleShape;

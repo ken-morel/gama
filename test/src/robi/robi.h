@@ -1,4 +1,5 @@
 #include "../../../assets/gama/gama.h"
+#include <stdio.h>
 #define NCACTUSSES 3
 
 Sprite *robi;
@@ -19,7 +20,6 @@ void createRobi() {
 
 void resetCactus(Sprite *c, float around) {
   // random float between -1 and 1
-
   float offset = ((float)(rand() % 2000) / 1000.0f) - 1.0f;
   if (offset > 1)
     offset = 1;
@@ -35,7 +35,6 @@ void resetCactus(Sprite *c, float around) {
   c->size->y = sizes[templ];
 }
 void createCactusses() {
-
   unsigned int anim[] = {0, 1};
   for (size_t i = 0; i < NCACTUSSES; i++) {
     cactusses[i] =
@@ -43,7 +42,6 @@ void createCactusses() {
     if (cactusses[i] == NULL)
       exit(3);
     resetCactus(cactusses[i], 2.0 + 1.0 * (double)i);
-
     SetSpriteAnimationArray(cactusses[i], anim, 2);
   }
 }
@@ -100,10 +98,14 @@ void robiCreate(Scene *scene) {
     createRectangle(&ground, at(0, -1), at(2, 0.1), GREEN);
     createCactusses();
   }
-  SetClearColor(LIGHTGRAY);
   created = 1;
 }
 void robiDestroy(Scene *scene) {}
+
+void test2(Scene *scene, MouseClickEvent *e) {
+  if (!e->down)
+    showScene(scene->app, welcomeScene);
+}
 
 Scene *createRobiScene(App *app) {
   Scene *s = createScene(app);
@@ -113,6 +115,8 @@ Scene *createRobiScene(App *app) {
   s->render = robiRender;
   s->update = robiUpdate;
   s->onkey = robiKey;
+  s->onclick = test2;
   s->destroy = robiDestroy;
+  s->background = LIGHTGRAY;
   return s;
 }

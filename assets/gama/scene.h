@@ -1,6 +1,7 @@
 #ifndef GAMA_SCENE_INCLUDED
 #define GAMA_SCENE_INCLUDED
 
+#include "color.h"
 #include "events.h"
 #include "shape.h"
 #include "sprite.h"
@@ -10,6 +11,7 @@ struct sApp;
 typedef struct sScene {
   SpriteList sprites;
   ShapeList shapes;
+  Color background;
   struct sApp *app;
   void (*create)(struct sScene *);
   void (*update)(struct sScene *, double);
@@ -36,6 +38,7 @@ Scene *createScene(struct sApp *app) {
   s->destroy = NULL;
   s->onclick = NULL;
   s->onkey = NULL;
+  s->background = LIGHTCYAN;
   return s;
 }
 
@@ -55,6 +58,7 @@ void sceneUpdate(Scene *s, double theta) {
     s->update(s, theta);
 }
 void sceneRender(Scene *s) {
+  SetClearColor(s->background);
   if (s->render != NULL)
     s->render(s);
 }

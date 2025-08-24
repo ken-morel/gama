@@ -27,14 +27,15 @@ App *gama;
 void __handleClick(GLFWwindow *win, int button, int action, int mode) {
   double posx, posy;
   int width, height;
+  MouseClickEvent event;
   glfwGetCursorPos(win, &posx, &posy);
   glfwGetWindowSize(win, &width, &height);
   float hw = (float)width / 2.0f, hh = (float)height / 2.0f;
-  MouseClickEvent *event = (MouseClickEvent *)malloc(sizeof(MouseClickEvent));
-  event->x = (posx - hw) / hw;
-  event->y = (posy - hh) / hh * -1;
-  event->button = button;
-  gama_click(gama, event);
+  event.x = (posx - hw) / hw;
+  event.y = (posy - hh) / hh * -1;
+  event.button = button;
+  event.down = action == 1;
+  gama_click(gama, &event);
 }
 
 void __handleKey(GLFWwindow *win, int key, int scancode, int action, int mode) {

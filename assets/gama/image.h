@@ -27,7 +27,14 @@ Image *openImageFile(Image *img, const char *path) {
   return img;
 }
 
-Image *newImage() { return (Image *)malloc(sizeof(Image)); }
+Image *newImage() {
+  Image *img = (Image *)malloc(sizeof(Image));
+  img->data = NULL;
+  img->height = 0;
+  img->width = 0;
+  img->texture_id = 0;
+  return img;
+}
 Image *createImage(unsigned int width, unsigned int height) {
   Image *img = newImage();
   img->data =
@@ -42,7 +49,6 @@ Image *cropImage(const Image *img, unsigned int startx, unsigned int starty,
                  unsigned int width, unsigned int height) {
   Image *cropped = createImage(width, height);
   unsigned int orig, dest;
-  // unsigned int endx = startx + width, endy = starty + height;
 
   for (unsigned int x = 0; x < width; x++) {
     for (unsigned int y = 0; y < height; y++) {

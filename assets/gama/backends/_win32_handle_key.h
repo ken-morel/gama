@@ -279,6 +279,6 @@ case VK_ADD:
   break;
 
 default:
-  keyHandled = false; // The key was not one we are handling
+  keyHandled = 0; // The key was not one we are handling
   break;
 }
