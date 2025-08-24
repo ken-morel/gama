@@ -1,6 +1,4 @@
-
-
-#include "../../assets/gama/gama.h"
+#include "../../../assets/gama/gama.h"
 #define NCACTUSSES 3
 
 Sprite *robi;
@@ -10,8 +8,8 @@ Sprite *cactusses[NCACTUSSES];
 int jumped = 0;
 
 void createRobi() {
-  robi = createSprite("assets/sprites/robi.png", 20, 20, at(-0.8, 0),
-               at(0.2, 0));
+  robi =
+      createSprite("assets/sprites/robi.png", 20, 20, at(-0.8, 0), at(0.2, 0));
   if (robi == NULL)
     exit(1);
   unsigned int animation[] = {0, 1, 2, 3, 2, 1};
@@ -40,8 +38,8 @@ void createCactusses() {
 
   unsigned int anim[] = {0, 1};
   for (size_t i = 0; i < NCACTUSSES; i++) {
-    cactusses[i] = createSprite("assets/sprites/cactus.png", 20, 30, at(0, 0),
-                 at(0, 0));
+    cactusses[i] =
+        createSprite("assets/sprites/cactus.png", 20, 30, at(0, 0), at(0, 0));
     if (cactusses[i] == NULL)
       exit(3);
     resetCactus(cactusses[i], 2.0 + 1.0 * (double)i);
