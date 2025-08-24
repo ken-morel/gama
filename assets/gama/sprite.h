@@ -218,4 +218,21 @@ void bounceSprite(Sprite *s, double x, double y) {
   }
 }
 
+int rectsCollide(Pos *pa, Pos *sa, Pos *pb, Pos *sb) {
+  double xMinDistance = (sa->x + sb->x) / 2.0;
+  double yMinDistance = (sa->y + sb->y) / 2.0;
+
+  double xDistance = pa->x - pb->x;
+  double yDistance = pa->y - pb->y;
+
+  if (xDistance < 0)
+    xDistance *= -1;
+  if (yDistance < 0)
+    yDistance *= -1;
+
+  return xDistance < xMinDistance && yDistance < yMinDistance;
+}
+int spriteTouchesSprite(Sprite *a, Sprite *b) {
+  return rectsCollide(a->pos->pos, a->size, b->pos->pos, b->size);
+}
 #endif // GAMA_SPRITE_INCLUDED

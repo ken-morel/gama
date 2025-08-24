@@ -137,20 +137,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     event.y = (posy - hh) / hh * -1.0f;
 
     gama_click(gama, &event);
-
+    return 0;
   case WM_DESTROY:
     return 0;
 
   case WM_KEYDOWN: {
     KeyEvent event;
-    // ***CORRECTION: Changed from 'bool' and 'true' to 'int' and '1' for C
-    // compatibility.***
     int keyHandled = 1;
 
 #include "_win32_handle_key.h"
 
-    if (keyHandled) { // This condition works correctly with an int (non-zero is
-                      // true)
+    if (keyHandled) {
       gama_key(gama, &event);
     }
     break;

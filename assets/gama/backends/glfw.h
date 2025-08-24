@@ -40,7 +40,7 @@ void __handleClick(GLFWwindow *win, int button, int action, int mode) {
 
 void __handleKey(GLFWwindow *win, int key, int scancode, int action, int mode) {
   KeyEvent *event = (KeyEvent *)malloc(sizeof(KeyEvent));
-  if (!event)
+  if (!event || !action)
     return;
 #include "_glfw_handle_key_keys.h"
   gama_key(gama, event);

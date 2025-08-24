@@ -54,7 +54,7 @@ var (
 func init() {
 	rootCmd.AddCommand(buildCmd)
 	buildCmd.PersistentFlags().BoolVarP(&shouldRun, "run", "r", false, "Run the application after building it")
-	buildCmd.PersistentFlags().BoolVarP(&shouldRun, "wine", "w", false, "Build the applicaiton using wine(linux only)")
+	buildCmd.PersistentFlags().BoolVarP(&useWine, "wine", "w", false, "Build the applicaiton using wine(linux only)")
 
 	// Here you will define your flags and configuration settings.
 

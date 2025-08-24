@@ -1,12 +1,12 @@
 #include "../../assets/gama/gama.h"
+#include "defs.h"
 
 Text *welcomeText;
 
 void welcomeCreate(Scene *scene) {
 
-  // welcomeText = createTextNulled("Press p to play\n", ubuntu, at(0, 0));
-  welcomeText = createText("Hello", 5, ubuntu, at(0, 0));
-  welcomeText->fontsize = 0.05;
+  welcomeText = createTextNulled("Press p to play\n", ubuntu, at(0, 0));
+  welcomeText->color = DARKBLUE;
   // welcomeText->fontsize = 0.1;
 }
 

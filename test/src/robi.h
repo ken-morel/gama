@@ -1,4 +1,6 @@
 #include "../../assets/gama/gama.h"
+#include "defs.h"
+
 #include <stdio.h>
 #define NCACTUSSES 3
 
@@ -6,7 +8,9 @@ Sprite *robi;
 Shape ground;
 Sprite *cactusses[NCACTUSSES];
 Text *helpText, *scoreText;
+void updateScore();
 
+int score = 0;
 int jumped = 0;
 
 void createRobi() {
@@ -66,7 +70,15 @@ void robiKey(Scene *scene, KeyEvent *e) {
   }
 }
 
+float gotoGameover = 0;
 void robiUpdate(Scene *scene, double theta) {
+  if (gotoGameover > 0) {
+    gotoGameover += theta;
+    if (gotoGameover > 1.0) {
+      showScene(scene->app, gameoverScene);
+    }
+    theta *= 0.1;
+  }
   if (robi == NULL)
     return;
   Sprite *cactus;
@@ -74,16 +86,25 @@ void robiUpdate(Scene *scene, double theta) {
     jumped = 0;
   }
   updateSprite(robi, theta);
+  updateScore();
   for (size_t i = 0; i < NCACTUSSES; i++) {
     cactus = cactusses[i];
     if (cactus == NULL)
       continue;
     if (getSpritePosition(cactus)->x < -2) {
+      score += 1;
       resetCactus(cactus, 2.0);
     }
     updateSprite(cactus, theta);
   }
   bounceSpriteUnder(robi, -0.95, 0.4, -1);
+
+  for (size_t i = 0; i < NCACTUSSES; i++) {
+    cactus = cactusses[i];
+    if (spriteTouchesSprite(cactus, robi)) {
+      gotoGameover += 0.1;
+    }
+  }
 }
 
 void robiRender(Scene *scene) {
@@ -97,13 +118,19 @@ void robiRender(Scene *scene) {
   renderText(scoreText);
 }
 
-int score = 0;
+void updateScore() {
+  char text[100];
+  int length = sprintf(text, "Score: %d", score);
+  setText(scoreText, text, length);
+};
 void createTexts() {
-  helpText = createTextNulled("Press p to pause", ubuntu, at(-0.9, -0.95));
-  helpText->fontsize = 0.05;
-  helpText->tint = BLUE;
-  scoreText = createTextNulled("Score: ", ubuntu, at(0, 0.95));
+  helpText = createTextNulled("Press p to pause", ubuntu, at(-0.8, -0.99));
+  helpText->fontsize = 0.03;
+  helpText->color = BLUE;
+  scoreText = createTextNulled("Score: ", ubuntu, at(0, 0.93));
+  scoreText->color = BLACK;
   scoreText->fontsize = 0.05;
+  updateScore();
 }
 int created = 0;
 void robiCreate(Scene *scene) {

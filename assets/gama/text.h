@@ -23,7 +23,7 @@ typedef struct {
   double fontsize;
   Font *font;
   Vector *pos;
-  Color tint;
+  Color color;
 } Text;
 
 void setText(Text *, const char *, size_t);
@@ -38,7 +38,7 @@ Font *newFont() {
 Text *newText() {
   Text *t = (Text *)malloc(sizeof(Text));
   t->text = NULL;
-  t->tint = WHITE;
+  t->color = WHITE;
   t->font = NULL;
   t->len = 0;
   t->fontsize = 0;
@@ -130,15 +130,15 @@ void renderText(Text *t) {
 
   double scale = t->fontsize / 20.0;
 
+  SetGLColor(t->color);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, t->font->ftex);
 
-  glTranslatef(-offset, 0, 0);
+  glTranslatef(t->pos->pos->x - offset, t->pos->pos->y, 0);
   glBegin(GL_QUADS);
 
-  // SetGLColor(t->tint);
   for (int i = 0; i < t->len; i++) {
     if ((int)t->text[i] >= 32 && (int)t->text[i] < 128) {
       stbtt_aligned_quad q;
@@ -160,7 +160,7 @@ void renderText(Text *t) {
     }
   }
   glEnd();
-  glTranslatef(offset, 0, 0);
+  glTranslatef(offset - t->pos->pos->x, -t->pos->pos->y, 0);
 
   glDisable(GL_BLEND);
   glDisable(GL_TEXTURE_2D);
