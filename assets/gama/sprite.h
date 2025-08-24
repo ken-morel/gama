@@ -20,12 +20,15 @@ typedef struct {
   unsigned int *animation;
   unsigned int width;
   unsigned int height;
-  float _remainingTimeFrame;
+  double _remainingTimeFrame;
 } Sprite;
 
-Sprite *openSprite(const char *path, unsigned int width, unsigned int height,
-                   Pos *pos, Pos *size) {
-  Image *img = openImageFile(path);
+Sprite *newSprite() { return (Sprite *)malloc(sizeof(Sprite)); }
+
+Sprite *createSprite(Sprite *sprite, const char *path, unsigned int width,
+                     unsigned int height, Pos *pos, Pos *size) {
+  Image *img = newImage();
+  openImageFile(img, path);
   if (img == NULL) {
     printf("Failed to load image at %s to create sprite", path);
     return NULL;
@@ -44,9 +47,7 @@ Sprite *openSprite(const char *path, unsigned int width, unsigned int height,
     freeImage(img);
     return NULL;
   }
-  float ratio = (float)height / (float)width;
 
-  Sprite *sprite = (Sprite *)malloc(sizeof(Sprite));
   sprite->pos = vectorAt(pos);
   sprite->animationCurrent = 0;
   sprite->length = img->width / width;
@@ -58,7 +59,7 @@ Sprite *openSprite(const char *path, unsigned int width, unsigned int height,
   sprite->size = size;
   sprite->images = (Image **)malloc(sprite->length * sizeof(Image *));
   sprite->fps = 4.0f;
-  sprite->_remainingTimeFrame = 1.0f / sprite->fps;
+  sprite->_remainingTimeFrame = 1.0 / sprite->fps;
   sprite->width = width;
   sprite->height = height;
   for (size_t idx = 0; idx < sprite->length; idx++) {
@@ -68,21 +69,27 @@ Sprite *openSprite(const char *path, unsigned int width, unsigned int height,
          img->height, width, height, sprite->length);
   return sprite;
 }
-void updateSprite(Sprite *s, float theta) {
-  float period = (1.0f / s->fps);
-  float timeSinceLastFrame = theta * s->_remainingTimeFrame;
+void updateSprite(Sprite *s, double theta) {
+  updateVector(s->pos, theta);
+  double period = (1.0 / s->fps);
+  double timeSinceLastFrame = theta + s->_remainingTimeFrame;
 
-  float numberOfFramesSkipped = timeSinceLastFrame / period;
+  double numberOfFramesSkipped = timeSinceLastFrame / period;
 
   int fullNumberOfFrames = (int)floor(numberOfFramesSkipped);
-  float remainingFrames = numberOfFramesSkipped - (float)fullNumberOfFrames;
-  float remainingTime = remainingFrames * period;
+  double remainingFrames = numberOfFramesSkipped - (double)fullNumberOfFrames;
+  double remainingTime = remainingFrames * period;
+
+  // printf(
+  //     "period is %lf. passed %lf seconds since last frame, so %lf frames(%d)
+  //     " "were skipped and such %lf frames(i.e %lf seconds) are left\n",
+  //     period, timeSinceLastFrame, numberOfFramesSkipped, fullNumberOfFrames,
+  //     remainingFrames, remainingTime);
 
   s->animationCurrent += (int)fullNumberOfFrames;
   s->animationCurrent %= s->animationLen;
 
   s->_remainingTimeFrame = remainingTime;
-  updateVector(s->pos, theta);
 }
 
 void renderSprite(Sprite *s) {
@@ -91,10 +98,8 @@ void renderSprite(Sprite *s) {
   currentFrame %= s->length;
   Image *frame = s->images[currentFrame];
 
-  drawImage(
-      frame,
-      at(s->pos->pos->x - s->size->x / 2, s->pos->pos->y - s->size->y / 2),
-      s->size);
+  drawImage(frame, s->pos->pos->x - s->size->x / 2,
+            s->pos->pos->y - s->size->y / 2, s->size->x, s->size->y);
 }
 
 void setSpriteAnimation(Sprite *s, unsigned int length, unsigned int *animation,
@@ -114,7 +119,8 @@ void setSpriteAnimation(Sprite *s, unsigned int length, unsigned int *animation,
 
 //////////////////////
 void setSpriteVelocity(Sprite *s, Pos *vel) {
-  free(s->pos->vel);
+  if (s->pos->vel != NULL)
+    free(s->pos->vel);
   s->pos->vel = vel;
 }
 Pos *getSpriteVelocity(Sprite *s) { return s->pos->vel; }
@@ -122,12 +128,14 @@ Pos *getSpritePosition(Sprite *s) { return s->pos->pos; }
 Pos *getSpriteAcceleration(Sprite *s) { return s->pos->acc; }
 
 void setSpriteAcceleration(Sprite *s, Pos *acc) {
-  free(s->pos->acc);
+  if (s->pos->acc != NULL)
+    free(s->pos->acc);
   s->pos->acc = acc;
 }
 
 void setSpritePosition(Sprite *s, Pos *pos) {
-  free(s->pos->pos);
+  if (s->pos->pos != NULL)
+    free(s->pos->pos);
   s->pos->pos = pos;
 }
 
@@ -141,6 +149,12 @@ SpriteList *newSpriteList() {
   list->length = 0;
   list->sprites = NULL;
   return list;
+}
+void createSpriteList(SpriteList *list) {
+  if (list->sprites != NULL)
+    free(list->sprites);
+  list->sprites = NULL;
+  list->length = 0;
 }
 
 void addSpriteToList(SpriteList *list, Sprite *sprite) {
@@ -160,21 +174,21 @@ void renderSprites(SpriteList *list) {
     renderSprite(list->sprites[i]);
   }
 }
-void updateSprites(SpriteList *list, float theta) {
+void updateSprites(SpriteList *list, double theta) {
   int i;
   for (i = 0; i < list->length; i++) {
     updateSprite(list->sprites[i], theta);
   }
 }
 
-float spriteTop(Sprite *s) { return s->pos->pos->y + s->size->y / 2.0f; }
-float spriteBottom(Sprite *s) { return s->pos->pos->y - s->size->y / 2.0f; }
-float spriteLeft(Sprite *s) { return s->pos->pos->x - s->size->x / 2.0f; }
-float spriteRight(Sprite *s) { return s->pos->pos->x + s->size->x / 2.0f; }
+double spriteTop(Sprite *s) { return s->pos->pos->y + s->size->y / 2.0; }
+double spriteBottom(Sprite *s) { return s->pos->pos->y - s->size->y / 2.0; }
+double spriteLeft(Sprite *s) { return s->pos->pos->x - s->size->x / 2.0; }
+double spriteRight(Sprite *s) { return s->pos->pos->x + s->size->x / 2.0; }
 
-float bounceSpriteUnder(Sprite *s, float pos, float bounce, float maxSpeed) {
+float bounceSpriteUnder(Sprite *s, double pos, double bounce, double maxSpeed) {
   maxSpeed = -abs(maxSpeed);
-  float halfHeight = s->size->y / 2;
+  double halfHeight = s->size->y / 2;
   if (s->pos->pos->y - halfHeight <= pos) {
     s->pos->pos->y = pos + halfHeight;
     if (s->pos->vel->y < 0) {
@@ -184,7 +198,7 @@ float bounceSpriteUnder(Sprite *s, float pos, float bounce, float maxSpeed) {
   }
 }
 
-void bounceSprite(Sprite *s, float x, float y) {
+void bounceSprite(Sprite *s, double x, double y) {
   if (x != 0) {
     s->pos->vel->x *= -x;
   }

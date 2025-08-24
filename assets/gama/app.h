@@ -2,28 +2,18 @@
 #define GAMA_APP_INCLUDED
 
 #include "color.h"
+#include "events.h"
+#include "scene.h"
 #include "vector.h"
 #include <stdlib.h>
 
-typedef struct {
-  float x;
-  float y;
-  int button;
-} MouseClickEvent;
-
-#include "_key.h"
-
-typedef struct {
-  Key key;
-
-} KeyEvent;
-
-typedef struct {
+typedef struct sApp {
   char *title;
   unsigned int width;
   unsigned int height;
-  void (*onclick)(MouseClickEvent *);
-  void (*onkey)(KeyEvent *);
+  void (*onclick)(struct sApp *, MouseClickEvent *);
+  void (*onkey)(struct sApp *, KeyEvent *);
+  Scene *scene;
 } App;
 
 App *GamaCreateApp() {
@@ -33,7 +23,15 @@ App *GamaCreateApp() {
   app->height = 600;
   app->onclick = NULL;
   app->onkey = NULL;
+  app->scene = NULL;
   return app;
+}
+
+void showScene(App *app, Scene *s) {
+  if (app->scene != NULL)
+    sceneDestroy(app->scene);
+  app->scene = s;
+  sceneCreate(app->scene);
 }
 
 void SetAppTitle(App *app, char *title) {

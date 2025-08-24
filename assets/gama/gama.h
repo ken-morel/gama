@@ -6,6 +6,7 @@
 
 #include "app.h"
 #include "image.h"
+#include "scene.h"
 #include "shape.h"
 #include "sprite.h"
 
@@ -35,40 +36,50 @@
 #ifdef BACKEND_WIN32
 #include "backends/win32.h"
 #endif // Backend win32
-//
+
+#include "time.h"
+
 void gama_click(App *app, MouseClickEvent *e) {
-  if (app->onclick != NULL) {
-    app->onclick(e);
+  if (app->onclick != NULL)
+    app->onclick(app, e);
+  if (app->scene != NULL) {
+    sceneClick(app->scene, e);
   }
 }
 void gama_key(App *app, KeyEvent *e) {
-  if (app->onkey != NULL) {
-    app->onkey(e);
+  if (app->onkey != NULL)
+    app->onkey(app, e);
+  if (app->scene != NULL) {
+    sceneKey(app->scene, e);
   }
 }
 
-float lastTime = 0.0f;
-
-double getT() { return (double)clock() / CLOCKS_PER_SEC; }
-
-#error "convert all floats to doubles"
+double lastTime = 0.0;
 
 void init(App *);
 void create(App *);
-void update(App *, float);
-void render(App *);
+void shutdown(App *);
 
 void _gama_init(App *app) {
-  lastTime = getT();
+  lastTime = get_elapsed_seconds();
   init(app);
 }
 void _gama_create(App *app) { create(app); }
 void _gama_update(App *app) {
-  float now = getT();
-  update(app, now - lastTime);
+  double now = get_elapsed_seconds();
+  double theta = now - lastTime;
+  if (app->scene != NULL)
+    sceneUpdate(app->scene, theta);
   lastTime = now;
 }
-void _gama_render(App *app) { render(app); }
-void _gama_shutdown(App *app) {}
+void _gama_render(App *app) {
+  if (app->scene != NULL)
+    sceneRender(app->scene);
+}
+void _gama_shutdown(App *app) {
+  if (app->scene->destroy != NULL)
+    sceneDestroy(app->scene);
+  shutdown(app);
+}
 
 #endif // GAMA_INCLUDED

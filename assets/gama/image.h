@@ -12,13 +12,14 @@ typedef struct {
   unsigned int texture_id;
 } Image;
 
-Image *openImageFile(const char *path) {
+Image *openImageFile(Image *img, const char *path) {
   int width, height, n;
   unsigned char *data = stbi_load(path, &width, &height, &n, 4);
   if (data == NULL) {
     return NULL;
   }
-  Image *img = (Image *)malloc(sizeof(Image));
+  if (img->data != NULL)
+    free(img->data);
   img->data = data;
   img->width = width;
   img->height = height;
@@ -26,8 +27,9 @@ Image *openImageFile(const char *path) {
   return img;
 }
 
-Image *newImage(unsigned int width, unsigned int height) {
-  Image *img = (Image *)malloc(sizeof(Image));
+Image *newImage() { return (Image *)malloc(sizeof(Image)); }
+Image *createImage(unsigned int width, unsigned int height) {
+  Image *img = newImage();
   img->data =
       (unsigned char *)malloc(width * height * 4 * sizeof(unsigned char));
   img->width = width;
@@ -38,7 +40,7 @@ Image *newImage(unsigned int width, unsigned int height) {
 
 Image *cropImage(const Image *img, unsigned int startx, unsigned int starty,
                  unsigned int width, unsigned int height) {
-  Image *cropped = newImage(width, height);
+  Image *cropped = createImage(width, height);
   unsigned int orig, dest;
   // unsigned int endx = startx + width, endy = starty + height;
 
@@ -66,9 +68,9 @@ void bindImage(Image *image) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-void drawImage(Image *image, Pos *pos, Pos *size) {
-  float width = size->x, height = size->y;
-  float ratio = (float)image->height / (float)image->width;
+void drawImage(Image *image, double x, double y, double w, double h) {
+  double width = w, height = h;
+  double ratio = (double)image->height / (double)image->width;
   if (width == 0) {
     if (height == 0) {
       width = 0.1;
@@ -87,13 +89,13 @@ void drawImage(Image *image, Pos *pos, Pos *size) {
   glBegin(GL_QUADS);
   {
     glTexCoord2f(0, 1);
-    glVertex2f(pos->x, pos->y);
+    glVertex2f(x, y);
     glTexCoord2f(1, 1);
-    glVertex2f(pos->x + width, pos->y);
+    glVertex2f(x + width, y);
     glTexCoord2f(1, 0);
-    glVertex2f(pos->x + width, pos->y + height);
+    glVertex2f(x + width, y + height);
     glTexCoord2f(0, 0);
-    glVertex2f(pos->x, pos->y + height);
+    glVertex2f(x, y + height);
   }
   glEnd();
   glDisable(GL_BLEND);

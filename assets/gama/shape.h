@@ -16,12 +16,12 @@ typedef struct {
   Vector *pos;
   Pos *size;
   Color color;
-  float radius;
+  double radius;
 } Shape;
 
-Shape *createRectangle(Pos *pos, Pos *size, Color col) {
+Shape *newSpape() { return (Shape *)malloc(sizeof(Shape)); }
 
-  Shape *s = (Shape *)malloc(sizeof(Shape));
+Shape *createRectangle(Shape *s, Pos *pos, Pos *size, Color col) {
   s->type = RectangleShape;
   s->pos = vectorAt(pos);
   s->color = col;
@@ -30,9 +30,7 @@ Shape *createRectangle(Pos *pos, Pos *size, Color col) {
 
   return s;
 }
-Shape *createCircle(Pos *pos, float radius, Color col) {
-
-  Shape *s = (Shape *)malloc(sizeof(Shape));
+Shape *createCircle(Shape *s, Pos *pos, double radius, Color col) {
   s->type = CircleShape;
   s->pos = vectorAt(pos);
   s->color = col;
@@ -42,15 +40,16 @@ Shape *createCircle(Pos *pos, float radius, Color col) {
   return s;
 }
 
-void updateShape(Shape *s, float theta) { updateVector(s->pos, theta); }
+void updateShape(Shape *s, double theta) { updateVector(s->pos, theta); }
 
 void renderShape(Shape *s) {
   switch (s->type) {
   case RectangleShape:
-    drawRectangle(s->pos->pos, s->size, s->color);
+    drawRectangle(s->pos->pos->x, s->pos->pos->y, s->size->x, s->size->y,
+                  s->color);
     break;
   case CircleShape:
-    drawCircle(s->pos->pos, s->radius, s->color);
+    drawCircle(s->pos->pos->x, s->pos->pos->y, s->radius, s->color);
     break;
   }
 }
@@ -84,7 +83,12 @@ ShapeList *newShapeList() {
   list->shapes = NULL;
   return list;
 }
-
+void createShapeList(ShapeList *list) {
+  if (list->shapes != NULL)
+    free(list->shapes);
+  list->shapes = NULL;
+  list->length = 0;
+}
 void addShapeToList(ShapeList *list, Shape *shape) {
   int i;
   Shape **newShapes = (Shape **)malloc((list->length + 1) * sizeof(Shape *));
@@ -101,56 +105,56 @@ void renderShapes(ShapeList *list) {
     renderShape(list->shapes[i]);
   }
 }
-void updateShapes(ShapeList *list, float theta) {
+void updateShapes(ShapeList *list, double theta) {
   int i;
   for (i = 0; i < list->length; i++) {
     updateShape(list->shapes[i], theta);
   }
 }
 
-float shapeTop(Shape *s) {
+double shapeTop(Shape *s) {
   switch (s->type) {
   case RectangleShape:
-    return s->pos->pos->y + s->size->y / 2.0f;
+    return s->pos->pos->y + s->size->y / 2.0;
   case CircleShape:
     return s->pos->pos->y + s->radius;
   }
   return 0;
 }
-float shapeBottom(Shape *s) {
+double shapeBottom(Shape *s) {
   switch (s->type) {
   case RectangleShape:
-    return s->pos->pos->y - s->size->y / 2.0f;
+    return s->pos->pos->y - s->size->y / 2.0;
   case CircleShape:
     return s->pos->pos->y - s->radius;
   }
   return 0;
 }
 
-float shapeLeft(Shape *s) {
+double shapeLeft(Shape *s) {
   switch (s->type) {
   case RectangleShape:
-    return s->pos->pos->x - s->size->x / 2.0f;
+    return s->pos->pos->x - s->size->x / 2.0;
   case CircleShape:
     return s->pos->pos->x - s->radius;
   }
   return 0;
 }
-float shapeRight(Shape *s) {
+double shapeRight(Shape *s) {
   switch (s->type) {
   case RectangleShape:
-    return s->pos->pos->x + s->size->x / 2.0f;
+    return s->pos->pos->x + s->size->x / 2.0;
   case CircleShape:
     return s->pos->pos->x + s->radius;
   }
   return 0;
 }
 
-void bounceShape(Shape *s, float x, float y) {
-  if (x != 0) {
+void bounceShape(Shape *s, double x, double y) {
+  if (x != 0.0) {
     s->pos->vel->x *= -x;
   }
-  if (y != 0) {
+  if (y != 0.0) {
     s->pos->vel->y *= -y;
   }
 }
