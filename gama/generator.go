@@ -8,123 +8,36 @@ import (
 	"github.com/plus3it/gorecurcopy"
 )
 
-type CreateProjectArgs struct {
-	Name     string
-	Template string
-}
-
-func CreateProject(args *CreateProjectArgs, log chan<- *Status) {
+func CreateProject(name string, template string) error {
 	if config == nil {
-		fmt.Println("Error: gama not initialized")
-		os.Exit(2)
+		return fmt.Errorf("error: gama not initialized")
 	}
-	steps := []func(*CreateProjectArgs, chan<- *Status) bool{
-		createProjectDir,
-		createProjectSource,
-		createGamaDir,
-		createConfig,
-	}
-	for _, step := range steps {
-		if !step(args, log) {
-			break
-		}
-	}
-	close(log)
-}
-
-func createProjectDir(args *CreateProjectArgs, log chan<- *Status) bool {
-	err := os.Mkdir(args.Name, 0755)
+	templatePath := path.Join(config.InstallPath, "templates", template)
+	gamaPath := path.Join(config.InstallPath, "gama")
+	_, err := os.Stat(templatePath)
 	if err != nil {
-		log <- &Status{
-			Message: "Error Creating project folder",
-			Error:   fmt.Errorf("failed creating folder at %s: %s ", args.Name, err.Error()),
-		}
-		return false
+		return fmt.Errorf("tempate %s not found: %s", template, err.Error())
 	}
-	log <- &Status{"Created project folder", nil}
-	return true
-}
-
-func createProjectSource(args *CreateProjectArgs, log chan<- *Status) bool {
-	err := os.Mkdir(path.Join(args.Name, "src"), 0755)
+	err = os.Mkdir(name, 0755)
 	if err != nil {
-		log <- &Status{
-			Message: "Error Creating project source folder",
-			Error:   fmt.Errorf("failed creating folder at %s: %s ", "src", err.Error()),
-		}
-		return false
+		return fmt.Errorf("error creating project folder at %s: %s", name, err.Error())
 	}
-	log <- &Status{"Created source folder folder", nil}
-	err = createTemplateFiles(path.Join(args.Name, "src"), args.Template)
+	err = gorecurcopy.CopyDirectory(templatePath, name)
 	if err != nil {
-		log <- &Status{
-			Message: "Error creating template files",
-			Error:   err,
-		}
-	} else {
-		log <- &Status{
-			Message: "Created template files",
-			Error:   nil,
-		}
+		return fmt.Errorf("error copying template: %s", err.Error())
 	}
-	return true
-}
-
-func createConfig(args *CreateProjectArgs, log chan<- *Status) bool {
-	conf := fmt.Sprintf(templateConfig, args.Name)
-	os.WriteFile(path.Join(args.Name, "gama.yml"), []byte(conf), 0775)
-	return true
-}
-
-func createTemplateFiles(sourceDir string, templ string) error {
-	templateDir := path.Join(config.InstallPath, "templates", templ)
-	entries, err := os.ReadDir(templateDir)
+	gamaDest := path.Join(name, "gama")
+	err = os.Mkdir(gamaDest, 0755)
+	if err == nil {
+		err = gorecurcopy.CopyDirectory(gamaPath, gamaDest)
+	}
 	if err != nil {
-		return fmt.Errorf("template does not exist: %s", err.Error())
+		return fmt.Errorf("error copying gama: %s", err.Error())
 	}
-	for _, entry := range entries {
-		if entry.IsDir() {
-			fmt.Println("Found a directory in template, this is unexpected but not error prone.")
-		} else {
-			file := entry.Name()
-			content, err := os.ReadFile(path.Join(templateDir, file))
-			if err != nil {
-				fmt.Printf("Could not read file %s from template. This should not happen", file)
-			} else {
-				err := os.WriteFile(path.Join(sourceDir, file), content, 0755)
-				if err != nil {
-					fmt.Println("Could not put file from template to destination path")
-					return err
-				}
-			}
-		}
-	}
-	return err
-}
-
-func createGamaDir(args *CreateProjectArgs, log chan<- *Status) bool {
-	dest := path.Join(args.Name, "gama")
-	err := os.Mkdir(dest, 0755)
+	conf := fmt.Sprintf(templateConfig, name)
+	err = os.WriteFile(path.Join(name, "gama.yml"), []byte(conf), 0755)
 	if err != nil {
-		log <- &Status{
-			Message: "Error Creating gama folder",
-			Error:   fmt.Errorf("failed creating folder at %s: %s ", "src", err.Error()),
-		}
-		return false
+		return fmt.Errorf("error writing gama config: %s", err.Error())
 	}
-	log <- &Status{"Created gama library folder", nil}
-	err = gorecurcopy.CopyDirectory(path.Join(config.InstallPath, "gama"), dest)
-
-	if err != nil {
-		log <- &Status{
-			Message: "Error copying gama headers",
-			Error:   err,
-		}
-	} else {
-		log <- &Status{
-			Message: "Created gama directory and copied header files",
-			Error:   nil,
-		}
-	}
-	return true
+	return nil
 }

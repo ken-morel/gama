@@ -33,17 +33,9 @@ var (
 				fmt.Println("No name specified")
 				os.Exit(1)
 			}
-			fmt.Printf("Creating project at ./%s/\n", projectName)
-			logs := make(chan *gama.Status)
-			go gama.CreateProject(&gama.CreateProjectArgs{
-				Name:     projectName,
-				Template: templateName,
-			}, logs)
-			for log := range logs {
-				fmt.Println(log.Message)
-				if log.Error != nil {
-					fmt.Println(log.Error.Error())
-				}
+			err := gama.CreateProject(projectName, templateName)
+			if err != nil {
+				fmt.Println("Error creating project: ", err.Error())
 			}
 		},
 		Aliases: []string{"init", "initialize"},

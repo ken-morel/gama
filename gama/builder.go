@@ -8,14 +8,9 @@ import (
 	"runtime"
 )
 
-type BuilldProjectArgs struct {
-	Run bool
-}
-
 // winegcc src/main.c -o test.exe -lopengl32 -lgdi32
 
 func buildWindows() error {
-	gccPath := config.Config.Build.GCC
 	if gccPath == nil {
 		return fmt.Errorf("no gcc path specified")
 	}
@@ -23,7 +18,6 @@ func buildWindows() error {
 	if name == "" {
 		return fmt.Errorf("invalid project name")
 	}
-	cmd := exec.Command(*gccPath, "src/main.c", "-o", fmt.Sprintf("build/%s.exe", name), "-lopengl32", "-lgdi32")
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	return cmd.Run()
@@ -81,5 +75,41 @@ func BuildProject(args *BuilldProjectArgs, log chan<- *Status) {
 		RunBuild(&RunBuildArgs{Args: []string{}}, log)
 	} else {
 		close(log)
+	}
+}
+
+func buildProjectWindows(name string) error {
+	gccPath := config.Config.Build.GCC
+	if gccPath == nil {
+		return fmt.Errorf("GCCpath required when building on windows. Set it to the path to your gcc executable")
+	}
+	cmd := exec.Command(
+		*gccPath,
+		"src/main.c",
+		"-o",
+		fmt.Sprintf("build/%s.exe", name),
+		"-lopengl32",
+		"-lgdi32",
+	)
+	return runBuildCommand(cmd)
+}
+
+func BuildProject(wine bool) error {
+	if config.Config == nil {
+		return fmt.Errorf("Config not found")
+	}
+	name := config.Config.Project.Name
+	if name == "" {
+		return fmt.Errorf("Invalid project name")
+	}
+	switch runtime.GOOS {
+	case "windows":
+		return buildProjectWindows(name)
+	case "linux":
+		if wine {
+			return buildProjectWine(name)
+		} else {
+			return buildProjectLinux(name)
+		}
 	}
 }

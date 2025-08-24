@@ -22,8 +22,6 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/ken-morel/gama/gama"
 	"github.com/spf13/cobra"
 )
@@ -31,20 +29,15 @@ import (
 // buildCmd represents the build command
 var (
 	shouldRun bool
+	useWine   bool
 	buildCmd  = &cobra.Command{
 		Use:   "build",
 		Short: "Build the applicaiton",
 		Long:  `Build the application into an executable in build.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			logs := make(chan *gama.Status)
-			go gama.BuildProject(&gama.BuilldProjectArgs{
-				Run: shouldRun,
-			}, logs)
-			for log := range logs {
-				fmt.Println(log.Message)
-				if log.Error != nil {
-					fmt.Println(log.Error.Error())
-				}
+			err := gama.BuildProject(useWine)
+			if err == nil && shouldRun {
+				err = gama.RunBuild(useWine)
 			}
 		},
 	}
@@ -53,6 +46,7 @@ var (
 func init() {
 	rootCmd.AddCommand(buildCmd)
 	rootCmd.PersistentFlags().BoolVarP(&shouldRun, "run", "r", false, "Run the application after building it")
+	rootCmd.PersistentFlags().BoolVarP(&shouldRun, "wine", "w", false, "Build the applicaiton using wine(linux only)")
 
 	// Here you will define your flags and configuration settings.
 
