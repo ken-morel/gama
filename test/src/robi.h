@@ -1,10 +1,11 @@
-#include "../../../assets/gama/gama.h"
+#include "../../assets/gama/gama.h"
 #include <stdio.h>
 #define NCACTUSSES 3
 
 Sprite *robi;
 Shape ground;
 Sprite *cactusses[NCACTUSSES];
+Text *helpText, *scoreText;
 
 int jumped = 0;
 
@@ -57,6 +58,9 @@ void robiKey(Scene *scene, KeyEvent *e) {
       jumped++;
     }
     break;
+  case KeyP:
+    showScene(scene->app, welcomeScene);
+    break;
   default:
     break;
   }
@@ -89,23 +93,29 @@ void robiRender(Scene *scene) {
   if (robi != NULL)
     renderSprite(robi);
   renderShape(&ground);
+  renderText(helpText);
+  renderText(scoreText);
 }
 
+int score = 0;
+void createTexts() {
+  helpText = createTextNulled("Press p to pause", ubuntu, at(-0.9, -0.95));
+  helpText->fontsize = 0.05;
+  helpText->tint = BLUE;
+  scoreText = createTextNulled("Score: ", ubuntu, at(0, 0.95));
+  scoreText->fontsize = 0.05;
+}
 int created = 0;
 void robiCreate(Scene *scene) {
   if (!created) {
     createRobi();
     createRectangle(&ground, at(0, -1), at(2, 0.1), GREEN);
     createCactusses();
+    createTexts();
   }
   created = 1;
 }
 void robiDestroy(Scene *scene) {}
-
-void test2(Scene *scene, MouseClickEvent *e) {
-  if (!e->down)
-    showScene(scene->app, welcomeScene);
-}
 
 Scene *createRobiScene(App *app) {
   Scene *s = createScene(app);
@@ -115,7 +125,6 @@ Scene *createRobiScene(App *app) {
   s->render = robiRender;
   s->update = robiUpdate;
   s->onkey = robiKey;
-  s->onclick = test2;
   s->destroy = robiDestroy;
   s->background = LIGHTGRAY;
   return s;

@@ -23,10 +23,11 @@ typedef struct {
   double fontsize;
   Font *font;
   Vector *pos;
-  Color color;
+  Color tint;
 } Text;
 
 void setText(Text *, const char *, size_t);
+void setTextNulled(Text *, const char *);
 
 Font *newFont() {
   Font *f = (Font *)malloc(sizeof(Font));
@@ -37,7 +38,7 @@ Font *newFont() {
 Text *newText() {
   Text *t = (Text *)malloc(sizeof(Text));
   t->text = NULL;
-  t->color = BLACK;
+  t->tint = WHITE;
   t->font = NULL;
   t->len = 0;
   t->fontsize = 0;
@@ -68,10 +69,18 @@ Font *loadFont(const char *url) {
   return f;
 }
 
-Text *createText(char *text, size_t length, Font *f, Pos *pos) {
+Text *createText(const char *text, size_t length, Font *f, Pos *pos) {
   Text *t = newText();
 
   setText(t, text, length);
+  t->fontsize = 0.1;
+  t->font = f;
+  t->pos = vectorAt(pos);
+  return t;
+}
+Text *createTextNulled(const char *text, Font *f, Pos *pos) {
+  Text *t = newText();
+  setTextNulled(t, text);
   t->fontsize = 0.1;
   t->font = f;
   t->pos = vectorAt(pos);
@@ -121,7 +130,6 @@ void renderText(Text *t) {
 
   double scale = t->fontsize / 20.0;
 
-  SetGLColor(t->color);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_TEXTURE_2D);
@@ -129,6 +137,8 @@ void renderText(Text *t) {
 
   glTranslatef(-offset, 0, 0);
   glBegin(GL_QUADS);
+
+  // SetGLColor(t->tint);
   for (int i = 0; i < t->len; i++) {
     if ((int)t->text[i] >= 32 && (int)t->text[i] < 128) {
       stbtt_aligned_quad q;
@@ -174,4 +184,25 @@ void setText(Text *t, const char *txt, size_t length) {
   t->len = length;
 }
 
+void setTextNulled(Text *t, const char *txt) {
+  if (t->text != NULL) {
+    free(t->text);
+    t->text = NULL;
+  }
+  int len;
+  for (len = 0; txt[len] != '\0'; len++)
+    if (len > 0 && len % 1000 == 0)
+      printf("String possibly non-terminated(passed %d characters)", len);
+
+  t->text = (char *)malloc(len + 1);
+  if (t->text == NULL) {
+    t->len = 0;
+    printf("Could not allocate text space");
+    return;
+  }
+
+  memcpy(t->text, txt, len);
+  t->text[len] = '\0';
+  t->len = len;
+}
 #endif

@@ -1,8 +1,9 @@
 #include "../../assets/gama/gama.h"
 
 Scene *robiScene, *welcomeScene;
-#include "robi/robi.h"
-#include "welcome/welcome.h"
+Font *ubuntu;
+#include "robi.h"
+#include "welcome.h"
 
 void init(App *app) {
   srand(time(NULL));
@@ -13,6 +14,11 @@ void init(App *app) {
   if (robiScene == NULL || welcomeScene == NULL) {
     puts("Failed to create scene");
     exit(1);
+  }
+  ubuntu = loadFont("assets/fonts/Ubuntu-R.ttf");
+  if (ubuntu == NULL) {
+    printf("Error loading Ubuntu font");
+    exit(11);
   }
 }
 void create(App *app) { showScene(app, welcomeScene); }
