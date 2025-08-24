@@ -44,7 +44,7 @@ var (
 			} else if shouldRun {
 				err = gama.RunBuild(args, useWine)
 				if err != nil {
-					fmt.Println("Error running project build: %s", err.Error())
+					fmt.Printf("Error running project build: %s", err.Error())
 				}
 			}
 		},
@@ -54,7 +54,7 @@ var (
 func init() {
 	rootCmd.AddCommand(buildCmd)
 	rootCmd.PersistentFlags().BoolVarP(&shouldRun, "run", "r", false, "Run the application after building it")
-	rootCmd.PersistentFlags().BoolVarP(&shouldRun, "wine", "w", false, "Build the applicaiton using wine(linux only)")
+	rootCmd.PersistentFlags().BoolVarP(&useWine, "wine", "w", false, "Build the applicaiton using wine(linux only)")
 
 	// Here you will define your flags and configuration settings.
 

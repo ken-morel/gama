@@ -19,7 +19,7 @@ func getDirCFiles(folder string) ([]string, error) {
 			}
 			cfiles = append(cfiles, children...)
 		} else {
-			if path.Ext(entry.Name()) == "c" {
+			if path.Ext(entry.Name()) == ".c" {
 				cfiles = append(cfiles, path.Join(folder, entry.Name()))
 			}
 		}
