@@ -18,6 +18,7 @@ func buildProjectWine(name string, cfiles []string) error {
 			fmt.Sprintf("build/%s.exe", name),
 			"-lopengl32",
 			"-lgdi32",
+			"-D BACKEND_WIN32=\"\"",
 		)...,
 	)
 	fmt.Println("Running:", cmd.String())
@@ -41,6 +42,7 @@ func buildProjectLinux(name string, cfiles []string) error {
 			"-lX11",
 			"-lXxf86vm",
 			"-lpthread",
+			"-D BACKEND_GLFW=\"\"",
 		)...,
 	)
 	fmt.Println("Running:", cmd.String())
@@ -61,6 +63,7 @@ func buildProjectWindows(name string, cfiles []string) error {
 			fmt.Sprintf("build/%s.exe", name),
 			"-lopengl32",
 			"-lgdi32",
+			"-D BACKEND_WIN32=\"\"",
 		)...,
 	)
 	fmt.Println("Running:", cmd.String())

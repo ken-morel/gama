@@ -13,21 +13,6 @@
 #include <stdio.h>
 #include <time.h>
 
-///////////////////////
-#ifndef BACKEND_GLFW
-#ifndef BACKEND_WIN32
-
-#ifdef __linux__
-#define BACKEND_GLFW
-#endif
-#ifdef __windows__
-#define BACKEND_GLFW
-#endif
-
-#endif
-#endif
-////////////////////////
-
 #ifdef BACKEND_GLFW
 #include "backends/glfw.h"
 
