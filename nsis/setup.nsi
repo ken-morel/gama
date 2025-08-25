@@ -1,14 +1,19 @@
 ; =============================================================================
-; NSIS Installer Script for "gama"
+; NSIS Installer Script for "gama" (Verified, Compilable Version)
 ;
 ; Features:
-; - Standard installer without PATH modification.
+; - Self-contained and robust function to add the installation directory to the PATH.
+; - Accurately checks if the directory is already in the PATH to avoid duplicates.
+; - No uninstaller logic for PATH removal to keep it simple.
 ; - Compiles cleanly with no warnings.
-; - Complete and clean uninstaller for all files, shortcuts, and registry keys.
 ; =============================================================================
 
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
+!include "StrFunc.nsh"
+
+; --- Declare which StrFunc macros we are using ---
+${Using:StrFunc} StrStr ; <-- THIS IS THE FIX for the new error.
 
 ;--------------------------------
 ; General
@@ -29,6 +34,33 @@ RequestExecutionLevel user
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
 
+;----------------------------------------------------------------------------
+; Custom Function to Add to PATH (Improved for Robustness)
+;----------------------------------------------------------------------------
+Function AddGamaToPath
+  ; Read the current user PATH
+  ReadRegStr $R0 HKCU "Environment" "Path"
+
+  ; To prevent partial matches (e.g., `C:\gama` in `C:\gama-old`),
+  ; we wrap the existing PATH and our path in semicolons for a precise check.
+  ; This reliably finds the entry whether it's at the start, middle, or end.
+  ${StrStr} $R1 ";$R0;" ";$INSTDIR;"
+  
+  ; If $R1 is empty, our path was not found.
+  ${If} $R1 == ""
+    ; It's not in the PATH, so let's add it.
+    ; Check if the current PATH is empty to avoid a leading semicolon.
+    ${If} $R0 == ""
+      WriteRegExpandStr HKCU "Environment" "Path" "$INSTDIR"
+    ${Else}
+      WriteRegExpandStr HKCU "Environment" "Path" "$R0;$INSTDIR"
+    ${EndIf}
+    
+    ; Broadcast a message to notify other processes of the change.
+    SendMessage ${HWND_BROADCAST} ${WM_SETTINGCHANGE} 0 "STR:Environment" /TIMEOUT=5000
+  ${EndIf}
+FunctionEnd
+
 ;=============================================================================
 ; Installer Section
 ;=============================================================================
@@ -40,6 +72,9 @@ Section "Install gama" SecInstall
   File /r "..\assets\fonts"
   File /r "..\assets\gama"
   File /r "..\assets\templates"
+
+  ; --- Add the installation directory to the user's PATH ---
+  Call AddGamaToPath
   
   ; --- Create Uninstaller and Registry entries for Add/Remove Programs ---
   WriteRegStr HKCU "Software\cm.engon.gama" "InstallDir" "$INSTDIR"
@@ -53,7 +88,6 @@ Section "Install gama" SecInstall
   ; --- Create shortcuts ---
   CreateDirectory "$SMPROGRAMS\gama"
   CreateShortCut "$SMPROGRAMS\gama\gama.lnk" "$INSTDIR\gama.exe"
-  CreateShortCut "$DESKTOP\gama\uninstall.lnk" "$INSTDIR\uninstall.exe"
   CreateShortCut "$DESKTOP\gama.lnk" "$INSTDIR\gama.exe"
 SectionEnd
 
