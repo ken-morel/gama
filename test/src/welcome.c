@@ -1,4 +1,3 @@
-#include "../../assets/gama/gama.h"
 #include "defs.h"
 
 Text *welcomeText;

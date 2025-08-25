@@ -1,9 +1,8 @@
-#ifndef def_was_included
-#define def_was_included
-
 #include "../../assets/gama/gama.h"
 
 Scene *robiScene, *welcomeScene, *gameoverScene;
 Font *ubuntu, *playwrite;
 
-#endif
+Scene *createWelcomeScene(App *app);
+Scene *creategameoverScene(App *app);
+Scene *createRobiScene(App *app);

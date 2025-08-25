@@ -1,7 +1,4 @@
 #include "defs.h"
-#include "gameover.h"
-#include "robi.h"
-#include "welcome.h"
 
 void init(App *app) {
   srand(time(NULL));

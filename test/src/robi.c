@@ -1,4 +1,3 @@
-#include "../../assets/gama/gama.h"
 #include "defs.h"
 
 #include <stdio.h>
@@ -31,11 +30,13 @@ void resetCactus(Sprite *c, float around) {
   else if (offset < -1)
     offset = -1;
   c->pos->pos->x = around + (1.0f * offset);
-  c->pos->vel->x = (offset > 0 ? -offset : offset) * 0.1f - 0.3f;
 
   double poss[3] = {-0.9, -0.85, -0.825};
   double sizes[3] = {0.15, 0.2, 0.25};
+  double bases[3] = {0.4, 0.3, 0.2};
   int templ = rand() % 3;
+  c->pos->vel->x =
+      (offset > 0 ? -offset : offset) * 0.2f - bases[templ] * (1 + cbrt(score));
   c->pos->pos->y = poss[templ];
   c->size->y = sizes[templ];
 }
@@ -71,13 +72,26 @@ void robiKey(Scene *scene, KeyEvent *e) {
 }
 
 float gotoGameover = 0;
+int robiTouchesACactus() {
+  Sprite *cactus;
+  for (size_t i = 0; i < NCACTUSSES; i++) {
+    cactus = cactusses[i];
+    if (spriteTouchesSprite(cactus, robi)) {
+      return 1;
+    }
+  }
+  return 0;
+}
 void robiUpdate(Scene *scene, double theta) {
   if (gotoGameover > 0) {
     gotoGameover += theta;
-    if (gotoGameover > 1.0) {
+    if (gotoGameover > 10.0) {
       showScene(scene->app, gameoverScene);
+    } else if (gotoGameover > 5.0) {
+      theta = 0;
+    } else {
+      theta *= sqrt(10.0 - gotoGameover * 2) / 10.0;
     }
-    theta *= 0.1;
   }
   if (robi == NULL)
     return;
@@ -98,13 +112,8 @@ void robiUpdate(Scene *scene, double theta) {
     updateSprite(cactus, theta);
   }
   bounceSpriteUnder(robi, -0.95, 0.4, -1);
-
-  for (size_t i = 0; i < NCACTUSSES; i++) {
-    cactus = cactusses[i];
-    if (spriteTouchesSprite(cactus, robi)) {
-      gotoGameover += 0.1;
-    }
-  }
+  if (robiTouchesACactus())
+    gotoGameover += 0.1;
 }
 
 void robiRender(Scene *scene) {
