@@ -34,6 +34,18 @@ func CreateProject(name string, template string) error {
 	if err != nil {
 		return fmt.Errorf("error copying gama: %s", err.Error())
 	}
+
+	for _, p := range [][]string{{"assets"}, {"assets", "fonts"}, {"assets", "sprites"}, {"assets", "images"}} {
+		os.Mkdir(
+			path.Join(
+				append(
+					[]string{name},
+					p...,
+				)...,
+			), 0755)
+	}
+	gorecurcopy.Copy(path.Join(config.InstallPath, "images", "gama.ico"), path.Join(name, "assets", "images", "logo.ico"))
+
 	conf := fmt.Sprintf(templateConfig, name)
 	err = os.WriteFile(path.Join(name, "gama.yml"), []byte(conf), 0755)
 	if err != nil {
