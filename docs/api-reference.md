@@ -324,7 +324,25 @@ Initializes a `Shape` structure as a circle.
 
 A pointer to the initialized `Shape`.
 
-... and many other helper functions to control the shape's physics and get its properties.
+### Shape Helpers
+
+#### Physics and Position
+
+*   `void setShapeVelocity(Shape *s, Pos *vel)`: Sets the velocity of a shape.
+*   `Pos *getShapeVelocity(Shape *s)`: Gets the velocity of a shape.
+*   `Pos *getShapePosition(Shape *s)`: Gets the position of a shape.
+*   `void setShapePosition(Shape *s, Pos *pos)`: Sets the position of a shape.
+*   `Pos *getShapeAcceleration(Shape *s)`: Gets the acceleration of a shape.
+*   `void setShapeAcceleration(Shape *s, Pos *acc)`: Sets the acceleration of a shape.
+
+#### Collision and Bouncing
+
+*   `double shapeTop(Shape *s)`: Returns the y-coordinate of the top edge of a shape.
+*   `double shapeBottom(Shape *s)`: Returns the y-coordinate of the bottom edge of a shape.
+*   `double shapeLeft(Shape *s)`: Returns the x-coordinate of the left edge of a shape.
+*   `double shapeRight(Shape *s)`: Returns the x-coordinate of the right edge of a shape.
+*   `void bounceShape(Shape *s, double x, double y)`: Inverts the velocity of a shape on the x or y axis, simulating a bounce. A value of `0.0` for `x` or `y` means no bounce on that axis.
+
 ---
 
 ## `sprite.h`
@@ -371,7 +389,27 @@ Sets a custom animation sequence for a sprite.
 *   `unsigned int *animation`: An array of frame indices for the animation.
 *   `unsigned int fps`: The speed of the animation in frames per second.
 
-... and many other helper functions to control the sprite's physics and get its properties.
+### Sprite Helpers
+
+#### Physics and Position
+
+*   `void setSpriteVelocity(Sprite *s, Pos *vel)`: Sets the velocity of a sprite.
+*   `Pos *getSpriteVelocity(Sprite *s)`: Gets the velocity of a sprite.
+*   `Pos *getSpritePosition(Sprite *s)`: Gets the position of a sprite.
+*   `void setSpritePosition(Sprite *s, Pos *pos)`: Sets the position of a sprite.
+*   `Pos *getSpriteAcceleration(Sprite *s)`: Gets the acceleration of a sprite.
+*   `void setSpriteAcceleration(Sprite *s, Pos *acc)`: Sets the acceleration of a sprite.
+
+#### Collision and Bouncing
+
+*   `double spriteTop(Sprite *s)`: Returns the y-coordinate of the top edge of a sprite.
+*   `double spriteBottom(Sprite *s)`: Returns the y-coordinate of the bottom edge of a sprite.
+*   `double spriteLeft(Sprite *s)`: Returns the x-coordinate of the left edge of a sprite.
+*   `double spriteRight(Sprite *s)`: Returns the x-coordinate of the right edge of a sprite.
+*   `void bounceSprite(Sprite *s, double x, double y)`: Inverts the velocity of a sprite on the x or y axis.
+*   `float bounceSpriteUnder(Sprite *s, double pos, double bounce, double maxSpeed)`: A specialized bounce function that simulates a bounce when a sprite hits a floor at a certain y-position.
+*   `int rectsCollide(Pos *pa, Pos *sa, Pos *pb, Pos *sb)`: Checks if two rectangles collide.
+*   `int spriteTouchesSprite(Sprite *a, Sprite *b)`: Checks if two sprites are colliding.
 
 ---
 
@@ -424,7 +462,7 @@ A pointer to the new `Text` object.
 
 ### `void renderText(Text *t)`
 
-_Renders a text object to the screen.
+Renders a text object to the screen.
 
 **Parameters**:
 
