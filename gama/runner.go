@@ -9,17 +9,17 @@ import (
 )
 
 func runBuildWindows(name string, args []string) error {
-	command := exec.Command(path.Join("build", name+".exe"), args...)
+	command := exec.Command(path.Join("build", "windows", name+".exe"), args...)
 	return runBuildCommand(command)
 }
 
 func runBuildLinux(name string, args []string) error {
-	command := exec.Command(path.Join("build", name), args...)
+	command := exec.Command(path.Join("build", "linux", name), args...)
 	return runBuildCommand(command)
 }
 
 func runBuildWine(name string, args []string) error {
-	bargs := []string{path.Join("build", name+".exe")}
+	bargs := []string{path.Join("build", "windows", name+".exe")}
 	bargs = append(bargs, args...)
 	command := exec.Command("wine", bargs...)
 	return runBuildCommand(command)

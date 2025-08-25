@@ -2,6 +2,7 @@ package gama
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"path"
 	"runtime"
@@ -9,13 +10,15 @@ import (
 
 // winegcc src/main.c -o test.exe -lopengl32 -lgdi32
 func buildProjectWine(name string, cfiles []string) error {
-	fmt.Println("Building project with winegcc")
+	outDir := path.Join("build", "windows")
+	os.RemoveAll(outDir)
+	os.MkdirAll(outDir, 0755)
 	cmd := exec.Command(
 		"winegcc",
 		append(
 			cfiles,
 			"-o",
-			fmt.Sprintf("build/%s.exe", name),
+			path.Join(outDir, name+".exe"),
 			"-lopengl32",
 			"-lgdi32",
 			"-D BACKEND_WIN32=\"\"",
@@ -27,12 +30,15 @@ func buildProjectWine(name string, cfiles []string) error {
 
 // gcc ./test/src/main.c -o ./test/test -lglfw -lGL -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread && ./test/test
 func buildProjectLinux(name string, cfiles []string) error {
+	outDir := path.Join("build", "linux")
+	os.RemoveAll(outDir)
+	os.MkdirAll(outDir, 0755)
 	cmd := exec.Command(
 		"gcc",
 		append(
 			cfiles,
 			"-o",
-			path.Join("build", name),
+			path.Join(outDir, name),
 			"-g",
 			"-lglfw",
 			"-lGL",
@@ -55,12 +61,16 @@ func buildProjectWindows(name string, cfiles []string) error {
 	if gccPath == nil {
 		return fmt.Errorf("GCCpath required when building on windows. Set it to the path to your gcc executable")
 	}
+	outDir := path.Join("build", "windows")
+	os.RemoveAll(outDir)
+	os.MkdirAll(outDir, 0755)
+
 	cmd := exec.Command(
 		*gccPath,
 		append(
 			cfiles,
 			"-o",
-			fmt.Sprintf("build/%s.exe", name),
+			path.Join(outDir, name+".exe"),
 			"-lopengl32",
 			"-lgdi32",
 			"-D BACKEND_WIN32=\"\"",

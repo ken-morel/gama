@@ -1,6 +1,7 @@
 #!/usr/bin/fish
 
 # Set environment variables for cross-compiling to Windows
+
 set -gx GOOS windows
 set -gx GOARCH amd64
 
