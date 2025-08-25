@@ -1,4 +1,3 @@
-
 #ifndef GAMA_INCLUDED
 #define GAMA_INCLUDED
 
