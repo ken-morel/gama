@@ -9,6 +9,8 @@
 name: gama
 depends:
   - gcc
+  - libglfw3
+  - libglfw3-dev
 provides:
   - gama
 recommends:
