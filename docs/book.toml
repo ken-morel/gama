@@ -1,0 +1,89 @@
+# This is the main configuration file for your mdBook.
+# Place this file inside your `docs` directory.
+
+# ------------------------------------------------------------------------------
+# [book] Section: Core book metadata
+# ------------------------------------------------------------------------------
+[book]
+title = "Gama Project Documentation"
+author = "Engon Ken Morel"
+description = "A library and utility to create cross platforms games in c."
+
+# The language of the book. This is used for generating the "lang" attribute in HTML.
+# Use IETF language tags like "en", "fr", "de".
+language = "en"
+
+# By default, mdBook looks for source files in a `src` directory.
+# Since your files are in `docs`, we handle this with the `mdbook build docs` command
+# in the workflow, so you don't need to set the `src` key here.
+
+
+# ------------------------------------------------------------------------------
+# [output.html] Section: Settings for the HTML website output
+# ------------------------------------------------------------------------------
+[output.html]
+# The base URL of your site. This is VERY IMPORTANT for correct links, search, and SEO.
+# Replace `<USER>` and `<REPO>` with your GitHub username and repository name.
+site-url = "/gama/"
+
+# Adds a link to your Git repository at the top of the sidebar.
+git-repository-url = "https://github.com/ken-morel/gama"
+git-repository-icon = "fa-github" # Uses a FontAwesome icon class
+
+# This creates an "Edit this page" link on each page.
+# The template is crucial for linking back to the correct source file.
+# Since your markdown is in the `docs` folder, this is the correct URL structure.
+edit-url-template = "https://github.com/ken-morel/gama/edit/main/docs/{path}"
+
+# The default visual theme. Options are "light", "rust", "coal", "navy", "ayu".
+default-theme = "coal"
+
+# The theme to use if the user's browser prefers a dark color scheme.
+preferred-dark-theme = "coal"
+
+# Path to a custom favicon, relative to your `docs` directory.
+# favicon = "../gama.png"
+
+# --- Optional Files for Custom Styling and Behavior ---
+
+# Add extra CSS files to customize the look and feel.
+# Paths are relative to your `docs` directory.
+# additional-css = ["theme/custom.css",]
+
+# Add extra JavaScript files.
+# additional-js = ["theme/custom.js"]
+
+
+# --- Optional Feature Toggles ---
+
+# If you don't want the "Section" label above chapter titles in the sidebar.
+no-section-label = true
+
+# Add your Google Analytics ID to enable tracking.
+# google-analytics = "UA-XXXXXXXX-X"
+
+
+# --- Search Configuration ---
+
+# You can disable the search feature if you don't need it.
+# search.enable = false
+
+# Limit the number of search results displayed.
+# search.limit = 20
+
+
+# ------------------------------------------------------------------------------
+# [preprocessor] Section: For enabling plugins that transform your content
+# ------------------------------------------------------------------------------
+# Preprocessors are powerful but optional. They can do things like render math
+# equations (katex) or check for broken links. The `linkcheck` preprocessor is
+# built-in and a good one to enable.
+
+[preprocessor.linkcheck]
+# This will check all your links during the `mdbook build` command and warn you of any broken ones.
+# It's highly recommended.
+
+
+# To enable other preprocessors, you would first need to install them with `cargo`.
+# For example, to enable KaTeX math notation:
+# [preprocessor.katex]
