@@ -8,6 +8,17 @@ import (
 	"runtime"
 )
 
+func getBuildExecutablePath(name string, useWine bool) (string, error) {
+	lin := path.Join("build", "linux", name)
+	win := path.Join("build", "windows", name+".exe")
+	if useWine || runtime.GOOS == "windows" {
+		return win, nil
+	} else if runtime.GOOS == "linux" {
+		return lin, nil
+	}
+	return "", fmt.Errorf("System not supported")
+}
+
 // winegcc src/main.c -o test.exe -lopengl32 -lgdi32
 func buildProjectWine(name string, cfiles []string) error {
 	outDir := path.Join("build", "windows")

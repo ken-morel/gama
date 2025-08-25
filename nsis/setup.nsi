@@ -27,6 +27,7 @@ RequestExecutionLevel user
 ; Modern UI Configuration
 !define MUI_ABORTWARNING
 !insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
@@ -72,6 +73,7 @@ Section "Install gama" SecInstall
   File /r "..\assets\fonts"
   File /r "..\assets\gama"
   File /r "..\assets\templates"
+  File /r "..\assets\images"
 
   ; --- Add the installation directory to the user's PATH ---
   Call AddGamaToPath
