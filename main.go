@@ -35,17 +35,20 @@ import (
 func getInstallDir() (string, error) {
 	installDir := os.Getenv("GAMA_DIR")
 	if installDir == "" {
+		_, err := os.Stat("/usr/share/gama")
+		if err == nil {
+			return "/usr/share/gama", nil
+		}
 		homeDir, err := os.UserHomeDir()
 		if err == nil {
 			installDir = path.Join(homeDir, ".gama")
 		} else {
 			fmt.Println("Error getting system home directory  gama")
-			os.Exit(1)
 		}
 	}
 	_, err := os.Stat(installDir)
 	if err != nil {
-		return "", fmt.Errorf("Error: gama install folder(%s) not found, please reinstall gama: %s\n", installDir, err.Error())
+		return "", fmt.Errorf("error: gama install folder(%s) not found, please reinstall gama: %s", installDir, err.Error())
 	}
 	return installDir, nil
 }

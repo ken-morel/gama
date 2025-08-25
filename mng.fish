@@ -14,8 +14,8 @@ function package -a mode
                 exit 1
             end
         case linux
-            echo "Linux packaging not supported yet"
-            exit 2
+            cd nfpm
+            nfpm pkg --packager deb --target ../bin/ -f nfpm.yaml
         case "*"
             echo "No or invalid package mode specified"
 

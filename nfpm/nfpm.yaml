@@ -1,0 +1,36 @@
+# This is an example nfpm configuration file.
+# Make sure to check the documentation at https://nfpm.goreleaser.com
+#
+# The lines below are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/need to use them.
+# yaml-language-server: $schema=./nfpm.yaml.schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+name: gama
+depends:
+  - gcc
+provides:
+  - gama
+recommends:
+  - winegcc
+  - wine
+arch: amd64
+platform: linux
+version: 0.1.0
+section: default
+priority: extra
+maintainer: Engon Ken Morel <engon@rbs.cm>
+description: Building, ship apps in pure c which works almost anwhere
+vendor: Engon Ken Morel
+homepage: https://slicenfill.rbs.cm
+license: MIT
+contents:
+  - src: ../bin/gama
+    dst: /usr/bin/gama
+  - src: ../gama.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/gama.svg
+  # copy icons to Yaru theme as well. For some reason Ubuntu didn't pick up fileicons from hicolor theme
+  - src: ../gama.svg
+    dst: /usr/share/icons/Yaru/scalable/apps/gama.svg
+  - src: ../assets
+    dst: /usr/share/gama
