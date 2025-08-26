@@ -34,10 +34,15 @@ void showScene(App *app, Scene *s) {
   sceneCreate(app->scene);
 }
 
-void SetAppTitle(App *app, char *title) {
+void setAppTitle(App *app, char *title) {
   // FIX: Fix this
   // free(app->title);
   app->title = title;
+}
+
+void setAppSize(App *app, unsigned int width, unsigned int height) {
+  app->width = width;
+  app->height = height;
 }
 
 void _gama_init(App *);

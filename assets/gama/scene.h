@@ -3,15 +3,17 @@
 
 #include "color.h"
 #include "events.h"
+#include "object.h"
 #include "shape.h"
 #include "sprite.h"
+#include "text.h"
+#include <cstddef>
 
 struct sApp;
 
 typedef struct sScene {
-  SpriteList sprites;
-  ShapeList shapes;
   Color background;
+  GObjectList objects;
   struct sApp *app;
   void (*create)(struct sScene *);
   void (*update)(struct sScene *, double);
@@ -27,10 +29,6 @@ Scene *createScene(struct sApp *app) {
   Scene *s = (Scene *)malloc(sizeof(Scene));
   if (s == NULL)
     return NULL;
-  s->sprites.sprites = NULL;
-  s->shapes.shapes = NULL;
-  createSpriteList(&s->sprites);
-  createShapeList(&s->shapes);
   s->app = app;
   s->create = NULL;
   s->update = NULL;
@@ -39,14 +37,15 @@ Scene *createScene(struct sApp *app) {
   s->onclick = NULL;
   s->onkey = NULL;
   s->background = LIGHTCYAN;
+  createGObjectList(&s->objects);
   return s;
 }
 
-void addShapeToScene(Scene *scene, Shape *shape) {
-  addShapeToList(&scene->shapes, shape);
+void addObjectToScene(Scene *s, GObject *o) {
+  addGObjectToList(&s->objects, o);
 }
-void addSpriteToScene(Scene *scene, Sprite *sprite) {
-  addSpriteToList(&scene->sprites, sprite);
+GObject *popObjectFromScene(Scene *s) {
+  return popGObjectFromList(&s->objects);
 }
 
 void sceneCreate(Scene *s) {
@@ -54,11 +53,18 @@ void sceneCreate(Scene *s) {
     s->create(s);
 }
 void sceneUpdate(Scene *s, double theta) {
+  for (int i = 0; i < s->objects.length; i++)
+    updateGObject(s->objects.objects[i], theta);
+
   if (s->update != NULL)
     s->update(s, theta);
 }
 void sceneRender(Scene *s) {
   SetClearColor(s->background);
+
+  for (int i = 0; i < s->objects.length; i++)
+    renderGObject(s->objects.objects[i]);
+
   if (s->render != NULL)
     s->render(s);
 }

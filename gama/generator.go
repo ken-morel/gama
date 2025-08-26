@@ -12,9 +12,10 @@ func CopyGamaLibrary() error {
 	projectGama := "gama"
 	gamaLib := path.Join(config.InstallPath, "gama")
 	os.RemoveAll(projectGama)
+	os.Mkdir("gama", 0755)
 	err := gorecurcopy.CopyDirectory(gamaLib, projectGama)
 	if err != nil {
-		return fmt.Errorf("error copying gama library")
+		return fmt.Errorf("error copying gama library: %s", err.Error())
 	} else {
 		return nil
 	}

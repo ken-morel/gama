@@ -80,46 +80,6 @@ void setShapePosition(Shape *s, Pos *pos) {
   s->pos->pos = pos;
 }
 
-typedef struct {
-  Shape **shapes;
-  int length;
-} ShapeList;
-
-ShapeList *newShapeList() {
-  ShapeList *list = (ShapeList *)malloc(sizeof(ShapeList));
-  list->length = 0;
-  list->shapes = NULL;
-  return list;
-}
-void createShapeList(ShapeList *list) {
-  if (list->shapes != NULL)
-    free(list->shapes);
-  list->shapes = NULL;
-  list->length = 0;
-}
-void addShapeToList(ShapeList *list, Shape *shape) {
-  int i;
-  Shape **newShapes = (Shape **)malloc((list->length + 1) * sizeof(Shape *));
-  for (i = 0; i < list->length; i++)
-    newShapes[i] = list->shapes[i];
-  newShapes[list->length] = shape;
-  free(list->shapes);
-  list->shapes = newShapes;
-}
-
-void renderShapes(ShapeList *list) {
-  int i;
-  for (i = 0; i < list->length; i++) {
-    renderShape(list->shapes[i]);
-  }
-}
-void updateShapes(ShapeList *list, double theta) {
-  int i;
-  for (i = 0; i < list->length; i++) {
-    updateShape(list->shapes[i], theta);
-  }
-}
-
 double shapeTop(Shape *s) {
   switch (s->type) {
   case RectangleShape:

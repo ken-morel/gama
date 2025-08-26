@@ -2,8 +2,11 @@
 
 - [Welcome to Gama documentation](./welcome.md)
 - [Installation](./installation.md)
-- [The gama tool](./gamatool.md)
+- [Introducing the gama tool](./gamatool.md)
 - [Tutorials](./tutorials/index.md)
   - [Building a Pong Game](./tutorials/pong.md)
-- [Packaging your app](./packaging.md)
+- [Guides](./guides/index.md)
+  - [Packaging your app](./guides/packaging.md)
+- [Gama.h](./gama/index.md)
+  - [The base](./gama/base.md)
 - [API reference](./reference.md)
