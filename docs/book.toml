@@ -1,0 +1,15 @@
+[book]
+authors = ["Engon Ken Morel"]
+language = "en"
+src = "src"
+title = "Gama documentation"
+
+
+[output.html]
+edit-url-template = "https://github.com/ken-morel/gama/edit/main/docs/{path}"
+
+git-repository-icon = "fa-github" # Uses a FontAwesome icon class
+
+default-theme = "coal"
+preferred-dark-theme = "coal"
+favicon = "../gama.png"
