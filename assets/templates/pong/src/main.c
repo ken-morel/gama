@@ -1,4 +1,4 @@
-// src/main.c
+// Copyright © 2025 Mr.DCT(VERLA BERINYUY)
 #include "../gama/gama.h"
 
 // Forward declarations for our scene functions
