@@ -150,48 +150,6 @@ void setSpritePosition(Sprite *s, Pos *pos) {
   s->pos->pos = pos;
 }
 
-typedef struct {
-  Sprite **sprites;
-  int length;
-} SpriteList;
-
-SpriteList *newSpriteList() {
-  SpriteList *list = (SpriteList *)malloc(sizeof(SpriteList));
-  list->length = 0;
-  list->sprites = NULL;
-  return list;
-}
-void createSpriteList(SpriteList *list) {
-  if (list->sprites != NULL)
-    free(list->sprites);
-  list->sprites = NULL;
-  list->length = 0;
-}
-
-void addSpriteToList(SpriteList *list, Sprite *sprite) {
-  int i;
-  Sprite **newSprites =
-      (Sprite **)malloc((list->length + 1) * sizeof(Sprite *));
-  for (i = 0; i < list->length; i++)
-    newSprites[i] = list->sprites[i];
-  newSprites[list->length] = sprite;
-  free(list->sprites);
-  list->sprites = newSprites;
-}
-
-void renderSprites(SpriteList *list) {
-  int i;
-  for (i = 0; i < list->length; i++) {
-    renderSprite(list->sprites[i]);
-  }
-}
-void updateSprites(SpriteList *list, double theta) {
-  int i;
-  for (i = 0; i < list->length; i++) {
-    updateSprite(list->sprites[i], theta);
-  }
-}
-
 double spriteTop(Sprite *s) { return s->pos->pos->y + s->size->y / 2.0; }
 double spriteBottom(Sprite *s) { return s->pos->pos->y - s->size->y / 2.0; }
 double spriteLeft(Sprite *s) { return s->pos->pos->x - s->size->x / 2.0; }

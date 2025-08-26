@@ -2,16 +2,19 @@
 #define GAMA_TEXT_INCLUDED
 
 #include "color.h"
+#include <stdio.h>
 #include <string.h>
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "stb/truetype.h"
 #include "vector.h"
 
+#define TEXT_DPI 512
+
 // Struct definitions are assumed to be the same...
 
 typedef struct {
   unsigned char ttf_buffer[1 << 20];
-  unsigned char temp_bitmap[512 * 512];
+  unsigned char temp_bitmap[TEXT_DPI * TEXT_DPI];
 
   stbtt_bakedchar cdata[96]; // ASCII 32..126 is 95 glyphs
   GLuint ftex;
@@ -26,9 +29,10 @@ typedef struct {
   Color color;
 } Text;
 
-void setText(Text *, const char *, size_t);
-void setTextNulled(Text *, const char *);
+void setTextN(Text *, const char *, size_t);
+void setText(Text *, const char *);
 
+void updateText(Text *t, double theta) { updateVector(t->pos, theta); }
 Font *newFont() {
   Font *f = (Font *)malloc(sizeof(Font));
   f->ftex = 0;
@@ -57,31 +61,38 @@ Font *loadFont(const char *url) {
   fread(f->ttf_buffer, 1, 1 << 20, fontFile);
   fclose(fontFile);
 
-  stbtt_BakeFontBitmap(f->ttf_buffer, 0, 32.0, f->temp_bitmap, 512, 512, 32, 96,
+  stbtt_BakeFontBitmap(f->ttf_buffer, 0, 32.0, f->temp_bitmap, TEXT_DPI,
+                       TEXT_DPI, 32, 96,
                        f->cdata); // no guarantee this fits!
                                   // can free ttf_buffer at this point
   glGenTextures(1, &f->ftex);
   glBindTexture(GL_TEXTURE_2D, f->ftex);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, 512, 512, 0, GL_ALPHA,
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, TEXT_DPI, TEXT_DPI, 0, GL_ALPHA,
                GL_UNSIGNED_BYTE, f->temp_bitmap);
   // can free temp_bitmap at this point
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   return f;
 }
+Font *loadFontAsset(const char *name) {
+  char path[100];
+  sprintf(path, "assets/fonts/%s.ttf", name);
+  return loadFont(path);
+}
 
-Text *createText(const char *text, size_t length, Font *f, Pos *pos) {
+Text *createTextN(const char *text, size_t length, double fontsize, Font *f,
+                  Pos *pos) {
   Text *t = newText();
 
-  setText(t, text, length);
-  t->fontsize = 0.1;
+  setTextN(t, text, length);
+  t->fontsize = fontsize;
   t->font = f;
   t->pos = vectorAt(pos);
   return t;
 }
-Text *createTextNulled(const char *text, Font *f, Pos *pos) {
+Text *createText(const char *text, double fontsize, Font *f, Pos *pos) {
   Text *t = newText();
-  setTextNulled(t, text);
-  t->fontsize = 0.1;
+  setText(t, text);
+  t->fontsize = fontsize;
   t->font = f;
   t->pos = vectorAt(pos);
   return t;
@@ -102,8 +113,8 @@ float getTextWidth(Text *t) {
   for (int i = 0; i < t->len; i++) {
     if ((int)t->text[i] >= 32 && (int)t->text[i] < 128) {
       stbtt_aligned_quad q;
-      stbtt_GetBakedQuad(t->font->cdata, 512, 512, (int)t->text[i] - 32, &x, &y,
-                         &q, 1);
+      stbtt_GetBakedQuad(t->font->cdata, TEXT_DPI, TEXT_DPI,
+                         (int)t->text[i] - 32, &x, &y, &q, 1);
     }
   }
 
@@ -166,7 +177,7 @@ void renderText(Text *t) {
   glDisable(GL_TEXTURE_2D);
 }
 
-void setText(Text *t, const char *txt, size_t length) {
+void setTextN(Text *t, const char *txt, size_t length) {
   if (t->text != NULL) {
     free(t->text);
     t->text = NULL;
@@ -184,7 +195,7 @@ void setText(Text *t, const char *txt, size_t length) {
   t->len = length;
 }
 
-void setTextNulled(Text *t, const char *txt) {
+void setText(Text *t, const char *txt) {
   if (t->text != NULL) {
     free(t->text);
     t->text = NULL;
@@ -205,4 +216,5 @@ void setTextNulled(Text *t, const char *txt) {
   t->text[len] = '\0';
   t->len = len;
 }
+
 #endif

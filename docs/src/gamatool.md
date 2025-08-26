@@ -1,4 +1,4 @@
-# The gama tool
+# Introducing the gama tool
 
 The gama tool manages and creates gama projects.
 

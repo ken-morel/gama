@@ -36,7 +36,7 @@ void resetGame() {
   updateScore();
   setShapePosition(&ball, at(0, 0));
   setShapeVelocity(&ball, at(0.5, 0.5));
-  setTextNulled(gameOverText, "");
+  setText(gameOverText, "");
   gameOver = 0;
 }
 
@@ -52,10 +52,9 @@ void gameCreate(Scene *scene) {
   setShapeVelocity(&ball, at(0.5, 0.5)); // Give the ball some initial speed
 
   font = loadFont("assets/fonts/Ubuntu-R.ttf");
-  leftScoreText = createTextNulled("0", font, at(-0.1, 0.8));
-  rightScoreText = createTextNulled("0", font, at(0.1, 0.8));
-  gameOverText = createTextNulled("", font, at(0, 0));
-  gameOverText->fontsize = 0.2;
+  leftScoreText = createText("0", 0.1, font, at(-0.1, 0.8));
+  rightScoreText = createText("0", 0.1, font, 0.1, at(0.1, 0.8));
+  gameOverText = createText("", 0.2, font, at(0, 0));
 }
 
 void gameRender(Scene *scene) {
@@ -91,9 +90,9 @@ void gameKey(Scene *scene, KeyEvent *e) {
 void updateScore() {
   char scoreStr[10];
   sprintf(scoreStr, "%d", leftScore);
-  setTextNulled(leftScoreText, scoreStr);
+  setText(leftScoreText, scoreStr);
   sprintf(scoreStr, "%d", rightScore);
-  setTextNulled(rightScoreText, scoreStr);
+  setText(rightScoreText, scoreStr);
 }
 
 void gameUpdate(Scene *scene, double theta) {
@@ -138,11 +137,11 @@ void gameUpdate(Scene *scene, double theta) {
   }
 
   if (leftScore >= 5) {
-    setTextNulled(gameOverText, "Left Player Wins!\nPress R to Restart");
+    setText(gameOverText, "Left Player Wins!\nPress R to Restart");
     gameOver = 1;
   }
   if (rightScore >= 5) {
-    setTextNulled(gameOverText, "Right Player Wins!\nPress R to Restart");
+    setText(gameOverText, "Right Player Wins!\nPress R to Restart");
     gameOver = 1;
   }
 }
