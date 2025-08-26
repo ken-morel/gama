@@ -1,7 +1,5 @@
 # Building a Pong Game (AI generated)
 
-> This tutorial is AI-generated
-
 This tutorial will guide you through creating a classic Pong game from scratch using the Gama engine. This is a great project for beginners as it covers all the fundamental concepts of game development in a simple and easy-to-understand way.
 
 ## Prerequisites
@@ -113,7 +111,7 @@ void gameRender(Scene *scene) {
 }
 ```
 
-If you run the game now (`gama run`), you should see the paddles and the ball, but nothing is moving yet.
+If you run the game now (`gama build -r`) which builds your projet and runs it, you should see the paddles and the ball, but nothing is moving yet.
 
 ## 6. Moving the Paddles
 
@@ -188,6 +186,19 @@ void gameUpdate(Scene *scene, double theta) {
 }
 ```
 
+## 9 Adding text
+
+For gama to be able to show text to your users, it needs a font.
+Add the `Ubuntu-R.ttf` font(which comes with gama) using:
+
+```bash
+gama font add Ubuntu-R.ttf
+```
+
+This will create the new file in your `assets/fonts/Ubuntu-R.ttf` your
+app can now use for rendering text.
+You can view other available fonts with `gama font list`.
+
 ## 9. Adding Scoring
 
 Let's add scoring. We'll need a font and two text objects.
@@ -201,7 +212,7 @@ int leftScore = 0, rightScore = 0;
 void gameCreate(Scene *scene) {
     // ... (paddle and ball creation)
 
-    font = loadFont("assets/fonts/Ubuntu-R.ttf");
+    font = loadFont("assets/fonts/Ubuntu-R.ttf"); // the font you just added
     leftScoreText = createTextNulled("0", font, at(-0.1, 0.8));
     rightScoreText = createTextNulled("0", font, at(0.1, 0.8));
 }
@@ -214,12 +225,19 @@ void gameRender(Scene *scene) {
 
 void updateScore() {
     char scoreStr[10];
-    sprintf(scoreStr, "%d", leftScore);
-    setTextNulled(leftScoreText, scoreStr);
+    sprintf(scoreStr, "%d", leftScore); // put the score text in scoreStr with printf like formating
+    setTextNulled(leftScoreText, scoreStr); // set the text to the new string
     sprintf(scoreStr, "%d", rightScore);
     setTextNulled(rightScoreText, scoreStr);
 }
 
+```
+
+Now we will add logic so that if the ball exits the screen(passes behind a paddl)
+then it is one point for the other user, and the ball returns to the middle of the
+scene(`at(0, 0)`)
+
+```c
 // In gameUpdate, modify the scoring logic:
 // ...
     if (shapeLeft(&ball) < -1.0) { // Right player scores
@@ -248,6 +266,7 @@ void gameCreate(Scene *scene) {
     // ...
     gameOverText = createTextNulled("", font, at(0, 0));
     gameOverText->fontsize = 0.2;
+    gameOverText->color = RED;
 }
 
 void resetGame() {
@@ -296,5 +315,3 @@ void gameRender(Scene *scene) {
 ## 11. Conclusion
 
 You now have a complete, working Pong game with a scoring and game over system! This tutorial has covered the basics of creating a game in Gama. From here, you can try to add more features, like a main menu, sound effects, or increasing ball speed over time.
-
-Happy coding!
