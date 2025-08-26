@@ -1,0 +1,19 @@
+# Read the Docs configuration file for mdBook
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version, and other tools you might need
+build:
+  os: ubuntu-24.04
+  tools:
+    # mdBook is built with Rust, so we need Rust toolchain
+    rust: "1.82"
+
+  commands:
+    # Install mdBook using cargo (Rust package manager)
+    - cargo install mdbook
+    
+    # Add cargo's bin directory to PATH and run mdbook
+    - export PATH="$HOME/.cargo/bin:$PATH" && mdbook build docs --dest-dir $READTHEDOCS_OUTPUT/html
