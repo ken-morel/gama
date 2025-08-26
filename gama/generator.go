@@ -8,6 +8,18 @@ import (
 	"github.com/plus3it/gorecurcopy"
 )
 
+func CopyGamaLibrary() error {
+	projectGama := "gama"
+	gamaLib := path.Join(config.InstallPath, "gama")
+	os.RemoveAll(projectGama)
+	err := gorecurcopy.CopyDirectory(gamaLib, projectGama)
+	if err != nil {
+		return fmt.Errorf("error copying gama library")
+	} else {
+		return nil
+	}
+}
+
 func CreateProject(name string, template string) error {
 	if config == nil {
 		return fmt.Errorf("error: gama not initialized")
