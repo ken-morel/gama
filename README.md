@@ -137,6 +137,4 @@ Contributions are welcome! Check [CONTRIBUTING.md](CONTRIBUTING.md) or open an i
 Gama is designed to help new programmers build and run real native C projects on any desktop platform, with minimal setup and maximum fun. Happy coding!
 ```
 
----
 
-Let me know if you want this pushed to your repo or need further customizations!
