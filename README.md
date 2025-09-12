@@ -24,19 +24,6 @@ Gama is a beginner-friendly toolkit and command-line utility for building native
 
 See the full [installation guide](https://gama.readthedocs.io/en/latest/installation.html) for details.
 
-#### On Linux
-
-```sh
-# Clone the repo and build
-git clone https://github.com/ken-morel/gama.git
-cd gama
-make
-sudo make install
-```
-
-#### On Windows
-
-Download the latest release from [Releases](https://github.com/ken-morel/gama/releases) and follow the [Windows instructions](https://gama.readthedocs.io/en/latest/installation.html#windows).
 
 ---
 
@@ -45,10 +32,9 @@ Download the latest release from [Releases](https://github.com/ken-morel/gama/re
 Use the `gama` command-line utility to quickly bootstrap a new project:
 
 ```sh
-gama new pong MyPongGame
+gama create MyPongGame
 cd MyPongGame
-make
-./MyPongGame
+gama build -r
 ```
 
 Available templates include:
@@ -59,35 +45,20 @@ See the [Templates Guide](https://gama.readthedocs.io/en/latest/gamatool.html#te
 
 ---
 
-## Building for Windows on Linux
+## Building
 
 Gama supports cross-compiling Windows binaries directly from Linux using `winegcc`:
 
 ```sh
-gama build --platform=windows
+gama build       # build for platform
+gama build -r    # build then run
+gama build -wine # build for windows using wine, also takes -r
 ```
 
-This produces a Windows executable using the WinAPI backend, with no need for a Windows machine.
 
 ---
 
-## What Does Gama Code Look Like?
-
-Here’s a snippet from the Pong template:
-
-```c
-#include "gama.h"
-
-void update(GameState *state) {
-    // Game logic here
-}
-
-int main() {
-    GamaConfig config = gama_default_config();
-    gama_run(&config, update);
-    return 0;
-}
-```
+## Backends
 
 Gama abstracts away platform details, so you focus on writing portable C code. On Windows, Gama uses WinAPI; on Linux, it uses GLFW automatically.
 
@@ -112,19 +83,15 @@ See the [Gama CLI Reference](https://gama.readthedocs.io/en/latest/gamatool.html
 ---
 
 ## Documentation
-
-- **Full docs:** [gama.readthedocs.io](https://gama.readthedocs.io)
-- **Getting started:** [Welcome](https://gama.readthedocs.io/en/latest/welcome.html)
-- **Installation:** [Installation Guide](https://gama.readthedocs.io/en/latest/installation.html)
-- **Templates:** [Project Templates](https://gama.readthedocs.io/en/latest/gamatool.html#templates)
-- **API Reference:** [Reference](https://gama.readthedocs.io/en/latest/reference.html)
+**Full docs:** [gama.readthedocs.io](https://gama.readthedocs.io)
 
 ---
 
 ## Example Projects
 
 - [Pong Game Template](assets/templates/pong/README.md)
-- [Skeleton Template](assets/templates/skeleton/README.md)
+- [Robi](https://GitHub.com/ken-morel/robi)
+
 
 ---
 
