@@ -49,7 +49,8 @@ switch "$argv[1]"
     case package
         package "$argv[2]"
     case run
-        go run .
+        export GAMA_PATH="assets/"
+        go run . $argv[2..]
     case ""
         echo "No command specified"
     case "*"

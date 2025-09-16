@@ -33,7 +33,7 @@ import (
 )
 
 func getInstallDir() (string, error) {
-	installDir := os.Getenv("GAMA_DIR")
+	installDir := os.Getenv("GAMA_PATH")
 	if installDir == "" {
 		_, err := os.Stat("/usr/share/gama")
 		if err == nil {
@@ -69,10 +69,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	conf, err := getConfig()
-	if err != nil {
-		log.Println(err.Error())
-	}
+	conf, _ := getConfig()
+
 	gama.Init(&gama.GamaConfig{
 		InstallPath: installDir,
 		Config:      conf,
