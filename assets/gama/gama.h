@@ -1,17 +1,8 @@
 #ifndef GAMA_INCLUDED
 #define GAMA_INCLUDED
 
-#include "color.h"
-
 #include "app.h"
-#include "image.h"
 #include "scene.h"
-#include "shape.h"
-#include "sprite.h"
-#include "text.h"
-
-#include <stdio.h>
-#include <time.h>
 
 #ifdef BACKEND_GLFW
 #include "backends/glfw.h"

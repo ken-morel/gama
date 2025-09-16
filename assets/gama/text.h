@@ -10,8 +10,6 @@
 
 #define TEXT_DPI 512
 
-// Struct definitions are assumed to be the same...
-
 typedef struct {
   unsigned char ttf_buffer[1 << 20];
   unsigned char temp_bitmap[TEXT_DPI * TEXT_DPI];
@@ -25,15 +23,15 @@ typedef struct {
   int len;
   double fontsize;
   Font *font;
-  Vector *pos;
+  Vector pos;
   Color color;
 } Text;
 
-void setTextN(Text *, const char *, size_t);
-void setText(Text *, const char *);
+int setTextN(Text *, const char *, size_t);
+int setText(Text *, const char *);
 
-void updateText(Text *t, double theta) { updateVector(t->pos, theta); }
-Font *newFont() {
+void updateText(Text *t, double theta) { updateVector(&t->pos, theta); }
+Font *_newFont() {
   Font *f = (Font *)malloc(sizeof(Font));
   f->ftex = 0;
   return f;
@@ -50,7 +48,7 @@ Text *newText() {
 }
 
 Font *loadFont(const char *url) {
-  Font *f = newFont();
+  Font *f = _newFont();
   // It's safer to check if fopen was successful
   FILE *fontFile = fopen(url, "rb");
   if (!fontFile) {
@@ -80,28 +78,24 @@ Font *loadFontAsset(const char *name) {
 }
 
 Text *createTextN(const char *text, size_t length, double fontsize, Font *f,
-                  Pos *pos) {
+                  Pos pos) {
   Text *t = newText();
 
   setTextN(t, text, length);
   t->fontsize = fontsize;
   t->font = f;
-  t->pos = vectorAt(pos);
+  t->pos = VectorAt(pos);
   return t;
 }
-Text *createText(const char *text, double fontsize, Font *f, Pos *pos) {
+Text *createText(const char *text, double fontsize, Font *f, Pos pos) {
   Text *t = newText();
   setText(t, text);
   t->fontsize = fontsize;
   t->font = f;
-  t->pos = vectorAt(pos);
+  t->pos = VectorAt(pos);
   return t;
 }
 
-/**
- * NEW HELPER FUNCTION
- * Calculates the total width of the rendered text in your world coordinates.
- */
 float getTextWidth(Text *t) {
   if (!t || !t->text || !t->font) {
     return 0.0f;
@@ -125,14 +119,13 @@ float getTextWidth(Text *t) {
   return total_width;
 }
 
-/**
- * IMPROVED RENDER FUNCTION
- * Now calculates the text width to center it and correctly renders the glyphs.
- */
-void renderText(Text *t) {
-  if (!t || !t->text || !t->font) {
-    return; // Nothing to render
-  }
+int renderText(Text *t) {
+  if (!t)
+    return 0;
+  else if (!t->text)
+    return -1;
+  else if (!t->font)
+    return -2;
   float x = 0, y = 0;
 
   float totalWidth = getTextWidth(t);
@@ -147,7 +140,7 @@ void renderText(Text *t) {
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, t->font->ftex);
 
-  glTranslatef(t->pos->pos->x - offset, t->pos->pos->y, 0);
+  glTranslatef(t->pos.x - offset, t->pos.y, 0);
   glBegin(GL_QUADS);
 
   for (int i = 0; i < t->len; i++) {
@@ -171,14 +164,17 @@ void renderText(Text *t) {
     }
   }
   glEnd();
-  glTranslatef(offset - t->pos->pos->x, -t->pos->pos->y, 0);
+  glTranslatef(offset - t->pos.x, -t->pos.y, 0);
 
   glDisable(GL_BLEND);
   glDisable(GL_TEXTURE_2D);
+  return 1;
 }
 
-void setTextN(Text *t, const char *txt, size_t length) {
-  if (t->text != NULL) {
+int setTextN(Text *t, const char *txt, size_t length) {
+  if (!t)
+    return 0;
+  if (t->text) {
     free(t->text);
     t->text = NULL;
   }
@@ -187,15 +183,18 @@ void setTextN(Text *t, const char *txt, size_t length) {
   if (t->text == NULL) {
     t->len = 0;
     printf("Could not allocate text space");
-    return;
+    return -10;
   }
 
   memcpy(t->text, txt, length);
   t->text[length] = '\0';
   t->len = length;
+  return 1;
 }
 
-void setText(Text *t, const char *txt) {
+int setText(Text *t, const char *txt) {
+  if (!t)
+    return 0;
   if (t->text != NULL) {
     free(t->text);
     t->text = NULL;
@@ -209,12 +208,13 @@ void setText(Text *t, const char *txt) {
   if (t->text == NULL) {
     t->len = 0;
     printf("Could not allocate text space");
-    return;
+    return -10;
   }
 
   memcpy(t->text, txt, len);
   t->text[len] = '\0';
   t->len = len;
+  return 1;
 }
 
 #endif

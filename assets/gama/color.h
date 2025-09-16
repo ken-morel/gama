@@ -2,7 +2,6 @@
 #define GAMA_COLOR_INCLUDED
 
 #include <GL/gl.h>
-#include <stdio.h>
 
 typedef unsigned int Color;
 
@@ -155,28 +154,28 @@ typedef unsigned int Color;
 #define YELLOW (Color)0xFFFF00FF
 #define YELLOWGREEN (Color)0x9ACD32FF
 
-float GetColorRed(Color col) {
+float getColorRed(Color col) {
   unsigned short a1 = (col & 0xFF000000) >> 24;
   return (float)a1 / 255.0f;
 }
-float GetColorGreen(Color col) {
+float getColorGreen(Color col) {
   unsigned short a1 = (col & 0x00FF0000) >> 16;
   return (float)a1 / 255.0f;
 }
-float GetColorBlue(Color col) {
+float getColorBlue(Color col) {
   unsigned short a1 = (col & 0x0000FF00) >> 8;
   return (float)a1 / 255.0f;
 }
-float GetColorAlpha(Color col) {
+float getColorAlpha(Color col) {
   unsigned short a1 = (col & 0x000000FF);
   return (float)a1 / 255.0f;
 }
 void SetClearColor(Color col) {
-  glClearColor(GetColorRed(col), GetColorGreen(col), GetColorBlue(col),
-               GetColorAlpha(col));
+  glClearColor(getColorRed(col), getColorGreen(col), getColorBlue(col),
+               getColorAlpha(col));
 }
 void SetGLColor(Color col) {
 
-  glColor3f(GetColorRed(col), GetColorGreen(col), GetColorBlue(col));
+  glColor3f(getColorRed(col), getColorGreen(col), getColorBlue(col));
 }
 #endif // GAMA_COLOR_INCLUDED

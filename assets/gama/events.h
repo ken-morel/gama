@@ -12,7 +12,6 @@ typedef struct {
 
 typedef struct {
   Key key;
-
 } KeyEvent;
 
 #endif // GAMA_EVENTS_INCLUDED

@@ -1,10 +1,9 @@
 #ifndef GAMA_APP_INCLUDED
 #define GAMA_APP_INCLUDED
 
-#include "color.h"
 #include "events.h"
 #include "scene.h"
-#include "vector.h"
+
 #include <stdlib.h>
 
 typedef struct sApp {
