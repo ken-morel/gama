@@ -80,4 +80,22 @@ int Grender(GObject g) {
   }
 }
 
+int Gdestroy(GObject g) {
+  switch (g.type) {
+  case GShapeObject:
+    free(g._object.shape);
+    break;
+  case GTextObject:
+    free(g._object.text);
+    break;
+  case GSpriteObject:
+    free(g._object.sprite);
+    break;
+  case GNoObject:
+    return 0;
+  }
+  g.type = GNoObject;
+  return 1;
+}
+
 #endif

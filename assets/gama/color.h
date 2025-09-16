@@ -22,11 +22,11 @@ float getColorAlpha(Color col) {
   unsigned short a1 = (col & 0x000000FF);
   return (float)a1 / 255.0f;
 }
-void SetClearColor(Color col) {
+void setClearColor(Color col) {
   glClearColor(getColorRed(col), getColorGreen(col), getColorBlue(col),
                getColorAlpha(col));
 }
-void SetGLColor(Color col) {
+void setGLColor(Color col) {
 
   glColor3f(getColorRed(col), getColorGreen(col), getColorBlue(col));
 }

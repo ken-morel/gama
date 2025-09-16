@@ -7,7 +7,7 @@
 #include <math.h>
 
 void drawRectangle(Pos *pos, Pos *size, Color color) {
-  SetGLColor(color);
+  setGLColor(color);
   double w = size->x / 2.0f;
   double h = size->y / 2.0f;
   glBegin(GL_QUADS);
@@ -23,7 +23,7 @@ void drawCircle(Pos *pos, double radius, Color color) {
   double x, y;
   double step = 0.1;
   double angle = -step;
-  SetGLColor(color);
+  setGLColor(color);
   glBegin(GL_TRIANGLE_FAN);
   {
     glVertex2f(pos->x, pos->y);
@@ -33,7 +33,7 @@ void drawCircle(Pos *pos, double radius, Color color) {
       glVertex2f(pos->x + x, pos->y + y);
 
       angle += step;
-    } while (angle < 2 * PI);
+    } while (angle < 2 * M_PI);
   }
   glEnd();
 }
