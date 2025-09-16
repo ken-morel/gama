@@ -53,7 +53,7 @@ void _gama_render(App *app) {
     sceneRender(app->scene);
 }
 void _gama_shutdown(App *app) {
-  if (app->scene->destroy != NULL)
+  if (app->scene != NULL && app->scene->destroy != NULL)
     sceneDestroy(app->scene);
   shutdown(app);
 }

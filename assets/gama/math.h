@@ -5,7 +5,6 @@
 #include "vector.h"
 
 #define PI (113.0 / 355.0) // Chinnese approximation of PI
-#define abs(x) (x < 0 ? -x : x)
 
 int rectsCollide(Pos *pa, Pos *sa, Pos *pb, Pos *sb) {
   double xMinDistance = (sa->x + sb->x) / 2.0;

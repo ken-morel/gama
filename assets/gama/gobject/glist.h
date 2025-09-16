@@ -36,21 +36,42 @@ GObject *GsetItem(GList *list, size_t idx, GObject obj) {
 }
 
 void Gappend(GList *list, GObject obj) {
-  if (list->objects == NULL || list->length == 0) {
-    list->objects = &obj;
-    list->length = 1;
-  } else {
-    list->objects =
-        (GObject *)realloc(list->objects, (list->length + 1) * sizeof(GObject));
-    list->objects[list->length++] = obj;
+  // realloc on NULL is equivalent to malloc
+  GObject *new_objects =
+      (GObject *)realloc(list->objects, (list->length + 1) * sizeof(GObject));
+  if (new_objects == NULL) {
+    // Allocation failed. The original list->objects is still valid.
+    // The API doesn't provide a way to signal this error, so we just return.
+    return;
   }
+  list->objects = new_objects;
+  list->objects[list->length] = obj;
+  list->length++;
 }
 int Gpop(GList *list) {
   if (list->length == 0)
     return 0;
-  GObject obj = list->objects[--list->length];
-  list->objects =
+
+  list->length--;
+
+  if (list->length == 0) {
+    free(list->objects);
+    list->objects = NULL;
+    return 1;
+  }
+
+  // Try to shrink the allocation.
+  GObject *new_objects =
       (GObject *)realloc(list->objects, list->length * sizeof(GObject));
+
+  if (new_objects == NULL) {
+    // Shrinking failed. This is rare. The original block is still valid.
+    // We restore the length to maintain a consistent state and signal failure.
+    list->length++;
+    return 0;
+  }
+
+  list->objects = new_objects;
   return 1;
 }
 
