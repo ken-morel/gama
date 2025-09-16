@@ -1,17 +1,8 @@
 #ifndef GAMA_INCLUDED
 #define GAMA_INCLUDED
 
-#include "color.h"
-
 #include "app.h"
-#include "image.h"
 #include "scene.h"
-#include "shape.h"
-#include "sprite.h"
-#include "text.h"
-
-#include <stdio.h>
-#include <time.h>
 
 #ifdef BACKEND_GLFW
 #include "backends/glfw.h"
@@ -62,7 +53,7 @@ void _gama_render(App *app) {
     sceneRender(app->scene);
 }
 void _gama_shutdown(App *app) {
-  if (app->scene->destroy != NULL)
+  if (app->scene != NULL && app->scene->destroy != NULL)
     sceneDestroy(app->scene);
   shutdown(app);
 }

@@ -27,7 +27,7 @@ Image *openImageFile(Image *img, const char *path) {
   return img;
 }
 
-Image *newImage() {
+Image *_newImage() {
   Image *img = (Image *)malloc(sizeof(Image));
   img->data = NULL;
   img->height = 0;
@@ -36,7 +36,7 @@ Image *newImage() {
   return img;
 }
 Image *createImage(unsigned int width, unsigned int height) {
-  Image *img = newImage();
+  Image *img = _newImage();
   img->data =
       (unsigned char *)malloc(width * height * 4 * sizeof(unsigned char));
   img->width = width;
@@ -74,8 +74,8 @@ void bindImage(Image *image) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-void drawImage(Image *image, double x, double y, double w, double h) {
-  double width = w, height = h;
+void drawImage(Image *image, Pos *pos, Pos *size) {
+  double width = size->x, height = size->y;
   double ratio = (double)image->height / (double)image->width;
   if (width == 0) {
     if (height == 0) {
@@ -95,13 +95,13 @@ void drawImage(Image *image, double x, double y, double w, double h) {
   glBegin(GL_QUADS);
   {
     glTexCoord2f(0, 1);
-    glVertex2f(x, y);
+    glVertex2f(pos->x, pos->y);
     glTexCoord2f(1, 1);
-    glVertex2f(x + width, y);
+    glVertex2f(pos->x + width, pos->y);
     glTexCoord2f(1, 0);
-    glVertex2f(x + width, y + height);
+    glVertex2f(pos->x + width, pos->y + height);
     glTexCoord2f(0, 0);
-    glVertex2f(x, y + height);
+    glVertex2f(pos->x, pos->y + height);
   }
   glEnd();
   glDisable(GL_BLEND);

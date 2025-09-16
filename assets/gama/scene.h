@@ -3,17 +3,15 @@
 
 #include "color.h"
 #include "events.h"
-#include "object.h"
-#include "shape.h"
-#include "sprite.h"
-#include "text.h"
-#include <cstddef>
+#include "gobject/glist.h"
+#include "gobject/gobject.h"
+#include <stddef.h>
 
 struct sApp;
 
 typedef struct sScene {
   Color background;
-  GObjectList objects;
+  GList objects;
   struct sApp *app;
   void (*create)(struct sScene *);
   void (*update)(struct sScene *, double);
@@ -37,34 +35,25 @@ Scene *createScene(struct sApp *app) {
   s->onclick = NULL;
   s->onkey = NULL;
   s->background = LIGHTCYAN;
-  createGObjectList(&s->objects);
+  GinitList(&s->objects);
   return s;
 }
 
-void addObjectToScene(Scene *s, GObject *o) {
-  addGObjectToList(&s->objects, o);
-}
-GObject *popObjectFromScene(Scene *s) {
-  return popGObjectFromList(&s->objects);
-}
+void sceneAdd(Scene *s, GObject o) { Gappend(&s->objects, o); }
+int scenePop(Scene *s) { return Gpop(&s->objects); }
 
 void sceneCreate(Scene *s) {
   if (s->create != NULL)
     s->create(s);
 }
 void sceneUpdate(Scene *s, double theta) {
-  for (int i = 0; i < s->objects.length; i++)
-    updateGObject(s->objects.objects[i], theta);
-
+  GupdateAll(&s->objects, theta);
   if (s->update != NULL)
     s->update(s, theta);
 }
 void sceneRender(Scene *s) {
   SetClearColor(s->background);
-
-  for (int i = 0; i < s->objects.length; i++)
-    renderGObject(s->objects.objects[i]);
-
+  GrenderAll(&s->objects);
   if (s->render != NULL)
     s->render(s);
 }

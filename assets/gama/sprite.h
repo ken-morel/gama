@@ -1,16 +1,15 @@
 #ifndef GAMA_SPRITE_INCLUDED
 #define GAMA_SPRITE_INCLUDED
 
+#include "image.h"
 #include "math.h"
 #include "vector.h"
 #include <stdio.h>
 #include <time.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include "image.h"
 
 typedef struct {
-  Vector *pos;
-  Pos *size;
+  Vector pos;
+  Pos size;
   unsigned int length;
   Image **images;
 
@@ -30,13 +29,13 @@ Sprite *newSprite() {
 }
 
 Sprite *createSprite(const char *path, unsigned int width, unsigned int height,
-                     Pos *pos, Pos *size) {
+                     Pos pos, Pos size) {
   Sprite *sprite = newSprite();
   if (sprite == NULL) {
     printf("Could not create sprite object");
     return NULL;
   }
-  Image *img = newImage();
+  Image *img = _newImage();
   openImageFile(img, path);
   if (img == NULL) {
     printf("Failed to load image at %s to create sprite", path);
@@ -58,7 +57,7 @@ Sprite *createSprite(const char *path, unsigned int width, unsigned int height,
     return NULL;
   }
 
-  sprite->pos = vectorAt(pos);
+  sprite->pos = VectorAt(pos);
   sprite->animationCurrent = 0;
   sprite->length = img->width / width;
   sprite->animationLen = sprite->length;
@@ -81,7 +80,7 @@ Sprite *createSprite(const char *path, unsigned int width, unsigned int height,
   return sprite;
 }
 void updateSprite(Sprite *s, double theta) {
-  updateVector(s->pos, theta);
+  updateVector(&s->pos, theta);
   double period = (1.0 / s->fps);
   double timeSinceLastFrame = theta + s->_remainingTimeFrame;
 
@@ -103,18 +102,26 @@ void updateSprite(Sprite *s, double theta) {
   s->_remainingTimeFrame = remainingTime;
 }
 
-void renderSprite(Sprite *s) {
+int renderSprite(Sprite *s) {
+  if (!s)
+    return 0;
   s->animationCurrent %= s->animationLen;
   int currentFrame = s->animation[s->animationCurrent];
   currentFrame %= s->length;
   Image *frame = s->images[currentFrame];
+  Pos p = {
+      .x = s->pos.x - s->size.x / 2,
+      .y = s->pos.y - s->size.y / 2,
+  };
 
-  drawImage(frame, s->pos->pos->x - s->size->x / 2,
-            s->pos->pos->y - s->size->y / 2, s->size->x, s->size->y);
+  drawImage(frame, &p, &s->size);
+  return 1;
 }
 
-void setSpriteAnimation(Sprite *s, unsigned int length, unsigned int *animation,
-                        unsigned int fps) {
+int setSpriteAnimation(Sprite *s, unsigned int length, unsigned int *animation,
+                       unsigned int fps) {
+  if (!s)
+    return 0;
   if (s->animation != NULL)
     free(s->animation);
   s->animation = (unsigned int *)malloc(length * sizeof(unsigned int));
@@ -124,73 +131,40 @@ void setSpriteAnimation(Sprite *s, unsigned int length, unsigned int *animation,
   for (size_t i = 0; i < length; i++) {
     s->animation[i] = animation[i];
   }
+  return 1;
 }
 #define SetSpriteAnimationArray(s, array, fps)                                 \
   setSpriteAnimation(s, sizeof(array) / sizeof(unsigned int), array, fps)
 
 //////////////////////
-void setSpriteVelocity(Sprite *s, Pos *vel) {
-  if (s->pos->vel != NULL)
-    free(s->pos->vel);
-  s->pos->vel = vel;
+int setSpriteVelocity(Sprite *s, Pos vel) {
+  if (s == NULL)
+    return 0;
+  s->pos.vel = vel;
+  return 1;
 }
-Pos *getSpriteVelocity(Sprite *s) { return s->pos->vel; }
-Pos *getSpritePosition(Sprite *s) { return s->pos->pos; }
-Pos *getSpriteAcceleration(Sprite *s) { return s->pos->acc; }
+Pos getSpriteVelocity(Sprite *s) { return s->pos.vel; }
+Pos getSpritePosition(Sprite *s) { return vectorPos(&s->pos); }
+Pos getSpriteAcceleration(Sprite *s) { return s->pos.acc; }
 
-void setSpriteAcceleration(Sprite *s, Pos *acc) {
-  if (s->pos->acc != NULL)
-    free(s->pos->acc);
-  s->pos->acc = acc;
-}
-
-void setSpritePosition(Sprite *s, Pos *pos) {
-  if (s->pos->pos != NULL)
-    free(s->pos->pos);
-  s->pos->pos = pos;
+int setSpriteAcceleration(Sprite *s, Pos acc) {
+  if (s == NULL)
+    return 0;
+  s->pos.acc = acc;
+  return 1;
 }
 
-double spriteTop(Sprite *s) { return s->pos->pos->y + s->size->y / 2.0; }
-double spriteBottom(Sprite *s) { return s->pos->pos->y - s->size->y / 2.0; }
-double spriteLeft(Sprite *s) { return s->pos->pos->x - s->size->x / 2.0; }
-double spriteRight(Sprite *s) { return s->pos->pos->x + s->size->x / 2.0; }
-
-float bounceSpriteUnder(Sprite *s, double pos, double bounce, double maxSpeed) {
-  maxSpeed = -abs(maxSpeed);
-  double halfHeight = s->size->y / 2;
-  if (s->pos->pos->y - halfHeight <= pos) {
-    s->pos->pos->y = pos + halfHeight;
-    if (s->pos->vel->y < 0) {
-      s->pos->vel->y = s->pos->vel->y < maxSpeed ? maxSpeed : s->pos->vel->y;
-      s->pos->vel->y *= -bounce;
-    }
-  }
+int setSpritePosition(Sprite *s, Pos pos) {
+  if (s == NULL)
+    return 0;
+  s->pos.x = pos.x;
+  s->pos.y = pos.y;
+  return 1;
 }
 
-void bounceSprite(Sprite *s, double x, double y) {
-  if (x != 0) {
-    s->pos->vel->x *= -x;
-  }
-  if (y != 0) {
-    s->pos->vel->y *= -y;
-  }
-}
+double spriteTopY(Sprite *s) { return s->pos.y + s->size.y / 2.0; }
+double spriteBottomY(Sprite *s) { return s->pos.y - s->size.y / 2.0; }
+double spriteLeftX(Sprite *s) { return s->pos.x - s->size.x / 2.0; }
+double spriteRightX(Sprite *s) { return s->pos.x + s->size.x / 2.0; }
 
-int rectsCollide(Pos *pa, Pos *sa, Pos *pb, Pos *sb) {
-  double xMinDistance = (sa->x + sb->x) / 2.0;
-  double yMinDistance = (sa->y + sb->y) / 2.0;
-
-  double xDistance = pa->x - pb->x;
-  double yDistance = pa->y - pb->y;
-
-  if (xDistance < 0)
-    xDistance *= -1;
-  if (yDistance < 0)
-    yDistance *= -1;
-
-  return xDistance < xMinDistance && yDistance < yMinDistance;
-}
-int spriteTouchesSprite(Sprite *a, Sprite *b) {
-  return rectsCollide(a->pos->pos, a->size, b->pos->pos, b->size);
-}
 #endif // GAMA_SPRITE_INCLUDED
