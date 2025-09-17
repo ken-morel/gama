@@ -9,15 +9,16 @@ import (
 
 // buildCmd represents the build command
 var (
-	shouldRun bool
-	useWine   bool
-	buildCmd  = &cobra.Command{
+	shouldRun    bool
+	useWine      bool
+	useEmscripten bool
+	buildCmd     = &cobra.Command{
 		Use:   "build",
 		Short: "Build the applicaiton",
 		Long:  `Build the application into an executable in build.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Running project with args:", args)
-			err := gama.BuildProject(useWine)
+			err := gama.BuildProject(useWine, useEmscripten)
 			if err != nil {
 				fmt.Printf("error building project: %s\n", err.Error())
 			} else if shouldRun {
@@ -34,6 +35,7 @@ func init() {
 	rootCmd.AddCommand(buildCmd)
 	buildCmd.PersistentFlags().BoolVarP(&shouldRun, "run", "r", false, "Run the application after building it")
 	buildCmd.PersistentFlags().BoolVarP(&useWine, "wine", "w", false, "Build the applicaiton using wine(linux only)")
+	buildCmd.PersistentFlags().BoolVarP(&useEmscripten, "emscripten", "e", false, "Build the applicaiton using emscripten")
 
 	// Here you will define your flags and configuration settings.
 

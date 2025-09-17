@@ -217,4 +217,30 @@ int setText(Text *t, const char *txt) {
   return 1;
 }
 
+int setTextPosition(Text *t, Pos *pos) {
+  if (!t || !pos)
+    return 0;
+  t->pos.x = pos->x;
+  t->pos.y = pos->y;
+  return 1;
+}
+Pos getTextPosition(Text *t) {
+  Pos p = {t->pos.x, t->pos.y};
+  return p;
+}
+int setTextVelocity(Text *t, Pos *vel) {
+  if (!t || !vel)
+    return 0;
+  copyPos(vel, &t->pos.vel);
+  return 1;
+}
+Pos getTextVelocity(Text *t) { return t->pos.vel; }
+int setTextAcceleration(Text *t, Pos *acc) {
+  if (!t || !acc)
+    return 0;
+  copyPos(acc, &t->pos.acc);
+  return 1;
+}
+Pos getTextAcceleration(Text *t) { return t->pos.acc; }
+
 #endif
