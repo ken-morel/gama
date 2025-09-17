@@ -134,7 +134,7 @@ int renderText(Text *t) {
 
   double scale = t->fontsize / 20.0;
 
-  SetGLColor(t->color);
+  setGLColor(t->color);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_TEXTURE_2D);

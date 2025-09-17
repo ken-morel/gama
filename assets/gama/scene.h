@@ -39,7 +39,7 @@ Scene *createScene(struct sApp *app) {
   return s;
 }
 
-void sceneAdd(Scene *s, GObject o) { Gappend(&s->objects, o); }
+void sceneAdd(Scene *s, GObject *o) { Gappend(&s->objects, o); }
 int scenePop(Scene *s) { return Gpop(&s->objects); }
 
 void sceneCreate(Scene *s) {
@@ -52,7 +52,7 @@ void sceneUpdate(Scene *s, double theta) {
     s->update(s, theta);
 }
 void sceneRender(Scene *s) {
-  SetClearColor(s->background);
+  setClearColor(s->background);
   GrenderAll(&s->objects);
   if (s->render != NULL)
     s->render(s);

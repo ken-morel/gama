@@ -11,8 +11,6 @@ depends:
   - gcc
   - libglfw3
   - libglfw3-dev
-  - libxi-dev
-  - libxxf86vm-dev
 provides:
   - gama
 recommends:

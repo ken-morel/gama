@@ -1,5 +1,6 @@
 #ifndef GAMA_INCLUDED
 #define GAMA_INCLUDED
+#include "gobject/shape.h"
 
 #include "app.h"
 #include "scene.h"
