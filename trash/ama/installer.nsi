@@ -25,6 +25,10 @@ RequestExecutionLevel user
 ;--------------------------------
 ; Modern UI Configuration
 !define MUI_ABORTWARNING
+
+!define MUI_ICON "./logo.ico"
+!define MUI_UNICON "./logo.ico"
+
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE LICENSE
 !insertmacro MUI_PAGE_DIRECTORY

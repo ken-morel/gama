@@ -22,26 +22,20 @@ func ensureIcon() error {
 	return copyLogoToIco()
 }
 
-type GamaColor int
+var gamaColor = color.RGBA{170, 120, 170, 255}
 
-func (GamaColor) RGBA() (uint32, uint32, uint32, uint32) {
-	return 170, 120, 170, 255
-}
-
-const gamaColor GamaColor = 0
-
-func _drawRectangle(i *image.RGBA, bx, ex, by, ey int, c color.Color) {
+func _drawRectangle(i *image.RGBA, bx, ex, by, ey int) {
 	for x := range ex - bx {
 		for y := range ey - by {
-			i.Set(bx+x, by+y, c)
+			i.Set(bx+x, by+y, gamaColor)
 		}
 	}
 }
 
 func createLogo() *image.RGBA {
 	img := image.NewRGBA(image.Rect(0, 0, 100, 100))
-	_drawRectangle(img, 30, 50, 10, 80, gamaColor)
-	_drawRectangle(img, 30, 80, 10, 20, gamaColor)
+	_drawRectangle(img, 30, 50, 10, 80)
+	_drawRectangle(img, 30, 80, 10, 30)
 	return img
 }
 
