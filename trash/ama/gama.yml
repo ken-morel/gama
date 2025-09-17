@@ -1,0 +1,10 @@
+project:
+  name: ama
+  version: 0.1.0
+  author:
+    name: jealomy
+    email: test@example.com
+gama:
+  location: $project/gama
+build:
+  gcc: null

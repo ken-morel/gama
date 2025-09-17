@@ -149,14 +149,14 @@ func CreateProjectInteractive() error {
 	os.MkdirAll(path.Join("assets", "images"), 0o755)
 	os.MkdirAll(path.Join("assets", "sprites"), 0o755)
 	os.MkdirAll(path.Join("assets", "fonts"), 0o755)
-	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "images", "project-icon"), "assets/images/logo.png"); err != nil {
+	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "images", "project-icon.png"), "assets/images/logo.png"); err != nil {
 		fmt.Println("Error copying icon: ", err.Error())
 	}
 	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "conf-templates", "license"), "LICENSE"); err != nil {
 		fmt.Println("Error copying license:", err.Error())
 	} else {
 		content, err := os.ReadFile("LICENSE")
-		if err != nil {
+		if err == nil {
 			content = bytes.ReplaceAll(content, []byte("{{author.name}}"), []byte(responses.AuthorName))
 			content = bytes.ReplaceAll(content, []byte("{{author.email}}"), []byte(responses.AuthorEmail))
 			os.WriteFile("LICENSE", content, 0o755)
@@ -165,7 +165,7 @@ func CreateProjectInteractive() error {
 	if err := CopyGamaLibrary(); err != nil {
 		return err
 	}
-	configFile, err := os.Open("gama.yml")
+	configFile, err := os.Create("gama.yml")
 	if err != nil {
 		return fmt.Errorf("error creating gama configuration: %s", err.Error())
 	}
@@ -180,7 +180,7 @@ func CreateProjectInteractive() error {
 			},
 		},
 		Gama: ProjectGamaConfig{
-			Location: "gama/",
+			Location: "$project/gama",
 		},
 		Build: ProjectBuildConfig{
 			GCC: nil,
@@ -188,49 +188,3 @@ func CreateProjectInteractive() error {
 	})
 	return nil
 }
-
-// func CreateProject(name string, template string) error {
-// 	if config == nil {
-// 		return fmt.Errorf("error: gama not initialized")
-// 	}
-// 	templatePath := path.Join(config.InstallPath, "templates", template)
-// 	gamaPath := path.Join(config.InstallPath, "gama")
-// 	_, err := os.Stat(templatePath)
-// 	if err != nil {
-// 		return fmt.Errorf("tempate %s not found: %s", template, err.Error())
-// 	}
-// 	err = os.Mkdir(name, 0o755)
-// 	if err != nil {
-// 		return fmt.Errorf("error creating project folder at %s: %s", name, err.Error())
-// 	}
-// 	err = gorecurcopy.CopyDirectory(templatePath, name)
-// 	if err != nil {
-// 		return fmt.Errorf("error copying template: %s", err.Error())
-// 	}
-// 	gamaDest := path.Join(name, "gama")
-// 	err = os.Mkdir(gamaDest, 0o755)
-// 	if err == nil {
-// 		err = gorecurcopy.CopyDirectory(gamaPath, gamaDest)
-// 	}
-// 	if err != nil {
-// 		return fmt.Errorf("error copying gama: %s", err.Error())
-// 	}
-//
-// 	for _, p := range [][]string{{"assets"}, {"assets", "fonts"}, {"assets", "sprites"}, {"assets", "images"}} {
-// 		os.Mkdir(
-// 			path.Join(
-// 				append(
-// 					[]string{name},
-// 					p...,
-// 				)...,
-// 			), 0o755)
-// 	}
-// 	gorecurcopy.Copy(path.Join(config.InstallPath, "images", "gama.ico"), path.Join(name, "assets", "images", "logo.ico"))
-//
-// 	conf := fmt.Sprintf(templateConfig, name)
-// 	err = os.WriteFile(path.Join(name, "gama.yml"), []byte(conf), 0o755)
-// 	if err != nil {
-// 		return fmt.Errorf("error writing gama config: %s", err.Error())
-// 	}
-// 	return nil
-// }

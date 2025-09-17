@@ -18,7 +18,7 @@ ${Using:StrFunc} StrStr ; <-- THIS IS THE FIX for the new error.
 ;--------------------------------
 ; General
 Name "gama"
-OutFile "../bin/gama-installer.exe"
+OutFile "../bin/gama-0.2.0-installer.exe"
 InstallDir "$PROFILE\.gama"
 InstallDirRegKey HKCU "Software\cm.engon.gama" "InstallDir"
 RequestExecutionLevel user
