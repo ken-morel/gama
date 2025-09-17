@@ -1,7 +1,6 @@
 package gama
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"path"
@@ -157,8 +156,7 @@ func CreateProjectInteractive() error {
 	} else {
 		content, err := os.ReadFile("LICENSE")
 		if err == nil {
-			content = bytes.ReplaceAll(content, []byte("{{author.name}}"), []byte(responses.AuthorName))
-			content = bytes.ReplaceAll(content, []byte("{{author.email}}"), []byte(responses.AuthorEmail))
+			content := SubstituteTemplate(content)
 			os.WriteFile("LICENSE", content, 0o755)
 		}
 	}
