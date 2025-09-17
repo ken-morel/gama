@@ -3,7 +3,7 @@ package gama
 import "bytes"
 
 func SubstituteTemplate(content []byte) []byte {
-	if config == nil {
+	if config == nil || config.Config == nil {
 		return content
 	}
 	subst := map[string]string{

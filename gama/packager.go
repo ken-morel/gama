@@ -41,6 +41,7 @@ func PackageNSIS() error {
 	if config.Config == nil {
 		return fmt.Errorf("no project configuration found")
 	}
+	ensureIcon()
 	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "conf-templates", "installer.nsi"), "installer.nsi"); err != nil {
 		return fmt.Errorf("error copying nsi template: %s", err.Error())
 	}
@@ -67,7 +68,7 @@ func buildNSIS() error {
 }
 
 func buildMakeNSIS() error {
-	return _buildNSIS("nsis")
+	return _buildNSIS("makensis")
 }
 
 func _buildNSIS(exe string) error {

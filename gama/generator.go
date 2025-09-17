@@ -145,10 +145,26 @@ func CreateProjectInteractive() error {
 			}
 		}
 	}
+	config.Config = &ProjectConfig{
+		Project: ProjectProjectConfig{
+			Name:    responses.ProjectName,
+			Version: "0.1.0",
+			Author: AuthorConfig{
+				Name:  responses.AuthorName,
+				Email: responses.AuthorEmail,
+			},
+		},
+		Gama: ProjectGamaConfig{
+			Location: "$project/gama",
+		},
+		Build: ProjectBuildConfig{
+			GCC: nil,
+		},
+	}
 	os.MkdirAll(path.Join("assets", "images"), 0o755)
 	os.MkdirAll(path.Join("assets", "sprites"), 0o755)
 	os.MkdirAll(path.Join("assets", "fonts"), 0o755)
-	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "images", "project-icon.png"), "assets/images/logo.png"); err != nil {
+	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "images", "project-icon.png"), "logo.png"); err != nil {
 		fmt.Println("Error copying icon: ", err.Error())
 	}
 	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "conf-templates", "license"), "LICENSE"); err != nil {
@@ -168,21 +184,6 @@ func CreateProjectInteractive() error {
 		return fmt.Errorf("error creating gama configuration: %s", err.Error())
 	}
 	defer configFile.Close()
-	yaml.NewEncoder(configFile).Encode(ProjectConfig{
-		Project: ProjectProjectConfig{
-			Name:    responses.ProjectName,
-			Version: "0.1.0",
-			Author: AuthorConfig{
-				Name:  responses.AuthorName,
-				Email: responses.AuthorEmail,
-			},
-		},
-		Gama: ProjectGamaConfig{
-			Location: "$project/gama",
-		},
-		Build: ProjectBuildConfig{
-			GCC: nil,
-		},
-	})
+	yaml.NewEncoder(configFile).Encode(config.Config)
 	return nil
 }
