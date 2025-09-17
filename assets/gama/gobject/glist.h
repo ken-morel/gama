@@ -2,8 +2,6 @@
 #define GAMA_GLIST_INCLUDED
 
 #include "gobject.h"
-#include <stdio.h>
-#include <time.h>
 
 typedef struct {
   GObject **objects;

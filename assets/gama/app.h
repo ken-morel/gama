@@ -4,8 +4,6 @@
 #include "events.h"
 #include "scene.h"
 
-#include <stdlib.h>
-
 typedef struct sApp {
   char *title;
   unsigned int width;

@@ -95,12 +95,28 @@ func buildProjectWindows(name string, cfiles []string, gama string) error {
 	return runBuildCommand(cmd)
 }
 
+func getGamaLocation() (string, error) {
+	if config == nil {
+		return "", fmt.Errorf("no project configuration found")
+	}
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	return strings.Replace(config.Config.Gama.Location, "$project", cwd, 1), nil
+}
+
 func getProjectCFiles() ([]string, error) {
 	sourceFiles, err := getDirCFiles("src")
+	var gamaFiles []string
 	if err != nil {
 		return nil, err
 	}
-	gamaFiles, err := getDirCFiles("gama")
+	gama, err := getGamaLocation()
+
+	if err == nil {
+		gamaFiles, err = getDirCFiles(gama)
+	}
 	if err != nil {
 		fmt.Printf("Warning: could not list files in gama/: %s\n", err.Error())
 	}
@@ -146,9 +162,7 @@ func BuildProject(wine bool, emscripten bool) error {
 		return fmt.Errorf("no c source file found file found")
 	}
 	fmt.Println("Building files", cfiles)
-
-	cwd, _ := os.Getwd()
-	gama := strings.Replace(config.Config.Gama.Location, "$project", cwd, 1)
+	gama, _ := getGamaLocation()
 
 	if emscripten {
 		return buildProjectEmscripten(name, cfiles, gama)

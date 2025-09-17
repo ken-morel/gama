@@ -5,6 +5,6 @@ project:
     name: jealomy
     email: test@example.com
 gama:
-  location: $project/gama
+  location: /home/engon/gama/assets/gama/
 build:
   gcc: null

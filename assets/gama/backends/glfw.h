@@ -1,10 +1,8 @@
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "../app.h"
-#include <math.h>
 
 void setGLPerspective(float width, float height) {
   glMatrixMode(GL_PROJECTION);

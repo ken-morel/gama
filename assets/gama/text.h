@@ -2,11 +2,10 @@
 #define GAMA_TEXT_INCLUDED
 
 #include "color.h"
-#include <stdio.h>
-#include <string.h>
-#define STB_TRUETYPE_IMPLEMENTATION
 #include "stb/truetype.h"
 #include "vector.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define TEXT_DPI 512
 
@@ -150,7 +149,7 @@ int renderText(Text *t) {
       stbtt_GetBakedQuad(t->font->cdata, 512, 512, (int)t->text[i] - 32, &x, &y,
                          &q, 1);
 
-      // 2. BUG FIX: Use the 'q' coordinates directly for the vertices.
+      // 2.: Use the 'q' coordinates directly for the vertices.
       // Do not add the original t->pos->pos->x to them.
       // We apply your custom scale and y-inversion.
       glTexCoord2f(q.s0, q.t0);

@@ -1,10 +1,9 @@
 #ifndef GAMA_IMAGE_INCLUDED
 #define GAMA_IMAGE_INCLUDED
 
+#include "stb/image.h"
 #include "vector.h"
 #include <GL/gl.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/image.h"
 
 typedef struct {
   unsigned int width, height;

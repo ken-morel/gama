@@ -1,6 +1,8 @@
 #ifndef GAMA_INCLUDED
 #define GAMA_INCLUDED
-#include "gobject/shape.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_TRUETYPE_IMPLEMENTATION
 
 #include "app.h"
 #include "scene.h"
@@ -18,7 +20,7 @@
 #include "backends/emscripten.h"
 #endif // BACKEND_EMSCRIPTEN
 
-#include "time.h"
+#include "gtime.h"
 
 void gama_click(App *app, MouseClickEvent *e) {
   if (app->onclick != NULL)
