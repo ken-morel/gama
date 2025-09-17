@@ -137,28 +137,29 @@ int setSpriteAnimation(Sprite *s, unsigned int length, unsigned int *animation,
   setSpriteAnimation(s, sizeof(array) / sizeof(unsigned int), array, fps)
 
 //////////////////////
-int setSpriteVelocity(Sprite *s, Pos vel) {
-  if (s == NULL)
-    return 0;
-  s->pos.vel = vel;
-  return 1;
-}
+
 Pos getSpriteVelocity(Sprite *s) { return s->pos.vel; }
 Pos getSpritePosition(Sprite *s) { return vectorPos(&s->pos); }
 Pos getSpriteAcceleration(Sprite *s) { return s->pos.acc; }
 
-int setSpriteAcceleration(Sprite *s, Pos acc) {
+int setSpriteAcceleration(Sprite *s, Pos *acc) {
   if (s == NULL)
     return 0;
-  s->pos.acc = acc;
+  copyPos(acc, &s->pos.acc);
+  return 1;
+}
+int setSpriteVelocity(Sprite *s, Pos *vel) {
+  if (s == NULL)
+    return 0;
+  copyPos(vel, &s->pos.vel);
   return 1;
 }
 
-int setSpritePosition(Sprite *s, Pos pos) {
+int setSpritePosition(Sprite *s, Pos *pos) {
   if (s == NULL)
     return 0;
-  s->pos.x = pos.x;
-  s->pos.y = pos.y;
+  s->pos.x = pos->x;
+  s->pos.y = pos->y;
   return 1;
 }
 

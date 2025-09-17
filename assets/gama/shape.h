@@ -85,24 +85,24 @@ Pos getShapeVelocity(Shape *s) { return s ? s->pos.vel : at(0, 0); }
 Pos getShapePosition(Shape *s) { return s ? vectorPos(&s->pos) : at(0, 0); }
 Pos getShapeAcceleration(Shape *s) { return s ? s->pos.acc : at(0, 0); }
 
-int setShapeVelocity(Shape *s, Pos vel) {
-  if (!s)
+int setShapeVelocity(Shape *s, Pos *vel) {
+  if (!s || !vel)
     return 0;
-  s->pos.vel = vel;
+  copyPos(vel, &s->pos.vel);
   return 1;
 }
-int setShapeAcceleration(Shape *s, Pos acc) {
-  if (!s)
+int setShapeAcceleration(Shape *s, Pos *acc) {
+  if (!s || !acc)
     return 0;
-  s->pos.acc = acc;
+  copyPos(acc, &s->pos.acc);
   return 1;
 }
 
-int setShapePosition(Shape *s, Pos pos) {
+int setShapePosition(Shape *s, Pos *pos) {
   if (!s)
     return 0;
-  s->pos.x = pos.x;
-  s->pos.y = pos.y;
+  s->pos.x = pos->x;
+  s->pos.y = pos->y;
   return 1;
 }
 

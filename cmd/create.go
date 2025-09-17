@@ -2,49 +2,33 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/ken-morel/gama/gama"
 	"github.com/spf13/cobra"
 )
 
-var (
-	projectName  string
-	templateName string
-	createCmd    = &cobra.Command{
-		Use:   "create <name>",
-		Short: "Create a new gama project",
-		Long: `Create is a command to create or start a new utility.
+var createCmd = &cobra.Command{
+	Use:   "create",
+	Short: "Create a new gama project interactively",
+	Long: `Create is a command to create or start a new utility.
 
 	Use:
-	gama create <name>
+	gama create
 
-	It creates a new directory called <name> and initializes the
-	project in it.
+	It creates a new project interactively.
 	`,
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(projectName) == 0 && len(args) > 0 {
-				projectName = args[0]
-			}
-			if projectName == "" {
-				fmt.Println("No name specified")
-				os.Exit(1)
-			}
-			err := gama.CreateProject(projectName, templateName)
-			if err != nil {
-				fmt.Println("Error creating project: ", err.Error())
-			}
-		},
-		Aliases: []string{"init", "initialize"},
-		Example: "gama create helloWorld",
-	}
-)
+	Run: func(cmd *cobra.Command, args []string) {
+		err := gama.CreateProjectInteractive()
+		if err != nil {
+			fmt.Println("Error creating project: ", err.Error())
+		}
+	},
+	Aliases: []string{"init", "initialize"},
+	Example: "gama create helloWorld",
+}
 
 func init() {
 	rootCmd.AddCommand(createCmd)
-
-	createCmd.Flags().StringVarP(&projectName, "name", "n", "", "The name of the project you want to create")
-	createCmd.Flags().StringVarP(&templateName, "template", "t", "skeleton", "The starter template")
 
 	// Here you will define your flags and configuration settings.
 

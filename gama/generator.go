@@ -3,66 +3,192 @@ package gama
 import (
 	"fmt"
 	"os"
-	"path"
+	"strings"
+	"unicode"
 
-	"github.com/plus3it/gorecurcopy"
+	"github.com/AlecAivazis/survey/v2"
 )
 
-func CopyGamaLibrary() error {
-	projectGama := "gama"
-	gamaLib := path.Join(config.InstallPath, "gama")
-	os.RemoveAll(projectGama)
-	os.Mkdir("gama", 0755)
-	err := gorecurcopy.CopyDirectory(gamaLib, projectGama)
-	if err != nil {
-		return fmt.Errorf("error copying gama library: %s", err.Error())
-	} else {
-		return nil
-	}
-}
-
-func CreateProject(name string, template string) error {
+func CreateProjectInteractive() error {
 	if config == nil {
-		return fmt.Errorf("error: gama not initialized")
+		return fmt.Errorf("gama configuration not found")
 	}
-	templatePath := path.Join(config.InstallPath, "templates", template)
-	gamaPath := path.Join(config.InstallPath, "gama")
-	_, err := os.Stat(templatePath)
+	fmt.Println("Let's make this real!")
+	hostName, _ := os.Hostname()
+	templates, err := GetTemplates()
 	if err != nil {
-		return fmt.Errorf("tempate %s not found: %s", template, err.Error())
+		return fmt.Errorf("could not load templates: %s", err.Error())
 	}
-	err = os.Mkdir(name, 0755)
-	if err != nil {
-		return fmt.Errorf("error creating project folder at %s: %s", name, err.Error())
-	}
-	err = gorecurcopy.CopyDirectory(templatePath, name)
-	if err != nil {
-		return fmt.Errorf("error copying template: %s", err.Error())
-	}
-	gamaDest := path.Join(name, "gama")
-	err = os.Mkdir(gamaDest, 0755)
-	if err == nil {
-		err = gorecurcopy.CopyDirectory(gamaPath, gamaDest)
-	}
-	if err != nil {
-		return fmt.Errorf("error copying gama: %s", err.Error())
+	templateNames := make([]string, len(templates))
+	for i, t := range templates {
+		templateNames[i] = t.Name
 	}
 
-	for _, p := range [][]string{{"assets"}, {"assets", "fonts"}, {"assets", "sprites"}, {"assets", "images"}} {
-		os.Mkdir(
-			path.Join(
-				append(
-					[]string{name},
-					p...,
-				)...,
-			), 0755)
+	responses := struct {
+		ProjectName     string   `survey:"projectName"`
+		ProjectTemplate string   `survey:"projectTemplate"`
+		AuthorName      string   `survey:"authorName"`
+		AuthorEmail     string   `survey:"authorEmail"`
+		Editors         []string `survey:"editors"`
+	}{}
+	questions := []*survey.Question{
+		{
+			Name:   "projectName",
+			Prompt: &survey.Input{Message: "What name do you want to give to your project? Use just letters, numbers and spaces:"},
+			Validate: func(val any) error {
+				if !isValidProjectName(val.(string)) {
+					return fmt.Errorf("invalid project name:  should contain only letters, numbers or spaces")
+				}
+				return nil
+			},
+		},
+		{
+			Name: "projectTemplate",
+			Prompt: &survey.Select{
+				Message: "What project template do you use?",
+				Options: templateNames,
+				Default: "skeleton",
+				Help:    "The template is the base code from which you are going to start your project.",
+				Description: func(value string, index int) string {
+					if index < len(templates) {
+						return templates[index].Description
+					}
+					return "No description found"
+				},
+			},
+			Validate: survey.Required,
+		},
+		{
+			Name: "authorName",
+			Prompt: &survey.Input{
+				Message: "How should be named the author of the project?",
+				Default: hostName,
+				Help:    "Use just letters, numbers and spaces. Try to make it shord and simple.",
+			},
+			Validate: func(val any) error {
+				if !isValidProjectName(val.(string)) {
+					return fmt.Errorf("invalid project name:  should contain only letters, numbers or spaces")
+				}
+				return nil
+			},
+		},
+		{
+			Name: "authorEmail",
+			Prompt: &survey.Input{
+				Message: "Enter the project author's email. like example@gmail.com or test@example.something:",
+				Suggest: func(entry string) []string {
+					if strings.HasSuffix(entry, "@") {
+						return []string{"gmail.com", "engon.cm"}
+					}
+					return nil
+				},
+				Help: "Enter your google mail address or any similar email so users can contact you.",
+			},
+			Transform: func(val any) any {
+				return strings.ReplaceAll(survey.ToLower(val).(string), " ", "")
+			},
+			Validate: func(ans any) error {
+				val := ans.(string)
+				if strings.Contains(val, " ") {
+					return fmt.Errorf("email address should not contain spaces")
+				}
+				if strings.Contains(val, "@") {
+					tail := val[strings.Index(val, "@"):]
+					if !strings.Contains(tail, ".") {
+						return fmt.Errorf("email address domain should have a dot(like gmail.com)")
+					}
+					return nil
+				} else {
+					return fmt.Errorf("email address contain @")
+				}
+			},
+		},
+		{
+			Name: "editors",
+			Prompt: &survey.MultiSelect{
+				Message: "What editor configurations do you want to add?",
+				Options: []string{"Code::Blocks", "Code", "Sublime Text", "Neovim"},
+				Default: nil,
+				Help:    "Choose what you are going to use to code",
+				Description: func(value string, index int) string {
+					switch value {
+					case "Code::Blocks":
+						return "Code blocks, a popular ide for GCE A/L students, recommended for beginers in C."
+					case "Code":
+						return "VS Code actually. A popular ide due to it's autocompletion, design and ease of use."
+					case "Sublime Text":
+						return "Sublime's just Sublime, I think the most beautiful editor amongst these with snippets, python plugins, and more."
+					case "Neovim":
+						return "Neovim(used to write gama), the modal text editor, it may not be easy to use, but is fast and nice."
+					default:
+						return "No description"
+					}
+				},
+			},
+		},
 	}
-	gorecurcopy.Copy(path.Join(config.InstallPath, "images", "gama.ico"), path.Join(name, "assets", "images", "logo.ico"))
-
-	conf := fmt.Sprintf(templateConfig, name)
-	err = os.WriteFile(path.Join(name, "gama.yml"), []byte(conf), 0755)
+	err = survey.Ask(questions, &responses)
 	if err != nil {
-		return fmt.Errorf("error writing gama config: %s", err.Error())
+		return err
 	}
+	fmt.Println("Finished surver, answers: ", responses)
 	return nil
 }
+
+func isValidProjectName(s string) bool {
+	if len(s) == 0 {
+		return false
+	}
+	for _, r := range s {
+		if !unicode.IsLetter(r) && !unicode.IsDigit(r) && !unicode.IsSpace(r) {
+			return false
+		}
+	}
+	return true
+}
+
+// func CreateProject(name string, template string) error {
+// 	if config == nil {
+// 		return fmt.Errorf("error: gama not initialized")
+// 	}
+// 	templatePath := path.Join(config.InstallPath, "templates", template)
+// 	gamaPath := path.Join(config.InstallPath, "gama")
+// 	_, err := os.Stat(templatePath)
+// 	if err != nil {
+// 		return fmt.Errorf("tempate %s not found: %s", template, err.Error())
+// 	}
+// 	err = os.Mkdir(name, 0o755)
+// 	if err != nil {
+// 		return fmt.Errorf("error creating project folder at %s: %s", name, err.Error())
+// 	}
+// 	err = gorecurcopy.CopyDirectory(templatePath, name)
+// 	if err != nil {
+// 		return fmt.Errorf("error copying template: %s", err.Error())
+// 	}
+// 	gamaDest := path.Join(name, "gama")
+// 	err = os.Mkdir(gamaDest, 0o755)
+// 	if err == nil {
+// 		err = gorecurcopy.CopyDirectory(gamaPath, gamaDest)
+// 	}
+// 	if err != nil {
+// 		return fmt.Errorf("error copying gama: %s", err.Error())
+// 	}
+//
+// 	for _, p := range [][]string{{"assets"}, {"assets", "fonts"}, {"assets", "sprites"}, {"assets", "images"}} {
+// 		os.Mkdir(
+// 			path.Join(
+// 				append(
+// 					[]string{name},
+// 					p...,
+// 				)...,
+// 			), 0o755)
+// 	}
+// 	gorecurcopy.Copy(path.Join(config.InstallPath, "images", "gama.ico"), path.Join(name, "assets", "images", "logo.ico"))
+//
+// 	conf := fmt.Sprintf(templateConfig, name)
+// 	err = os.WriteFile(path.Join(name, "gama.yml"), []byte(conf), 0o755)
+// 	if err != nil {
+// 		return fmt.Errorf("error writing gama config: %s", err.Error())
+// 	}
+// 	return nil
+// }

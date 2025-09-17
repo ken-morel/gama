@@ -1,21 +1,16 @@
 package gama
 
-const templateConfig = `
-project:
-  name: %s
-  version: 0.1.0
-gama:
-  version: 0.1.0
-build:
-  gcc: null
-`
-
+type AuthorConfig struct {
+	Name  string `yaml:"name"`
+	Email string `yaml:"email"`
+}
 type ProjectProjectConfig struct {
-	Name    string `yaml:"name"`
-	Version string `yaml:"version"`
+	Name    string       `yaml:"name"`
+	Version string       `yaml:"version"`
+	Author  AuthorConfig `yaml:"author"`
 }
 type ProjectGamaConfig struct {
-	Version string `yaml:"version"`
+	Location string `yaml:"location"`
 }
 type ProjectBuildConfig struct {
 	GCC *string `yaml:"gcc"`
