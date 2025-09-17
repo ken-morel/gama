@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"unicode"
 )
 
 func zipSource(source, target string) error {
@@ -51,4 +52,16 @@ func zipSource(source, target string) error {
 		}
 		return err
 	})
+}
+
+func isValidProjectName(s string) bool {
+	if len(s) == 0 {
+		return false
+	}
+	for _, r := range s {
+		if !unicode.IsLetter(r) && !unicode.IsDigit(r) && !unicode.IsSpace(r) {
+			return false
+		}
+	}
+	return true
 }

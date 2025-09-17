@@ -1,12 +1,15 @@
 package gama
 
 import (
+	"bytes"
 	"fmt"
 	"os"
+	"path"
 	"strings"
-	"unicode"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/plus3it/gorecurcopy"
+	"gopkg.in/yaml.v3"
 )
 
 func CreateProjectInteractive() error {
@@ -131,20 +134,59 @@ func CreateProjectInteractive() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Finished surver, answers: ", responses)
-	return nil
-}
-
-func isValidProjectName(s string) bool {
-	if len(s) == 0 {
-		return false
-	}
-	for _, r := range s {
-		if !unicode.IsLetter(r) && !unicode.IsDigit(r) && !unicode.IsSpace(r) {
-			return false
+	os.Mkdir(responses.ProjectName, 0o755)
+	os.Chdir(responses.ProjectName)
+	for _, template := range templates {
+		if template.Name == responses.ProjectTemplate {
+			err := template.Copy()
+			if err != nil {
+				return err
+			} else {
+				break
+			}
 		}
 	}
-	return true
+	os.MkdirAll(path.Join("assets", "images"), 0o755)
+	os.MkdirAll(path.Join("assets", "sprites"), 0o755)
+	os.MkdirAll(path.Join("assets", "fonts"), 0o755)
+	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "images", "project-icon"), "assets/images/logo.png"); err != nil {
+		fmt.Println("Error copying icon: ", err.Error())
+	}
+	if err := gorecurcopy.Copy(path.Join(config.InstallPath, "conf-templates", "license"), "LICENSE"); err != nil {
+		fmt.Println("Error copying license:", err.Error())
+	} else {
+		content, err := os.ReadFile("LICENSE")
+		if err != nil {
+			content = bytes.ReplaceAll(content, []byte("{{author.name}}"), []byte(responses.AuthorName))
+			content = bytes.ReplaceAll(content, []byte("{{author.email}}"), []byte(responses.AuthorEmail))
+			os.WriteFile("LICENSE", content, 0o755)
+		}
+	}
+	if err := CopyGamaLibrary(); err != nil {
+		return err
+	}
+	configFile, err := os.Open("gama.yml")
+	if err != nil {
+		return fmt.Errorf("error creating gama configuration: %s", err.Error())
+	}
+	defer configFile.Close()
+	yaml.NewEncoder(configFile).Encode(ProjectConfig{
+		Project: ProjectProjectConfig{
+			Name:    responses.ProjectName,
+			Version: "0.1.0",
+			Author: AuthorConfig{
+				Name:  responses.AuthorName,
+				Email: responses.AuthorEmail,
+			},
+		},
+		Gama: ProjectGamaConfig{
+			Location: "gama/",
+		},
+		Build: ProjectBuildConfig{
+			GCC: nil,
+		},
+	})
+	return nil
 }
 
 // func CreateProject(name string, template string) error {
