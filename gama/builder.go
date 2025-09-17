@@ -16,14 +16,14 @@ func getBuildExecutablePath(name string, useWine bool) (string, error) {
 	} else if runtime.GOOS == "linux" {
 		return lin, nil
 	}
-	return "", fmt.Errorf("System not supported")
+	return "", fmt.Errorf("system not supported")
 }
 
 // winegcc src/main.c -o test.exe -lopengl32 -lgdi32
 func buildProjectWine(name string, cfiles []string) error {
 	outDir := path.Join("build", "windows")
 	os.RemoveAll(outDir)
-	os.MkdirAll(outDir, 0755)
+	os.MkdirAll(outDir, 0o755)
 	cmd := exec.Command(
 		"winegcc",
 		append(
@@ -43,7 +43,7 @@ func buildProjectWine(name string, cfiles []string) error {
 func buildProjectLinux(name string, cfiles []string) error {
 	outDir := path.Join("build", "linux")
 	os.RemoveAll(outDir)
-	os.MkdirAll(outDir, 0755)
+	os.MkdirAll(outDir, 0o755)
 	cmd := exec.Command(
 		"gcc",
 		append(
@@ -74,7 +74,7 @@ func buildProjectWindows(name string, cfiles []string) error {
 	}
 	outDir := path.Join("build", "windows")
 	os.RemoveAll(outDir)
-	os.MkdirAll(outDir, 0755)
+	os.MkdirAll(outDir, 0o755)
 
 	cmd := exec.Command(
 		*gccPath,
@@ -103,7 +103,29 @@ func getProjectCFiles() ([]string, error) {
 	return append(sourceFiles, gamaFiles...), nil
 }
 
-func BuildProject(wine bool) error {
+func buildProjectEmscripten(name string, cfiles []string) error {
+	outDir := path.Join("build", "emscripten")
+	os.RemoveAll(outDir)
+	os.MkdirAll(outDir, 0o755)
+	cmd := exec.Command(
+		"emcc",
+		append(
+			cfiles,
+			"-o",
+			path.Join(outDir, name+".html"),
+			"-s",
+			"USE_GLFW=3",
+			"-s",
+			"USE_WEBGL2=1",
+			"-D",
+			"BACKEND_EMSCRIPTEN",
+		)...,
+	)
+	fmt.Println("Running:", cmd.String())
+	return runBuildCommand(cmd)
+}
+
+func BuildProject(wine bool, emscripten bool) error {
 	if config.Config == nil {
 		return fmt.Errorf("config not found")
 	}
@@ -119,6 +141,10 @@ func BuildProject(wine bool) error {
 		return fmt.Errorf("no c source file found file found")
 	}
 	fmt.Println("Building files", cfiles)
+
+	if emscripten {
+		return buildProjectEmscripten(name, cfiles)
+	}
 
 	switch runtime.GOOS {
 	case "windows":

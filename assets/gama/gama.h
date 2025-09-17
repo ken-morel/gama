@@ -14,6 +14,10 @@
 #include "backends/win32.h"
 #endif // Backend win32
 
+#ifdef BACKEND_EMSCRIPTEN
+#include "backends/emscripten.h"
+#endif // BACKEND_EMSCRIPTEN
+
 #include "time.h"
 
 void gama_click(App *app, MouseClickEvent *e) {

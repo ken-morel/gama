@@ -23,7 +23,7 @@ typedef struct {
   GObjectType type;
 } GObject;
 
-GObject newGObject() {
+GObject Gnew() {
   GObject obj;
   obj._object.shape = NULL;
   obj.type = GNoObject;
