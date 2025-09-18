@@ -1,4 +1,0 @@
-If:
-  PathMatch: .*\.h
-CompileFlags:
-  Add: [-x, c-header]

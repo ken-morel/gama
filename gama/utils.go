@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"unicode"
 )
 
@@ -64,4 +66,33 @@ func isValidProjectName(s string) bool {
 		}
 	}
 	return true
+}
+
+func openURL(url string) error {
+	var cmd *exec.Cmd
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "start", url)
+	case "darwin": // macOS
+		cmd = exec.Command("open", url)
+	default: // Linux, FreeBSD, OpenBSD, NetBSD, etc.
+		// Check if running under WSL (Windows Subsystem for Linux)
+		if isWSL() {
+			cmd = exec.Command("cmd.exe", "/c", "start", url)
+		} else {
+			cmd = exec.Command("xdg-open", url)
+		}
+	}
+
+	return cmd.Start()
+}
+
+// isWSL checks if the current environment is Windows Subsystem for Linux.
+func isWSL() bool {
+	// A simple way to check for WSL is to look for the /proc/version file
+	// and see if it contains "Microsoft".
+	// This might not be exhaustive for all WSL versions or future changes.
+	_, err := exec.Command("grep", "-q", "Microsoft", "/proc/version").CombinedOutput()
+	return err == nil
 }

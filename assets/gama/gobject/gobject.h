@@ -23,6 +23,12 @@ typedef struct {
   GObjectType type;
 } GObject;
 
+const GObject GN = {
+    ._object.sprite = NULL,
+    .type = GNoObject,
+};
+#define Gnothing GN
+
 GObject Gnew() {
   GObject obj;
   obj._object.shape = NULL;

@@ -5,6 +5,7 @@
 #define STB_TRUETYPE_IMPLEMENTATION
 
 #include "app.h"
+#include "gobject/shape.h"
 #include "scene.h"
 
 #ifdef BACKEND_GLFW
@@ -17,7 +18,7 @@
 #endif // Backend win32
 
 #ifdef BACKEND_EMSCRIPTEN
-#include "backends/emscripten.h"
+#include "backends/bemscripten.h"
 #endif // BACKEND_EMSCRIPTEN
 
 #include "gtime.h"

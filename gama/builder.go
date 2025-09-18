@@ -137,8 +137,9 @@ func buildProjectEmscripten(name string, cfiles []string, gama string) error {
 			"USE_GLFW=3",
 			"-s",
 			"USE_WEBGL2=1",
-			"-D",
-			"BACKEND_EMSCRIPTEN",
+			"-D", "BACKEND_EMSCRIPTEN",
+			"-sLEGACY_GL_EMULATION=1",
+			"-sGL_UNSAFE_OPTS=0",
 			fmt.Sprintf("-I%s", gama),
 		)...,
 	)

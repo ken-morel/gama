@@ -9,10 +9,10 @@ import (
 
 // buildCmd represents the build command
 var (
-	shouldRun    bool
-	useWine      bool
+	shouldRun     bool
+	useWine       bool
 	useEmscripten bool
-	buildCmd     = &cobra.Command{
+	buildCmd      = &cobra.Command{
 		Use:   "build",
 		Short: "Build the applicaiton",
 		Long:  `Build the application into an executable in build.`,
@@ -22,7 +22,7 @@ var (
 			if err != nil {
 				fmt.Printf("error building project: %s\n", err.Error())
 			} else if shouldRun {
-				err = gama.RunBuild(args, useWine)
+				err = gama.RunBuild(args, useWine, useEmscripten)
 				if err != nil {
 					fmt.Printf("Error running project build: %s", err.Error())
 				}
