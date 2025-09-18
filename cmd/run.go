@@ -11,12 +11,13 @@ var runCmd = &cobra.Command{
 	Short: "Run the built binaries",
 	Long:  `Run built binaries in build/.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		gama.RunBuild(args, useWine)
+		gama.RunBuild(args, useWine, useEmscripten)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(runCmd)
+	runCmd.PersistentFlags().BoolVarP(&useEmscripten, "emscripten", "e", false, "Build the applicaiton using emscripten")
 	runCmd.PersistentFlags().BoolVarP(&useWine, "wine", "w", false, "Run windows build with wine")
 
 	// Here you will define your flags and configuration settings.

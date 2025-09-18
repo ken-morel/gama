@@ -4,12 +4,18 @@ import (
 	"bytes"
 	"os"
 	"path"
+
+	"github.com/plus3it/gorecurcopy"
 )
 
 type ProjectTemplate struct {
 	Name        string
 	Path        string
 	Description string
+}
+
+func (t *ProjectTemplate) Copy() error {
+	return gorecurcopy.CopyDirectory(t.Path, ".")
 }
 
 func GetTemplates() (templates []ProjectTemplate, err error) {

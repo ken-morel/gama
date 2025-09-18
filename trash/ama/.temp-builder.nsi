@@ -1,5 +1,5 @@
 ; =============================================================================
-; NSIS Installer Script for "{{project.name}}"
+; NSIS Installer Script for "ama"
 ;
 ; Features:
 ; - Self-contained and robust function to add the installation directory to the PATH.
@@ -15,10 +15,10 @@
 
 ;--------------------------------
 ; General
-Name "{{project.name}}"
-OutFile ".\build\windows\{{project.name}}-{{project.version}}-installer.exe"
-InstallDir "$APPDATA\gama\{{author.name}}\{{project.name}}"
-InstallDirRegKey HKCU "Software\{{author.name}}\{{project.name}}" "InstallDir"
+Name "ama"
+OutFile ".\build\windows\ama-0.1.0-installer.exe"
+InstallDir "$APPDATA\gama\jealomy\ama"
+InstallDirRegKey HKCU "Software\jealomy\ama" "InstallDir"
 RequestExecutionLevel user
 
 
@@ -41,26 +41,26 @@ RequestExecutionLevel user
 ;=============================================================================
 ; Installer Section
 ;=============================================================================
-Section "Install {{project.name}}" SecInstall
+Section "Install ama" SecInstall
   SetOutPath "$INSTDIR"
   
   ; --- Install application files ---
-  File ".\build\windows\{{project.name}}.exe"
+  File ".\build\windows\ama.exe"
   File /r ".\assets"
 
   ; --- Create Uninstaller and Registry entries for Add/Remove Programs ---
-  WriteRegStr HKCU "Software\{{author.name}}\{{project.name}}" "InstallDir" "$INSTDIR"
+  WriteRegStr HKCU "Software\jealomy\ama" "InstallDir" "$INSTDIR"
   WriteUninstaller "$INSTDIR\uninstall.exe"
   
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{author.name}}\{{project.name}}" "DisplayName" "{{project.name}}"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{author.name}}\{{project.name}}" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{author.name}}\{{project.name}}" "NoModify" 1
-  WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{author.name}}\{{project.name}}" "NoRepair" 1
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\jealomy\ama" "DisplayName" "ama"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\jealomy\ama" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\jealomy\ama" "NoModify" 1
+  WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\jealomy\ama" "NoRepair" 1
 
   ; --- Create shortcuts ---
-  CreateDirectory "$SMPROGRAMS\{{author.name}}"
-  CreateShortCut "$SMPROGRAMS\{{author.name}}\{{project.name}}.lnk" "$INSTDIR\{{project.name}}.exe"
-  CreateShortCut "$DESKTOP\{{project.name}}.lnk" "$INSTDIR\{{project.name}}.exe"
+  CreateDirectory "$SMPROGRAMS\jealomy"
+  CreateShortCut "$SMPROGRAMS\jealomy\ama.lnk" "$INSTDIR\ama.exe"
+  CreateShortCut "$DESKTOP\ama.lnk" "$INSTDIR\ama.exe"
 SectionEnd
 
 ;=============================================================================
@@ -68,13 +68,13 @@ SectionEnd
 ;=============================================================================
 Section "Uninstall"
   ; --- Remove shortcuts and Start Menu folder ---
-  Delete "$SMPROGRAMS\{{author.name}}\{{project.name}}.lnk"
-  Delete "$DESKTOP\{{project.name}}.lnk"
-  ; RMDir "$SMPROGRAMS\{{author.name}}"
+  Delete "$SMPROGRAMS\jealomy\ama.lnk"
+  Delete "$DESKTOP\ama.lnk"
+  ; RMDir "$SMPROGRAMS\jealomy"
   
   ; --- Remove registry keys ---
-  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{author.name}}\{{project.name}}"
-  DeleteRegKey HKCU "Software\{{author.name}}\{{project.name}}"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\jealomy\ama"
+  DeleteRegKey HKCU "Software\jealomy\ama"
   
   ; --- Remove all installed files and directories ---
   RMDir /r "$INSTDIR"

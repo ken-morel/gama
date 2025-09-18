@@ -7,7 +7,7 @@ App *gama;
 
 void main_loop() {
   _gama_update(gama);
-  glClear(GL_COLOR_BUFFER_BIT);
+  // glClear(GL_COLOR_BUFFER_BIT);
   _gama_render(gama);
 }
 

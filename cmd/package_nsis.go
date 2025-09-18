@@ -3,21 +3,19 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/ken-morel/gama/gama"
 	"github.com/spf13/cobra"
 )
 
 // nsisCmd represents the nsis command
 var nsisCmd = &cobra.Command{
 	Use:   "nsis",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Package the app in nsis installer",
+	Long:  `Package the app using nsis installer, uses nsis on windows and makensis on linux`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("nsis called")
+		if err := gama.PackageNSIS(); err != nil {
+			fmt.Println("Error packaging executable: ", err.Error())
+		}
 	},
 }
 

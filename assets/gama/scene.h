@@ -34,7 +34,6 @@ Scene *createScene(struct sApp *app) {
   s->destroy = NULL;
   s->onclick = NULL;
   s->onkey = NULL;
-  s->background = LIGHTCYAN;
   GinitList(&s->objects);
   return s;
 }

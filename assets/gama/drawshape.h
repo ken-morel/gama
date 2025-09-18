@@ -2,8 +2,7 @@
 #define GAMA_DRAWSHAPE_INCLUDED
 
 #include "color.h"
-#include "math.h"
-#include <GL/gl.h>
+#include "vector.h"
 #include <math.h>
 
 void drawRectangle(Pos *pos, Pos *size, Color color) {

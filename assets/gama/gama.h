@@ -1,8 +1,11 @@
 #ifndef GAMA_INCLUDED
 #define GAMA_INCLUDED
-#include "gobject/shape.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_TRUETYPE_IMPLEMENTATION
 
 #include "app.h"
+#include "gobject/shape.h"
 #include "scene.h"
 
 #ifdef BACKEND_GLFW
@@ -15,10 +18,10 @@
 #endif // Backend win32
 
 #ifdef BACKEND_EMSCRIPTEN
-#include "backends/emscripten.h"
+#include "backends/bemscripten.h"
 #endif // BACKEND_EMSCRIPTEN
 
-#include "time.h"
+#include "gtime.h"
 
 void gama_click(App *app, MouseClickEvent *e) {
   if (app->onclick != NULL)

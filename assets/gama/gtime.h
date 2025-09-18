@@ -1,6 +1,7 @@
 
 #ifndef GAMA_TIME_INCLUDED
 #define GAMA_TIME_INCLUDED
+
 #include <time.h>
 
 #if defined(_WIN32)

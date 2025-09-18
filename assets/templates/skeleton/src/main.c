@@ -1,4 +1,4 @@
-#include "../gama/gama.h"
+#include <gama.h>
 
 // Initialize the applicaiton here
 void init(App *app) {}

@@ -27,7 +27,6 @@ void setClearColor(Color col) {
                getColorAlpha(col));
 }
 void setGLColor(Color col) {
-
   glColor3f(getColorRed(col), getColorGreen(col), getColorBlue(col));
 }
 #endif // GAMA_COLOR_INCLUDED
