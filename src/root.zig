@@ -2,5 +2,6 @@
 const std = @import("std");
 const print = std.debug.print;
 pub const create = @import("create.zig");
+pub const build = @import("build.zig");
 
 const toml = @import("toml");
