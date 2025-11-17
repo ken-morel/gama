@@ -8,7 +8,7 @@ pub const Installation = struct {
         buildtemplate: []const u8,
     },
     pub fn copyTemplate(self: Installation, allocator: std.mem.Allocator, template: []const u8, to: []const u8) !void {
-        const templatePath = try std.fs.path.join(allocator, &[_][]const u8{ .templates, self.locs.template });
+        const templatePath = try std.fs.path.join(allocator, &[_][]const u8{ self.locs.templates, template });
         defer allocator.free(templatePath);
         _ = std.fs.cwd().openDir(templatePath, .{}) catch |err| switch (err) {
             error.FileNotFound => {
@@ -25,7 +25,7 @@ pub const Installation = struct {
     pub fn copyGama(self: Installation, allocator: std.mem.Allocator, to: []const u8) !void {
         try futils.copyDir(allocator, self.locs.gama, to);
     }
-    pub fn copyBuildTemplate(self: *Installation, allocator: std.mem.Allocator, to: []const u8) !void {
+    pub fn copyBuildTemplate(self: Installation, allocator: std.mem.Allocator, to: []const u8) !void {
         try futils.copyDir(allocator, self.locs.buildtemplate, to);
     }
 };

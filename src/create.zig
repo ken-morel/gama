@@ -40,7 +40,7 @@ pub fn initProject(allocator: std.mem.Allocator, c: InitProjectConfig) !void {
     try cwd.makeDir("gama");
     try cwd.makeDir("assets");
 
-    try install.copyTemplate(c.template, ".");
+    try install.copyTemplate(allocator, c.template, ".");
     const gamaDest = try cwd.realpathAlloc(allocator, "gama");
     defer allocator.free(gamaDest);
     try install.copyGama(allocator, gamaDest);
