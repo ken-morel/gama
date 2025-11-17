@@ -1,0 +1,11 @@
+CompileFlags:
+  Add:
+    - -I/home/engon/gama/lib
+---
+If:
+  PathMatch: .*\.h$
+CompileFlags:
+  Add:
+    - -x
+    - c
+    - -std=11
