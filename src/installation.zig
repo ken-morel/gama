@@ -34,7 +34,7 @@ pub fn getInstallation() !Installation {
     const devDir = "/home/engon/gama/";
     return .{
         .locs = .{
-            .gama = devDir ++ "lib",
+            .gama = devDir ++ "gama",
             .templates = devDir ++ "templates",
             .zig = "/home/engon/zig/zig",
             .buildtemplate = devDir ++ "buildtemplate",

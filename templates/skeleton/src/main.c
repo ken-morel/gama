@@ -1,9 +1,10 @@
 #include <gama.h>
 
+int gameOver = 0;
+
 int main() {
   gama_init();
-  double theta = 0.0;
-  for (; gama_isrunning(); theta = gama_frame()) {
+  for (double theta = 0.0; !gameOver; theta = gama_yield()) {
   }
   return 0;
 }

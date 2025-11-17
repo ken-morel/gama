@@ -22,7 +22,6 @@ pub fn createEditorConfig(wd: std.fs.Dir) !void {
         \\  Add:
         \\    - -x
         \\    - c
-        \\    - -std=11
         ,
         .sub_path = ".clangd",
         .flags = .{},
@@ -40,7 +39,7 @@ pub fn initProject(allocator: std.mem.Allocator, c: InitProjectConfig) !void {
     try cwd.makeDir("gama");
     try cwd.makeDir("assets");
 
-    try install.copyTemplate(allocator, c.template, ".");
+    try install.copyTemplate(allocator, c.template, cwdPath);
     const gamaDest = try cwd.realpathAlloc(allocator, "gama");
     defer allocator.free(gamaDest);
     try install.copyGama(allocator, gamaDest);

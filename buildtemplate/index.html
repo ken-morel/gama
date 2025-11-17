@@ -6,8 +6,54 @@
   <meta name="viewport" content="width=device-width; initial-scale=1;" />
 </head>
 
-<body>
-  Welcome to gama!
+<body style="margin: 0; overflow: hidden; background-color: #1e1e1e;">
+  <canvas id="gama-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
+  <script>
+    const canvas = document.getElementById('gama-canvas');
+
+    if (!canvas.transferControlToOffscreen) {
+      throw new Error("Your browser does not support OffscreenCanvas. This application cannot run.");
+    }
+
+    const worker = new Worker('gama.worker.js');
+
+    worker.onmessage = (event) => {
+      switch (event.data.type) {
+        case "setTitle":
+          document.title = event.data.title;
+          break;
+      }
+    };
+
+    // Function to set canvas dimensions and inform the worker
+    function setCanvasDimensions() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      // Set the visible canvas attributes (important for OffscreenCanvas inheritance)
+      canvas.width = width;
+      canvas.height = height;
+
+      // If the worker has already been initialized, send it the new dimensions
+      // The 'initialized' flag is set after the initial 'init' message is sent.
+      if (worker.initialized) {
+        worker.postMessage({type: 'resize', width: width, height: height});
+      }
+    }
+
+    // Initial setup of canvas dimensions
+    setCanvasDimensions();
+
+    // Transfer canvas control to the worker with initial dimensions
+    const offscreen = canvas.transferControlToOffscreen();
+    worker.postMessage({type: 'init', canvas: offscreen, width: canvas.width, height: canvas.height}, [offscreen]);
+
+    // Mark worker as initialized after sending the initial canvas
+    worker.initialized = true;
+
+    // Listen for window resize events to update canvas dimensions
+    window.addEventListener('resize', setCanvasDimensions);
+  </script>
 </body>
 
 </html>
