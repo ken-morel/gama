@@ -2,6 +2,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include "api.h"
+#include "color.h"
+#include "shape.h"
 
 
 int GAMA_IS_RUNNING = 0;
