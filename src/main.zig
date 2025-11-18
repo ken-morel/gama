@@ -36,6 +36,10 @@ pub fn main() !void {
         gama.build.buildProject(allocator) catch |err| {
             print("Error creating project: {}\n", .{err});
         };
+    } else if (std.mem.eql(u8, command.?, "run")) {
+        gama.run.runBuild(allocator) catch |err| {
+            print("Error running project: {}\n", .{err});
+        };
     } else {
         print("Invalid command: '{s}' use gama help to show help\n", .{command.?});
     }
