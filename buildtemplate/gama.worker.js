@@ -70,7 +70,11 @@ self.onmessage = async (event) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
           },
           gapi_canvas_clear_rect: (x, y, w, h) => {
-            ctx.clearRect(x, y, w, h);
+            const screenX = (x + 1) / 2 * canvas.width;
+            const screenY = (y + 1) / 2 * canvas.height;
+            const screenW = (w / 2) * canvas.width;
+            const screenH = (h / 2) * canvas.height;
+            ctx.clearRect(screenX, screenY, screenW, screenH);
           },
           gapi_canvas_set_background: (r, g, b, a) => {
             ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a / 255.0})`;
@@ -85,15 +89,24 @@ self.onmessage = async (event) => {
             ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${a / 255.0})`;
           },
           gapi_canvas_set_line_width: (width) => {
-            ctx.lineWidth = width;
+            // Scale line width based on the average of canvas dimensions
+            ctx.lineWidth = (width / 2) * ((canvas.width + canvas.height) / 2);
           },
 
           // --- Basic Shapes ---
           gapi_canvas_fill_rect: (x, y, w, h) => {
-            ctx.fillRect(x, y, w, h);
+            const screenX = (x + 1) / 2 * canvas.width;
+            const screenY = (y + 1) / 2 * canvas.height;
+            const screenW = (w / 2) * canvas.width;
+            const screenH = (h / 2) * canvas.height;
+            ctx.fillRect(screenX, screenY, screenW, screenH);
           },
           gapi_canvas_stroke_rect: (x, y, w, h) => {
-            ctx.strokeRect(x, y, w, h);
+            const screenX = (x + 1) / 2 * canvas.width;
+            const screenY = (y + 1) / 2 * canvas.height;
+            const screenW = (w / 2) * canvas.width;
+            const screenH = (h / 2) * canvas.height;
+            ctx.strokeRect(screenX, screenY, screenW, screenH);
           },
 
           // --- Paths ---
@@ -101,13 +114,20 @@ self.onmessage = async (event) => {
             ctx.beginPath();
           },
           gapi_canvas_path_move_to: (x, y) => {
-            ctx.moveTo(x, y);
+            const screenX = (x + 1) / 2 * canvas.width;
+            const screenY = (y + 1) / 2 * canvas.height;
+            ctx.moveTo(screenX, screenY);
           },
           gapi_canvas_path_line_to: (x, y) => {
-            ctx.lineTo(x, y);
+            const screenX = (x + 1) / 2 * canvas.width;
+            const screenY = (y + 1) / 2 * canvas.height;
+            ctx.lineTo(screenX, screenY);
           },
           gapi_canvas_path_arc: (x, y, radius, start_angle, end_angle, counter_clockwise) => {
-            ctx.arc(x, y, radius, start_angle, end_angle, counter_clockwise === 1);
+            const screenX = (x + 1) / 2 * canvas.width;
+            const screenY = (y + 1) / 2 * canvas.height;
+            const screenRadius = (radius / 2) * ((canvas.width + canvas.height) / 2);
+            ctx.arc(screenX, screenY, screenRadius, start_angle, end_angle, counter_clockwise === 1);
           },
           gapi_canvas_path_close: () => {
             ctx.closePath();
@@ -127,7 +147,9 @@ self.onmessage = async (event) => {
             ctx.restore();
           },
           gapi_canvas_transform_translate: (x, y) => {
-            ctx.translate(x, y);
+            const screenX = (x / 2) * canvas.width;
+            const screenY = (y / 2) * canvas.height;
+            ctx.translate(screenX, screenY);
           },
           gapi_canvas_transform_rotate: (angle_rad) => {
             ctx.rotate(angle_rad);
@@ -142,6 +164,8 @@ self.onmessage = async (event) => {
           // --- Text ---
           gapi_canvas_set_font: (font_ptr) => {
             const font = decoder.decode(new Uint8Array(memory.buffer, font_ptr, get_string_length(font_ptr)));
+            // Note: Font size within the string is not scaled automatically.
+            // The C code is responsible for calculating the appropriate pixel size.
             ctx.font = font;
           },
           gapi_canvas_set_text_align: (align_ptr) => {
@@ -149,12 +173,16 @@ self.onmessage = async (event) => {
             ctx.textAlign = align;
           },
           gapi_canvas_fill_text: (text_ptr, x, y) => {
+            const screenX = (x + 1) / 2 * canvas.width;
+            const screenY = (y + 1) / 2 * canvas.height;
             const text = decoder.decode(new Uint8Array(memory.buffer, text_ptr, get_string_length(text_ptr)));
-            ctx.fillText(text, x, y);
+            ctx.fillText(text, screenX, screenY);
           },
           gapi_canvas_stroke_text: (text_ptr, x, y) => {
+            const screenX = (x + 1) / 2 * canvas.width;
+            const screenY = (y + 1) / 2 * canvas.height;
             const text = decoder.decode(new Uint8Array(memory.buffer, text_ptr, get_string_length(text_ptr)));
-            ctx.strokeText(text, x, y);
+            ctx.strokeText(text, screenX, screenY);
           }
         }
       };
