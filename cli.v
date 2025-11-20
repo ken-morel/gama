@@ -120,11 +120,34 @@ fn main() {
 					return
 				}
 			},
-			{
+			cli.Command{
 				name:        'build'
-				usage:       'build'
-				description: 'Create a new gama project with the assistant'
+				usage:       'build [-r]'
+				description: 'Builds the current gama project'
+				flags:       [
+					cli.Flag{
+						name:        'run'
+						abbrev:      'r'
+						description: 'Run the project after building'
+						required:    false
+					},
+				]
 				execute:     fn (cmd cli.Command) ! {
+					run_after_build := cmd.flags.get_bool('run') or { false }
+					project := vgama.Project.find_at(os.getwd()) or {
+						println(term.fail_message('Not in a gama project. (Could not find gama.toml)'))
+						return error('Not a gama project')
+					}
+
+					println(term.ok_message('Building project at: ${project.path}'))
+					installation := vgama.Installation.dev('/home/engon/gama')
+
+					project.build_native(installation) or {
+						println(term.fail_message('Build failed: ${err}'))
+						return err
+					}
+					println(term.ok_message('Build successful!'))
+					return
 				}
 			},
 		]

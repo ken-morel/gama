@@ -3,12 +3,27 @@ module vgama
 import os
 import toml
 
-pub struct Installation {
-pub:
-	lib       string @[required]
-	templates string @[required]
-	zig       string @[required]
-	runners   string @[required]
+struct ZigCC {
+	exepath string
+}
+
+fn (z ZigCC) build_shared(file string, include string, name string, out string) !string {
+	ext := $if windows {
+		'dll'
+	} $else $if darwin {
+		'dylib'
+	} $else {
+		'so'
+	}
+	output := os.join_path(out, '{name}.${ext}')
+	compile_cmd := '${z.exepath} cc -shared -o ${output} ${file} -I${include}'
+	res := os.execute(compile_cmd)
+
+	return if res.exit_code != 0 {
+		error('Failed to compile code: ${res.output}')
+	} else {
+		output
+	}
 }
 
 pub struct GamaTemplate {
@@ -22,6 +37,18 @@ pub fn (g GamaTemplate) copy_to(dest string) ! {
 	os.cp_all(g.path, dest, false) or {
 		return error('Error copying files from ${g.path} to ${dest}: ${err}')
 	}
+}
+
+pub struct Installation {
+pub:
+	lib       string @[required]
+	templates string @[required]
+	zig       string @[required]
+	runners   string @[required]
+}
+
+pub fn (i Installation) get_zig() ZigCC {
+	return ZigCC{i.zig}
 }
 
 pub fn GamaTemplate.get_description(path string) !string {
@@ -82,7 +109,27 @@ pub fn (i Installation) get_gama_version() !Version {
 }
 
 pub struct Project {
+pub:
 	path string @[required]
+}
+
+pub fn (p Project) build_path(type string) string {
+	return os.join_path(p.path, 'build', type)
+}
+
+pub fn Project.find_at(start string) ?Project {
+	mut project_root := start
+	for {
+		if os.exists(os.join_path(project_root, 'gama.toml')) {
+			break
+		}
+		parent := os.dir(project_root)
+		if parent == project_root {
+			return none
+		}
+		project_root = parent
+	}
+	return Project{project_root}
 }
 
 pub fn (p Project) get_conf() !ProjectConf {
@@ -149,4 +196,17 @@ pub fn ProjectConf.load(path string) !ProjectConf {
 			version: Version.parse(doc.value('gama.version').string())!
 		}
 	}
+}
+
+pub fn (p &Project) build_native(inst Installation) ! {
+	build_dir := p.build_path('native')
+	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
+
+	// TODO: This path should eventually be '${$os}_${$arch}'
+	runner_path := os.join_path(inst.runners, 'native')
+
+	if !os.exists(runner_path) {
+		return error('no pre-compiled native runner found at ${runner_path}')
+	}
+	os.cp_all(runner_path, build_dir, false) or { return error('failed to copy runner: ${err}') }
 }
