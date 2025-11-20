@@ -152,7 +152,7 @@ fn main() {
 					}
 					println(term.ok_message('Build successful!'))
 					if run_after_build {
-						project.run_native_build() or {
+						project.run_native_build(true) or {
 							println(term.fail_message('Error running build: ${err}'))
 						}
 					}

@@ -9,6 +9,7 @@ __global (
 	bg_color      gx.Color
 	c_can_draw    sync.Mutex
 	v_can_present sync.Mutex
+	gama_runs     bool
 )
 
 // The frame function for the gg loop (runs in V thread).
@@ -23,18 +24,6 @@ fn frame(mut ctx gg.Context) {
 	ctx.end()
 }
 
-@[unsafe]
-fn v_gama_runs(val int) bool {
-	mut static value := false
-	if val == 0 {
-		value = false
-	} else if val == 1 {
-		value = true
-	}
-	// For other values (like -1), return current static value
-	return value
-}
-
 fn get_time() f64 {
 	return f64(time.now().unix_micro()) / f64(1_000_000)
 }
@@ -44,22 +33,21 @@ fn get_time() f64 {
 fn gapi_init(width int, height int, title &char) i32 {
 	println(term.cyan('[vgama]: gapi_init() called'))
 
-	bg_color = gx.rgb(100, 100, 100) // Default background color
+	bg_color = gx.rgb(100, 100, 100)
 	c_can_draw = sync.new_mutex()
 	v_can_present = sync.new_mutex()
-	c_can_draw.lock()
-	v_can_present.lock()
+	// Deliberately NOT locking here to prevent deadlock on first frame.
 
 	g = gg.new_context(
-		width: width
-		height: height
+		width:        width
+		height:       height
 		window_title: title.vstring()
-		frame_fn: frame
+		frame_fn:     frame
 	)
 
 	spawn g.run()
 
-	v_gama_runs(1)
+	gama_runs = true
 	println(term.ok_message('[vgama]: initialization successful'))
 	return 0
 }
@@ -76,36 +64,44 @@ fn gapi_log(message &char) {
 @[unsafe]
 fn gapi_yield(dt &f64) i32 {
 	mut static last_time := f64(0)
+
+	// This is the "ping-pong" synchronization logic.
 	if last_time == 0 {
+		// First call. Don't do any locking/unlocking.
+		// Just bootstrap the timing and let the loop run once.
 		last_time = get_time()
+	} else {
+		// Subsequent calls.
+		// 1. Signal to V that C-side drawing for the *previous* frame is complete.
+		v_can_present.unlock()
+		// 2. Wait here until V has cleared the *new* frame and is ready for drawing commands.
+		c_can_draw.lock()
 	}
 
-	// 1. Signal to V that the C-side drawing for the *previous* frame is complete.
-	v_can_present.unlock()
-
-	// 2. Wait here until V has cleared the new frame and is ready for new drawing commands.
-	c_can_draw.lock()
-
 	if !g.running {
-		v_gama_runs(0)
+		gama_runs = false
 	}
 
 	current_time := get_time()
-	unsafe { *dt = current_time - last_time }
+	unsafe {
+		if dt != nil {
+			*dt = current_time - last_time
+		}
+	}
 	last_time = current_time
-	
-	return if v_gama_runs(-1) { i32(1) } else { i32(0) }
+
+	return gapi_runs()
 }
 
 @[export: 'gapi_runs']
 @[unsafe]
 fn gapi_runs() i32 {
-	return if v_gama_runs(-1) { i32(1) } else { i32(0) }
+	return if gama_runs { i32(1) } else { i32(0) }
 }
 
 @[export: 'gapi_quit']
 @[unsafe]
 fn gapi_quit() {
 	println(term.cyan('[vgama]: gapi_quit() called'))
-	v_gama_runs(0)
+	gama_runs = false
 }
