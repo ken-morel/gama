@@ -121,7 +121,7 @@ fn main() {
 
 					vgama.Project.generate(installation, conf, template) or {
 						println(term.fail_message('Error generating the project: ${err}'))
-						return err
+						return
 					}
 					println(term.ok_message('${name} generated successfuly!'))
 					return
@@ -148,11 +148,13 @@ fn main() {
 
 					project.build_native(installation) or {
 						println(term.fail_message('Build failed: ${err}'))
-						return err
+						return
 					}
 					println(term.ok_message('Build successful!'))
 					if run_after_build {
-						project.run_native_build()!
+						project.run_native_build() or {
+							println(term.fail_message('Error running build: ${err}'))
+						}
 					}
 					return
 				}

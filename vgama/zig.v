@@ -20,19 +20,28 @@ fn (z ZigCC) build_shared(file string, include string, name string, out string) 
 }
 
 struct ZigBuildNativeOptions {
-	file      string @[required]
-	lib_path  string @[required]
-	build_dir string @[required]
-	name      string @[required]
+	files           []string @[required] // C source files
+	include_path    string   @[required] // for -I
+	executable_path string   @[required] // full path for the output exe
 }
 
 fn (z ZigCC) build_native(opts ZigBuildNativeOptions) !string {
-	output := os.join_path(opts.build_dir, executable_extension(opts.name))
-	cmd := '${z.exepath} cc -o ${output} ${opts.file} -I${opts.lib_path} -L${opts.build_dir} -lvgama -Wl,-rpath=.'
+	// Compile and link multiple C source files together.
+	source_files_str := opts.files.join(' ')
+	mut linker_flags := '-lpthread' // pthread is common for V runtime
+
+	$if linux {
+		linker_flags += ' -lX11 -lGL -lglfw' // Common for gg on Linux
+	} $else $if windows {
+		linker_flags += ' -lgdi32 -luser32' // Common for gg on Windows
+	}
+	// TODO: Add macOS flags when needed: linker_flags += ' -framework Cocoa -framework OpenGL'
+
+	cmd := '${z.exepath} cc -o ${opts.executable_path} ${source_files_str} -I${opts.include_path} ${linker_flags}'
 	res := os.execute(cmd)
 	return if res.exit_code != 0 {
 		error('Failed to compile and link app: ${res.output}')
 	} else {
-		output
+		opts.executable_path
 	}
 }

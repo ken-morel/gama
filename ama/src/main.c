@@ -2,18 +2,12 @@
 #include <gama.h>
 
 int main() {
-  printf("Starting\n");
-  gama_init();
-  printf("Initialized gama\n");
-  int n = 0;
-  for (double theta = 0.0; gama_runs(); theta = gama_yield()) {
-    n++;
-    if (n > 10) {
-      printf("Quiting");
-      gama_quit();
-    }
-    printf("Yielding\n");
+  gapi_init(800, 600, "Gama Window"); // Call gapi_init with window parameters
+
+  for (double dt = 0.0; gapi_yield(&dt);) {
+    // Game loop continues as long as the window is open
+    // dt contains the delta time since last frame
   }
-  printf("Bye");
+  printf("Bye\n");
   return 0;
 }

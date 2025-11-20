@@ -24,6 +24,14 @@ pub fn executable_extension(f string) string {
 	}
 }
 
-pub fn libgama_name() string {
-	return 'libgama.${get_shared_library_extension()}'
+fn get_static_library_extension() string {
+	return $if windows {
+		'lib'
+	} $else {
+		'a'
+	}
+}
+
+pub fn static_libvgama_name() string {
+	return 'libvgama.${get_static_library_extension()}'
 }
