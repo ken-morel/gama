@@ -13,7 +13,9 @@ pub fn (p Project) build_native(inst Installation) !string {
 	if !os.exists(runner_path) {
 		return error('no pre-compiled native runner found at ${runner_path}')
 	}
-	os.cp_all(runner_path, build_dir, false) or { return error('failed to copy runner: ${err}') }
+	os.cp_all(runner_path, build_dir, false) or {
+		return error('Failed to copy runner from ${runner_path} to ${build_dir}: ${err}')
+	}
 	return inst.get_zig().build_native(ZigBuildNativeOptions{
 		file:      os.join_path(p.path, 'src', 'main.c')
 		lib_path:  os.join_path(p.path, 'gama')

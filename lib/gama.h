@@ -7,18 +7,18 @@
 
 #include "gapi.h"
 #include "shape.h"
-#include <stdio.h>
+// #include <stdio.h>
 
 
 void gama_init() {
   int code = gapi_init();
-  char msg[100];
+  // char msg[100];
 
   if (code != 0) {
-    sprintf(msg,
-            "Error starting gama, initialization exited with non zero code %d",
-            code);
-    gapi_log(msg);
+    // sprintf(msg,
+    //         "Error starting gama, initialization exited with non zero code %d",
+    //         code);
+    // gapi_log(msg);
   }
 }
 int gama_runs() { return gapi_runs(); }
