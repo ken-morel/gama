@@ -19,7 +19,9 @@ pub:
 }
 
 pub fn (g GamaTemplate) copy_to(dest string) ! {
-	return os.cp_all(g.path, dest, false)
+	os.cp_all(g.path, dest, false) or {
+		return error('Error copying files from ${g.path} to ${dest}: ${err}')
+	}
 }
 
 pub fn GamaTemplate.get_description(path string) !string {
@@ -97,11 +99,12 @@ pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTempla
 
 	os.mkdir(os.join_path(project_dir, 'assets'))!
 
+	template.copy_to(project_dir)!
+
 	project := Project{
 		path: os.abs_path(project_dir)
 	}
 	project.set_conf(conf)!
-	template.copy_to('.')!
 	return project
 }
 

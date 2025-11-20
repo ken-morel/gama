@@ -22,27 +22,37 @@ fn main() {
 					println('Welcome to gama project creation assistant, let me load a few things')
 					installation := vgama.Installation.dev('/home/engon/gama')
 					gama_version := installation.get_gama_version() or {
-						println('Error getting gama version: ${err}')
+						println(term.fail_message('Error getting gama version: ${err}'))
 						return err
 					}
-					println('Gama version ${gama_version}')
 					templates := installation.get_templates() or {
-						println('Error loading gama templates: ${err}')
+						println(term.fail_message('Error loading gama templates: ${err}'))
 						return err
 					}
+					println(term.ok_message('Loaded installation with gama version ${gama_version} and ${templates.len} templates'))
 					mut name := ''
 					nameloop: for {
-						for c in os.input('Enter the project name, the project name should only contain lowercase letters, numbers, and underscores\n> ').runes() {
+						println('Enter the project name, the project name should only contain lowercase letters, numbers, and underscores')
+						mut rm := false
+						for c in os.input(term.blue('> ')).runes() {
 							n := if c >= `A` && c <= `Z` { c - (`A` - `a`) } else { c } // convert to lower
 							if (n >= `a` && n <= `z`) || (n >= `0` && n <= `9`) || n == `_` {
 								name += n.str()
+							} else {
+								rm = true
 							}
 						}
+						if rm {
+							println(term.warn_message('Some characters had to be removed'))
+						}
 						if name.len < 3 || name.len > 15 {
-							println('The name should have at least 3 and at most 15 letters')
+							println(term.warn_message('The name should have at least 3 and at most 15 letters'))
 							continue nameloop
 						}
-						if os.input('The project will be named: "${name}" is that okay (Yep / nop)?') in [
+						print('The project will be named: ')
+						print(term.bold(name))
+						print(' is that okay? (Yep / nop)')
+						if os.input(term.blue('? ')) in [
 							'n',
 							'N',
 							'no',
@@ -56,7 +66,11 @@ fn main() {
 							break
 						}
 					}
-					desc := os.input('Oh sounds cool, what is ${name} about?\n> ')
+					print('Oh sounds cool, what is ')
+
+					print(term.bold(name))
+					println(' about?')
+					desc := os.input(term.blue('> '))
 					println('And what do you want to use as template for your application?')
 					mut template := &vgama.GamaTemplate(unsafe { nil })
 					templateloop: for template == unsafe { nil } {
@@ -65,7 +79,7 @@ fn main() {
 							print(term.green(tmpl.name))
 							println(term.gray('  ${tmpl.description}'))
 						}
-						index := os.input('> ').int()
+						index := os.input(term.blue('> ')).int()
 						if index < 0 || index > templates.len {
 							println(term.fail_message('Invalid index'))
 							continue templateloop
@@ -84,22 +98,33 @@ fn main() {
 							}
 						}
 					}
-					repo := os.input_opt("Will you host your project on a github repo? Type it's name as user/reponame, if you don't know what it is, just hit enter\n> ")
+					println("Will you host your project on a github repo? Type it's name as user/reponame, if you don't know what it is, just hit enter")
+					repo := os.input_opt(term.blue('> '))
 					conf := vgama.ProjectConf{
 						name:        name
 						description: desc
 						repo:        repo or { '' }
 						gama:        vgama.ProjectGamaConf{
 							version: installation.get_gama_version() or {
-								println(err)
+								println(term.fail_message(err.str()))
 								vgama.Version{}
 							}
 						}
 					}
 
-					_ = vgama.Project.generate(installation, conf, template)!
-
+					vgama.Project.generate(installation, conf, template) or {
+						println(term.fail_message('Error generating the project: ${err}'))
+						return err
+					}
+					println(term.ok_message('${name} generated successfuly!'))
 					return
+				}
+			},
+			{
+				name:        'build'
+				usage:       'build'
+				description: 'Create a new gama project with the assistant'
+				execute:     fn (cmd cli.Command) ! {
 				}
 			},
 		]

@@ -1,0 +1,10 @@
+
+name = "ama"
+description = "ama"
+version = "0.1.0"
+repo = ""
+
+[gama]
+
+version = "0.1.0"
+		
