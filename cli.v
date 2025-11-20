@@ -151,6 +151,9 @@ fn main() {
 						return err
 					}
 					println(term.ok_message('Build successful!'))
+					if run_after_build {
+						project.run_native_build()!
+					}
 					return
 				}
 			},

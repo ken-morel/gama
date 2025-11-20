@@ -1,10 +1,13 @@
 #include <gama.h>
 
-int gameOver = 0;
-
 int main() {
   gama_init();
-  for (double theta = 0.0; !gameOver; theta = gama_yield()) {
+  int n = 0;
+  for (double theta = 0.0; gama_runs(); theta = gama_yield()) {
+    n++;
+    if (n > 100000) {
+      gama_quit();
+    }
   }
   return 0;
 }

@@ -1,30 +1,51 @@
-// This file is intended to be compiled as a shared library.
-// Example: v -cc gcc -shared -o libgama.so runners/native/native.v
 module main
 
+import time
 import term
 
 __global (
-	abc int
+	gama_runs       bool
+	last_yield_time f64
 )
 
+fn get_time() f64 {
+	return f64(time.now().unix_micro()) / f64(1_000_000)
+}
+
 @[export: 'gapi_init']
-pub fn gapi_init() int {
-	println(term.cyan('GAMA API (V Shared Library): gapi_init() called.'))
-	return 0 // Indicate success
+fn gapi_init() i32 {
+	println(term.cyan('[vgama]: gapi_init() called'))
+	gama_runs = true
+	last_yield_time = get_time()
+	println(term.ok_message('[vgama]: initialization succesful'))
+	return 0
 }
 
 @[export: 'gapi_log']
-pub fn gapi_log(message &char) {
-	println(term.gray('GAMA LOG (from C): ${message.vstring()}'))
+fn gapi_log(message &char) {
+	unsafe {
+		println(term.gray('[log]: ${message.vstring()}'))
+	}
 }
 
 @[export: 'gapi_yield']
-pub fn gapi_yield() f64 {
-	return 0.01666 // ~16.6ms
+fn gapi_yield() f64 {
+	if !gama_runs {
+		return 0.0
+	}
+	current_time := get_time()
+	dt_seconds := current_time - last_yield_time
+	last_yield_time = current_time
+	return dt_seconds
+}
+
+@[export: 'gapi_runs']
+fn gapi_runs() i32 {
+	return if gama_runs { 1 } else { 0 }
 }
 
 @[export: 'gapi_quit']
-pub fn gapi_quit() {
-	println(term.cyan('GAMA API (V Shared Library): gapi_quit() called.'))
+fn gapi_quit() {
+	println(term.cyan('[vgama]: gapi_quit() called'))
+	gama_runs = false
 }
