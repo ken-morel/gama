@@ -1,2 +1,3 @@
-#/usr/bin/fish
-v -cc gcc -shared native.v -enable-globals -o libvgama
+#!/usr/bin/fish
+
+autoreload "v native.v -o native.c" native.v
