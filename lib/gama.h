@@ -1,17 +1,17 @@
 #ifndef GAMA_H_INCLUDED
 
+//NOTE: The order is important, major, minor, patch
 #define GAMA_VERSION_MAJOR 0
 #define GAMA_VERSION_MINOR 1
 #define GAMA_VERSION_PATCH 0
 
 #include <time.h>
-#include <stdlib.h>
-#include "api.h"
+#include "gapi.h"
 #include "color.h"
 #include "shape.h"
 
 
-int GAMA_IS_RUNNING = 0;
+int GAMA_RUNS = 0;
 double gama_last_update_time;
 double gama_get_time_secs(){
     struct timespec ts;
@@ -22,7 +22,7 @@ double gama_get_time_secs(){
     }
 }
 void gama_init() {
-  GAMA_IS_RUNNING = 1;
+  GAMA_RUNS = 1;
   if(!gapi_init()) {
     return;
   } else {
@@ -30,15 +30,19 @@ void gama_init() {
   }
   gama_last_update_time = gama_get_time_secs();
 }
-double  gama_next_frame() {
+int gama_runs() {
+  return GAMA_RUNS;
+}
+double  gama_yield() {
   double ctime = gama_get_time_secs();
   double dt = ctime - gama_last_update_time;
   gama_last_update_time = ctime;
   return dt;
 }
 
-void gama_exit(int code) {
-  exit(code);
+void gama_quit() {
+  GAMA_RUNS = 0;
+  gapi_quit();
 }
 
 #define GAMA_H_INCLUDED

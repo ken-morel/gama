@@ -15,7 +15,7 @@ fn (z ZigCC) build_shared(file string, include string, name string, out string) 
 	} $else {
 		'so'
 	}
-	output := os.join_path(out, '{name}.${ext}')
+	output := os.join_path(out, '${name}.${ext}')
 	compile_cmd := '${z.exepath} cc -shared -o ${output} ${file} -I${include}'
 	res := os.execute(compile_cmd)
 
@@ -113,6 +113,13 @@ pub:
 	path string @[required]
 }
 
+pub fn (p Project) build_shared(z ZigCC, out string) ! {
+	conf := p.get_conf() or { return error('Error getting project configuration: ${err}') }
+
+	z.build_shared(os.join_path(p.path, 'src', 'main.c'), os.join_path(p.path, 'gama'),
+		conf.name, out) or { return err }
+}
+
 pub fn (p Project) build_path(type string) string {
 	return os.join_path(p.path, 'build', type)
 }
@@ -140,6 +147,25 @@ pub fn (p Project) set_conf(conf ProjectConf) ! {
 	conf.save(os.join_path(p.path, 'gama.toml'))!
 }
 
+pub fn (p Project) add_editor_config() ! {
+	os.write_file(os.join_path(p.path, '.clangd'), '
+CompileFlags:
+  Add:
+    - -I/home/engon/gama/lib
+---
+If:
+  PathMatch: .*\\.h\$
+CompileFlags:
+  Add:
+    - -x
+    - c
+')!
+}
+
+pub fn (i Installation) copy_gama(dest string, overwrite bool) ! {
+	os.cp_all(i.lib, dest, overwrite) or { return error('Error copying gama') }
+}
+
 pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTemplate) !Project {
 	project_dir := conf.name
 	os.mkdir(project_dir)!
@@ -148,10 +174,13 @@ pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTempla
 
 	template.copy_to(project_dir)!
 
+	inst.copy_gama(os.join_path(project_dir, 'gama'), false)!
+
 	project := Project{
 		path: os.abs_path(project_dir)
 	}
 	project.set_conf(conf)!
+	project.add_editor_config()!
 	return project
 }
 
@@ -198,7 +227,7 @@ pub fn ProjectConf.load(path string) !ProjectConf {
 	}
 }
 
-pub fn (p &Project) build_native(inst Installation) ! {
+pub fn (p Project) build_native(inst Installation) ! {
 	build_dir := p.build_path('native')
 	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
 
@@ -209,4 +238,9 @@ pub fn (p &Project) build_native(inst Installation) ! {
 		return error('no pre-compiled native runner found at ${runner_path}')
 	}
 	os.cp_all(runner_path, build_dir, false) or { return error('failed to copy runner: ${err}') }
+	p.build_shared(inst.get_zig(), os.join_path('build', 'native'))!
+}
+
+pub fn (p Project) reset_gama(inst Installation) ! {
+	inst.copy_gama(os.join_path(p.path, 'gama'), true)!
 }

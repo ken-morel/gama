@@ -5,6 +5,13 @@ import os
 import vgama
 import term
 
+fn get_project() !vgama.Project {
+	return vgama.Project.find_at(os.getwd()) or {
+		println(term.fail_message('Not in a gama project. (Could not find gama.toml)'))
+		return error('Not a gama project')
+	}
+}
+
 fn main() {
 	mut app := cli.Command{
 		name:        'gama'
@@ -134,10 +141,7 @@ fn main() {
 				]
 				execute:     fn (cmd cli.Command) ! {
 					run_after_build := cmd.flags.get_bool('run') or { false }
-					project := vgama.Project.find_at(os.getwd()) or {
-						println(term.fail_message('Not in a gama project. (Could not find gama.toml)'))
-						return error('Not a gama project')
-					}
+					project := get_project()!
 
 					println(term.ok_message('Building project at: ${project.path}'))
 					installation := vgama.Installation.dev('/home/engon/gama')
@@ -149,6 +153,35 @@ fn main() {
 					println(term.ok_message('Build successful!'))
 					return
 				}
+			},
+			cli.Command{
+				name:        'lib'
+				usage:       'lib <cmd>'
+				description: "manage the project's gama library"
+				args:        [
+					'cmd',
+				]
+				execute:     fn (_ cli.Command) ! {
+					println(term.warn_message('No command specified'))
+				}
+				commands:    [
+					cli.Command{
+						name:        'reset'
+						usage:       'reset'
+						description: "reset the project's gama library to the cli tool's verion"
+						execute:     fn (_ cli.Command) ! {
+							installation := vgama.Installation.dev('/home/engon/gama')
+							project := get_project()!
+							project.reset_gama(installation) or {
+								println(term.fail_message('Error reseting gama: ${err}'))
+								return err
+							}
+							println(term.ok_message('Reset gama successfuly'))
+
+							return
+						}
+					},
+				]
 			},
 		]
 	}
