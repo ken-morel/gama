@@ -27,11 +27,11 @@ struct ZigBuildNativeOptions {
 }
 
 fn (z ZigCC) build_native(opts ZigBuildNativeOptions) !string {
-	output = os.join_path(opts.build_dir, executable_extention(opts.name))
-	cmd := '${z.exepath} cc -o ${output} ${opts.file} -I${opts.lib_path} -L${opts.build_dir} -lgama -Wl,-rpath=.'
+	output := os.join_path(opts.build_dir, executable_extension(opts.name))
+	cmd := '${z.exepath} cc -o ${output} ${opts.file} -I${opts.lib_path} -L${opts.build_dir} -lvgama -Wl,-rpath=.'
 	res := os.execute(cmd)
 	return if res.exit_code != 0 {
-		error('Failed to compile and link app: ${res.ouptut}')
+		error('Failed to compile and link app: ${res.output}')
 	} else {
 		output
 	}

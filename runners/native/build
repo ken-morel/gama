@@ -1,0 +1,2 @@
+#/usr/bin/fish
+v -cc gcc -shared native.v -enable-globals -o libvgama

@@ -1,6 +1,6 @@
 module vgama
-pub struct Version {
 
+pub struct Version {
 pub:
 	major u16
 	minor u16 = 1

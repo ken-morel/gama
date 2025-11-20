@@ -1,5 +1,7 @@
 module vgama
 
+import os
+
 pub fn (p Project) add_editor_config() ! {
 	os.write_file(os.join_path(p.path, '.clangd'), '
 CompileFlags:

@@ -1,4 +1,7 @@
 module vgama
+
+import os
+
 pub struct Installation {
 pub:
 	lib       string @[required]
@@ -10,7 +13,6 @@ pub:
 pub fn (i Installation) get_zig() ZigCC {
 	return ZigCC{i.zig}
 }
-
 
 pub fn Installation.dev(repo string) Installation {
 	return Installation{
@@ -36,7 +38,6 @@ pub fn (i Installation) get_templates() ![]GamaTemplate {
 	return templates
 }
 
-
 pub fn (i Installation) get_gama_version() !Version {
 	parts := os.read_file(os.join_path(i.lib, 'gama.h')) or {
 		return error('Could not read gama.h at ${i.lib} file from installation')
@@ -46,7 +47,6 @@ pub fn (i Installation) get_gama_version() !Version {
 	}
 	return Version{parts[0], parts[1], parts[2]}
 }
-
 
 pub fn (i Installation) copy_gama(dest string, overwrite bool) ! {
 	os.cp_all(i.lib, dest, overwrite) or { return error('Error copying gama') }

@@ -1,6 +1,7 @@
 module vgama
 
 import os
+import toml
 
 pub struct ProjectGamaConf {
 pub:
