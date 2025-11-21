@@ -22,7 +22,7 @@ pub fn (p Project) build_native(inst Installation) !string {
 
 	return inst.get_zig().build_native(ZigBuildNativeOptions{
 		files:           source_files
-		include_path:    inst.lib
+		include_path:    os.join_path(p.path, 'gama')
 		lib_path:        build_dir
 		executable_path: os.join_path(build_dir, executable_extension(conf.name))
 	})
@@ -45,12 +45,5 @@ pub fn (p Project) run_native_build(replace bool) ! {
 }
 
 pub fn (p Project) get_src_c_files() ![]string {
-	mut files := []string{}
-	os.walk(os.join_path(p.path, 'src'), fn [mut files] (file string) {
-		if file.ends_with('.c') {
-			println(' - ${file}')
-			files << file
-		}
-	})
-	return files
+	return os.glob(os.join_path(p.path, 'src', '**.c'))
 }

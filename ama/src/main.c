@@ -8,8 +8,6 @@ int main() {
   for (double dt = 0.0; gapi_yield(&dt);count++) {
     // Game loop continues as long as the window is open
     // dt contains the delta time since last frame
-    if(count > 100)
-      gama_quit();
   }
   printf("Bye\n");
   return 0;

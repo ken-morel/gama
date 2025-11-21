@@ -57,6 +57,12 @@ fn gapi_init(width int, height int, title &char) i32 {
 	gapi_v_can_present__ = &sync.Mutex{}
 	gapi_v_can_present__.lock()
 
+	// Spawn the graphics thread.
+	spawn run_gg_loop()
+	// Wait for the graphics thread to signal that it's ready (after the first frame).
+	gapi_c_can_draw__.lock()
+	gapi_gama_runs__ = true
+
 	println(term.ok_message('[vgama]: initialization successful'))
 	return 0
 }
@@ -72,21 +78,20 @@ fn gapi_yield(dt &f64) i32 {
 	println(term.cyan('yielding'))
 	mut static last_time := f64(0)
 
-	if last_time == 0 {
-		// First call: spawn the V thread, then wait for it to be ready.
-		spawn run_gg_loop()
-		gapi_gama_runs__ = true
-	} else {
-		// Subsequent calls: Signal V that we are done with the previous frame.
-		gapi_v_can_present__.unlock()
-	}
+	// Signal V that we are done with the previous frame's drawing.
+	gapi_v_can_present__.unlock()
 
-	// For all calls (including the first), wait for V to be ready for the new frame.
+	// Wait for V to prepare the new frame.
 	gapi_c_can_draw__.lock()
 
 	// If the V thread has exited, `gapi_gama_runs__` will be false.
 	if !gapi_gama_runs__ {
 		return 0
+	}
+
+	// First time through, last_time will be 0.
+	if last_time == 0 {
+		last_time = get_time()
 	}
 
 	current_time := get_time()
@@ -95,7 +100,7 @@ fn gapi_yield(dt &f64) i32 {
 	}
 	last_time = current_time
 
-	// Now that we have the lock, C-side can draw. Let's clear the screen.
+	// Now that we have the lock, C-side can draw.
 	gapi_g__.begin()
 
 	return 1
