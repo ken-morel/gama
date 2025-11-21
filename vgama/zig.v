@@ -28,16 +28,21 @@ struct ZigBuildNativeOptions {
 fn (z ZigCC) build_native(opts ZigBuildNativeOptions) !string {
 	// Compile and link multiple C source files together.
 	source_files_str := opts.files.join(' ')
-	mut linker_flags := '-lpthread' // pthread is common for V runtime
+	mut linker_flags := '-lpthread'
+	mut defines := ' -DSOKOL_IMPL -DSOKOL_NO_ENTRY'
 
 	$if linux {
-		linker_flags += ' -lX11 -lGL -lglfw' // Common for gg on Linux
+		linker_flags += ' -lX11 -lGL -lglfw'
+		defines += ' -DSOKOL_GLCORE'
 	} $else $if windows {
-		linker_flags += ' -lgdi32 -luser32' // Common for gg on Windows
+		linker_flags += ' -lgdi32 -luser32'
+		defines += ' -DSOKOL_D3D11'
+	} $else $if macos {
+		defines += ' -DSOKOL_METAL'
+		linker_flags += ' -framework Cocoa -framework OpenGL'
 	}
-	// TODO: Add macOS flags when needed: linker_flags += ' -framework Cocoa -framework OpenGL'
 
-	cmd := '${z.exepath} cc -o ${opts.executable_path} ${source_files_str} -I${opts.include_path} ${linker_flags}'
+	cmd := '${z.exepath} cc -o ${opts.executable_path} ${source_files_str} -I${opts.include_path} ${defines} ${linker_flags}'
 	res := os.execute(cmd)
 	return if res.exit_code != 0 {
 		error('Failed to compile and link app: ${res.output}')
