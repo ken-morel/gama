@@ -26,7 +26,7 @@ void gama_rectangle_init(struct gama_rectangle *r, double x, double y, double w,
   gama_position_set(&r->velocity, x, y);
   gama_position_set(&r->acceleration, x, y);
 }
-struct gama_rectangle gama_create_rectangle(double x, double y, double w,
+struct gama_rectangle gama_rectangle_create(double x, double y, double w,
                                             double h, Color c) {
   struct gama_rectangle r;
   gama_rectangle_init(&r, x, y, w, h, c);
