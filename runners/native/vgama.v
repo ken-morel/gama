@@ -15,7 +15,10 @@ __global (
 	gapi_width__         int
 	gapi_height__        int
 	gapi_side__          int
-	gapi_draw_queue__    []fn ()
+	gapi_queue__         []fn ()
+	gapi_isfullscreen__  bool
+	gapi_images__        map[u32]gg.Image
+	gapi_image_count__   u32
 )
 
 fn frame(mut _ gg.Context) {
@@ -24,12 +27,12 @@ fn frame(mut _ gg.Context) {
 	// 2. Wait here until the C thread says it's done drawing for this frame.
 	gapi_v_can_present__.lock()
 
-	println('Calling draw functions ${gapi_draw_queue__.len}')
-	for func in gapi_draw_queue__ {
+	println('Calling draw functions ${gapi_queue__.len}')
+	for func in gapi_queue__ {
 		func()
 	}
 	println('called draw functions')
-	gapi_draw_queue__ = []
+	gapi_queue__ = []
 	gapi_ctx__.end()
 }
 
@@ -54,9 +57,11 @@ fn get_time() f64 {
 @[unsafe]
 fn gapi_init(width int, height int, title &char) i32 {
 	println(term.cyan('[vgama]: gapi_init() called'))
+	gapi_isfullscreen__ = false
+	gapi_image_count__ = 1
 	gapi_height__ = height
 	gapi_width__ = width
-	gapi_side = if gapi_width__ < gapi_height__ { gapi_width__ } else { gapi_height__ }
+	gapi_side__ = if gapi_width__ < gapi_height__ { gapi_width__ } else { gapi_height__ }
 	gapi_title__ = title.vstring()
 
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
@@ -73,6 +78,13 @@ fn gapi_init(width int, height int, title &char) i32 {
 
 	println(term.ok_message('[vgama]: initialization successful'))
 	return 0
+}
+
+@[export: 'gapi_set_title']
+@[unsafe]
+fn gapi_set_title(title &char) {
+	gapi_title__ = title.vstring()
+	gg.set_window_title(gapi_title__)
 }
 
 @[export: 'gapi_log']
@@ -118,5 +130,36 @@ fn gapi_runs() i32 {
 
 @[export: 'gapi_quit']
 fn gapi_quit() {
+	gapi_queue__ << fn () {
+		gapi_ctx__.quit()
+	}
 	gapi_gama_runs__ = false
+}
+
+@[export: 'gapi_resize']
+fn gapi_resize(w i32, h i32) {
+	gapi_queue__ << fn () {
+		gapi_ctx__.resize(w, h)
+	}
+}
+
+@[export: 'gapi_set_bg_color']
+fn gapi_set_bg_color(r u8, g u8, b u8, a u8) {
+	c := c_color(r, g, b, a)
+	gapi_queue__ << fn [c] () {
+		gapi_ctx__.set_bg_color(c)
+	}
+}
+
+@[export: 'gapi_fullscreen']
+fn gapi_fullscreen(fc i32) {
+	gapi_queue__ << fn [fc] () {
+		if fc == 1 && !gapi_isfullscreen__ {
+			gapi_ctx__.toggle_fullscreen()
+			gapi_isfullscreen__ = true
+		} else if fc == 0 && gapi_isfullscreen__ {
+			gapi_ctx__.toggle_fullscreen()
+			gapi_isfullscreen__ = false
+		}
+	}
 }

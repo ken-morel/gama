@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "color.h"
 #include "shape.h"
+#include "image.h"
 
 void gama_init(int width, int height, const char *title) {
   int code = gapi_init(width, height, title);
