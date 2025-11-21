@@ -46,9 +46,11 @@ pub fn (p Project) run_native_build(replace bool) ! {
 
 pub fn (p Project) get_src_c_files() ![]string {
 	mut files := []string{}
-	src := os.join_path(p.path, 'src')
-	os.walk(src, fn [mut files] (file string) {
-		files << file
+	os.walk(os.join_path(p.path, 'src'), fn [mut files] (file string) {
+		if file.ends_with('.c') {
+			println(' - ${file}')
+			files << file
+		}
 	})
 	return files
 }
