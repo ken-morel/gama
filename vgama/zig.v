@@ -29,10 +29,10 @@ fn (z ZigCC) build_native(opts ZigBuildNativeOptions) !string {
 	// Compile and link multiple C source files together.
 	source_files_str := opts.files.join(' ')
 	mut linker_flags := '-lpthread'
-	mut defines := ' -DSOKOL_IMPL -DSOKOL_NO_ENTRY'
+	mut defines := ' -DSOKOL_IMPL -DSOKOL_NO_ENTRY -DSTB_IMAGE_IMPLEMENTATION -DSTB_IMAGE_WRITE_IMPLEMENTATION -DSTB_IMAGE_RESIZE_IMPLEMENTATION'
 
 	$if linux {
-		linker_flags += ' -lX11 -lGL -lglfw'
+		linker_flags += ' -lX11 -lGL -lglfw -lXi -lXrandr -lXcursor'
 		defines += ' -DSOKOL_GLCORE'
 	} $else $if windows {
 		linker_flags += ' -lgdi32 -luser32'
