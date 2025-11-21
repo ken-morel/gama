@@ -16,17 +16,14 @@ __global (
 	gapi_height__        int
 )
 
-// The frame function for the gg loop (runs in V thread).
 fn frame(mut ctx gg.Context) {
 	// 1. Let the C thread know it can start drawing.
 	gapi_c_can_draw__.unlock()
 	// 2. Wait here until the C thread says it's done drawing for this frame.
 	gapi_v_can_present__.lock()
-	// 3. Present the frame (drawing happens on the C side).
 	ctx.end()
 }
 
-// This function runs in the spawned thread.
 fn run_gg_loop() {
 	gapi_g__ = gg.new_context(
 		width:        gapi_width__
@@ -35,8 +32,8 @@ fn run_gg_loop() {
 		frame_fn:     frame
 		bg_color:     gapi_bg_color__
 	)
-	gapi_g__.run() // This blocks until the window is closed.
-	gapi_gama_runs__ = false // Signal the main C loop to exit.
+	gapi_g__.run()
+	gapi_gama_runs__ = false
 	gapi_c_can_draw__.unlock() // Unlock C one last time to prevent deadlock on exit.
 }
 
@@ -84,12 +81,10 @@ fn gapi_yield(dt &f64) i32 {
 	// Wait for V to prepare the new frame.
 	gapi_c_can_draw__.lock()
 
-	// If the V thread has exited, `gapi_gama_runs__` will be false.
 	if !gapi_gama_runs__ {
 		return 0
 	}
 
-	// First time through, last_time will be 0.
 	if last_time == 0 {
 		last_time = get_time()
 	}
@@ -100,7 +95,6 @@ fn gapi_yield(dt &f64) i32 {
 	}
 	last_time = current_time
 
-	// Now that we have the lock, C-side can draw.
 	gapi_g__.begin()
 
 	return 1
