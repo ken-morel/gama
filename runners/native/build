@@ -1,3 +1,3 @@
 #!/usr/bin/fish
 
-autoreload "v -cc clang -shared vgama.v -enable-globals -o libvgama" vgama.v
+autoreload "v . -cc clang -shared -enable-globals -o libvgama" *.v

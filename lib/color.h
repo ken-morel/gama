@@ -1,5 +1,4 @@
-#ifndef GAMA_COLOR_INCLUDED
-#define GAMA_COLOR_INCLUDED
+#pragma once
 
 #include <stdlib.h>
 
@@ -177,4 +176,3 @@ void gama_color_set_alpha(int *col, int alpha) {
 #define YELLOW (Color)0xFFFF00FF
 #define YELLOWGREEN (Color)0x9ACD32FF
 
-#endif // GAMA_COLOR_INCLUDED

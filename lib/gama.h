@@ -1,5 +1,4 @@
-#ifndef GAMA_H_INCLUDED
-#define GAMA_H_INCLUDED
+#pragma once
 
 // NOTE: The order is important, major, minor, patch
 #define GAMA_VERSION_MAJOR 0
@@ -26,4 +25,3 @@ int gama_yield(double *theta) { return gapi_yield(theta); }
 
 void gama_quit() { gapi_quit(); }
 
-#endif

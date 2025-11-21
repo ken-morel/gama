@@ -6,35 +6,35 @@ import term
 import sync
 
 __global (
-	gapi_g__             &gg.Context
-	gapi_bg_color__      gg.Color
-	gapi_c_can_draw__    &sync.Mutex
-	gapi_v_can_present__ &sync.Mutex
-	gapi_gama_runs__     bool
-	gapi_title__         string
-	gapi_width__         int
-	gapi_height__        int
+	ctx           &gg.Context
+	bg_color      gg.Color
+	c_can_draw    &sync.Mutex
+	v_can_present &sync.Mutex
+	gama_runs     bool
+	title         string
+	width         int
+	height        int
 )
 
-fn frame(mut ctx gg.Context) {
+fn frame(mut _ gg.Context) {
 	// 1. Let the C thread know it can start drawing.
-	gapi_c_can_draw__.unlock()
+	c_can_draw.unlock()
 	// 2. Wait here until the C thread says it's done drawing for this frame.
-	gapi_v_can_present__.lock()
+	v_can_present.lock()
 	ctx.end()
 }
 
 fn run_gg_loop() {
-	gapi_g__ = gg.new_context(
-		width:        gapi_width__
-		height:       gapi_height__
-		window_title: gapi_title__
+	ctx = gg.new_context(
+		width:        width
+		height:       height
+		window_title: title
 		frame_fn:     frame
-		bg_color:     gapi_bg_color__
+		bg_color:     bg_color
 	)
-	gapi_g__.run()
-	gapi_gama_runs__ = false
-	gapi_c_can_draw__.unlock() // Unlock C one last time to prevent deadlock on exit.
+	ctx.run()
+	gama_runs = false
+	c_can_draw.unlock() // Unlock C one last time to prevent deadlock on exit.
 }
 
 fn get_time() f64 {
@@ -42,29 +42,31 @@ fn get_time() f64 {
 }
 
 @[export: 'gapi_init']
-fn gapi_init(width int, height int, title &char) i32 {
+@[unsafe]
+fn gapi_init(width int, height int, c_title &char) i32 {
 	println(term.cyan('[vgama]: gapi_init() called'))
-	gapi_height__ = height
-	gapi_width__ = width
-	gapi_title__ = title.vstring()
+	height = height
+	width = width
+	title = c_title.vstring()
 
-	gapi_bg_color__ = gg.rgb(100, 100, 100)
-	gapi_c_can_draw__ = &sync.Mutex{}
-	gapi_c_can_draw__.lock()
-	gapi_v_can_present__ = &sync.Mutex{}
-	gapi_v_can_present__.lock()
+	bg_color = gg.rgb(100, 100, 100)
+	c_can_draw = &sync.Mutex{}
+	c_can_draw.lock()
+	v_can_present = &sync.Mutex{}
+	v_can_present.lock()
 
 	// Spawn the graphics thread.
 	spawn run_gg_loop()
 	// Wait for the graphics thread to signal that it's ready (after the first frame).
-	gapi_c_can_draw__.lock()
-	gapi_gama_runs__ = true
+	c_can_draw.lock()
+	gama_runs = true
 
 	println(term.ok_message('[vgama]: initialization successful'))
 	return 0
 }
 
 @[export: 'gapi_log']
+@[unsafe]
 fn gapi_log(message &char) {
 	println(term.gray('[log]: ${message.vstring()}'))
 }
@@ -76,12 +78,12 @@ fn gapi_yield(dt &f64) i32 {
 	mut static last_time := f64(0)
 
 	// Signal V that we are done with the previous frame's drawing.
-	gapi_v_can_present__.unlock()
+	v_can_present.unlock()
 
 	// Wait for V to prepare the new frame.
-	gapi_c_can_draw__.lock()
+	c_can_draw.lock()
 
-	if !gapi_gama_runs__ {
+	if !gama_runs {
 		return 0
 	}
 
@@ -95,17 +97,17 @@ fn gapi_yield(dt &f64) i32 {
 	}
 	last_time = current_time
 
-	gapi_g__.begin()
+	ctx.begin()
 
 	return 1
 }
 
 @[export: 'gapi_runs']
 fn gapi_runs() i32 {
-	return if gapi_gama_runs__ { i32(1) } else { i32(0) }
+	return if gama_runs { i32(1) } else { i32(0) }
 }
 
 @[export: 'gapi_quit']
 fn gapi_quit() {
-	gapi_gama_runs__ = false
+	gama_runs = false
 }
