@@ -11,6 +11,9 @@ __global (
 	gapi_c_can_draw__    &sync.Mutex
 	gapi_v_can_present__ &sync.Mutex
 	gapi_gama_runs__     bool
+	gapi_title__         string
+	gapi_width__         int
+	gapi_height__        int
 )
 
 // The frame function for the gg loop (runs in V thread).
@@ -25,6 +28,13 @@ fn frame(mut ctx gg.Context) {
 
 // This function runs in the spawned thread.
 fn run_gg_loop() {
+	gapi_g__ = gg.new_context(
+		width:        gapi_width__
+		height:       gapi_height__
+		window_title: gapi_title__
+		frame_fn:     frame
+		bg_color:     gapi_bg_color__
+	)
 	gapi_g__.run() // This blocks until the window is closed.
 	gapi_gama_runs__ = false // Signal the main C loop to exit.
 	gapi_c_can_draw__.unlock() // Unlock C one last time to prevent deadlock on exit.
@@ -37,18 +47,15 @@ fn get_time() f64 {
 @[export: 'gapi_init']
 fn gapi_init(width int, height int, title &char) i32 {
 	println(term.cyan('[vgama]: gapi_init() called'))
+	gapi_height__ = height
+	gapi_width__ = width
+	gapi_title__ = title.vstring()
 
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
 	gapi_c_can_draw__ = &sync.Mutex{}
+	gapi_c_can_draw__.lock()
 	gapi_v_can_present__ = &sync.Mutex{}
-
-	gapi_g__ = gg.new_context(
-		width:        width
-		height:       height
-		window_title: title.vstring()
-		frame_fn:     frame
-		bg_color:     gapi_bg_color__
-	)
+	gapi_v_can_present__.lock()
 
 	println(term.ok_message('[vgama]: initialization successful'))
 	return 0
