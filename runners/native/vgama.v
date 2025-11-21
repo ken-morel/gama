@@ -1,3 +1,5 @@
+module main
+
 // import gg
 import time
 import term
@@ -33,7 +35,6 @@ fn get_time() f64 {
 }
 
 @[export: 'gapi_init']
-@[unsafe]
 fn gapi_init(width int, height int, title &char) i32 {
 	println(term.cyan('[vgama]: gapi_init() called'))
 
@@ -54,7 +55,6 @@ fn gapi_init(width int, height int, title &char) i32 {
 }
 
 @[export: 'gapi_log']
-@[unsafe]
 fn gapi_log(message &char) {
 	println(term.gray('[log]: ${message.vstring()}'))
 }
@@ -91,17 +91,4 @@ fn gapi_yield(dt &f64) i32 {
 	// gapi_g__.begin()
 
 	return 1
-}
-
-@[export: 'gapi_runs']
-@[unsafe]
-fn gapi_runs() i32 {
-	return if gapi_gama_runs__ { i32(1) } else { i32(0) }
-}
-
-@[export: 'gapi_quit']
-@[unsafe]
-fn gapi_quit() {
-	println(term.cyan('[vgama]: gapi_quit() called'))
-	gapi_gama_runs__ = false
 }
