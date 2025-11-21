@@ -5,6 +5,8 @@ import time
 import term
 import sync
 
+#preinclude <gama_impl.h>
+
 __global (
 	gapi_g__             &gg.Context
 	gapi_bg_color__      gg.Color

@@ -1,3 +1,5 @@
+#ifndef STBI_IMAGE_RESIZE2_INCLUDED
+#define STBI_IMAGE_RESIZE2_INCLUDED
 /* stb_image_resize2 - v2.11 - public domain image resizing
 
    by Jeff Roberts (v2) and Jorge L Rodriguez
@@ -337,11 +339,11 @@
       2.08 (2024-06-10) fix for RGB->BGR three channel flips and add SIMD (thanks
                           to Ryan Salsbury), fix for sub-rect resizes, use the
                           pragmas to control unrolling when they are available.
-      2.07 (2024-05-24) fix for slow final split during threaded conversions of very 
-                          wide scanlines when downsampling (caused by extra input 
-                          converting), fix for wide scanline resamples with many 
+      2.07 (2024-05-24) fix for slow final split during threaded conversions of very
+                          wide scanlines when downsampling (caused by extra input
+                          converting), fix for wide scanline resamples with many
                           splits (int overflow), fix GCC warning.
-      2.06 (2024-02-10) fix for identical width/height 3x or more down-scaling 
+      2.06 (2024-02-10) fix for identical width/height 3x or more down-scaling
                           undersampling a single row on rare resize ratios (about 1%).
       2.05 (2024-02-07) fix for 2 pixel to 1 pixel resizes with wrap (thanks Aras),
                         fix for output callback (thanks Julien Koenen).
@@ -1215,18 +1217,18 @@ static stbir__inline stbir_uint8 stbir__linear_to_srgb_uchar(float in)
   #define STBIR_STREAMOUT_PTR( star ) star __restrict
   #define STBIR_NO_UNROLL( ptr ) __assume(ptr) // this oddly keeps msvc from unrolling a loop
   #if _MSC_VER >= 1900
-    #define STBIR_NO_UNROLL_LOOP_START __pragma(loop( no_vector )) 
+    #define STBIR_NO_UNROLL_LOOP_START __pragma(loop( no_vector ))
   #else
-    #define STBIR_NO_UNROLL_LOOP_START 
+    #define STBIR_NO_UNROLL_LOOP_START
   #endif
 #elif defined( __clang__ )
   #define STBIR_STREAMOUT_PTR( star ) star __restrict__
-  #define STBIR_NO_UNROLL( ptr ) __asm__ (""::"r"(ptr)) 
+  #define STBIR_NO_UNROLL( ptr ) __asm__ (""::"r"(ptr))
   #if ( __clang_major__ >= 4 ) || ( ( __clang_major__ >= 3 ) && ( __clang_minor__ >= 5 ) )
     #define STBIR_NO_UNROLL_LOOP_START _Pragma("clang loop unroll(disable)") _Pragma("clang loop vectorize(disable)")
   #else
     #define STBIR_NO_UNROLL_LOOP_START
-  #endif 
+  #endif
 #elif defined( __GNUC__ )
   #define STBIR_STREAMOUT_PTR( star ) star __restrict__
   #define STBIR_NO_UNROLL( ptr ) __asm__ (""::"r"(ptr))
@@ -3340,7 +3342,7 @@ static void stbir__insert_coeff( stbir__contributors * contribs, float * coeffs,
     if ( new_pixel < contribs->n0 ) // before the front?
     {
       if ( ( contribs->n1 - new_pixel + 1 ) <= max_width )
-      { 
+      {
         int j, o = contribs->n0 - new_pixel;
         for ( j = contribs->n1 - contribs->n0 ; j <= 0 ; j-- )
           coeffs[ j + o ] = coeffs[ j ];
@@ -3641,9 +3643,9 @@ static void stbir__cleanup_gathered_coefficients( stbir_edge edge, stbir__filter
   filter_info->widest = widest;
 }
 
-#undef STBIR_RENORM_TYPE 
+#undef STBIR_RENORM_TYPE
 
-static int stbir__pack_coefficients( int num_contributors, stbir__contributors* contributors, float * coefficents, int coefficient_width, int widest, int row0, int row1 ) 
+static int stbir__pack_coefficients( int num_contributors, stbir__contributors* contributors, float * coefficents, int coefficient_width, int widest, int row0, int row1 )
 {
   #define STBIR_MOVE_1( dest, src ) { STBIR_NO_UNROLL(dest); ((stbir_uint32*)(dest))[0] = ((stbir_uint32*)(src))[0]; }
   #define STBIR_MOVE_2( dest, src ) { STBIR_NO_UNROLL(dest); ((stbir_uint64*)(dest))[0] = ((stbir_uint64*)(src))[0]; }
@@ -3964,7 +3966,7 @@ static void stbir__calculate_filters( stbir__sampler * samp, stbir__sampler * ot
           for (k = gn0 ; k <= gn1 ; k++ )
           {
             float gc = *g_coeffs++;
-            
+
             // skip zero and denormals - must skip zeros to avoid adding coeffs beyond scatter_coefficient_width
             //   (which happens when pivoting from horizontal, which might have dummy zeros)
             if ( ( ( gc >= stbir__small_float ) || ( gc <= -stbir__small_float ) ) )
@@ -4465,7 +4467,7 @@ static void stbir__simple_flip_3ch( float * decode_buffer, int width_times_chann
 
 #ifdef STBIR_SIMD
     #ifdef stbir__simdf_swiz2 // do we have two argument swizzles?
-      end_decode -= 12; 
+      end_decode -= 12;
       STBIR_NO_UNROLL_LOOP_START
       while( decode <= end_decode )
       {
@@ -4476,13 +4478,13 @@ static void stbir__simple_flip_3ch( float * decode_buffer, int width_times_chann
         stbir__simdf_load( b, decode+4 );
         stbir__simdf_load( c, decode+8 );
 
-        na = stbir__simdf_swiz2( a, b, 2, 1, 0, 5 );   
-        b  = stbir__simdf_swiz2( a, b, 4, 3, 6, 7 );   
-        nb = stbir__simdf_swiz2( b, c, 0, 1, 4, 3 );   
-        c  = stbir__simdf_swiz2( b, c, 2, 7, 6, 5 );   
+        na = stbir__simdf_swiz2( a, b, 2, 1, 0, 5 );
+        b  = stbir__simdf_swiz2( a, b, 4, 3, 6, 7 );
+        nb = stbir__simdf_swiz2( b, c, 0, 1, 4, 3 );
+        c  = stbir__simdf_swiz2( b, c, 2, 7, 6, 5 );
 
         stbir__simdf_store( decode, na );
-        stbir__simdf_store( decode+4, nb ); 
+        stbir__simdf_store( decode+4, nb );
         stbir__simdf_store( decode+8, c );
         decode += 12;
       }
@@ -4504,18 +4506,18 @@ static void stbir__simple_flip_3ch( float * decode_buffer, int width_times_chann
         stbir__simdf_load( f, decode+15 );
         stbir__simdf_load( g, decode+18 );
 
-        a = stbir__simdf_swiz( a, 2, 1, 0, 3 );   
-        b = stbir__simdf_swiz( b, 2, 1, 0, 3 );   
-        c = stbir__simdf_swiz( c, 2, 1, 0, 3 );   
-        d = stbir__simdf_swiz( d, 2, 1, 0, 3 );   
-        e = stbir__simdf_swiz( e, 2, 1, 0, 3 );   
-        f = stbir__simdf_swiz( f, 2, 1, 0, 3 );   
-        g = stbir__simdf_swiz( g, 2, 1, 0, 3 );   
+        a = stbir__simdf_swiz( a, 2, 1, 0, 3 );
+        b = stbir__simdf_swiz( b, 2, 1, 0, 3 );
+        c = stbir__simdf_swiz( c, 2, 1, 0, 3 );
+        d = stbir__simdf_swiz( d, 2, 1, 0, 3 );
+        e = stbir__simdf_swiz( e, 2, 1, 0, 3 );
+        f = stbir__simdf_swiz( f, 2, 1, 0, 3 );
+        g = stbir__simdf_swiz( g, 2, 1, 0, 3 );
 
-        // stores overlap, need to be in order, 
+        // stores overlap, need to be in order,
         stbir__simdf_store( decode,    a );
         i21 = decode[21];
-        stbir__simdf_store( decode+3,  b ); 
+        stbir__simdf_store( decode+3,  b );
         i23 = decode[23];
         stbir__simdf_store( decode+6,  c );
         stbir__simdf_store( decode+9,  d );
@@ -4840,7 +4842,7 @@ static void stbir__decode_scanline(stbir__info const * stbir_info, int n, float 
     stbir__simdf_0123to0011( t, t );                 \
     stbir__simdf_mult( t, t, d );                    \
     stbir__simdf8_add4( tot0, tot0, t ); }
- 
+
 #define stbir__2_coeff_remnant( ofs )                \
     { stbir__simdf t;                                \
     stbir__simdf_load2( t, hc + (ofs) );             \
@@ -6544,11 +6546,11 @@ static void stbir__set_sampler(stbir__sampler * samp, stbir_filter filter, stbir
   samp->coefficient_width = stbir__get_coefficient_width(samp, samp->is_gather, user_data);
 
   // filter_pixel_width is the conservative size in pixels of input that affect an output pixel.
-  //   In rare cases (only with 2 pix to 1 pix with the default filters), it's possible that the 
-  //   filter will extend before or after the scanline beyond just one extra entire copy of the 
-  //   scanline (we would hit the edge twice). We don't let you do that, so we clamp the total 
-  //   width to 3x the total of input pixel (once for the scanline, once for the left side 
-  //   overhang, and once for the right side). We only do this for edge mode, since the other 
+  //   In rare cases (only with 2 pix to 1 pix with the default filters), it's possible that the
+  //   filter will extend before or after the scanline beyond just one extra entire copy of the
+  //   scanline (we would hit the edge twice). We don't let you do that, so we clamp the total
+  //   width to 3x the total of input pixel (once for the scanline, once for the left side
+  //   overhang, and once for the right side). We only do this for edge mode, since the other
   //   modes can just re-edge clamp back in again.
   if ( edge == STBIR_EDGE_WRAP )
     if ( samp->filter_pixel_width > ( scale_info->input_full_size * 3 ) )
@@ -6557,11 +6559,11 @@ static void stbir__set_sampler(stbir__sampler * samp, stbir_filter filter, stbir
   // This is how much to expand buffers to account for filters seeking outside
   // the image boundaries.
   samp->filter_pixel_margin = samp->filter_pixel_width / 2;
-  
-  // filter_pixel_margin is the amount that this filter can overhang on just one side of either 
-  //   end of the scanline (left or the right). Since we only allow you to overhang 1 scanline's 
-  //   worth of pixels, we clamp this one side of overhang to the input scanline size. Again, 
-  //   this clamping only happens in rare cases with the default filters (2 pix to 1 pix). 
+
+  // filter_pixel_margin is the amount that this filter can overhang on just one side of either
+  //   end of the scanline (left or the right). Since we only allow you to overhang 1 scanline's
+  //   worth of pixels, we clamp this one side of overhang to the input scanline size. Again,
+  //   this clamping only happens in rare cases with the default filters (2 pix to 1 pix).
   if ( edge == STBIR_EDGE_WRAP )
     if ( samp->filter_pixel_margin > scale_info->input_full_size )
       samp->filter_pixel_margin = scale_info->input_full_size;
@@ -7239,8 +7241,8 @@ static stbir__info * stbir__alloc_internal_mem_and_build_samplers( stbir__sample
         info->ring_buffer_num_entries = conservative_split_output_size;
       STBIR_ASSERT( info->ring_buffer_num_entries <= info->alloc_ring_buffer_num_entries );
 
-      // a few of the horizontal gather functions read past the end of the decode (but mask it out), 
-      //   so put in normal values so no snans or denormals accidentally sneak in (also, in the ring 
+      // a few of the horizontal gather functions read past the end of the decode (but mask it out),
+      //   so put in normal values so no snans or denormals accidentally sneak in (also, in the ring
       //   buffer for vertical first)
       for( i = 0 ; i < splits ; i++ )
       {
@@ -7249,7 +7251,7 @@ static stbir__info * stbir__alloc_internal_mem_and_build_samplers( stbir__sample
         ofs = decode_buffer_size / 4;
 
         #if defined( STBIR__SEPARATE_ALLOCATIONS ) && defined(STBIR_SIMD8)
-        if ( effective_channels == 3 ) 
+        if ( effective_channels == 3 )
           --ofs; // avx in 3 channel mode needs one float at the start of the buffer, so we snap back for clearing
         #endif
 
@@ -10606,3 +10608,4 @@ ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------------------------
 */
+#endif // STBI_IMAGE_RESIZE2_INCLUDED

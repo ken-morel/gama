@@ -1,35 +1,29 @@
 module vgama
 
 import os
-import term
 
 pub fn (p Project) build_native(inst Installation) !string {
 	conf := p.get_conf()!
 	build_dir := p.build_path('native')
 	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
 
-	// 1. Find the path to the pre-transpiled native.c runner.
-	pretranspiled_c_path := os.join_path(inst.runners, 'native', 'native.c')
+	// 1. Copy the pre-transpiled C file and STB implementation to the build directory.
+	lib_basename := libvgama_name()
+	lib_path := os.join_path(inst.runners, 'native', lib_basename)
 
-	if !os.exists(pretranspiled_c_path) {
-		return error('pre-transpiled runner not found at ${pretranspiled_c_path}')
+	if !os.exists(lib_path) {
+		return error('libvgama not found at ${lib_path}')
+	}
+	os.cp(lib_path, os.join_path(build_dir, lib_basename)) or {
+		return error('Failed to copy libvgama: ${err}')
 	}
 
-	// 2. Copy the pre-transpiled C file to the build directory.
-	copied_c_path := os.join_path(build_dir, 'native.c')
-	os.cp(pretranspiled_c_path, copied_c_path) or {
-		return error('Failed to copy pre-transpiled runner from ${pretranspiled_c_path} to ${copied_c_path}: ${err}')
-	}
-
-	// 3. Delegate to zig.v to compile both the student's C code and the runner's C code together.
-	source_files := [
-		os.join_path(p.path, 'src', 'main.c'),
-		copied_c_path,
-	]
+	source_files := p.get_src_c_files()!
 
 	return inst.get_zig().build_native(ZigBuildNativeOptions{
 		files:           source_files
-		include_path:    inst.lib // Path to gama.h
+		include_path:    inst.lib
+		lib_path:        build_dir
 		executable_path: os.join_path(build_dir, executable_extension(conf.name))
 	})
 }
@@ -48,4 +42,13 @@ pub fn (p Project) run_native_build(replace bool) ! {
 	} else {
 		os.execute_opt(output) or { return error('Error running the app build executable: ${err}') }
 	}
+}
+
+pub fn (p Project) get_src_c_files() ![]string {
+	mut files := []string{}
+	src := os.join_path(p.path, 'src')
+	os.walk(src, fn [mut files] (file string) {
+		files << file
+	})
+	return files
 }
