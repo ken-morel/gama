@@ -28,7 +28,7 @@ struct ZigBuildNativeOptions {
 
 fn (z ZigCC) build_native(opts ZigBuildNativeOptions) !string {
 	source_files_str := opts.files.join(' ')
-	mut linker_flags := '-lpthread -lvgama -Wl,-rpath=.' // pthread is common for V runtime
+	mut linker_flags := '-lpthread -lvgama -lbacktrace -ldl -Wl,-rpath=.'
 
 	$if linux {
 		linker_flags += ' -lX11 -lGL -lglfw' // Common for gg on Linux
