@@ -14,15 +14,22 @@ __global (
 	gapi_title__         string
 	gapi_width__         int
 	gapi_height__        int
+	gapi_side__          int
+	gapi_draw_queue__    []fn ()
 )
 
 fn frame(mut _ gg.Context) {
 	// 1. Let the C thread know it can start drawing.
 	gapi_c_can_draw__.unlock()
 	// 2. Wait here until the C thread says it's done drawing for this frame.
-	println('v says c starts drawing')
 	gapi_v_can_present__.lock()
-	println('v says c finished drawing')
+
+	println('Calling draw functions ${gapi_draw_queue__.len}')
+	for func in gapi_draw_queue__ {
+		func()
+	}
+	println('called draw functions')
+	gapi_draw_queue__ = []
 	gapi_ctx__.end()
 }
 
@@ -49,6 +56,7 @@ fn gapi_init(width int, height int, title &char) i32 {
 	println(term.cyan('[vgama]: gapi_init() called'))
 	gapi_height__ = height
 	gapi_width__ = width
+	gapi_side = if gapi_width__ < gapi_height__ { gapi_width__ } else { gapi_height__ }
 	gapi_title__ = title.vstring()
 
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
