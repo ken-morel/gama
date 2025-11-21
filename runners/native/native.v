@@ -1,27 +1,20 @@
+module vgama
+
 import gg
-import gx
 import time
 import term
 import sync
 
 __global (
-	g             &gg.Context
-	bg_color      gx.Color
-	c_can_draw    sync.Mutex
-	v_can_present sync.Mutex
-	gama_runs     bool
+	g         &gg.Context
+	bg_color  gg.Color
+	bottle    &sync.Mutex
+	gama_runs bool
 )
 
-// The frame function for the gg loop (runs in V thread).
-fn frame(mut ctx gg.Context) {
-	// 1. Clear the screen for the new frame.
-	ctx.clear(bg_color)
-	// 2. Let the C thread know it can start drawing.
-	c_can_draw.unlock()
-	// 3. Wait here until the C thread says it's done drawing for this frame.
-	v_can_present.lock()
-	// 4. Present the frame.
-	ctx.end()
+fn run_gg_loop() {
+	g.run()
+	gama_runs = false
 }
 
 fn get_time() f64 {
@@ -33,21 +26,17 @@ fn get_time() f64 {
 fn gapi_init(width int, height int, title &char) i32 {
 	println(term.cyan('[vgama]: gapi_init() called'))
 
-	bg_color = gx.rgb(100, 100, 100)
-	c_can_draw = sync.new_mutex()
-	v_can_present = sync.new_mutex()
-	// Deliberately NOT locking here to prevent deadlock on first frame.
+	bg_color = gg.rgb(100, 100, 100)
+	bottle = &sync.Mutex{}
 
 	g = gg.new_context(
 		width:        width
 		height:       height
 		window_title: title.vstring()
 		frame_fn:     frame
+		bg_color:     bg_color
 	)
 
-	spawn g.run()
-
-	gama_runs = true
 	println(term.ok_message('[vgama]: initialization successful'))
 	return 0
 }
@@ -55,9 +44,14 @@ fn gapi_init(width int, height int, title &char) i32 {
 @[export: 'gapi_log']
 @[unsafe]
 fn gapi_log(message &char) {
-	unsafe {
-		println(term.gray('[log]: ${message.vstring()}'))
-	}
+	println(term.gray('[log]: ${message.vstring()}'))
+}
+
+fn frame(mut ctx gg.Context) {
+	bottle.unlock() // let c start drawing
+	time.sleep(10)
+	bottle.lock() // wait for c, then block it again
+	ctx.end()
 }
 
 @[export: 'gapi_yield']
@@ -65,21 +59,14 @@ fn gapi_log(message &char) {
 fn gapi_yield(dt &f64) i32 {
 	mut static last_time := f64(0)
 
-	// This is the "ping-pong" synchronization logic.
 	if last_time == 0 {
-		// First call. Don't do any locking/unlocking.
-		// Just bootstrap the timing and let the loop run once.
 		last_time = get_time()
+		spawn run_gg_loop()
+		bottle.lock() // v // it is not locked yet, tell c to wait
+		gama_runs = true
 	} else {
-		// Subsequent calls.
-		// 1. Signal to V that C-side drawing for the *previous* frame is complete.
-		v_can_present.unlock()
-		// 2. Wait here until V has cleared the *new* frame and is ready for drawing commands.
-		c_can_draw.lock()
-	}
-
-	if !g.running {
-		gama_runs = false
+		bottle.unlock() // let v run, tell them we finished drawing
+		time.sleep(10)
 	}
 
 	current_time := get_time()
@@ -90,6 +77,7 @@ fn gapi_yield(dt &f64) i32 {
 	}
 	last_time = current_time
 
+	bottle.lock() // c // wait for v to prepare
 	return gapi_runs()
 }
 
