@@ -37,7 +37,8 @@ fn (z ZigCC) build_native(opts ZigBuildNativeOptions) !string {
 	}
 	// TODO: Add macOS flags when needed: linker_flags += ' -framework Cocoa -framework OpenGL'
 
-	cmd := '${z.exepath} cc -o ${opts.executable_path} ${source_files_str} -I${opts.include_path} -L${opts.lib_path} ${linker_flags} -v'
+	// cmd := '${z.exepath} cc -o ${opts.executable_path} ${source_files_str} -I${opts.include_path} -L${opts.lib_path} ${linker_flags} -v'
+	cmd := '${z.exepath} cc -o /home/engon/gama/ama/build/native/ama /home/engon/gama/ama/src/main.c -I/home/engon/gama/ama/gama -L/home/engon/gama/ama/build/native -lvgama -Wl,-rpath=.'
 	println('Building with: ${cmd}')
 	res := os.execute(cmd)
 	return if res.exit_code != 0 {
