@@ -1,22 +1,27 @@
+#include "draw.h"
 #include <stdio.h>
 #include <gama.h>
 
 int main() {
   printf("Starting Gama Demo\n");
 
-  gama_init(800, 600, "Bouncing Ball Demo");
+  printf("Initializing gama");
+  gama_init(800, 600, "Bouncing Ball Demo\0");
+  printf("Gama iniialized");
 
   // --- Create Physics Bodies ---
-  
+
+  printf("Creating body\n");
   // Floor/Platform (Static Rectangle)
-  gama_body floor = gama_body_create(0, -0.9, 1.8, 0.2, GAMA_COLLIDER_RECT);
+  gama_body floor = gama_rectangle_create(0, 0, 1.9, 0.9);
   floor.is_active = 1;
   floor.mass = 0.0; // Mass of 0 makes it static
   floor.restitution = 0.5; // Slightly bouncy
   floor.friction = 0.8; // Some friction
 
+  printf("Creating circle\n");
   // Ball (Dynamic Circle)
-  gama_body ball = gama_body_create(0, 0.5, 0.2, 0.2, GAMA_COLLIDER_CIRCLE); // w,h act as radius for circle create
+  gama_body ball = gama_circle_create(0, 0.9, 0.1); // w,h act as radius for circle create
   ball.is_active = 1;
   ball.mass = 1.0; // Dynamic
   ball.restitution = 0.7; // Bouncier than floor
@@ -25,33 +30,27 @@ int main() {
 
   gama_body bodies[] = { floor, ball };
   int body_count = 2;
-  
-  double dt = 0.0; // Delta time will be updated by gama_yield
 
-  while (gama_runs()) {
-    // Call gama_yield to update delta time and sync with graphics thread
-    // The loop continues as long as gama_yield returns true (1)
-    if (!gama_yield(&dt)) {
-        break; // Exit loop if window is closed
-    }
+  // Delta time will be updated by gama_yield
+  for(double dt = 0;gama_yield(&dt);) {
 
     // --- Update Physics ---
-    gama_physics_update(bodies, body_count, dt);
+    // gama_physics_update(bodies, body_count, dt);
 
     // --- Draw Everything ---
     // Clear screen is handled by gapi_yield's begin()
-    
+
     // Draw floor
-    gama_draw_rect_body(&floor, LIGHTGREEN);
-    
+    // gama_draw_rect_body(&floor, LIGHTGREEN);
+    gama_draw_rectangle(0, 1, 0.1, 0.1,GREEN);
+
     // Draw ball
-    gama_draw_circle_body(&ball, BLUE);
+    // gama_draw_circle_body(&ball, BLUE);
 
     // Optional: Display some text
-    gama_draw_text(0, 0.9, "Gama Physics Demo", 0.05, WHITE);
+    // gama_draw_text(0, 0.9, "Gama Physics Demo", 0.05, WHITE);
   }
 
   printf("Gama Demo Finished. Bye!\n");
-  gama_quit();
   return 0;
 }
