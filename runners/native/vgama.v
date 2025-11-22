@@ -138,7 +138,7 @@ fn gapi_quit() {
 
 @[export: 'gapi_resize']
 fn gapi_resize(w i32, h i32) {
-	gapi_queue__ << fn () {
+	gapi_queue__ << fn [w, h] () {
 		gapi_ctx__.resize(w, h)
 	}
 }
@@ -155,10 +155,10 @@ fn gapi_set_bg_color(r u8, g u8, b u8, a u8) {
 fn gapi_fullscreen(fc i32) {
 	gapi_queue__ << fn [fc] () {
 		if fc == 1 && !gapi_isfullscreen__ {
-			gapi_ctx__.toggle_fullscreen()
+			gg.toggle_fullscreen()
 			gapi_isfullscreen__ = true
 		} else if fc == 0 && gapi_isfullscreen__ {
-			gapi_ctx__.toggle_fullscreen()
+			gg.toggle_fullscreen()
 			gapi_isfullscreen__ = false
 		}
 	}

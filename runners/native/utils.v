@@ -13,11 +13,11 @@ fn c_redimension_rect(x f64, y f64, w f64, h f64) (f32, f32, f32, f32) {
 }
 
 fn c_redimension_coord(x f64, y f64) (f32, f32) {
-	return f32(ngl(x - w / 2) * gapi_width__), f32(ngl(y - h / 2) * gapi_height__)
+	return c_redimension_one(x), c_redimension_one(y)
 }
 
-fn c_redimension_one(x f64) f32 {
-	return (x / 2) * gapi_side__
+fn c_redimension_one(v f64) f32 {
+	return f32(ngl(v) * gapi_side__)
 }
 
 fn c_color(r u8, g u8, b u8, a u8) gg.Color {

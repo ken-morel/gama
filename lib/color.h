@@ -4,10 +4,9 @@
 
 typedef unsigned int Color;
 
-
-#define gama_color_red(col)   ((col & 0xFF000000) >> 24)
+#define gama_color_red(col) ((col & 0xFF000000) >> 24)
 #define gama_color_green(col) ((col & 0x00FF0000) >> 16)
-#define gama_color_blue(col)  ((col & 0x0000FF00) >> 8)
+#define gama_color_blue(col) ((col & 0x0000FF00) >> 8)
 #define gama_color_alpha(col) (col & 0x000000FF)
 
 static inline Color gama_color_from_rgba(int r, int g, int b, int a) {
@@ -180,4 +179,3 @@ void gama_color_set_alpha(int *col, int alpha) {
 #define WHITESMOKE (Color)0xF5F5F5FF
 #define YELLOW (Color)0xFFFF00FF
 #define YELLOWGREEN (Color)0x9ACD32FF
-

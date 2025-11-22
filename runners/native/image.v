@@ -8,17 +8,16 @@ fn gapi_create_image(path &char, width &u32, height &u32) u32 {
 	vpath := path.vstring()
 	gapi_image_count__ += 1
 	idx := gapi_image_count__ - 1
-	gapi_queue__ << fn [idx, vpath] () {
-		gapi_images__[idx] = gapi_ctx__.create_image(vpath) or {
-			println(term.fail_message('[vgama]: Error loading image ${vpath}: ${err}'))
-			return 0
-		}
-		if width != nil {
-			*width = gapi_images__[idx].width
-		}
-		if height != nil {
-			*height = gapi_images__[idx].height
-		}
+	img := gapi_ctx__.create_image(vpath) or {
+		println(term.fail_message('[vgama]: Error loading image ${vpath}: ${err}'))
+		return 0
+	}
+	gapi_images__[idx] = img
+	if width != nil {
+		*width = u32(img.width)
+	}
+	if height != nil {
+		*height = u32(img.height)
 	}
 	return idx
 }

@@ -8,7 +8,7 @@ fn gapi_draw_rect(x f64, y f64, w f64, h f64, cr u8, cg u8, cb u8, ca u8) i32 {
 	c := c_color(cr, cg, cb, ca)
 
 	gapi_queue__ << fn [gx, gy, gw, gh, c] () {
-		gapi_ctx__.draw_rect_filled(gx, gy, gx, gh, c)
+		gapi_ctx__.draw_rect_filled(gx, gy, gw, gh, c)
 	}
 	return 0
 }
@@ -20,7 +20,7 @@ fn gapi_draw_rounded_rect(x f64, y f64, w f64, h f64, r f64, cr u8, cg u8, cb u8
 	c := c_color(cr, cg, cb, ca)
 
 	gapi_queue__ << fn [gx, gy, gw, gh, gr, c] () {
-		gapi_ctx__.draw_rounded_rect_filled(gx, gy, gw, gh, gr, c)
+		gapi_ctx__.draw_rounded_rect_filled(gx, gy, i32(gw), gh, gr, c)
 	}
 	return 0
 }
@@ -34,6 +34,7 @@ fn gapi_draw_circle(x f64, y f64, r f64, cr u8, cg u8, cb u8, ca u8) i32 {
 	gapi_queue__ << fn [gx, gy, gr, c] () {
 		gapi_ctx__.draw_circle_filled(gx, gy, gr, c)
 	}
+	return 0
 }
 
 @[export: 'gapi_draw_ellipse']
@@ -93,25 +94,23 @@ fn gapi_draw_text(x f64, y f64, maxwidth f64, height f64, txt &char, font &char,
 	bold := (style & text_style_bold__) > 0
 	mono := (style & text_style_mono__) > 0
 
-	gt := c_redimension_one(t)
-
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ << fn [gx, gy, gw, gh, vtext, vfont, italic, bold, mono, gt, c, align] () {
+	gapi_queue__ << fn [gx, gy, gw, gh, vtext, vfont, italic, bold, mono, c, align] () {
 		gapi_ctx__.draw_text2(gg.DrawTextParams{
-			x:         gx
-			y:         gy
+			x:         i32(gx)
+			y:         i32(gy)
 			text:      vtext
 			color:     c
 			size:      i32(gh)
-			align:     if align == 'l' {
+			align:     if align == `l` {
 				.left
-			} else if align == 'c' {
+			} else if align == `c` {
 				.center
 			} else {
 				.right
 			}
-			max_width: gw
+			max_width: i32(gw)
 			family:    vfont
 			bold:      bold
 			mono:      mono

@@ -44,7 +44,7 @@ void gama_rectangle_update(struct gama_rectangle *r, double dt) {
 
 }
 void gama_rectangle_draw(struct gama_rectangle *r) {
-  draw_rectantle(r->position.x, r->position.y, r->width, r->height,  r->color);
+  gama_draw_rectangle(r->position.x, r->position.y, r->width, r->height,  r->color);
 }
 void gama_rectangle_render(struct gama_rectangle *r, double dt) {
   gama_rectangle_update(r,  dt);
