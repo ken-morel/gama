@@ -43,7 +43,13 @@ fn run_gg_loop() {
 		window_title: gapi_title__
 		frame_fn:     frame
 		bg_color:     gapi_bg_color__
+		resized_fn:   fn (e &gg.Event, data voidptr) {
+			gapi_width__ = e.window_width
+			gapi_height__ = e.window_height
+			gapi_side__ = if gapi_width__ < gapi_height__ { gapi_width__ } else { gapi_height__ }
+		}
 	)
+
 	gapi_ctx__.run()
 	gapi_gama_runs__ = false
 	gapi_c_can_draw__.unlock() // Unlock C one last time to prevent deadlock on exit.

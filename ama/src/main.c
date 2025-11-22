@@ -1,3 +1,4 @@
+#include "draw.h"
 #include <stdio.h>
 #include <gama.h>
 
@@ -9,6 +10,7 @@ int main() {
   for (double dt = 0.0; gapi_yield(&dt);) {
     printf("C draws\n");
     gama_rectangle_render(&r, dt);
+   gama_draw_rounded_rectangle(0, 0, 1, 1, 0.02, GREEN);
     printf("c finished\n");
   }
   printf("Bye\n");

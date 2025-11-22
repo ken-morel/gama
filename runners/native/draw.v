@@ -20,7 +20,7 @@ fn gapi_draw_rounded_rect(x f64, y f64, w f64, h f64, r f64, cr u8, cg u8, cb u8
 	c := c_color(cr, cg, cb, ca)
 
 	gapi_queue__ << fn [gx, gy, gw, gh, gr, c] () {
-		gapi_ctx__.draw_rounded_rect_filled(gx, gy, i32(gw), gh, gr, c)
+		gapi_ctx__.draw_rounded_rect_filled(gx, gy, gw, gh, gr, c)
 	}
 	return 0
 }

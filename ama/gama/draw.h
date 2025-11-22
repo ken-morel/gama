@@ -8,7 +8,7 @@ int32_t gama_draw_rectangle(double x, double y, double w, double h, Color c) {
   return gapi_draw_rect(x, y, w, h, gama_color_red(c), gama_color_green(c),
                         gama_color_blue(c), gama_color_alpha(c));
 }
-int32_t gama_draw_rounded_rectantle(double x, double y, double w, double h,
+int32_t gama_draw_rounded_rectangle(double x, double y, double w, double h,
                                 double r, Color c) {
   return gapi_draw_rounded_rect(x, y, w, h, r, gama_color_red(c),
                                 gama_color_green(c), gama_color_blue(c),

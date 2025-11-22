@@ -7,8 +7,8 @@ fn ngl(x f64) f64 {
 }
 
 fn c_redimension_rect(x f64, y f64, w f64, h f64) (f32, f32, f32, f32) {
-	gx, gy := c_redimension_coord(x, y)
-	gw, gh := c_redimension_one(w), c_redimension_one(h)
+	gx, gy := c_redimension_coord(x - (w / 2), y - (h / 2))
+	gw, gh := c_redimension_coord(w, h)
 	return gx, gy, gw, gh
 }
 
