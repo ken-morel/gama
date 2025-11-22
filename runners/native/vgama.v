@@ -13,7 +13,6 @@ __global (
 	gapi_title__        string
 	gapi_width__        int
 	gapi_height__       int
-	gapi_side__         int
 	gapi_queue__        chan GapiTask
 	gapi_end_frame__    chan bool
 	gapi_isfullscreen__ bool
@@ -25,7 +24,22 @@ __global (
 	gapi_game_h__       int
 	gapi_offset_x__     int
 	gapi_offset_y__     int
+	gapi_queue_wait__   &sync.Mutex
 )
+
+fn update_virtual_dimensions() {
+	if gapi_width__ < gapi_height__ {
+		gapi_game_w__ = gapi_width__
+		gapi_game_h__ = gapi_width__
+		gapi_offset_x__ = 0
+		gapi_offset_y__ = (gapi_height__ - gapi_width__) / 2
+	} else {
+		gapi_game_w__ = gapi_height__
+		gapi_game_h__ = gapi_height__
+		gapi_offset_x__ = (gapi_width__ - gapi_height__) / 2
+		gapi_offset_y__ = 0
+	}
+}
 
 fn frame(mut _ gg.Context) {
 	gapi_ctx__.begin()
@@ -46,10 +60,18 @@ fn frame(mut _ gg.Context) {
 	gapi_ctx__.end()
 }
 
+fn wait_for_queue() {
+	gapi_queue__ <- fn () {
+		gapi_queue_wait__.unlock()
+	}
+	gapi_queue_wait__.lock() // wait all preceding events are processed
+}
+
 @[export: 'gapi_yield']
 @[unsafe]
 fn gapi_yield(dt &f64) i32 {
-	gapi_end_frame__ <- true or { return 0 } // close the current frame or wait
+	wait_for_queue() // wait it processes other events before sending stop
+	gapi_end_frame__ <- true // close the current frame
 	// for the frame to request for closing
 	//
 	// subsequent pushes to the queue will block
@@ -83,7 +105,7 @@ fn run_gg_loop() {
 		resized_fn:   fn (e &gg.Event, data voidptr) {
 			gapi_width__ = e.window_width
 			gapi_height__ = e.window_height
-			gapi_side__ = if gapi_width__ < gapi_height__ { gapi_width__ } else { gapi_height__ }
+			update_virtual_dimensions()
 		}
 		keydown_fn:   fn (code gg.KeyCode, _ gg.Modifier, _ voidptr) {
 			if key := keys[code] {
@@ -96,6 +118,7 @@ fn run_gg_loop() {
 	gapi_gama_runs__ = false
 	gapi_queue__.close() // cancel remaining draw operaions
 	gapi_end_frame__.close()
+	gapi_queue_wait__.unlock()
 }
 
 @[export: 'gapi_init']
@@ -106,14 +129,16 @@ fn gapi_init(width int, height int, title &char) i32 {
 	gapi_image_count__ = 1
 	gapi_height__ = height
 	gapi_width__ = width
-	gapi_side__ = if gapi_width__ < gapi_height__ { gapi_width__ } else { gapi_height__ }
 	gapi_title__ = title.vstring()
+
+	update_virtual_dimensions()
 
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
 
-	gapi_queue__ = chan GapiTask{cap: 50} // 50 function pointers and abit more,
-	// it's okay :D
-	gapi_end_frame__ = chan bool{}
+	gapi_queue__ = chan GapiTask{cap: 50}
+	gapi_end_frame__ = chan bool{cap: 0}
+	gapi_queue_wait__ = &sync.Mutex{}
+	gapi_queue_wait__.lock()
 
 	// Spawn the graphics thread.
 	spawn run_gg_loop()
