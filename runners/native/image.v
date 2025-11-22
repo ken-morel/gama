@@ -33,3 +33,27 @@ fn gapi_draw_image(handle u32, x f64, y f64, w f64, h f64) {
 		}
 	}
 }
+
+@[export: 'gapi_draw_image_part']
+fn gapi_draw_image_part(handle u32, sx u32, sy u32, sw u32, sh u32, x f64, y f64, w f64, h f64) u32 {
+	gx, gy, gw, gh := c_redimension_rect(x, y, w, h)
+	img_r := gg.Rect{
+		x: gx
+		y: gy
+		width: gw
+		height: gh
+	}
+	part_r := gg.Rect{
+		x: f32(sx)
+		y: f32(sy)
+		width: f32(sw)
+		height: f32(sh)
+	}
+	gapi_queue__ << fn [img_r, part_r, handle] () {
+		if img := gapi_images__[handle] {
+			gapi_ctx__.draw_image_part(gx, , &img)
+		} else {
+			println(term.warn_message('Image ${handle} does not exist'))
+		}
+	}
+}

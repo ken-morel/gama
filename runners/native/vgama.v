@@ -20,19 +20,12 @@ __global (
 	gapi_images__        map[u32]gg.Image
 	gapi_image_count__   u32
 	gapi_pressed_keys__  []string
-	gapi_down_keys__     []string
 )
 
 @[export: 'gapi_key_pressed']
 fn gapi_key_pressed(kt char, kk char) i32 {
 	code := rune(kt).str() + rune(kk).str()
 	return if code in gapi_pressed_keys__ { i32(1) } else { i32(0) }
-}
-
-@[export: 'gapi_key_down']
-fn gapi_key_down(kt char, kk char) i32 {
-	code := rune(kt).str() + rune(kk).str()
-	return if code in gapi_down_keys__ { i32(1) } else { i32(0) }
 }
 
 fn frame(mut _ gg.Context) {
@@ -65,18 +58,6 @@ fn run_gg_loop() {
 		keydown_fn:   fn (code gg.KeyCode, _ gg.Modifier, _ voidptr) {
 			if key := keys[code] {
 				gapi_pressed_keys__ << key
-				gapi_down_keys__ << key
-			}
-		}
-		keyup_fn:     fn (code gg.KeyCode, _ gg.Modifier, _ voidptr) {
-			if key := keys[code] {
-				mut list := []string{cap: gapi_down_keys__.len}
-				for list_key in gapi_down_keys__ {
-					if list_key != key {
-						list << list_key
-					}
-				}
-				gapi_down_keys__ = list.clone()
 			}
 		}
 	)

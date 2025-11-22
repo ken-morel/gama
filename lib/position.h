@@ -2,12 +2,12 @@
 
 #include <stdlib.h>
 
-struct gama_position {
+typedef struct {
   double x, y, z;
-};
+} gama_position;
 
-void gama_position_update(struct gama_position *p, struct gama_position *v,
-                          struct gama_position *a, double dt) {
+void gama_position_update(gama_position *p, gama_position *v, gama_position *a,
+                          double dt) {
   double dt2 = dt * dt;
   double vx = 0, vy = 0, vz = 0;
   double ax = 0, ay = 0, az = 0;
@@ -32,12 +32,12 @@ void gama_position_update(struct gama_position *p, struct gama_position *v,
   }
 }
 
-void gama_position_set(struct gama_position *p, double x, double y) {
+void gama_position_set(gama_position *p, double x, double y) {
   p->x = x;
   p->y = y;
   p->z = 0;
 }
-void gama_position_set3(struct gama_position *p, double x, double y, double z) {
+void gama_position_set3(gama_position *p, double x, double y, double z) {
   p->x = x;
   p->y = y;
   p->z = z;

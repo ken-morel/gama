@@ -10,7 +10,6 @@ const keys = {
 	gg.KeyCode.left:          'al'
 	gg.KeyCode.right:         'ar'
 	// Special keys -> 's' class (special/control)
-	gg.KeyCode.enter:         'se'
 	gg.KeyCode.escape:        'sx'
 	gg.KeyCode.insert:        'si'
 	gg.KeyCode.delete:        'sd'
