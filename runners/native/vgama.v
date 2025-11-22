@@ -3,20 +3,19 @@ module vgama
 import gg
 import time
 import term
-import sync
 
 type GapiTask = fn ()
 
 __global (
 	gapi_ctx__          &gg.Context
 	gapi_bg_color__     gg.Color
-	gapi_c_can_draw__   &sync.Mutex
 	gapi_gama_runs__    bool
 	gapi_title__        string
 	gapi_width__        int
 	gapi_height__       int
 	gapi_side__         int
 	gapi_queue__        chan GapiTask
+	gapi_end_frame__    chan bool
 	gapi_isfullscreen__ bool
 	gapi_images__       map[u32]gg.Image
 	gapi_image_count__  u32
@@ -29,17 +28,48 @@ __global (
 )
 
 fn frame(mut _ gg.Context) {
-	gapi_queue__ = chan GapiTask{}
 	gapi_ctx__.begin()
-	// 1. Let the C thread know it can start drawing.
-	gapi_c_can_draw__.unlock()
-
 	for {
-		func := <-gapi_queue__ or { break }
-		func()
+		select {
+			func := <-gapi_queue__ {
+				func()
+			}
+			gapi_end_frame__ <- true {
+				break
+			}
+			1 * time.second {
+				break
+			}
+		}
 	}
 	gapi_pressed_keys__ = []
 	gapi_ctx__.end()
+}
+
+@[export: 'gapi_yield']
+@[unsafe]
+fn gapi_yield(dt &f64) i32 {
+	_ := <-gapi_end_frame__ // close the current frame or wait
+	// for the frame to request for closing
+	//
+	// subsequent pushes to the queue will block
+	mut static last_time := f64(0)
+
+	if !gapi_gama_runs__ {
+		return 0
+	}
+
+	if last_time == 0 {
+		last_time = get_time()
+	}
+
+	current_time := get_time()
+	if dt != nil {
+		*dt = current_time - last_time
+	}
+	last_time = current_time
+
+	return 1
 }
 
 fn run_gg_loop() {
@@ -64,7 +94,7 @@ fn run_gg_loop() {
 
 	gapi_ctx__.run()
 	gapi_gama_runs__ = false
-	gapi_c_can_draw__.unlock() // Unlock C one last time to prevent deadlock on exit.
+	gapi_queue__.close() // cancel remaining draw operaions
 }
 
 @[export: 'gapi_init']
@@ -79,20 +109,16 @@ fn gapi_init(width int, height int, title &char) i32 {
 	gapi_title__ = title.vstring()
 
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
-	gapi_c_can_draw__ = &sync.Mutex{}
-	gapi_c_can_draw__.lock()
 
 	gapi_queue__ = chan GapiTask{}
+	gapi_end_frame__ = chan bool{}
 
 	// Spawn the graphics thread.
 	spawn run_gg_loop()
 	// Wait for the graphics thread to signal that it's ready (after the first frame).
-	gapi_c_can_draw__.lock()
 	gapi_gama_runs__ = true
 
 	println(term.ok_message('[vgama]: initialization successful'))
-	time.sleep(2)
-	println('just verifying')
 	return 0
 }
 
@@ -101,33 +127,6 @@ fn gapi_init(width int, height int, title &char) i32 {
 fn gapi_set_title(title &char) {
 	gapi_title__ = title.vstring()
 	gg.set_window_title(gapi_title__)
-}
-
-@[export: 'gapi_yield']
-@[unsafe]
-fn gapi_yield(dt &f64) i32 {
-	mut static last_time := f64(0)
-
-	gapi_queue__.close()
-
-	// Wait for V to prepare the new frame.
-	gapi_c_can_draw__.lock()
-
-	if !gapi_gama_runs__ {
-		return 0
-	}
-
-	if last_time == 0 {
-		last_time = get_time()
-	}
-
-	current_time := get_time()
-	if dt != nil {
-		*dt = current_time - last_time
-	}
-	last_time = current_time
-
-	return 1
 }
 
 @[export: 'gapi_runs']
