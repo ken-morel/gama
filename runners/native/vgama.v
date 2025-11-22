@@ -101,7 +101,6 @@ fn run_gg_loop() {
 		window_title: gapi_title__
 		frame_fn:     frame
 		bg_color:     gapi_bg_color__
-		ui_mode:      true
 		resized_fn:   fn (e &gg.Event, data voidptr) {
 			gapi_width__ = e.window_width
 			gapi_height__ = e.window_height

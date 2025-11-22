@@ -20,7 +20,7 @@ typedef struct {
   gama_position acceleration;
 
   double width, height, radius;
-  double mass; // 0 -> static, >0 -> dynamic
+  double mass; // ==0 -> static, >0 -> dynamic
   double restitution;
   double friction;
 } gama_body;
@@ -50,7 +50,7 @@ gama_body gama_body_create(double x, double y, double w, double h,
       .width = w,
       .height = h,
       .radius = w < h ? w : h,
-      .mass = 0,
+      .mass = 1,
       .restitution = 0,
   };
   return body;
