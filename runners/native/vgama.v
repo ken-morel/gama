@@ -19,7 +19,21 @@ __global (
 	gapi_isfullscreen__  bool
 	gapi_images__        map[u32]gg.Image
 	gapi_image_count__   u32
+	gapi_pressed_keys__  []string
+	gapi_down_keys__     []string
 )
+
+@[export: 'gapi_key_pressed']
+fn gapi_key_pressed(kt char, kk char) i32 {
+	code := rune(kt).str() + rune(kk).str()
+	return if code in gapi_pressed_keys__ { i32(1) } else { i32(0) }
+}
+
+@[export: 'gapi_key_down']
+fn gapi_key_down(kt char, kk char) i32 {
+	code := rune(kt).str() + rune(kk).str()
+	return if code in gapi_down_keys__ { i32(1) } else { i32(0) }
+}
 
 fn frame(mut _ gg.Context) {
 	// 1. Let the C thread know it can start drawing.
@@ -33,9 +47,9 @@ fn frame(mut _ gg.Context) {
 	}
 	println('called draw functions')
 	gapi_queue__ = []
+	gapi_pressed_keys__ = []
 	gapi_ctx__.end()
 }
-
 
 fn run_gg_loop() {
 	gapi_ctx__ = gg.new_context(
@@ -44,13 +58,29 @@ fn run_gg_loop() {
 		window_title: gapi_title__
 		frame_fn:     frame
 		bg_color:     gapi_bg_color__
+		ui_mode:      true
 		resized_fn:   fn (e &gg.Event, data voidptr) {
 			gapi_width__ = e.window_width
 			gapi_height__ = e.window_height
 			gapi_side__ = if gapi_width__ < gapi_height__ { gapi_width__ } else { gapi_height__ }
 		}
-			keydown_fn: fn(){}
-			keyup_fn() {}
+		keydown_fn:   fn (code gg.KeyCode, _ gg.Modifier, _ voidptr) {
+			if key := keys[code] {
+				gapi_pressed_keys__ << key
+				gapi_down_keys__ << key
+			}
+		}
+		keyup_fn:     fn (code gg.KeyCode, _ gg.Modifier, _ voidptr) {
+			if key := keys[code] {
+				mut list := []string{cap: gapi_down_keys__.len}
+				for list_key in gapi_down_keys__ {
+					if list_key != key {
+						list << list_key
+					}
+				}
+				gapi_down_keys__ = list.clone()
+			}
+		}
 	)
 
 	gapi_ctx__.run()

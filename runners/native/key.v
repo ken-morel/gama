@@ -4,6 +4,7 @@ import gg
 
 const keys = {
 	// Direction keys -> 'd' class (direction)
+	gg.KeyCode.invalid:       '  '
 	gg.KeyCode.up:            'au'
 	gg.KeyCode.down:          'ad'
 	gg.KeyCode.left:          'al'
