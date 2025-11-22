@@ -34,7 +34,7 @@ fn frame(mut _ gg.Context) {
 			func := <-gapi_queue__ {
 				func()
 			}
-			gapi_end_frame__ <- true {
+			_ := <-gapi_end_frame__ {
 				break
 			}
 			1 * time.second {
@@ -49,7 +49,7 @@ fn frame(mut _ gg.Context) {
 @[export: 'gapi_yield']
 @[unsafe]
 fn gapi_yield(dt &f64) i32 {
-	_ := <-gapi_end_frame__ // close the current frame or wait
+	gapi_end_frame__ <- true or { return 0 } // close the current frame or wait
 	// for the frame to request for closing
 	//
 	// subsequent pushes to the queue will block
@@ -95,6 +95,7 @@ fn run_gg_loop() {
 	gapi_ctx__.run()
 	gapi_gama_runs__ = false
 	gapi_queue__.close() // cancel remaining draw operaions
+	gapi_end_frame__.close()
 }
 
 @[export: 'gapi_init']
@@ -110,7 +111,8 @@ fn gapi_init(width int, height int, title &char) i32 {
 
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
 
-	gapi_queue__ = chan GapiTask{}
+	gapi_queue__ = chan GapiTask{cap: 50} // 50 function pointers and abit more,
+	// it's okay :D
 	gapi_end_frame__ = chan bool{}
 
 	// Spawn the graphics thread.
