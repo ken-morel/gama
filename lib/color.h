@@ -10,6 +10,11 @@ typedef unsigned int Color;
 #define gama_color_blue(col)  ((col & 0x0000FF00) >> 8)
 #define gama_color_alpha(col) (col & 0x000000FF)
 
+static inline Color gama_color_from_rgba(int r, int g, int b, int a) {
+  return (unsigned)(abs(r) % 256) << 24 | (unsigned)(abs(g) % 256) << 16 |
+         (unsigned)(abs(b) % 256) << 8 | (unsigned)(abs(a) % 256);
+}
+
 void gama_color_set_red(int *col, int red) {
   *col &= 0x00FFFFFF;
   *col |= (unsigned)(abs(red) % 256) << 24;
