@@ -2,6 +2,7 @@ module vgama
 
 import gg
 import time
+import term
 
 fn c_redimension_coord(x f64, y f64) (f32, f32) {
 	return f32((x + 1.0) * 0.5 * gapi_width__), f32((1.0 - y) * 0.5 * gapi_height__) // Y is inverted

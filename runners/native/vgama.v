@@ -82,7 +82,7 @@ fn gapi_init(width int, height int, title &char) i32 {
 	gapi_c_can_draw__ = &sync.Mutex{}
 	gapi_c_can_draw__.lock()
 
-	gapi_queue = chan GapiTask{}
+	gapi_queue__ = chan GapiTask{}
 
 	// Spawn the graphics thread.
 	spawn run_gg_loop()
