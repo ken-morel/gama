@@ -1,4 +1,4 @@
-module main
+module vgama
 
 import gg
 import time
@@ -36,6 +36,7 @@ fn frame(mut _ gg.Context) {
 	gapi_ctx__.end()
 }
 
+
 fn run_gg_loop() {
 	gapi_ctx__ = gg.new_context(
 		width:        gapi_width__
@@ -48,6 +49,8 @@ fn run_gg_loop() {
 			gapi_height__ = e.window_height
 			gapi_side__ = if gapi_width__ < gapi_height__ { gapi_width__ } else { gapi_height__ }
 		}
+			keydown_fn: fn(){}
+			keyup_fn() {}
 	)
 
 	gapi_ctx__.run()

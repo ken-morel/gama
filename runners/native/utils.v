@@ -1,4 +1,4 @@
-module main
+module vgama
 
 import gg
 
