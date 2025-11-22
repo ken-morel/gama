@@ -8,9 +8,10 @@
 #include "gapi.h"
 #include <stdio.h>
 #include "color.h"
-#include "shape.h"
 #include "image.h"
 #include "key.h"
+#include "physics.h" // Include physics.h for gama_body and physics functions
+#include "draw.h"    // Include draw.h for drawing functions
 
 void gama_init(int width, int height, const char *title) {
   int code = gapi_init(width, height, title);
@@ -24,7 +25,6 @@ void gama_init(int width, int height, const char *title) {
   }
 }
 int gama_runs() { return gapi_runs(); }
-int gama_yield(double *theta) { return gapi_yield(theta); }
+int gama_yield(double *dt) { return gapi_yield(dt); } // Corrected parameter name
 
 void gama_quit() { gapi_quit(); }
-
