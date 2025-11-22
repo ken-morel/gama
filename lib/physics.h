@@ -1,10 +1,10 @@
 #pragma once
 
 #include "body.h"
+#include "gapi.h"
 #include "position.h"
 #include <math.h>
 #include <stdio.h>
-#include "gapi.h"
 
 // --- Forward declarations for collision functions ---
 int gama_collision_detect(gama_body *a, gama_body *b);
@@ -177,7 +177,7 @@ void gama_collision_resolve(gama_body *a, gama_body *b) {
 
   // Positional correction to prevent sinking
   const double percent = 0.2; // How much to correct by
-  const double slop = 0.0001;   // How much overlap to allow
+  const double slop = 0.0001; // How much overlap to allow
   double penetration_depth = 0;
 
   if (a->collider_type == GAMA_COLLIDER_RECT &&
@@ -225,20 +225,19 @@ void gama_physics_update2(gama_body *b1, gama_body *b2) {
   gama_physics_update_ptr(bodies, 2);
 }
 
-void gama_physics_update3(double dt, gama_body *b1, gama_body *b2,
-                          gama_body *b3) {
+void gama_physics_update3(gama_body *b1, gama_body *b2, gama_body *b3) {
   gama_body *bodies[] = {b1, b2, b3};
   gama_physics_update_ptr(bodies, 3);
 }
 
-void gama_physics_update4(double dt, gama_body *b1, gama_body *b2,
-                          gama_body *b3, gama_body *b4) {
+void gama_physics_update4(gama_body *b1, gama_body *b2, gama_body *b3,
+                          gama_body *b4) {
   gama_body *bodies[] = {b1, b2, b3, b4};
   gama_physics_update_ptr(bodies, 4);
 }
 
-void gama_physics_update5(double dt, gama_body *b1, gama_body *b2,
-                          gama_body *b3, gama_body *b4, gama_body *b5) {
+void gama_physics_update5(gama_body *b1, gama_body *b2, gama_body *b3,
+                          gama_body *b4, gama_body *b5) {
   gama_body *bodies[] = {b1, b2, b3, b4, b5};
   gama_physics_update_ptr(bodies, 5);
 }

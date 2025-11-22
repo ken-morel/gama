@@ -1,6 +1,7 @@
 #pragma once
 
 #include "body.h"
+#include "gapi.h"
 #include "position.h"
 #include <math.h>
 #include <stdio.h>
@@ -14,28 +15,28 @@ void gama_collision_resolve(gama_body *a, gama_body *b);
 // ---------------------------------------------------------------------------
 
 // Updates a single body's position based on its velocity and acceleration
-void gama_body_update(gama_body *body, double dt) {
+void gama_body_update(gama_body *body) {
   if (body == NULL || !body->is_active || body->mass == 0) {
     return; // Don't update inactive or static bodies
   }
 
   // Apply acceleration to velocity
-  body->velocity.x += body->acceleration.x * dt;
-  body->velocity.y += body->acceleration.y * dt;
+  body->velocity.x += body->acceleration.x * gama_dt;
+  body->velocity.y += body->acceleration.y * gama_dt;
 
   // Apply velocity to position
-  body->position.x += body->velocity.x * dt;
-  body->position.y += body->velocity.y * dt;
+  body->position.x += body->velocity.x * gama_dt;
+  body->position.y += body->velocity.y * gama_dt;
 }
 
 // The main physics system function
 
 // --- Convenience wrappers for small numbers of bodies --- │
 
-void gama_physics_update_ptr(gama_body **bodies, int count, double dt) {
+void gama_physics_update_ptr(gama_body **bodies, int count) {
   // 1. Update all positions
   for (int i = 0; i < count; i++) {
-    gama_body_update(bodies[i], dt);
+    gama_body_update(bodies[i]);
   }
 
   // 2. Check for and resolve collisions (simple N-body check)
@@ -176,7 +177,7 @@ void gama_collision_resolve(gama_body *a, gama_body *b) {
 
   // Positional correction to prevent sinking
   const double percent = 0.2; // How much to correct by
-  const double slop = 0.0001;   // How much overlap to allow
+  const double slop = 0.0001; // How much overlap to allow
   double penetration_depth = 0;
 
   if (a->collider_type == GAMA_COLLIDER_RECT &&
@@ -212,32 +213,31 @@ void gama_collision_resolve(gama_body *a, gama_body *b) {
   }
 }
 
-void gama_physics_update(gama_body *bodies, int count, double dt) {
+void gama_physics_update(gama_body *bodies, int count) {
   gama_body **list = malloc(count * sizeof(gama_body *));
   for (size_t i = 0; i < count; i++)
     list[i] = &bodies[i];
-  gama_physics_update_ptr(list, count, dt);
+  gama_physics_update_ptr(list, count);
 }
 
-void gama_physics_update2(double dt, gama_body *b1, gama_body *b2) {
+void gama_physics_update2(gama_body *b1, gama_body *b2) {
   gama_body *bodies[] = {b1, b2};
-  gama_physics_update_ptr(bodies, 2, dt);
+  gama_physics_update_ptr(bodies, 2);
 }
 
-void gama_physics_update3(double dt, gama_body *b1, gama_body *b2,
-                          gama_body *b3) {
+void gama_physics_update3(gama_body *b1, gama_body *b2, gama_body *b3) {
   gama_body *bodies[] = {b1, b2, b3};
-  gama_physics_update_ptr(bodies, 3, dt);
+  gama_physics_update_ptr(bodies, 3);
 }
 
-void gama_physics_update4(double dt, gama_body *b1, gama_body *b2,
-                          gama_body *b3, gama_body *b4) {
+void gama_physics_update4(gama_body *b1, gama_body *b2, gama_body *b3,
+                          gama_body *b4) {
   gama_body *bodies[] = {b1, b2, b3, b4};
-  gama_physics_update_ptr(bodies, 4, dt);
+  gama_physics_update_ptr(bodies, 4);
 }
 
-void gama_physics_update5(double dt, gama_body *b1, gama_body *b2,
-                          gama_body *b3, gama_body *b4, gama_body *b5) {
+void gama_physics_update5(gama_body *b1, gama_body *b2, gama_body *b3,
+                          gama_body *b4, gama_body *b5) {
   gama_body *bodies[] = {b1, b2, b3, b4, b5};
-  gama_physics_update_ptr(bodies, 5, dt);
+  gama_physics_update_ptr(bodies, 5);
 }
