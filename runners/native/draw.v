@@ -87,7 +87,7 @@ const text_style_italic__ = u8(1 << 2)
 @[export: 'gapi_draw_text']
 @[unsafe]
 fn gapi_draw_text(x f64, y f64, maxwidth f64, height f64, txt &char, font &char, style u8, align char, cr u8, cg u8, cb u8, ca u8) i32 {
-	gx, gy, _, gh := c_redimension_rect(x, y, maxwidth, height)
+	gx, gy, _, gh := c_redimension_rect(x, y, 0, height)
 	gw := c_redimension_one(maxwidth)
 	vtext := txt.vstring()
 	vfont := font.vstring()
@@ -103,7 +103,7 @@ fn gapi_draw_text(x f64, y f64, maxwidth f64, height f64, txt &char, font &char,
 			y:         i32(gy)
 			text:      vtext
 			color:     c
-			size:      i32(gh)
+			size:      gh
 			align:     if align == `l` {
 				.left
 			} else if align == `c` {
@@ -111,7 +111,7 @@ fn gapi_draw_text(x f64, y f64, maxwidth f64, height f64, txt &char, font &char,
 			} else {
 				.right
 			}
-			max_width: i32(gw)
+			max_width: gapi_width__
 			family:    vfont
 			bold:      bold
 			mono:      mono

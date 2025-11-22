@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
 
+double gama_dt = 0;
+
 // --- Windowing ---
 extern void gapi_set_title(const char *title);
 extern void gapi_resize(int32_t width, int32_t height);

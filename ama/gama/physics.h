@@ -176,7 +176,7 @@ void gama_collision_resolve(gama_body *a, gama_body *b) {
 
   // Positional correction to prevent sinking
   const double percent = 0.2; // How much to correct by
-  const double slop = 0.001;   // How much overlap to allow
+  const double slop = 0.0001;   // How much overlap to allow
   double penetration_depth = 0;
 
   if (a->collider_type == GAMA_COLLIDER_RECT &&
