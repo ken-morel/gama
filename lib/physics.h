@@ -53,7 +53,7 @@ void gama_physics_update(gama_body bodies[], int count, double dt) {
 // ---------------------------------------------------------------------------
 
 // Helper for AABB (Axis-Aligned Bounding Box) collision
-int aabb_vs_aabb(gama_body *a, gama_body *b) {
+static inline int gama_aabb_vs_aabb(gama_body *a, gama_body *b) {
     double a_left = a->position.x - a->width / 2;
     double a_right = a->position.x + a->width / 2;
     double a_top = a->position.y + a->height / 2;
@@ -72,7 +72,7 @@ int aabb_vs_aabb(gama_body *a, gama_body *b) {
 }
 
 // Helper for Circle vs Circle collision
-int circle_vs_circle(gama_body *a, gama_body *b) {
+static inline int gama_circle_vs_circle(gama_body *a, gama_body *b) {
     double dx = b->position.x - a->position.x;
     double dy = b->position.y - a->position.y;
     double distance_sq = dx * dx + dy * dy;
@@ -81,7 +81,7 @@ int circle_vs_circle(gama_body *a, gama_body *b) {
 }
 
 // Helper for Circle vs AABB collision
-int circle_vs_aabb(gama_body *circle, gama_body *rect) {
+static inline int gama_circle_vs_aabb(gama_body *circle, gama_body *rect) {
     double closest_x = fmax(rect->position.x - rect->width / 2, fmin(circle->position.x, rect->position.x + rect->width / 2));
     double closest_y = fmax(rect->position.y - rect->height / 2, fmin(circle->position.y, rect->position.y + rect->height / 2));
 
@@ -95,16 +95,16 @@ int circle_vs_aabb(gama_body *circle, gama_body *rect) {
 // Main collision detection dispatcher
 int gama_collision_detect(gama_body *a, gama_body *b) {
     if (a->collider_type == GAMA_COLLIDER_RECT && b->collider_type == GAMA_COLLIDER_RECT) {
-        return aabb_vs_aabb(a, b);
+        return gama_aabb_vs_aabb(a, b);
     }
     if (a->collider_type == GAMA_COLLIDER_CIRCLE && b->collider_type == GAMA_COLLIDER_CIRCLE) {
-        return circle_vs_circle(a, b);
+        return gama_circle_vs_circle(a, b);
     }
     if (a->collider_type == GAMA_COLLIDER_CIRCLE && b->collider_type == GAMA_COLLIDER_RECT) {
-        return circle_vs_aabb(a, b);
+        return gama_circle_vs_aabb(a, b);
     }
     if (a->collider_type == GAMA_COLLIDER_RECT && b->collider_type == GAMA_COLLIDER_CIRCLE) {
-        return circle_vs_aabb(b, a);
+        return gama_circle_vs_aabb(b, a);
     }
     return 0; // No collision for other combinations
 }
@@ -138,8 +138,8 @@ void gama_collision_resolve(gama_body *a, gama_body *b) {
 
     // Use the minimum bounciness and friction
     double e = fmin(a->restitution, b->restitution); 
-    double sf = fmin(a->friction, b->friction);
-    double df = fmin(a->friction, b->friction);
+    double sf = fmin(a->friction, b->friction); // Static friction factor (not yet used)
+    double df = fmin(a->friction, b->friction); // Dynamic friction factor (not yet used)
 
 
     double j = -(1 + e) * vel_along_normal;
@@ -164,13 +164,16 @@ void gama_collision_resolve(gama_body *a, gama_body *b) {
     // Positional correction to prevent sinking
     const double percent = 0.4; // How much to correct by
     const double slop = 0.01;   // How much overlap to allow
-    double penetration_depth;
+    double penetration_depth = 0;
 
     if (a->collider_type == GAMA_COLLIDER_RECT && b->collider_type == GAMA_COLLIDER_RECT) {
-        penetration_depth = (a->width/2 + b->width/2) - fabs(dx);
+        // Simplified for AABB, needs more accurate calculation for exact depth
+        double overlap_x = (a->width/2 + b->width/2) - fabs(dx);
+        double overlap_y = (a->height/2 + b->height/2) - fabs(dy);
+        penetration_depth = fmin(overlap_x, overlap_y);
     } else if (a->collider_type == GAMA_COLLIDER_CIRCLE && b->collider_type == GAMA_COLLIDER_CIRCLE) {
         penetration_depth = (a->radius + b->radius) - distance;
-    } else { // Simplified for circle-rect
+    } else { // Simplified for circle-rect, needs more accurate for exact depth
         penetration_depth = (a->collider_type == GAMA_COLLIDER_CIRCLE ? a->radius : a->width/2) + 
                             (b->collider_type == GAMA_COLLIDER_CIRCLE ? b->radius : b->width/2) - distance;
     }
