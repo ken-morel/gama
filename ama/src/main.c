@@ -1,18 +1,19 @@
 #include "draw.h"
-#include <stdio.h>
 #include <gama.h>
+#include <stdio.h>
 
 int main() {
-  gapi_init(800, 600, "Gama Window");
-  struct gama_rectangle r = gama_rectangle_create(0, 0, 1, 1, BLUE);
-  r.velocity.y = 0.002;
+  gama_init(800, 600, "Gama Window");
+  double x = 0;
+  double dt = 0;
 
-  for (double dt = 0.0; gapi_yield(&dt);) {
-    printf("C draws\n");
-    gama_rectangle_render(&r, dt);
-   gama_draw_rounded_rectangle(0, 0, 1, 1, 0.02, GREEN);
-    printf("c finished\n");
+  while (gama_yield(&dt)) {
+    gama_draw_rounded_rectangle(x, 0, 1, 1, 0.02, GREEN);
+    if (gama_key_shortcut_pressed('L')) {
+      x -= 0.1 * dt;
+    } else if (gama_key_shortcut_pressed('R')) {
+      x += 0.1 * dt;
+    }
   }
-  printf("Bye\n");
   return 0;
 }

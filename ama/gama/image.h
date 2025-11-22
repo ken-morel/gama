@@ -1,3 +1,5 @@
+#pragma once
+
 #include "gapi.h"
 #include "position.h"
 #include <stdint.h>

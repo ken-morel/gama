@@ -41,11 +41,9 @@ fn frame(mut _ gg.Context) {
 	// 2. Wait here until the C thread says it's done drawing for this frame.
 	gapi_v_can_present__.lock()
 
-	println('Calling draw functions ${gapi_queue__.len}')
 	for func in gapi_queue__ {
 		func()
 	}
-	println('called draw functions')
 	gapi_queue__ = []
 	gapi_pressed_keys__ = []
 	gapi_ctx__.end()
