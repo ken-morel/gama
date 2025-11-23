@@ -139,10 +139,10 @@ int gama_body_contains(gama_body *body, double x, double y) {
 }
 
 static inline int gama_hovered(gama_body *body) {
-  printf("Tesging if (%lf, %lf) is hovered", gama_mouse.x, gama_mouse.y);
   return gama_body_contains(body, gama_mouse.x, gama_mouse.y);
 }
 static inline int gama_clicked(gama_body *body) {
+  printf("%d  %d\n", gama_mouse.pressed, gama_mouse.down);
   return gama_mouse.pressed && gama_hovered(body);
 }
 

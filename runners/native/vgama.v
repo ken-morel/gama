@@ -63,8 +63,6 @@ fn frame(mut _ gg.Context) {
 			}
 		}
 	}
-	gapi_pressed_keys__ = []
-	gapi_mouse_pressed__ = false
 	gapi_ctx__.end()
 }
 
@@ -81,6 +79,19 @@ fn gapi_wait_queue() {
 fn gapi_yield(dt &f64) i32 {
 	gapi_wait_queue() // wait it processes other events before sending stop
 	gapi_end_frame__ <- true or { return 0 } // close the current frame
+
+	mut static notified_mouse := false
+	if !gapi_mouse_down__ {
+		notified_mouse = false
+	} else if !notified_keys {
+		gapi_mouse_pressed__ = true
+		notified_mouse = true
+	} else {
+		gapi_mouse_pressed__ = false
+	}
+
+	gapi_pressed_keys__ = []
+
 	// for the frame to request for closing
 	//
 	// subsequent pushes to the queue will block
@@ -133,7 +144,6 @@ fn run_gg_loop() {
 			gapi_mouse_x__ = i32(x)
 			gapi_mouse_y__ = i32(y)
 			gapi_mouse_down__ = true
-			gapi_mouse_pressed__ = true
 		}
 		unclick_fn:   fn (x f32, y f32, _ gg.MouseButton, _ voidptr) {
 			gapi_mouse_x__ = i32(x)
