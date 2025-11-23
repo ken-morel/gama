@@ -89,18 +89,39 @@ static inline int gama_circle_vs_circle(gama_body *a, gama_body *b) {
 }
 
 // Helper for Circle vs AABB collision
-static inline int gama_circle_vs_aabb(gama_body *circle, gama_body *rect) {
-  double closest_x =
-      fmax(rect->position.x - rect->width / 2,
-           fmin(circle->position.x, rect->position.x + rect->width / 2));
-  double closest_y =
-      fmax(rect->position.y - rect->height / 2,
-           fmin(circle->position.y, rect->position.y + rect->height / 2));
+// static inline int gama_circle_vs_aabb(gama_body *circle, gama_body *rect) {
+//   double closest_x =
+//       fmax(rect->position.x - rect->width / 2,
+//            fmin(circle->position.x, rect->position.x + rect->width / 2));
+//   double closest_y =
+//       fmax(rect->position.y - rect->height / 2,
+//            fmin(circle->position.y, rect->position.y + rect->height / 2));
 
+//   double dx = circle->position.x - closest_x;
+//   double dy = circle->position.y - closest_y;
+
+//   return (dx * dx + dy * dy) < (circle->radius * circle->radius);
+// }
+
+// Accurate Circle vs Axis-Aligned Bounding Box collision
+static inline int gama_circle_vs_aabb(const gama_body *circle,
+                                      const gama_body *rect) {
+  double half_w = rect->width * 0.5;
+  double half_h = rect->height * 0.5;
+
+  // Clamp circle center to rectangle bounds
+  double closest_x = fmax(rect->position.x - half_w,
+                          fmin(circle->position.x, rect->position.x + half_w));
+
+  double closest_y = fmax(rect->position.y - half_h,
+                          fmin(circle->position.y, rect->position.y + half_h));
+
+  // Vector from closest point to circle center
   double dx = circle->position.x - closest_x;
   double dy = circle->position.y - closest_y;
 
-  return (dx * dx + dy * dy) < (circle->radius * circle->radius);
+  // Check collision (<= catches "touching" cases)
+  return (dx * dx + dy * dy) <= (circle->radius * circle->radius);
 }
 
 // Main collision detection dispatcher
@@ -191,45 +212,60 @@ void gama_collision_resolve(gama_body *a, gama_body *b) {
     gama_body *circle = (a->collider_type == GAMA_COLLIDER_CIRCLE) ? a : b;
     gama_body *rect = (a->collider_type == GAMA_COLLIDER_RECT) ? a : b;
 
+    double half_w = rect->width * 0.5;
+    double half_h = rect->height * 0.5;
+
     double closest_x =
-        fmax(rect->position.x - rect->width / 2,
-             fmin(circle->position.x, rect->position.x + rect->width / 2));
+        fmax(rect->position.x - half_w,
+             fmin(circle->position.x, rect->position.x + half_w));
+
     double closest_y =
-        fmax(rect->position.y - rect->height / 2,
-             fmin(circle->position.y, rect->position.y + rect->height / 2));
+        fmax(rect->position.y - half_h,
+             fmin(circle->position.y, rect->position.y + half_h));
 
     double dx = circle->position.x - closest_x;
     double dy = circle->position.y - closest_y;
+
     double distance_sq = dx * dx + dy * dy;
 
-    if (distance_sq < (circle->radius * circle->radius)) {
+    if (distance_sq < circle->radius * circle->radius) {
+
       double distance = sqrt(distance_sq);
-      penetration_depth = circle->radius - distance;
-      if (distance > 0) {
+
+      if (distance > 0.0) {
+        // Normal from closest point to circle center
         normal_x = dx / distance;
         normal_y = dy / distance;
-      } else { // Circle center is inside rect
-        // Find axis of least penetration to push out
-        double overlap_x = (rect->width / 2 + circle->radius) -
-                           fabs(b->position.x - a->position.x);
-        double overlap_y = (rect->height / 2 + circle->radius) -
-                           fabs(b->position.y - a->position.y);
-        if (overlap_x < overlap_y) {
-          normal_x = (b->position.x - a->position.x < 0) ? -1 : 1;
+        penetration_depth = circle->radius - distance;
+      } else {
+        // Circle center INSIDE rectangle – find nearest face
+        double left_pen = (circle->position.x - (rect->position.x - half_w));
+        double right_pen = ((rect->position.x + half_w) - circle->position.x);
+        double bottom_pen = (circle->position.y - (rect->position.y - half_h));
+        double top_pen = ((rect->position.y + half_h) - circle->position.y);
+
+        double pen_x = fmin(left_pen, right_pen);
+        double pen_y = fmin(bottom_pen, top_pen);
+
+        if (pen_x < pen_y) {
+          penetration_depth = pen_x;
+          normal_x = (left_pen < right_pen) ? -1 : 1;
           normal_y = 0;
         } else {
+          penetration_depth = pen_y;
           normal_x = 0;
-          normal_y = (b->position.y - a->position.y < 0) ? -1 : 1;
+          normal_y = (bottom_pen < top_pen) ? -1 : 1;
         }
       }
-      if (a != circle) { // Ensure normal always points from A to B
+
+      // Make sure normal points from A → B
+      if (a != circle) {
         normal_x = -normal_x;
         normal_y = -normal_y;
       }
     }
   }
-
-  if (penetration_depth <= 0) {
+   if (penetration_depth <= 0) {
     return; // No collision to resolve
   }
 
