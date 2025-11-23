@@ -83,7 +83,7 @@ fn gapi_yield(dt &f64) i32 {
 	mut static notified_mouse := false
 	if !gapi_mouse_down__ {
 		notified_mouse = false
-	} else if !notified_keys {
+	} else if !notified_mouse {
 		gapi_mouse_pressed__ = true
 		notified_mouse = true
 	} else {

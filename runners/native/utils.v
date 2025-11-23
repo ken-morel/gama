@@ -28,18 +28,12 @@ fn v_redimension_one(v f32) f64 {
 }
 
 fn c_redimension_rect(x f64, y f64, w f64, h f64) (f32, f32, f32, f32) {
-	// Calculate top-left corner in normalized coordinates first
-	tl_x := x - (w / 2.0)
-	tl_y := y + (h / 2.0)
+	gx, gy := c_redimension_coord(x, y)
 
-	// Convert top-left position to screen coordinates using the corrected function
-	gx, gy := c_redimension_coord(tl_x, tl_y)
+	gw := f32(w * 0.5 * gapi_game_w__)
+	gh := f32(h * 0.5 * gapi_game_h__)
 
-	// Scale width and height directly using the virtual game area's dimensions
-	gw := f32(w * gapi_game_w__)
-	gh := f32(h * gapi_game_h__)
-
-	return gx, gy, gw, gh
+	return gx - gw / 2, gy - gh / 2, gw, gh
 }
 
 fn c_color(r u8, g u8, b u8, a u8) gg.Color {

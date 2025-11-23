@@ -3,7 +3,7 @@
 #include <gama.h>
 
 int main() {
-  gama_init(800, 600, "Bouncing Ball Demo");
+  gama_init(600, 600, "Select File Ball Demo");
 
   gama_color ball_color;
   gama_body ball = gama_circle_create(0, 0.5, 0.2);
@@ -22,7 +22,7 @@ int main() {
   third_floor.mass = 0;
 
   while (gama_yield()) {
-    gama_physics_update4( &ball, &floor, &second_floor, &third_floor);
+    gama_physics_update4(&ball, &floor, &second_floor, &third_floor);
 
     gama_draw_rect_body(&floor, DARKGREEN);
     gama_draw_rect_body(&second_floor, BLUE);
