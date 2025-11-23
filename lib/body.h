@@ -25,6 +25,9 @@ typedef struct {
   double friction;
 } gama_body;
 
+
+
+
 void gama_body_reset(gama_body *b) {
   b->is_active = 1;
   b->mass = 0;
