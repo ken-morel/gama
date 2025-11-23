@@ -63,7 +63,7 @@ int32_t gama_draw_text(double x, double y, const char *text, double font_size,
   // Assuming a default font 'm' for monospace for now.
   // Style and align are defaulted for simplicity.
   return gapi_draw_text(
-      x, y, 1.0, font_size, text, gama_text_font, 0,
+      x, y, font_size, text, gama_text_font, 0,
       gama_text_align, // maxwidth and height params are weird in gapi, let's
                        // keep it simple for now
       gama_color_red(c), gama_color_green(c), gama_color_blue(c),

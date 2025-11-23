@@ -51,7 +51,7 @@ gama_body gama_body_create(double x, double y, double w, double h,
       .height = h,
       .radius = w < h ? w : h,
       .mass = 1,
-      .restitution = 0,
+      .restitution = 1,
   };
   return body;
 }

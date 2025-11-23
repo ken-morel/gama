@@ -86,9 +86,8 @@ const text_style_italic__ = u8(1 << 2)
 
 @[export: 'gapi_draw_text']
 @[unsafe]
-fn gapi_draw_text(x f64, y f64, maxwidth f64, height f64, txt &char, font &char, style u8, align char, cr u8, cg u8, cb u8, ca u8) i32 {
+fn gapi_draw_text(x f64, y f64, height f64, txt &char, font &char, style u8, align char, cr u8, cg u8, cb u8, ca u8) i32 {
 	gx, gy, _, gh := c_redimension_rect(x, y, 0, height)
-	gw := c_redimension_one(maxwidth)
 	vtext := txt.vstring()
 	vfont := font.vstring()
 	italic := (style & text_style_italic__) > 0
@@ -97,13 +96,13 @@ fn gapi_draw_text(x f64, y f64, maxwidth f64, height f64, txt &char, font &char,
 
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx, gy, gw, gh, vtext, vfont, italic, bold, mono, c, align] () {
+	gapi_queue__ <- fn [gx, gy, gh, vtext, vfont, italic, bold, mono, c, align] () {
 		gapi_ctx__.draw_text2(gg.DrawTextParams{
 			x:         i32(gx)
 			y:         i32(gy)
 			text:      vtext
 			color:     c
-			size:      gh
+			size:      i32(gh)
 			align:     if align == `l` {
 				.left
 			} else if align == `c` {

@@ -32,7 +32,7 @@ extern int32_t gapi_draw_image(uint32_t handle, double x, double y, double width
 extern int32_t gapi_draw_image_part(uint32_t handle, uint32_t slice_x, uint32_t slice_y, uint32_t slice_width, uint32_t slice_height, double x, double y, double width, double height);
 
 // --- Text Functions ---
-extern int32_t gapi_draw_text(double x, double y, double maxwidth, double height, const char *txt,const char* font, uint8_t style, char align, uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca);
+extern int32_t gapi_draw_text(double x, double y, double height, const char *txt,const char* font, uint8_t style, char align, uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca);
 
 // --- Event Functions ---
 extern int32_t gapi_key_pressed(char t, char k);
