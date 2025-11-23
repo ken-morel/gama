@@ -15,27 +15,31 @@ void gama_collision_resolve(gama_body *a, gama_body *b);
 // ---------------------------------------------------------------------------
 
 // Updates a single body's position based on its velocity and acceleration for a given time step
-void gama_body_update(gama_body *body, double dt) {
+void gama_body_update_dt(gama_body *body, double dt) {
   if (body == NULL || !body->is_active || body->mass == 0) {
     return; // Don't update inactive or static bodies
   }
   // Apply acceleration to velocity
-  body->velocity.x += body->acceleration.x * dt;
-  body->velocity.y += body->acceleration.y * dt;
+  body->velocity.x += body->acceleration.x * gama_dt;
+  body->velocity.y += body->acceleration.y * gama_dt;
   // Apply velocity to position
-  body->position.x += body->velocity.x * dt;
-  body->position.y += body->velocity.y * dt;
+  body->position.x += body->velocity.x * gama_dt;
+  body->position.y += body->velocity.y * gama_dt;
 }
 
+void gama_body_update(gama_body *body) {
+    return gama_body_update_dt(body, gama_dt);
+
+}
 // The main physics system function, now with sub-stepping
-void gama_physics_update_ptr(gama_body **bodies, int count, double dt) {
+void gama_physics_update_ptr(gama_body **bodies, int count) {
   const int substeps = 5; // Number of sub-steps to perform
-  const double sub_dt = dt / substeps;
+  const double sub_dt = gama_dt / substeps;
 
   for (int i = 0; i < substeps; i++) {
     // 1. Update all positions by a small amount
     for (int j = 0; j < count; j++) {
-      gama_body_update(bodies[j], sub_dt);
+      gama_body_update_dt(bodies[j], sub_dt);
     }
 
     // 2. Check for and resolve all collisions

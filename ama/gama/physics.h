@@ -14,39 +14,43 @@ void gama_collision_resolve(gama_body *a, gama_body *b);
 // ------------------------------ Core Physics Update ------------------------
 // ---------------------------------------------------------------------------
 
-// Updates a single body's position based on its velocity and acceleration
-void gama_body_update(gama_body *body) {
+// Updates a single body's position based on its velocity and acceleration for a given time step
+void gama_body_update_dt(gama_body *body, double dt) {
   if (body == NULL || !body->is_active || body->mass == 0) {
     return; // Don't update inactive or static bodies
   }
-
   // Apply acceleration to velocity
   body->velocity.x += body->acceleration.x * gama_dt;
   body->velocity.y += body->acceleration.y * gama_dt;
-
   // Apply velocity to position
   body->position.x += body->velocity.x * gama_dt;
   body->position.y += body->velocity.y * gama_dt;
 }
 
-// The main physics system function
+void gama_body_update(gama_body *body) {
+    return gama_body_update_dt(body, gama_dt);
 
-// --- Convenience wrappers for small numbers of bodies --- │
-
+}
+// The main physics system function, now with sub-stepping
 void gama_physics_update_ptr(gama_body **bodies, int count) {
-  // 1. Update all positions
-  for (int i = 0; i < count; i++) {
-    gama_body_update(bodies[i]);
-  }
+  const int substeps = 5; // Number of sub-steps to perform
+  const double sub_dt = gama_dt / substeps;
 
-  // 2. Check for and resolve collisions (simple N-body check)
-  for (int i = 0; i < count; ++i) {
-    for (int j = i + 1; j < count; ++j) {
-      if (!bodies[i]->is_active || !bodies[j]->is_active) {
-        continue;
-      }
-      if (gama_collision_detect(bodies[i], bodies[j])) {
-        gama_collision_resolve(bodies[i], bodies[j]);
+  for (int i = 0; i < substeps; i++) {
+    // 1. Update all positions by a small amount
+    for (int j = 0; j < count; j++) {
+      gama_body_update_dt(bodies[j], sub_dt);
+    }
+
+    // 2. Check for and resolve all collisions
+    for (int j = 0; j < count; ++j) {
+      for (int k = j + 1; k < count; ++k) {
+        if (!bodies[j]->is_active || !bodies[k]->is_active) {
+          continue;
+        }
+        if (gama_collision_detect(bodies[j], bodies[k])) {
+          gama_collision_resolve(bodies[j], bodies[k]);
+        }
       }
     }
   }
@@ -125,92 +129,123 @@ int gama_collision_detect(gama_body *a, gama_body *b) {
 // ---------------------------------------------------------------------------
 
 void gama_collision_resolve(gama_body *a, gama_body *b) {
-  double dx = b->position.x - a->position.x;
-  double dy = b->position.y - a->position.y;
-  double distance = sqrt(dx * dx + dy * dy);
-  if (distance == 0) { // Avoid division by zero; default to an upward normal
-    dx = 0;
-    dy = 1;
-    distance = 1;
-  }
+    double normal_x = 0, normal_y = 0, penetration_depth = 0;
 
-  double normal_x = dx / distance;
-  double normal_y = dy / distance;
+    // --- 1. Calculate Penetration and Collision Normal ---
+    if (a->collider_type == GAMA_COLLIDER_CIRCLE && b->collider_type == GAMA_COLLIDER_CIRCLE) {
+        double dx = b->position.x - a->position.x;
+        double dy = b->position.y - a->position.y;
+        double distance = sqrt(dx * dx + dy * dy);
+        if (distance == 0) {
+             distance = 0.001; dx = 0.001; // Avoid division by zero
+        }
+        penetration_depth = a->radius + b->radius - distance;
+        if (penetration_depth > 0) {
+            normal_x = dx / distance;
+            normal_y = dy / distance;
+        }
+    } else if (a->collider_type == GAMA_COLLIDER_RECT && b->collider_type == GAMA_COLLIDER_RECT) {
+        double dx = b->position.x - a->position.x;
+        double overlap_x = (a->width / 2 + b->width / 2) - fabs(dx);
+        if (overlap_x > 0) {
+            double dy = b->position.y - a->position.y;
+            double overlap_y = (a->height / 2 + b->height / 2) - fabs(dy);
+            if (overlap_y > 0) {
+                if (overlap_x < overlap_y) {
+                    penetration_depth = overlap_x;
+                    normal_x = (dx < 0) ? -1 : 1;
+                    normal_y = 0;
+                } else {
+                    penetration_depth = overlap_y;
+                    normal_x = 0;
+                    normal_y = (dy < 0) ? -1 : 1;
+                }
+            }
+        }
+    } else { // Circle vs Rectangle
+        gama_body *circle = (a->collider_type == GAMA_COLLIDER_CIRCLE) ? a : b;
+        gama_body *rect = (a->collider_type == GAMA_COLLIDER_RECT) ? a : b;
 
-  // Relative velocity
-  double rel_vx = b->velocity.x - a->velocity.x;
-  double rel_vy = b->velocity.y - a->velocity.y;
+        double closest_x = fmax(rect->position.x - rect->width / 2, fmin(circle->position.x, rect->position.x + rect->width / 2));
+        double closest_y = fmax(rect->position.y - rect->height / 2, fmin(circle->position.y, rect->position.y + rect->height / 2));
 
-  double vel_along_normal = rel_vx * normal_x + rel_vy * normal_y;
+        double dx = circle->position.x - closest_x;
+        double dy = circle->position.y - closest_y;
+        double distance_sq = dx * dx + dy * dy;
 
-  // Do not resolve if velocities are separating
-  if (vel_along_normal > 0) {
-    return;
-  }
+        if (distance_sq < (circle->radius * circle->radius)) {
+            double distance = sqrt(distance_sq);
+            penetration_depth = circle->radius - distance;
+            if (distance > 0) {
+                normal_x = dx / distance;
+                normal_y = dy / distance;
+            } else { // Circle center is inside rect
+                // Find axis of least penetration to push out
+                double overlap_x = (rect->width/2 + circle->radius) - fabs(b->position.x - a->position.x);
+                double overlap_y = (rect->height/2 + circle->radius) - fabs(b->position.y - a->position.y);
+                 if (overlap_x < overlap_y) {
+                    normal_x = (b->position.x - a->position.x < 0) ? -1 : 1;
+                    normal_y = 0;
+                } else {
+                    normal_x = 0;
+                    normal_y = (b->position.y - a->position.y < 0) ? -1 : 1;
+                }
+            }
+            if (a != circle) { // Ensure normal always points from A to B
+                normal_x = -normal_x;
+                normal_y = -normal_y;
+            }
+        }
+    }
 
-  // Use the minimum bounciness and friction
-  double e = fmin(a->restitution, b->restitution);
-  double sf =
-      fmin(a->friction, b->friction); // Static friction factor (not yet used)
-  double df =
-      fmin(a->friction, b->friction); // Dynamic friction factor (not yet used)
+    if (penetration_depth <= 0) {
+        return; // No collision to resolve
+    }
 
-  double j = -(1 + e) * vel_along_normal;
-  double inv_mass_a = (a->mass > 0) ? 1.0 / a->mass : 0;
-  double inv_mass_b = (b->mass > 0) ? 1.0 / b->mass : 0;
-  if (inv_mass_a + inv_mass_b == 0)
-    return; // Both are static
-  j /= (inv_mass_a + inv_mass_b);
+    // --- 2. Resolve Velocity ---
+    double rel_vx = b->velocity.x - a->velocity.x;
+    double rel_vy = b->velocity.y - a->velocity.y;
+    double vel_along_normal = rel_vx * normal_x + rel_vy * normal_y;
 
-  // Apply impulse
-  double impulse_x = j * normal_x;
-  double impulse_y = j * normal_y;
+    if (vel_along_normal > 0) {
+        return;
+    }
 
-  if (a->mass > 0) {
-    a->velocity.x -= inv_mass_a * impulse_x;
-    a->velocity.y -= inv_mass_a * impulse_y;
-  }
-  if (b->mass > 0) {
-    b->velocity.x += inv_mass_b * impulse_x;
-    b->velocity.y += inv_mass_b * impulse_y;
-  }
+    double e = fmin(a->restitution, b->restitution);
+    double j = -(1 + e) * vel_along_normal;
 
-  // Positional correction to prevent sinking
-  const double percent = 0.2; // How much to correct by
-  const double slop = 0.0001; // How much overlap to allow
-  double penetration_depth = 0;
+    double inv_mass_a = (a->mass > 0) ? 1.0 / a->mass : 0;
+    double inv_mass_b = (b->mass > 0) ? 1.0 / b->mass : 0;
+    if (inv_mass_a + inv_mass_b == 0) return;
+    j /= (inv_mass_a + inv_mass_b);
 
-  if (a->collider_type == GAMA_COLLIDER_RECT &&
-      b->collider_type == GAMA_COLLIDER_RECT) {
-    // Simplified for AABB, needs more accurate calculation for exact depth
-    double overlap_x = (a->width / 2 + b->width / 2) - fabs(dx);
-    double overlap_y = (a->height / 2 + b->height / 2) - fabs(dy);
-    penetration_depth = fmin(overlap_x, overlap_y);
-  } else if (a->collider_type == GAMA_COLLIDER_CIRCLE &&
-             b->collider_type == GAMA_COLLIDER_CIRCLE) {
-    penetration_depth = (a->radius + b->radius) - distance;
-  } else { // Simplified for circle-rect, needs more accurate for exact depth
-    penetration_depth =
-        (a->collider_type == GAMA_COLLIDER_CIRCLE ? a->radius : a->width / 2) +
-        (b->collider_type == GAMA_COLLIDER_CIRCLE ? b->radius : b->width / 2) -
-        distance;
-  }
+    double impulse_x = j * normal_x;
+    double impulse_y = j * normal_y;
 
-  if (penetration_depth > slop) {
-    double correction_amount =
-        (penetration_depth - slop) / (inv_mass_a + inv_mass_b) * percent;
+    if (a->mass > 0) {
+        a->velocity.x -= inv_mass_a * impulse_x;
+        a->velocity.y -= inv_mass_a * impulse_y;
+    }
+    if (b->mass > 0) {
+        b->velocity.x += inv_mass_b * impulse_x;
+        b->velocity.y += inv_mass_b * impulse_y;
+    }
+
+    // --- 3. Positional Correction ---
+    const double percent = 0.4;
+    const double slop = 0.01;
+    double correction_amount = fmax(penetration_depth - slop, 0.0) / (inv_mass_a + inv_mass_b) * percent;
     double correction_x = correction_amount * normal_x;
     double correction_y = correction_amount * normal_y;
 
     if (a->mass > 0) {
-      a->position.x -= inv_mass_a * correction_x;
-      a->position.y -= inv_mass_a * correction_y;
+        a->position.x -= inv_mass_a * correction_x;
+        a->position.y -= inv_mass_a * correction_y;
     }
     if (b->mass > 0) {
-      b->position.x += inv_mass_b * correction_x;
-      b->position.y += inv_mass_b * correction_y;
+        b->position.x += inv_mass_b * correction_x;
+        b->position.y += inv_mass_b * correction_y;
     }
-  }
 }
 
 void gama_physics_update(gama_body *bodies, int count) {
