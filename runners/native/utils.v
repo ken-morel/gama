@@ -4,31 +4,29 @@ import gg
 import time
 import term
 
-// Correctly converts a normalized coordinate (-1.0 to 1.0) to a screen pixel coordinate,
-// taking the centered "virtual square" game area into account.
 fn c_redimension_coord(x f64, y f64) (f32, f32) {
-	// Map -1 to 1 range to the 0 to 1 range
 	norm_x := (x + 1.0) * 0.5
 	norm_y := (1.0 - y) * 0.5 // Invert Y-axis for screen coordinates
 
-	// Scale to the virtual game area and add the offset to center it
-	screen_x := f32(norm_x * gapi_game_w__ + gapi_offset_x__)
-	screen_y := f32(norm_y * gapi_game_h__ + gapi_offset_y__)
-	
-	return screen_x, screen_y
+	return f32(norm_x * gapi_game_w__ + gapi_offset_x__), f32(norm_y * gapi_game_h__ +
+		gapi_offset_y__)
 }
 
-// Scales a single normalized scalar value (like a radius or thickness) to the virtual game area.
-// It maps the normalized value (which is typically -1 to 1 for coords, but 0 to 2 for dimensions)
-// to pixels based on the smallest dimension of the virtual game area.
+fn v_redimension_coord(x f32, y f32) (f64, f64) {
+	norm_x := (x - gapi_offset_x__) / gapi_game_w__
+	norm_y := (y - gapi_offset_y__) / gapi_game_h__
+
+	return (norm_x * 2) - 1.0, 1.0 - (norm_y * 2)
+}
+
 fn c_redimension_one(v f64) f32 {
-	// gapi_game_w__ and gapi_game_h__ are the same (side of the square), so we can use either
-	// The 0.5 factor is because a normalized width/height of 1.0 means full height, so we scale it.
-	return f32(v * gapi_game_w__ * 0.5) 
+	return f32(v * gapi_game_w__ * 0.5)
 }
 
-// Converts a center-based rect in normalized coords to a top-left-based rect in screen pixel coords,
-// respecting the virtual square game area.
+fn v_redimension_one(v f32) f64 {
+	return (v * 2) / gapi_game_w__
+}
+
 fn c_redimension_rect(x f64, y f64, w f64, h f64) (f32, f32, f32, f32) {
 	// Calculate top-left corner in normalized coordinates first
 	tl_x := x - (w / 2.0)
@@ -40,7 +38,7 @@ fn c_redimension_rect(x f64, y f64, w f64, h f64) (f32, f32, f32, f32) {
 	// Scale width and height directly using the virtual game area's dimensions
 	gw := f32(w * gapi_game_w__)
 	gh := f32(h * gapi_game_h__)
-	
+
 	return gx, gy, gw, gh
 }
 
