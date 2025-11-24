@@ -22,7 +22,7 @@ pub fn (p Project) build_native(inst Installation) !string {
 
 	return inst.get_zig().build_native(ZigBuildNativeOptions{
 		files:           source_files
-		include_path:    os.join_path(p.path, 'gama')
+		include_path:    inst.lib
 		lib_path:        build_dir
 		executable_path: os.join_path(build_dir, executable_extension(conf.name))
 	})

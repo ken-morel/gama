@@ -2,180 +2,180 @@
 
 #include <stdlib.h>
 
-typedef unsigned int gama_color;
+typedef unsigned int gmColor;
 
-#define gama_color_red(col) ((col & 0xFF000000) >> 24)
-#define gama_color_green(col) ((col & 0x00FF0000) >> 16)
-#define gama_color_blue(col) ((col & 0x0000FF00) >> 8)
-#define gama_color_alpha(col) (col & 0x000000FF)
+#define gm_red(col) ((col & 0xFF000000) >> 24)
+#define gm_green(col) ((col & 0x00FF0000) >> 16)
+#define gm_blue(col) ((col & 0x0000FF00) >> 8)
+#define gm_alpha(col) (col & 0x000000FF)
 
-static inline gama_color gama_color_from_rgba(int r, int g, int b, int a) {
+static inline gmColor gm_rgba(int r, int g, int b, int a) {
   return (unsigned)(abs(r) % 256) << 24 | (unsigned)(abs(g) % 256) << 16 |
          (unsigned)(abs(b) % 256) << 8 | (unsigned)(abs(a) % 256);
 }
 
-static inline void gama_color_set_red(int *col, int red) {
+static inline void gama_set_red(int *col, int red) {
   *col &= 0x00FFFFFF;
   *col |= (unsigned)(abs(red) % 256) << 24;
 }
-static inline void gama_color_set_green(int *col, int green) {
+static inline void gama_set_green(int *col, int green) {
   *col &= 0xFF00FFFF;
   *col |= (unsigned)(abs(green) % 256) << 16;
 }
-static inline void gama_color_set_blue(int *col, int blue) {
+static inline void gama_set_blue(int *col, int blue) {
   *col &= 0xFFFF00FF;
   *col |= (unsigned)(abs(blue) % 256) << 8;
 }
-static inline void gama_color_set_alpha(int *col, int alpha) {
+static inline void gama_set_alpha(int *col, int alpha) {
   *col &= 0xFFFFFF00;
   *col |= (unsigned)(abs(alpha) % 256);
 }
 
-#define ALICEBLUE (gama_color)0xF0F8FFFF
-#define ANTIQUEWHITE (gama_color)0xFAEBD7FF
-#define AQUA (gama_color)0x00FFFFFF
-#define AQUAMARINE (gama_color)0x7FFFD4FF
-#define AZURE (gama_color)0xF0FFFFFF
-#define BEIGE (gama_color)0xF5F5DCFF
-#define BISQUE (gama_color)0xFFE4C4FF
-#define BLACK (gama_color)0x000000FF
-#define BLANCHEDALMOND (gama_color)0xFFEBCDFF
-#define BLUE (gama_color)0x0000FFFF
-#define BLUEVIOLET (gama_color)0x8A2BE2FF
-#define BROWN (gama_color)0xA52A2AFF
-#define BURLYWOOD (gama_color)0xDEB887FF
-#define CADETBLUE (gama_color)0x5F9EA0FF
-#define CHARTREUSE (gama_color)0x7FFF00FF
-#define CHOCOLATE (gama_color)0xD2691EFF
-#define CORAL (gama_color)0xFF7F50FF
-#define CORNFLOWERBLUE (gama_color)0x6495EDFF
-#define CORNSILK (gama_color)0xFFF8DCFF
-#define CRIMSON (gama_color)0xDC143CFF
-#define CYAN (gama_color)0x00FFFFFF
-#define DARKBLUE (gama_color)0x00008BFF
-#define DARKCYAN (gama_color)0x008B8BFF
-#define DARKGOLDENROD (gama_color)0xB8860BFF
-#define DARKGRAY (gama_color)0xA9A9A9FF
-#define DARKGREY (gama_color)0xA9A9A9FF
-#define DARKGREEN (gama_color)0x006400FF
-#define DARKKHAKI (gama_color)0xBDB76BFF
-#define DARKMAGENTA (gama_color)0x8B008BFF
-#define DARKOLIVEGREEN (gama_color)0x556B2FFF
-#define DARKORANGE (gama_color)0xFF8C00FF
-#define DARKORCHID (gama_color)0x9932CCFF
-#define DARKRED (gama_color)0x8B0000FF
-#define DARKSALMON (gama_color)0xE9967AFF
-#define DARKSEAGREEN (gama_color)0x8FBC8FFF
-#define DARKSLATEBLUE (gama_color)0x483D8BFF
-#define DARKSLATEGRAY (gama_color)0x2F4F4FFF
-#define DARKSLATEGREY (gama_color)0x2F4F4FFF
-#define DARKTURQUOISE (gama_color)0x00CED1FF
-#define DARKVIOLET (gama_color)0x9400D3FF
-#define DEEPPINK (gama_color)0xFF1493FF
-#define DEEPSKYBLUE (gama_color)0x00BFFFFF
-#define DIMGRAY (gama_color)0x696969FF
-#define DIMGREY (gama_color)0x696969FF
-#define DODGERBLUE (gama_color)0x1E90FFFF
-#define FIREBRICK (gama_color)0xB22222FF
-#define FLORALWHITE (gama_color)0xFFFAF0FF
-#define FORESTGREEN (gama_color)0x228B22FF
-#define FUCHSIA (gama_color)0xFF00FFFF
-#define GAINSBORO (gama_color)0xDCDCDCFF
-#define GHOSTWHITE (gama_color)0xF8F8FFFF
-#define GOLD (gama_color)0xFFD700FF
-#define GOLDENROD (gama_color)0xDAA520FF
-#define GRAY (gama_color)0x808080FF
-#define GREY (gama_color)0x808080FF
-#define GREEN (gama_color)0x008000FF
-#define GREENYELLOW (gama_color)0xADFF2FFF
-#define HONEYDEW (gama_color)0xF0FFF0FF
-#define HOTPINK (gama_color)0xFF69B4FF
-#define INDIANRED (gama_color)0xCD5C5CFF
-#define INDIGO (gama_color)0x4B0082FF
-#define IVORY (gama_color)0xFFFFF0FF
-#define KHAKI (gama_color)0xF0E68CFF
-#define LAVENDER (gama_color)0xE6E6FAFF
-#define LAVENDERBLUSH (gama_color)0xFFF0F5FF
-#define LAWNGREEN (gama_color)0x7CFC00FF
-#define LEMONCHIFFON (gama_color)0xFFFACDFF
-#define LIGHTBLUE (gama_color)0xADD8E6FF
-#define LIGHTCORAL (gama_color)0xF08080FF
-#define LIGHTCYAN (gama_color)0xE0FFFFFF
-#define LIGHTGOLDENRODYELLOW (gama_color)0xFAFAD2FF
-#define LIGHTGRAY (gama_color)0xD3D3D3FF
-#define LIGHTGREY (gama_color)0xD3D3D3FF
-#define LIGHTGREEN (gama_color)0x90EE90FF
-#define LIGHTPINK (gama_color)0xFFB6C1FF
-#define LIGHTSALMON (gama_color)0xFFA07AFF
-#define LIGHTSEAGREEN (gama_color)0x20B2AAFF
-#define LIGHTSKYBLUE (gama_color)0x87CEFAFF
-#define LIGHTSLATEGRAY (gama_color)0x778899FF
-#define LIGHTSLATEGREY (gama_color)0x778899FF
-#define LIGHTSTEELBLUE (gama_color)0xB0C4DEFF
-#define LIGHTYELLOW (gama_color)0xFFFFE0FF
-#define LIME (gama_color)0x00FF00FF
-#define LIMEGREEN (gama_color)0x32CD32FF
-#define LINEN (gama_color)0xFAF0E6FF
-#define MAGENTA (gama_color)0xFF00FFFF
-#define MAROON (gama_color)0x800000FF
-#define MEDIUMAQUAMARINE (gama_color)0x66CDAAFF
-#define MEDIUMBLUE (gama_color)0x0000CDFF
-#define MEDIUMORCHID (gama_color)0xBA55D3FF
-#define MEDIUMPURPLE (gama_color)0x9370DBFF
-#define MEDIUMSEAGREEN (gama_color)0x3CB371FF
-#define MEDIUMSLATEBLUE (gama_color)0x7B68EEFF
-#define MEDIUMSPRINGGREEN (gama_color)0x00FA9AFF
-#define MEDIUMTURQUOISE (gama_color)0x48D1CCFF
-#define MEDIUMVIOLETRED (gama_color)0xC71585FF
-#define MIDNIGHTBLUE (gama_color)0x191970FF
-#define MINTCREAM (gama_color)0xF5FFFAFF
-#define MISTYROSE (gama_color)0xFFE4E1FF
-#define MOCCASIN (gama_color)0xFFE4B5FF
-#define NAVAJOWHITE (gama_color)0xFFDEADFF
-#define NAVY (gama_color)0x000080FF
-#define OLDLACE (gama_color)0xFDF5E6FF
-#define OLIVE (gama_color)0x808000FF
-#define OLIVEDRAB (gama_color)0x6B8E23FF
-#define ORANGE (gama_color)0xFFA500FF
-#define ORANGERED (gama_color)0xFF4500FF
-#define ORCHID (gama_color)0xDA70D6FF
-#define PALEGOLDENROD (gama_color)0xEEE8AAFF
-#define PALEGREEN (gama_color)0x98FB98FF
-#define PALETURQUOISE (gama_color)0xAFEEEEFF
-#define PALEVIOLETRED (gama_color)0xDB7093FF
-#define PAPAYAWHIP (gama_color)0xFFEFD5FF
-#define PEACHPUFF (gama_color)0xFFDAB9FF
-#define PERU (gama_color)0xCD853FFF
-#define PINK (gama_color)0xFFC0CBFF
-#define PLUM (gama_color)0xDDA0DDFF
-#define POWDERBLUE (gama_color)0xB0E0E6FF
-#define PURPLE (gama_color)0x800080FF
-#define REBECCAPURPLE (gama_color)0x663399FF
-#define RED (gama_color)0xFF0000FF
-#define ROSYBROWN (gama_color)0xBC8F8FFF
-#define ROYALBLUE (gama_color)0x4169E1FF
-#define SADDLEBROWN (gama_color)0x8B4513FF
-#define SALMON (gama_color)0xFA8072FF
-#define SANDYBROWN (gama_color)0xF4A460FF
-#define SEAGREEN (gama_color)0x2E8B57FF
-#define SEASHELL (gama_color)0xFFF5EEFF
-#define SIENNA (gama_color)0xA0522DFF
-#define SILVER (gama_color)0xC0C0C0FF
-#define SKYBLUE (gama_color)0x87CEEBFF
-#define SLATEBLUE (gama_color)0x6A5ACDFF
-#define SLATEGRAY (gama_color)0x708090FF
-#define SLATEGREY (gama_color)0x708090FF
-#define SNOW (gama_color)0xFFFAFAFF
-#define SPRINGGREEN (gama_color)0x00FF7FFF
-#define STEELBLUE (gama_color)0x4682B4FF
-#define TAN (gama_color)0xD2B48CFF
-#define TEAL (gama_color)0x008080FF
-#define THISTLE (gama_color)0xD8BFD8FF
-#define TOMATO (gama_color)0xFF6347FF
-#define TURQUOISE (gama_color)0x40E0D0FF
-#define VIOLET (gama_color)0xEE82EEFF
-#define WHEAT (gama_color)0xF5DEB3FF
-#define WHITE (gama_color)0xFFFFFFFF
-#define WHITESMOKE (gama_color)0xF5F5F5FF
-#define YELLOW (gama_color)0xFFFF00FF
-#define YELLOWGREEN (gama_color)0x9ACD32FF
+#define GM_ALICEBLUE (gmColor)0xF0F8FFFF
+#define GM_ANTIQUEWHITE (gmColor)0xFAEBD7FF
+#define GM_AQUA (gmColor)0x00FFFFFF
+#define GM_AQUAMARINE (gmColor)0x7FFFD4FF
+#define GM_AZURE (gmColor)0xF0FFFFFF
+#define GM_BEIGE (gmColor)0xF5F5DCFF
+#define GM_BISQUE (gmColor)0xFFE4C4FF
+#define GM_BLACK (gmColor)0x000000FF
+#define GM_BLANCHEDALMOND (gmColor)0xFFEBCDFF
+#define GM_BLUE (gmColor)0x0000FFFF
+#define GM_BLUEVIOLET (gmColor)0x8A2BE2FF
+#define GM_BROWN (gmColor)0xA52A2AFF
+#define GM_BURLYWOOD (gmColor)0xDEB887FF
+#define GM_CADETBLUE (gmColor)0x5F9EA0FF
+#define GM_CHARTREUSE (gmColor)0x7FFF00FF
+#define GM_CHOCOLATE (gmColor)0xD2691EFF
+#define GM_CORAL (gmColor)0xFF7F50FF
+#define GM_CORNFLOWERBLUE (gmColor)0x6495EDFF
+#define GM_CORNSILK (gmColor)0xFFF8DCFF
+#define GM_CRIMSON (gmColor)0xDC143CFF
+#define GM_CYAN (gmColor)0x00FFFFFF
+#define GM_DARKBLUE (gmColor)0x00008BFF
+#define GM_DARKCYAN (gmColor)0x008B8BFF
+#define GM_DARKGOLDENROD (gmColor)0xB8860BFF
+#define GM_DARKGRAY (gmColor)0xA9A9A9FF
+#define GM_DARKGREY (gmColor)0xA9A9A9FF
+#define GM_DARKGREEN (gmColor)0x006400FF
+#define GM_DARKKHAKI (gmColor)0xBDB76BFF
+#define GM_DARKMAGENTA (gmColor)0x8B008BFF
+#define GM_DARKOLIVEGREEN (gmColor)0x556B2FFF
+#define GM_DARKORANGE (gmColor)0xFF8C00FF
+#define GM_DARKORCHID (gmColor)0x9932CCFF
+#define GM_DARKRED (gmColor)0x8B0000FF
+#define GM_DARKSALMON (gmColor)0xE9967AFF
+#define GM_DARKSEAGREEN (gmColor)0x8FBC8FFF
+#define GM_DARKSLATEBLUE (gmColor)0x483D8BFF
+#define GM_DARKSLATEGRAY (gmColor)0x2F4F4FFF
+#define GM_DARKSLATEGREY (gmColor)0x2F4F4FFF
+#define GM_DARKTURQUOISE (gmColor)0x00CED1FF
+#define GM_DARKVIOLET (gmColor)0x9400D3FF
+#define GM_DEEPPINK (gmColor)0xFF1493FF
+#define GM_DEEPSKYBLUE (gmColor)0x00BFFFFF
+#define GM_DIMGRAY (gmColor)0x696969FF
+#define GM_DIMGREY (gmColor)0x696969FF
+#define GM_DODGERBLUE (gmColor)0x1E90FFFF
+#define GM_FIREBRICK (gmColor)0xB22222FF
+#define GM_FLORALWHITE (gmColor)0xFFFAF0FF
+#define GM_FORESTGREEN (gmColor)0x228B22FF
+#define GM_FUCHSIA (gmColor)0xFF00FFFF
+#define GM_GAINSBORO (gmColor)0xDCDCDCFF
+#define GM_GHOSTWHITE (gmColor)0xF8F8FFFF
+#define GM_GOLD (gmColor)0xFFD700FF
+#define GM_GOLDENROD (gmColor)0xDAA520FF
+#define GM_GRAY (gmColor)0x808080FF
+#define GM_GREY (gmColor)0x808080FF
+#define GM_GREEN (gmColor)0x008000FF
+#define GM_GREENYELLOW (gmColor)0xADFF2FFF
+#define GM_HONEYDEW (gmColor)0xF0FFF0FF
+#define GM_HOTPINK (gmColor)0xFF69B4FF
+#define GM_INDIANRED (gmColor)0xCD5C5CFF
+#define GM_INDIGO (gmColor)0x4B0082FF
+#define GM_IVORY (gmColor)0xFFFFF0FF
+#define GM_KHAKI (gmColor)0xF0E68CFF
+#define GM_LAVENDER (gmColor)0xE6E6FAFF
+#define GM_LAVENDERBLUSH (gmColor)0xFFF0F5FF
+#define GM_LAWNGREEN (gmColor)0x7CFC00FF
+#define GM_LEMONCHIFFON (gmColor)0xFFFACDFF
+#define GM_LIGHTBLUE (gmColor)0xADD8E6FF
+#define GM_LIGHTCORAL (gmColor)0xF08080FF
+#define GM_LIGHTCYAN (gmColor)0xE0FFFFFF
+#define GM_LIGHTGOLDENRODYELLOW (gmColor)0xFAFAD2FF
+#define GM_LIGHTGRAY (gmColor)0xD3D3D3FF
+#define GM_LIGHTGREY (gmColor)0xD3D3D3FF
+#define GM_LIGHTGREEN (gmColor)0x90EE90FF
+#define GM_LIGHTPINK (gmColor)0xFFB6C1FF
+#define GM_LIGHTSALMON (gmColor)0xFFA07AFF
+#define GM_LIGHTSEAGREEN (gmColor)0x20B2AAFF
+#define GM_LIGHTSKYBLUE (gmColor)0x87CEFAFF
+#define GM_LIGHTSLATEGRAY (gmColor)0x778899FF
+#define GM_LIGHTSLATEGREY (gmColor)0x778899FF
+#define GM_LIGHTSTEELBLUE (gmColor)0xB0C4DEFF
+#define GM_LIGHTYELLOW (gmColor)0xFFFFE0FF
+#define GM_LIME (gmColor)0x00FF00FF
+#define GM_LIMEGREEN (gmColor)0x32CD32FF
+#define GM_LINEN (gmColor)0xFAF0E6FF
+#define GM_MAGENTA (gmColor)0xFF00FFFF
+#define GM_MAROON (gmColor)0x800000FF
+#define GM_MEDIUMAQUAMARINE (gmColor)0x66CDAAFF
+#define GM_MEDIUMBLUE (gmColor)0x0000CDFF
+#define GM_MEDIUMORCHID (gmColor)0xBA55D3FF
+#define GM_MEDIUMPURPLE (gmColor)0x9370DBFF
+#define GM_MEDIUMSEAGREEN (gmColor)0x3CB371FF
+#define GM_MEDIUMSLATEBLUE (gmColor)0x7B68EEFF
+#define GM_MEDIUMSPRINGGREEN (gmColor)0x00FA9AFF
+#define GM_MEDIUMTURQUOISE (gmColor)0x48D1CCFF
+#define GM_MEDIUMVIOLETRED (gmColor)0xC71585FF
+#define GM_MIDNIGHTBLUE (gmColor)0x191970FF
+#define GM_MINTCREAM (gmColor)0xF5FFFAFF
+#define GM_MISTYROSE (gmColor)0xFFE4E1FF
+#define GM_MOCCASIN (gmColor)0xFFE4B5FF
+#define GM_NAVAJOWHITE (gmColor)0xFFDEADFF
+#define GM_NAVY (gmColor)0x000080FF
+#define GM_OLDLACE (gmColor)0xFDF5E6FF
+#define GM_OLIVE (gmColor)0x808000FF
+#define GM_OLIVEDRAB (gmColor)0x6B8E23FF
+#define GM_ORANGE (gmColor)0xFFA500FF
+#define GM_ORANGERED (gmColor)0xFF4500FF
+#define GM_ORCHID (gmColor)0xDA70D6FF
+#define GM_PALEGOLDENROD (gmColor)0xEEE8AAFF
+#define GM_PALEGREEN (gmColor)0x98FB98FF
+#define GM_PALETURQUOISE (gmColor)0xAFEEEEFF
+#define GM_PALEVIOLETRED (gmColor)0xDB7093FF
+#define GM_PAPAYAWHIP (gmColor)0xFFEFD5FF
+#define GM_PEACHPUFF (gmColor)0xFFDAB9FF
+#define GM_PERU (gmColor)0xCD853FFF
+#define GM_PINK (gmColor)0xFFC0CBFF
+#define GM_PLUM (gmColor)0xDDA0DDFF
+#define GM_POWDERBLUE (gmColor)0xB0E0E6FF
+#define GM_PURPLE (gmColor)0x800080FF
+#define GM_REBECCAPURPLE (gmColor)0x663399FF
+#define GM_RED (gmColor)0xFF0000FF
+#define GM_ROSYBROWN (gmColor)0xBC8F8FFF
+#define GM_ROYALBLUE (gmColor)0x4169E1FF
+#define GM_SADDLEBROWN (gmColor)0x8B4513FF
+#define GM_SALMON (gmColor)0xFA8072FF
+#define GM_SANDYBROWN (gmColor)0xF4A460FF
+#define GM_SEAGREEN (gmColor)0x2E8B57FF
+#define GM_SEASHELL (gmColor)0xFFF5EEFF
+#define GM_SIENNA (gmColor)0xA0522DFF
+#define GM_SILVER (gmColor)0xC0C0C0FF
+#define GM_SKYBLUE (gmColor)0x87CEEBFF
+#define GM_SLATEBLUE (gmColor)0x6A5ACDFF
+#define GM_SLATEGRAY (gmColor)0x708090FF
+#define GM_SLATEGREY (gmColor)0x708090FF
+#define GM_SNOW (gmColor)0xFFFAFAFF
+#define GM_SPRINGGREEN (gmColor)0x00FF7FFF
+#define GM_STEELBLUE (gmColor)0x4682B4FF
+#define GM_TAN (gmColor)0xD2B48CFF
+#define GM_TEAL (gmColor)0x008080FF
+#define GM_THISTLE (gmColor)0xD8BFD8FF
+#define GM_TOMATO (gmColor)0xFF6347FF
+#define GM_TURQUOISE (gmColor)0x40E0D0FF
+#define GM_VIOLET (gmColor)0xEE82EEFF
+#define GM_WHEAT (gmColor)0xF5DEB3FF
+#define GM_WHITE (gmColor)0xFFFFFFFF
+#define GM_WHITESMOKE (gmColor)0xF5F5F5FF
+#define GM_YELLOW (gmColor)0xFFFF00FF
+#define GM_YELLOWGREEN (gmColor)0x9ACD32FF

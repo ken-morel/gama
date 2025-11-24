@@ -1,18 +1,20 @@
 #pragma once
 
 #include "body.h"
+#include <stdio.h>
 
-typedef gama_body *gbody;
-typedef gbody *gama_body_list;
 
-gama_body_list gama_bodys = gnothing;
+typedef gmBody **gmBodies;
 
-size_t gama_body_list_length(gama_body_list list) {
-  for (size_t i = 0;; i++)
-    if (list[i] == NULL)
-      return i;
+size_t gm_bodies_length(gmBodies list) {
+  if (list == NULL)
+    return 0;
+  else
+    for (size_t i = 0;; i++)
+      if (list[i] == NULL)
+        return i;
 }
-size_t gama_body_list_count(gama_body_list list, gbody obj) {
+size_t gm_bodies_count(gmBodies list, gmBody* obj) {
   size_t count = 0;
   for (size_t i = 0;; i++) {
     if (list[i] == obj)
@@ -21,24 +23,24 @@ size_t gama_body_list_count(gama_body_list list, gbody obj) {
       return count;
   }
 }
-gama_body_list gama_body_list_add(gama_body_list list, gbody obj) {
-  size_t length = gama_body_list_length(list);
-  gama_body_list new_list = reallocarray(list, length + 2, sizeof(gbody));
+gmBodies gm_bodies_push(gmBodies list, gmBody* obj) {
+  size_t length = gm_bodies_length(list);
+  gmBodies new_list = reallocarray(list, length + 2, sizeof(gmBody*));
   new_list[length] = obj;
   new_list[length + 1] = NULL;
   return new_list;
 }
 
-gama_body_list gama_body_list_pop(gama_body_list list) {
-  size_t len = gama_body_list_length(list);
-  gama_body_list new_list = reallocarray(list, len + 1, sizeof(gbody));
+gmBodies gm_bodies_pop(gmBodies list) {
+  size_t len = gm_bodies_length(list);
+  gmBodies new_list = reallocarray(list, len + 1, sizeof(gmBody*));
   new_list[len] = NULL;
   return new_list;
 }
-gama_body_list gama_body_list_remove(gama_body_list list, gbody obj) {
-  size_t len = gama_body_list_length(list);
-  size_t count = gama_body_list_count(list, obj);
-  gama_body_list new_list = malloc((len - count + 1) * sizeof(gbody));
+gmBodies gm_bodies_remove(gmBodies list, gmBody* obj) {
+  size_t len = gm_bodies_length(list);
+  size_t count = gm_bodies_count(list, obj);
+  gmBodies new_list = malloc((len - count + 1) * sizeof(gmBody*));
   size_t index = 0;
   for (size_t i = 0; i < len; i++) {
     if (list[i] != obj) {

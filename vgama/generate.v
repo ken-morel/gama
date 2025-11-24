@@ -2,11 +2,11 @@ module vgama
 
 import os
 
-pub fn (p Project) add_editor_config() ! {
+pub fn (p Project) add_editor_config(inst Installation) ! {
 	os.write_file(os.join_path(p.path, '.clangd'), '
 CompileFlags:
   Add:
-    - -I/home/engon/gama/lib
+    - -I${inst.lib}
 ---
 If:
   PathMatch: .*\\.h\$
@@ -25,12 +25,10 @@ pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTempla
 
 	template.copy_to(project_dir)!
 
-	inst.copy_gama(os.join_path(project_dir, 'gama'), false)!
-
 	project := Project{
 		path: os.abs_path(project_dir)
 	}
 	project.set_conf(conf)!
-	project.add_editor_config()!
+	project.add_editor_config(inst)!
 	return project
 }

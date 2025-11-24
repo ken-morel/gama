@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <stddef.h>
@@ -8,60 +7,53 @@
 #include "position.h"
 #include <stdint.h>
 #include <stdlib.h>
+#include "gapi.h"
 
-typedef enum { GAMA_COLLIDER_CIRCLE, GAMA_COLLIDER_RECT } gama_collider_type;
+
+typedef enum { GM_COLLIDER_CIRCLE, GM_COLLIDER_RECT } gmColliderType;
 typedef struct {
   int is_active;
 
-  gama_collider_type collider_type;
-
-  gama_position position;
-  gama_position velocity;
-  gama_position acceleration;
+  gmColliderType collider_type;
+  gmPos position;
+  gmPos velocity;
+  gmPos acceleration;
 
   double width, height, radius;
   double mass; // ==0 -> static, >0 -> dynamic
   double restitution;
   double friction;
-} gama_body;
+} gmBody;
 
-
-
-
-void gama_body_reset(gama_body *b) {
-  b->is_active = 1;
-  b->mass = 0;
-  b->restitution = 1;
-  b->friction = 1;
-  b->width = 1;
-  b->height = 1;
-  b->radius = 1;
-  b->collider_type = GAMA_COLLIDER_RECT;
-  gama_position_reset(&b->position);
-  gama_position_reset(&b->acceleration);
-  gama_position_reset(&b->velocity);
-}
-
-gama_body gama_body_create(double x, double y, double w, double h,
-                           gama_collider_type c) {
-  gama_body body = {
+gmBody gm_body_create(double mass,double x, double y, double w, double h,
+                      gmColliderType c) {
+  gmBody body = {
       .is_active = 1,
-      .collider_type = GAMA_COLLIDER_RECT,
-      .position = {.x = x, .y = y, .z = 0},
-      .velocity = {.x = 0, .y = 0, .z = 0},
-      .acceleration = {.x = 0, .y = 0, .z = 0},
+      .collider_type = c,
+      .position = {.x = x, .y = y},
+      .velocity = {.x = 0, .y = 0},
+      .acceleration = {.x = 0, .y = 0},
       .width = w,
       .height = h,
       .radius = w < h ? w : h,
-      .mass = 1,
+      .mass = mass,
       .restitution = 1,
   };
   return body;
 }
 
-gama_body gama_rectangle_create(double x, double y, double w, double h) {
-  return gama_body_create(x, y, w, h, GAMA_COLLIDER_RECT);
+gmBody gm_rectangle_body(double m,double x, double y, double w, double h) {
+  return gm_body_create(m, x, y, w, h, GM_COLLIDER_RECT);
 }
-gama_body gama_circle_create(double x, double y, double r) {
-  return gama_body_create(x, y, r, r, GAMA_COLLIDER_CIRCLE);
+gmBody gm_circle_body(double m, double x, double y, double r) {
+  return gm_body_create(m, x, y, r, r, GM_COLLIDER_CIRCLE);
+}
+
+#include "collision.h"
+
+static inline int gm_hovered(gmBody *body) {
+  return gm_body_contains(body, gm_mouse.position.x, gm_mouse.position.y);
+}
+static inline int gm_clicked(gmBody *body) {
+  return gm_mouse.pressed && gm_hovered(body);
 }
