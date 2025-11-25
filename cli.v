@@ -6,8 +6,21 @@ import vgama
 import term
 import time
 
-fn find_compilers() []string {
-	mut found := []string{}
+struct Compiler {
+pub:
+	name string
+	path string
+}
+
+const compiler_descriptions = {
+	'clang': 'A relatively fast compiler for modern systems'
+	'gcc':   'Robust compiler(comes with code blocks)'
+	'tcc':   'Tiny and extremely fast compiler(but the resulting app is not as fast)'
+	'msvc':  'A compiler for windows systems, support not guaranteed'
+}
+
+fn find_compilers() []Compiler {
+	mut found := []Compiler{}
 	mut locations := os.getenv('PATH').split(os.path_separator)
 	compilers := ['clang', 'gcc', 'tcc', 'msvc']
 
@@ -26,9 +39,7 @@ fn find_compilers() []string {
 				exe_path += '.exe'
 			}
 			if os.exists(exe_path) {
-				if exe_path !in found {
-					found << exe_path
-				}
+				found << Compiler{compiler, exe_path}
 			}
 		}
 	}
@@ -95,152 +106,7 @@ fn main() {
 				name:        'create'
 				usage:       'create'
 				description: 'Create a new gama project with the assistant'
-				execute:     fn (cmd cli.Command) ! {
-					println('Welcome to gama project creation assistant, let me load a few things')
-					installation := get_installation()!
-					gama_version := installation.get_gama_version() or {
-						println(term.fail_message('Error getting gama version: ${err}'))
-						return err
-					}
-					templates := installation.get_templates() or {
-						println(term.fail_message('Error loading gama templates: ${err}'))
-						return err
-					}
-					println(term.ok_message('Loaded installation with gama version ${gama_version} and ${templates.len} templates'))
-					mut name := ''
-					nameloop: for {
-						println('Enter the project name, the project name should only contain lowercase letters, numbers, and underscores')
-						mut rm := false
-						for c in os.input(term.blue('> ')).runes() {
-							n := if c >= `A` && c <= `Z` { c - (`A` - `a`) } else { c } // convert to lower
-							if (n >= `a` && n <= `z`) || (n >= `0` && n <= `9`) || n == `_` {
-								name += n.str()
-							} else {
-								rm = true
-							}
-						}
-						if rm {
-							println(term.warn_message('Some characters had to be removed'))
-						}
-						if name.len < 3 || name.len > 15 {
-							println(term.warn_message('The name should have at least 3 and at most 15 letters'))
-							name = ''
-							continue nameloop
-						}
-						print('The project will be named: ')
-						print(term.bold(name))
-						print(' is that okay? (Yep / nop)')
-						if os.input(term.blue('? ')) in [
-							'n',
-							'N',
-							'no',
-							'nope',
-							'nop',
-							'nah',
-						] {
-							name = ''
-							continue nameloop
-						} else {
-							break
-						}
-					}
-					print('Oh sounds cool, what is ')
-					print(term.bold(name))
-					println(' about?')
-					desc := os.input(term.blue('> '))
-					println('And what do you want to use as template for your application?')
-					mut template := &vgama.GamaTemplate(unsafe { nil })
-					templateloop: for template == unsafe { nil } {
-						for index, tmpl in templates {
-							print(term.cyan(' ${index}) '))
-							print(term.green(tmpl.name))
-							println(term.gray('  ${tmpl.description}'))
-						}
-						index := os.input(term.blue('> ')).int()
-						if index < 0 || index > templates.len {
-							println(term.fail_message('Invalid index'))
-							continue templateloop
-						} else {
-							if os.input('so we use template ${templates[index].name}? (Yep/nop)') in [
-								'n',
-								'N',
-								'no',
-								'nop',
-								'nope',
-							] {
-								continue
-							} else {
-								template = &templates[index]
-								break templateloop
-							}
-						}
-					}
-					println('Looking for compilers...')
-					compilers := find_compilers()
-
-					println('Please choose a compiler, you can still change it latter')
-
-					mut compiler := ''
-					compilerloop: for compiler == '' {
-						print(term.cyan(' 0) '))
-						println(term.green('skip'))
-						for index, comp in compilers {
-							print(term.cyan(' ${index + 1}) '))
-							println(term.green(comp))
-						}
-						mut index := os.input(term.blue('> ')).int()
-						if index == 0 {
-							if os.input("so you don't want a compiler? (Yep/nop)") in [
-								'n',
-								'N',
-								'no',
-								'nop',
-								'nope',
-							] {
-								continue
-							} else {
-								compiler = ''
-								break compilerloop
-							}
-						}
-						index -= 1
-						if index < 0 || index > templates.len {
-							println(term.fail_message('Invalid index'))
-							continue compilerloop
-						} else {
-							if os.input('so we use compiler ${compilers[index]}? (Yep/nop)') in [
-								'n',
-								'N',
-								'no',
-								'nop',
-								'nope',
-							] {
-								continue
-							} else {
-								compiler = compilers[index]
-								break compilerloop
-							}
-						}
-					}
-					conf := vgama.ProjectConf{
-						name:        name
-						description: desc
-						gama:        vgama.ProjectGamaConf{
-							version:  installation.get_gama_version() or {
-								println(term.fail_message(err.str()))
-								vgama.Version{}
-							}
-							compiler: compiler
-						}
-					}
-
-					vgama.Project.generate(installation, conf, template) or {
-						println(term.fail_message('Error generating the project: ${err}'))
-						return
-					}
-					println(term.ok_message('${name} generated successfuly!'))
-					return
-				}
+				execute:     generator_assistant
 			},
 			cli.Command{
 				name:        'build'
@@ -378,4 +244,156 @@ fn main() {
 	}
 	app.setup()
 	app.parse(os.args)
+}
+
+@[unsafe]
+fn generator_assistant(cmd cli.Command) ! {
+	println('Welcome to gama project creation assistant, let me load a few things')
+	installation := get_installation()!
+	gama_version := installation.get_gama_version() or {
+		println(term.fail_message('Error getting gama version: ${err}'))
+		return err
+	}
+	templates := installation.get_templates() or {
+		println(term.fail_message('Error loading gama templates: ${err}'))
+		return err
+	}
+	println(term.ok_message('Loaded installation with gama version ${gama_version} and ${templates.len} templates'))
+	mut name := ''
+	nameloop: for {
+		println('Enter the project name, the project name should only contain lowercase letters, numbers, and underscores')
+		mut rm := false
+		for c in os.input(term.blue('> ')).runes() {
+			n := if c >= `A` && c <= `Z` { c - (`A` - `a`) } else { c } // convert to lower
+			if (n >= `a` && n <= `z`) || (n >= `0` && n <= `9`) || n == `_` {
+				name += n.str()
+			} else {
+				rm = true
+			}
+		}
+		if rm {
+			println(term.warn_message('Some characters had to be removed'))
+		}
+		if name.len < 3 || name.len > 15 {
+			println(term.warn_message('The name should have at least 3 and at most 15 letters'))
+			name = ''
+			continue nameloop
+		}
+		print('The project will be named: ')
+		print(term.bold(name))
+		print(' is that okay? (Yep / nop)')
+		if os.input(term.blue('? ')) in [
+			'n',
+			'N',
+			'no',
+			'nope',
+			'nop',
+			'nah',
+		] {
+			name = ''
+			continue nameloop
+		} else {
+			break
+		}
+	}
+	print('Oh sounds cool, what is ')
+	print(term.bold(name))
+	println(' about?')
+	desc := os.input(term.blue('> '))
+	println('And what do you want to use as template for your application?')
+	mut template := &vgama.GamaTemplate(nil)
+	templateloop: for template == nil {
+		for index, tmpl in templates {
+			print(term.cyan(' ${index}) '))
+			print(term.green(tmpl.name))
+			println(term.gray('  ${tmpl.description}'))
+		}
+		index := os.input(term.blue('> ')).int()
+		if index < 0 || index > templates.len {
+			println(term.fail_message('Invalid index'))
+			continue templateloop
+		} else {
+			if os.input('so we use template ${templates[index].name}? (Yep/nop)') in [
+				'n',
+				'N',
+				'no',
+				'nop',
+				'nope',
+			] {
+				continue
+			} else {
+				template = &templates[index]
+				break templateloop
+			}
+		}
+	}
+	println('Looking for compilers...')
+	compilers := find_compilers()
+
+	println('Please choose a compiler, you can still change it latter')
+
+	mut compiler := &Compiler(nil)
+	compilerloop: for compiler == nil {
+		print(term.cyan(' 0) '))
+		println(term.green('skip'))
+		for index, comp in compilers {
+			print(term.cyan(' ${index + 1}) '))
+			print(term.green(comp.name))
+			print(' at ')
+			print(comp.path)
+			print('  ')
+			println(term.gray(compiler_descriptions[comp.name] or { 'no description' }))
+		}
+		mut index := os.input(term.blue('> ')).int()
+		if index == 0 {
+			if os.input("so you don't want a compiler? (Yep/nop)") in [
+				'n',
+				'N',
+				'no',
+				'nop',
+				'nope',
+			] {
+				continue
+			} else {
+				compiler = nil
+				break compilerloop
+			}
+		}
+		index -= 1
+		if index < 0 || index > templates.len {
+			println(term.fail_message('Invalid index'))
+			continue compilerloop
+		} else {
+			if os.input('so we use compiler ${compilers[index]}? (Yep/nop)') in [
+				'n',
+				'N',
+				'no',
+				'nop',
+				'nope',
+			] {
+				continue
+			} else {
+				compiler = &compilers[index]
+				break compilerloop
+			}
+		}
+	}
+	conf := vgama.ProjectConf{
+		name:        name
+		description: desc
+		gama:        vgama.ProjectGamaConf{
+			version:  installation.get_gama_version() or {
+				println(term.fail_message(err.str()))
+				vgama.Version{}
+			}
+			compiler: if compiler != nil { compiler.path } else { '' }
+		}
+	}
+
+	vgama.Project.generate(installation, conf, template) or {
+		println(term.fail_message('Error generating the project: ${err}'))
+		return
+	}
+	println(term.ok_message('${name} generated successfuly!'))
+	return
 }

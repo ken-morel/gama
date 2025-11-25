@@ -6,7 +6,8 @@ pub fn (p Project) add_editor_config(conf ProjectConf, inst Installation) ! {
 	os.write_file(os.join_path(p.path, '.clangd'), '
 CompileFlags:
   Add:
-    - -I${inst.lib}
+    - -I${os.join_path(p.path,
+		'include')}
 ---
 If:
   PathMatch: .*\\.h\$
@@ -27,24 +28,14 @@ CompileFlags:
 				<Option output="bin/Debug/${conf.name}" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="0" />
-				<Compiler>
-					<Add option="-g" />
-				</Compiler>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/${conf.name}" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="0" />
-				<Compiler>
-					<Add option="-O2" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Weverything" />
 			<Add directory="./include/" />
 		</Compiler>
 		<Linker>
