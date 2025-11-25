@@ -6,8 +6,7 @@ pub fn (p Project) add_editor_config(conf ProjectConf, inst Installation) ! {
 	os.write_file(os.join_path(p.path, '.clangd'), '
 CompileFlags:
   Add:
-    - -I${os.join_path(p.path,
-		'include')}
+    - -Iinclude/
 ---
 If:
   PathMatch: .*\\.h\$
