@@ -11,6 +11,8 @@ function cli-build -a target
         case ""
             echo "Building gama cli for host system"
             v cli.v -o bin/gama $argv[2..]
+        case "*"
+            echo "Invalid build target system"
     end
 end
 
@@ -37,10 +39,7 @@ end
 function package -a target
     switch "$target"
         case nsis
-            vgama windows
-            cli-build windows
-            cd nsis
-            makensis ./setup.nsi
+            vgama windows; and cli-build windows; and cd nsis; and makensis ./setup.nsi
         case "*"
             echo "No package target specified, use nsis"
     end

@@ -1,5 +1,0 @@
-LIBRARY /home/engon/gama/runners/native/libvgama.dll
-
-EXPORTS
-_vinit_caller
-_vcleanup_caller
