@@ -6,8 +6,8 @@ pub fn (p Project) add_editor_config(conf ProjectConf, inst Installation) ! {
 	os.write_file(os.join_path(p.path, '.clangd'), '
 CompileFlags:
   Add:
-    - -I${os.join_path(p.path,
-		'include')}
+    - -I../include/
+    - -Iinclude/
 ---
 If:
   PathMatch: .*\\.h\$
@@ -17,7 +17,7 @@ CompileFlags:
     - c
 ') or {}
 	os.write_file(os.join_path(p.path, '${conf.name}.cbp'), '
-	<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
@@ -53,5 +53,15 @@ CompileFlags:
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
+') or {}
+
+	os.write_file(os.join_path(p.path, '${conf.name}.sublime-project'), '
+{
+	"folders": [{"path": "."}],
+	"build_systems": [
+		{"name": "gama dev", "cmd": ["gama","dev"], "working_dir": "\$project_path","file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)\$",},
+		{"name": "Build and run", "cmd": ["gama","build","-r"], "working_dir": "\$project_path","file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)\$",},
+	]
+}
 ') or {}
 }
