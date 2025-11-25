@@ -36,7 +36,7 @@ int main() {
   do {
     double dt = gm_dt();
     gm_system_update(&sys, 500);
-    for (size_t i = 0; i < 20; i++)
+    for (size_t i = 0; i < 10; i++)
       gm_draw_circle_body(&circles[i], i % 2 == 0 ? GM_BLUE : GM_DARKBLUE);
     for (size_t i = 0; i < 5; i++)
       gm_draw_rect_body(&rects[i], GM_CYAN);
