@@ -54,4 +54,14 @@ CompileFlags:
 	</Project>
 </CodeBlocks_project_file>
 ') or {}
+
+	os.write_file(os.join_path(p.path, '${conf.name}.sublime-project'), '
+{
+	"folders": [{"path": "."}],
+	"build_systems": [
+		{"name": "gama dev", "cmd": ["gama","dev"], "working_dir": "\$project_path","file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)\$",},
+		{"name": "Build and run", "cmd": ["gama","build","-r"], "working_dir": "\$project_path","file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)\$",},
+	]
+}
+') or {}
 }
