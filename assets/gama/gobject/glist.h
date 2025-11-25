@@ -16,7 +16,7 @@ GList *GnewList() {
 }
 void GinitList(GList *list) {
   list->length = 0;
-  list->objects = 0;
+  list->objects = NULL;
 }
 GObject *GgetItem(GList *list, size_t idx) {
   if (idx >= list->length)
