@@ -86,7 +86,11 @@ const text_style_italic__ = u8(1 << 2)
 
 @[export: 'gapi_draw_text']
 @[unsafe]
-fn gapi_draw_text(x f64, y f64, height f64, txt &char, font &char, style u8, align char, cr u8, cg u8, cb u8, ca u8) i32 {
+fn gapi_draw_text(x f64, y f64,
+	height f64,
+	txt &char, font &char,
+	style u8, align char,
+	cr u8, cg u8, cb u8, ca u8) i32 {
 	gx, gy, _, gh := c_redimension_rect(x, y, 0, height)
 	vtext := txt.vstring()
 	vfont := font.vstring()

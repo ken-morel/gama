@@ -3,7 +3,7 @@ module vgama
 import os
 
 pub fn (p Project) reset_gama(inst Installation) ! {
-	inst.copy_gama(os.join_path(p.path, 'gama'), true)!
+	inst.copy_gama(os.join_path(p.path, 'include'), true)!
 }
 
 fn get_shared_library_extension() string {

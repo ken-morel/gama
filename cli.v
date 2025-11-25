@@ -6,6 +6,36 @@ import vgama
 import term
 import time
 
+fn find_compilers() []string {
+	mut found := []string{}
+	mut locations := os.getenv('PATH').split(os.path_separator)
+	compilers := ['clang', 'gcc', 'tcc', 'msvc']
+
+	$if windows {
+		locations << 'C:/CodeBlocks/MinGW/bin'
+		locations << 'C:/MinGW/bin'
+	} $else {
+		locations << '/usr/bin'
+		locations << '/usr/local/bin'
+	}
+
+	for loc in locations {
+		for compiler in compilers {
+			mut exe_path := os.join_path(loc, compiler)
+			$if windows {
+				exe_path += '.exe'
+			}
+			if os.exists(exe_path) {
+				if exe_path !in found {
+					found << exe_path
+				}
+			}
+		}
+	}
+
+	return found
+}
+
 struct Watcher {
 mut:
 	last_mtime i64    @[required]
@@ -49,7 +79,7 @@ fn get_project() !vgama.Project {
 }
 
 fn get_installation() !vgama.Installation {
-	return vgama.Installation.dev('/home/engon/gama')
+	return vgama.Installation.folder(os.dir(os.executable()))
 }
 
 fn main() {
@@ -94,6 +124,7 @@ fn main() {
 						}
 						if name.len < 3 || name.len > 15 {
 							println(term.warn_message('The name should have at least 3 and at most 15 letters'))
+							name = ''
 							continue nameloop
 						}
 						print('The project will be named: ')
@@ -114,7 +145,6 @@ fn main() {
 						}
 					}
 					print('Oh sounds cool, what is ')
-
 					print(term.bold(name))
 					println(' about?')
 					desc := os.input(term.blue('> '))
@@ -145,17 +175,62 @@ fn main() {
 							}
 						}
 					}
-					println("Will you host your project on a github repo? Type it's name as user/reponame, if you don't know what it is, just hit enter")
-					repo := os.input_opt(term.blue('> '))
+					println('Looking for compilers...')
+					compilers := find_compilers()
+
+					println('Please choose a compiler, you can still change it latter')
+
+					mut compiler := ''
+					compilerloop: for compiler == '' {
+						print(term.cyan(' 0) '))
+						println(term.green('skip'))
+						for index, comp in compilers {
+							print(term.cyan(' ${index + 1}) '))
+							println(term.green(comp))
+						}
+						mut index := os.input(term.blue('> ')).int()
+						if index == 0 {
+							if os.input("so you don't want a compiler? (Yep/nop)") in [
+								'n',
+								'N',
+								'no',
+								'nop',
+								'nope',
+							] {
+								continue
+							} else {
+								compiler = ''
+								break compilerloop
+							}
+						}
+						index -= 1
+						if index < 0 || index > templates.len {
+							println(term.fail_message('Invalid index'))
+							continue compilerloop
+						} else {
+							if os.input('so we use compiler ${compilers[index]}? (Yep/nop)') in [
+								'n',
+								'N',
+								'no',
+								'nop',
+								'nope',
+							] {
+								continue
+							} else {
+								compiler = compilers[index]
+								break compilerloop
+							}
+						}
+					}
 					conf := vgama.ProjectConf{
 						name:        name
 						description: desc
-						repo:        repo or { '' }
 						gama:        vgama.ProjectGamaConf{
-							version: installation.get_gama_version() or {
+							version:  installation.get_gama_version() or {
 								println(term.fail_message(err.str()))
 								vgama.Version{}
 							}
+							compiler: compiler
 						}
 					}
 
@@ -230,20 +305,16 @@ fn main() {
 						return err
 					}
 
-					// Main Dev Loop
 					loop_dev: for {
-						// 1. Build
 						exe := project.build_native(inst) or {
 							println(term.fail_message('Error building: ${err}'))
 							time.sleep(time.second * 2)
 							continue
 						}
 
-						// 2. Run
 						mut process := os.new_process(exe)
 						process.run()
 
-						// 3. Create a channel to detect if the APP exits on its own
 						process_exit_ch := chan bool{}
 
 						spawn fn (mut p os.Process, ch chan bool) {
@@ -251,28 +322,22 @@ fn main() {
 							ch <- true or { return }
 						}(mut process, process_exit_ch)
 
-						// 4. Inner Loop: Wait for File Change OR Process Exit
-						// We poll in the main thread so 'w' state is preserved correctly
 						loop_wait: for {
 							select {
-								// CASE A: Process exited naturally (crashed or finished)
 								_ := <-process_exit_ch {
 									println(term.warn_message('Process exited.'))
 									break loop_dev
 								}
-								// CASE B: Timeout (allows us to poll files)
 								1 * time.second {
-									// Check for file changes
 									changed_file := w.poll()
 									if changed_file != '' {
 										println(term.warn_message('Code changed in ${changed_file}, restarting...'))
 
-										// Kill the running app
 										if process.is_alive() {
 											process.signal_kill()
 											process.wait()
 										}
-										break loop_wait // Break inner loop to rebuild
+										break loop_wait
 									}
 								}
 							}

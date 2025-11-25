@@ -1,0 +1,71 @@
+# depslib dependency file v1.0
+1764027202 source:/tmp/ban/main.c
+	<gama.h>
+
+1763942367 /home/engon/gama/lib/gama.h
+	"gapi.h"
+	"body.h"
+	"system.h"
+	"physics.h"
+	"draw.h"
+	"key.h"
+	<stdio.h>
+
+1763939424 /home/engon/gama/lib/gapi.h
+	<stdint.h>
+	"position.h"
+
+1763937760 /home/engon/gama/lib/position.h
+
+1763944741 /home/engon/gama/lib/body.h
+	<stddef.h>
+	<stdlib.h>
+	"position.h"
+	<stdint.h>
+	<stdlib.h>
+	"gapi.h"
+	"collision.h"
+
+1763945258 /home/engon/gama/lib/collision.h
+	"body.h"
+	<math.h>
+	<stdio.h>
+
+1764011070 /home/engon/gama/lib/system.h
+	"body.h"
+	"body_list.h"
+	"position.h"
+
+1763943186 /home/engon/gama/lib/body_list.h
+	"body.h"
+	<stdio.h>
+
+1764013522 /home/engon/gama/lib/physics.h
+	"body.h"
+	"gapi.h"
+	"position.h"
+	"system.h"
+	<math.h>
+	<stdio.h>
+
+1763942723 /home/engon/gama/lib/draw.h
+	"body.h"
+	"color.h"
+	"gapi.h"
+	"image.h"
+	"physics.h"
+	<stdint.h>
+
+1763928761 /home/engon/gama/lib/color.h
+	<stdlib.h>
+
+1763939432 /home/engon/gama/lib/image.h
+	"gapi.h"
+	<stdint.h>
+
+1763942353 /home/engon/gama/lib/key.h
+	"gapi.h"
+
+1764054432 source:/tmp/ban/src/main.c
+	<gama.h>
+
