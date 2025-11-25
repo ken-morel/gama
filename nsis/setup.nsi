@@ -78,7 +78,7 @@ Section "Install gama" SecInstall
   File /r "..\assets"
 
   SetOutPath "$INSTDIR\runners\native"
-  File /r "..\runners\native\libvgama.dll"
+  File /r "..\bin\libvgama.dll"
 
   ; --- Add the installation directory to the user's PATH ---
   Call AddGamaToPath
