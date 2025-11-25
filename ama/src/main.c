@@ -34,7 +34,7 @@ int main() {
   gm_system_push(&sys, &walls[1]);
 
   do {
-    double dt = gm_dt();
+    gm_dt();
     gm_system_update(&sys, 500);
     for (size_t i = 0; i < 10; i++)
       gm_draw_circle_body(&circles[i], i % 2 == 0 ? GM_BLUE : GM_DARKBLUE);
