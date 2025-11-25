@@ -56,7 +56,6 @@ Function AddGamaToPath
     ${Else}
       WriteRegExpandStr HKCU "Environment" "Path" "$R0;$INSTDIR"
     ${EndIf}
-
     ; Broadcast a message to notify other processes of the change.
     SendMessage ${HWND_BROADCAST} ${WM_SETTINGCHANGE} 0 "STR:Environment" /TIMEOUT=5000
   ${EndIf}
@@ -76,8 +75,10 @@ Section "Install gama" SecInstall
   File "..\README.md"
   File /r "..\lib"
   File /r "..\templates"
-  File /r "..\runners"
   File /r "..\assets"
+
+  SetOutPath "$INSTDIR\runners\native"
+  File /r "..\runners\native\libvgama.dll"
 
   ; --- Add the installation directory to the user's PATH ---
   Call AddGamaToPath
