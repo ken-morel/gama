@@ -4,5 +4,6 @@
 *.v linguist-language=V
 *.vv linguist-language=V
 *.vsh linguist-language=V
+*.h linguist-language=C
 v.mod linguist-language=V
 .vdocignore linguist-language=ignore

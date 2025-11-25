@@ -26,6 +26,7 @@ fn find_compilers() []Compiler {
 
 	$if windows {
 		locations << 'C:/CodeBlocks/MinGW/bin'
+		locations << 'C:/Program Files/CodeBlocks/MinGW/bin'
 		locations << 'C:/MinGW/bin'
 	} $else {
 		locations << '/usr/bin'
