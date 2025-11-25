@@ -1,20 +1,30 @@
 #pragma once
 #include <stdint.h>
 
-double gama_dt = 0;
+#include "position.h"
+
+double _gm_dt = 0;
+
+static inline double gm_dt() { return _gm_dt; }
+
 struct {
-  double x;
-  double y;
-  double dx;
-  double dy;
+  gmPos position;
+  gmPos movement;
 
   int32_t pressed;
   int32_t down;
-} gama_mouse = {
-    .x = 0,
-    .y = 0,
-    .dx = 0,
-    .dy = 0,
+} gm_mouse = {
+    .position =
+        {
+            .x = 0,
+            .y = 0,
+        },
+
+    .movement =
+        {
+            .x = 0,
+            .y = 0,
+        },
     .pressed = 0,
     .down = 0,
 };

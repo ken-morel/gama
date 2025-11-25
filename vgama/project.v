@@ -7,13 +7,6 @@ pub:
 	path string @[required]
 }
 
-pub fn (p Project) build_shared(z ZigCC, out string) ! {
-	conf := p.get_conf() or { return error('Error getting project configuration: ${err}') }
-
-	z.build_shared(os.join_path(p.path, 'src', 'main.c'), os.join_path(p.path, 'gama'),
-		conf.name, out) or { return err }
-}
-
 pub fn (p Project) build_path(type string) string {
 	return os.join_path(p.path, 'build', type)
 }

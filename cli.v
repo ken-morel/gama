@@ -4,12 +4,82 @@ import cli
 import os
 import vgama
 import term
+import time
+
+fn find_compilers() []string {
+	mut found := []string{}
+	mut locations := os.getenv('PATH').split(os.path_separator)
+	compilers := ['clang', 'gcc', 'tcc', 'msvc']
+
+	$if windows {
+		locations << 'C:/CodeBlocks/MinGW/bin'
+		locations << 'C:/MinGW/bin'
+	} $else {
+		locations << '/usr/bin'
+		locations << '/usr/local/bin'
+	}
+
+	for loc in locations {
+		for compiler in compilers {
+			mut exe_path := os.join_path(loc, compiler)
+			$if windows {
+				exe_path += '.exe'
+			}
+			if os.exists(exe_path) {
+				if exe_path !in found {
+					found << exe_path
+				}
+			}
+		}
+	}
+
+	return found
+}
+
+struct Watcher {
+mut:
+	last_mtime i64    @[required]
+	pattern    string @[required]
+}
+
+fn Watcher.new(pattern string) !Watcher {
+	mut w := Watcher{0, pattern}
+	w.last_mtime, _ = w.get_last_mtime()
+	return w
+}
+
+fn (w Watcher) get_last_mtime() (i64, string) {
+	mut max_mtime := i64(0)
+	mut max_f := ''
+	files := os.glob(w.pattern) or { return 0, '' }
+	for file in files {
+		mtime := os.inode(file).mtime
+		if mtime > max_mtime {
+			max_mtime = mtime
+			max_f = file
+		}
+	}
+	return max_mtime, max_f
+}
+
+fn (mut w Watcher) poll() string {
+	ctime, mf := w.get_last_mtime()
+	if ctime > w.last_mtime {
+		w.last_mtime = ctime
+		return mf
+	}
+	return ''
+}
 
 fn get_project() !vgama.Project {
 	return vgama.Project.find_at(os.getwd()) or {
 		println(term.fail_message('Not in a gama project. (Could not find gama.toml)'))
 		return error('Not a gama project')
 	}
+}
+
+fn get_installation() !vgama.Installation {
+	return vgama.Installation.folder(os.dir(os.executable()))
 }
 
 fn main() {
@@ -27,7 +97,7 @@ fn main() {
 				description: 'Create a new gama project with the assistant'
 				execute:     fn (cmd cli.Command) ! {
 					println('Welcome to gama project creation assistant, let me load a few things')
-					installation := vgama.Installation.dev('/home/engon/gama')
+					installation := get_installation()!
 					gama_version := installation.get_gama_version() or {
 						println(term.fail_message('Error getting gama version: ${err}'))
 						return err
@@ -54,6 +124,7 @@ fn main() {
 						}
 						if name.len < 3 || name.len > 15 {
 							println(term.warn_message('The name should have at least 3 and at most 15 letters'))
+							name = ''
 							continue nameloop
 						}
 						print('The project will be named: ')
@@ -74,7 +145,6 @@ fn main() {
 						}
 					}
 					print('Oh sounds cool, what is ')
-
 					print(term.bold(name))
 					println(' about?')
 					desc := os.input(term.blue('> '))
@@ -105,17 +175,62 @@ fn main() {
 							}
 						}
 					}
-					println("Will you host your project on a github repo? Type it's name as user/reponame, if you don't know what it is, just hit enter")
-					repo := os.input_opt(term.blue('> '))
+					println('Looking for compilers...')
+					compilers := find_compilers()
+
+					println('Please choose a compiler, you can still change it latter')
+
+					mut compiler := ''
+					compilerloop: for compiler == '' {
+						print(term.cyan(' 0) '))
+						println(term.green('skip'))
+						for index, comp in compilers {
+							print(term.cyan(' ${index + 1}) '))
+							println(term.green(comp))
+						}
+						mut index := os.input(term.blue('> ')).int()
+						if index == 0 {
+							if os.input("so you don't want a compiler? (Yep/nop)") in [
+								'n',
+								'N',
+								'no',
+								'nop',
+								'nope',
+							] {
+								continue
+							} else {
+								compiler = ''
+								break compilerloop
+							}
+						}
+						index -= 1
+						if index < 0 || index > templates.len {
+							println(term.fail_message('Invalid index'))
+							continue compilerloop
+						} else {
+							if os.input('so we use compiler ${compilers[index]}? (Yep/nop)') in [
+								'n',
+								'N',
+								'no',
+								'nop',
+								'nope',
+							] {
+								continue
+							} else {
+								compiler = compilers[index]
+								break compilerloop
+							}
+						}
+					}
 					conf := vgama.ProjectConf{
 						name:        name
 						description: desc
-						repo:        repo or { '' }
 						gama:        vgama.ProjectGamaConf{
-							version: installation.get_gama_version() or {
+							version:  installation.get_gama_version() or {
 								println(term.fail_message(err.str()))
 								vgama.Version{}
 							}
+							compiler: compiler
 						}
 					}
 
@@ -144,7 +259,7 @@ fn main() {
 					project := get_project()!
 
 					println(term.ok_message('Building project at: ${project.path}'))
-					installation := vgama.Installation.dev('/home/engon/gama')
+					installation := get_installation()!
 
 					project.build_native(installation) or {
 						println(term.fail_message('Build failed: ${err}'))
@@ -157,6 +272,77 @@ fn main() {
 						}
 					}
 					return
+				}
+			},
+			cli.Command{
+				name:        'run'
+				usage:       'run'
+				description: 'Run the built project'
+				execute:     fn (_ cli.Command) ! {
+					project := get_project()!
+					println(term.ok_message('Running project at: ${project.path}'))
+
+					project.run_native_build(true) or {
+						println(term.fail_message('Error running build: ${err}'))
+					}
+				}
+			},
+			cli.Command{
+				name:        'dev'
+				usage:       'dev'
+				description: 'Build and re-run the project on code changes'
+				execute:     fn (_ cli.Command) ! {
+					inst := get_installation()!
+					project := get_project()!
+					println(term.ok_message('Running project at: ${project.path} in dev mode'))
+
+					// Ensure we only watch source files, not binaries
+					watch_path := os.join_path(project.path, 'src', '**')
+					println('Watching: ${os.glob(watch_path)!}')
+
+					mut w := Watcher.new(watch_path) or {
+						println(term.fail_message('Failed watching directory'))
+						return err
+					}
+
+					loop_dev: for {
+						exe := project.build_native(inst) or {
+							println(term.fail_message('Error building: ${err}'))
+							time.sleep(time.second * 2)
+							continue
+						}
+
+						mut process := os.new_process(exe)
+						process.run()
+
+						process_exit_ch := chan bool{}
+
+						spawn fn (mut p os.Process, ch chan bool) {
+							p.wait()
+							ch <- true or { return }
+						}(mut process, process_exit_ch)
+
+						loop_wait: for {
+							select {
+								_ := <-process_exit_ch {
+									println(term.warn_message('Process exited.'))
+									break loop_dev
+								}
+								1 * time.second {
+									changed_file := w.poll()
+									if changed_file != '' {
+										println(term.warn_message('Code changed in ${changed_file}, restarting...'))
+
+										if process.is_alive() {
+											process.signal_kill()
+											process.wait()
+										}
+										break loop_wait
+									}
+								}
+							}
+						}
+					}
 				}
 			},
 			cli.Command{
@@ -175,7 +361,7 @@ fn main() {
 						usage:       'reset'
 						description: "reset the project's gama library to the cli tool's verion"
 						execute:     fn (_ cli.Command) ! {
-							installation := vgama.Installation.dev('/home/engon/gama')
+							installation := get_installation()!
 							project := get_project()!
 							project.reset_gama(installation) or {
 								println(term.fail_message('Error reseting gama: ${err}'))

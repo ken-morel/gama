@@ -1,17 +1,18 @@
 #pragma once
 
+
 #define CP_USE_DOUBLES 1
 // NOTE: The order is important, major, minor, patch
 #define GAMA_VERSION_MAJOR 0
 #define GAMA_VERSION_MINOR 1
 #define GAMA_VERSION_PATCH 0
 
-#include "body.h"
-#include "draw.h"
 #include "gapi.h"
-#include "key.h"
-#include "physics.h"
+#include "body.h"
 #include "system.h"
+#include "physics.h"
+#include "draw.h"
+#include "key.h"
 #include <stdio.h>
 
 void gm_init(int width, int height, const char *title) {

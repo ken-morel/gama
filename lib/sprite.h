@@ -13,5 +13,5 @@ typedef struct {
   uint32_t height;
   uint8_t n_sprites;
 
-  gama_image image;
-} gama_sprite;
+  gmImage image;
+} gmSprite;

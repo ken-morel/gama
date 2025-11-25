@@ -6,19 +6,13 @@ pub struct Installation {
 pub:
 	lib       string @[required]
 	templates string @[required]
-	zig       string @[required]
 	runners   string @[required]
 }
 
-pub fn (i Installation) get_zig() ZigCC {
-	return ZigCC{i.zig}
-}
-
-pub fn Installation.dev(repo string) Installation {
+pub fn Installation.folder(repo string) Installation {
 	return Installation{
 		lib:       os.join_path(repo, 'lib')
 		templates: os.join_path(repo, 'templates')
-		zig:       'zig'
 		runners:   os.join_path(repo, 'runners')
 	}
 }
