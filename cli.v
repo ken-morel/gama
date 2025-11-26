@@ -7,7 +7,6 @@ import term
 import time
 
 struct Compiler {
-pub:
 	name string
 	path string
 }
@@ -27,6 +26,7 @@ fn find_compilers() []Compiler {
 	$if windows {
 		locations << 'C:/CodeBlocks/MinGW/bin'
 		locations << 'C:/Program Files/CodeBlocks/MinGW/bin'
+		locations << 'C:/Program Files(x86)/CodeBlocks/MinGW/bin'
 		locations << 'C:/MinGW/bin'
 	} $else {
 		locations << '/usr/bin'
@@ -241,10 +241,31 @@ fn main() {
 					},
 				]
 			},
+			cli.Command{
+				name:        'package'
+				usage:       'package'
+				description: 'Package the current gama project into a setup'
+				execute:     package_project
+			},
 		]
 	}
+
 	app.setup()
 	app.parse(os.args)
+}
+
+fn package_project(cmd cli.Command) ! {
+	project := get_project()!
+	installation := get_installation()!
+
+	println(term.ok_message('Packaging project at: ${project.path}'))
+
+	project.package_native(installation) or {
+		println(term.fail_message('Packaging failed: ${err}'))
+		return
+	}
+	println(term.ok_message('Packaging successful!'))
+	return
 }
 
 @[unsafe]

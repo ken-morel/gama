@@ -1,0 +1,11 @@
+
+name = "pong"
+description = "A simple pong game, made with gama"
+version = "0.1.0"
+author = "gama"
+
+[gama]
+
+version = "0.1.0"
+compiler = "/usr/bin/clang"
+		

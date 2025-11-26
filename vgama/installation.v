@@ -7,6 +7,7 @@ pub:
 	lib       string @[required]
 	templates string @[required]
 	runners   string @[required]
+	assets    string @[required]
 }
 
 pub fn Installation.folder(repo string) Installation {
@@ -14,6 +15,7 @@ pub fn Installation.folder(repo string) Installation {
 		lib:       os.join_path(repo, 'lib')
 		templates: os.join_path(repo, 'templates')
 		runners:   os.join_path(repo, 'runners')
+		assets:    os.join_path(repo, 'assets')
 	}
 }
 

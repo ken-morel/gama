@@ -25,6 +25,8 @@ pub fn (p Project) build_native(inst Installation) !string {
 	p.copy_build_native_artifacts(inst)!
 	source_files := p.get_src_c_files()!
 
+	inst.copy_gama(os.join_path(p.path, 'include'), false) or {}
+
 	if source_files.len == 0 {
 		return error('No c source files in src directory')
 	}

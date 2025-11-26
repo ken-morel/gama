@@ -4,7 +4,6 @@
 #include "color.h"
 #include "gapi.h"
 #include "image.h" // For gmImage
-#include "physics.h"
 #include <stdint.h>
 
 // ---------------------------------------------------------------------------
@@ -85,29 +84,31 @@ void gm_draw_body(const gmBody *body, gmColor c) {
 
 // Specialized drawing functions for physics bodies
 void gm_draw_rect_body(const gmBody *body, gmColor c) {
-  if (body == NULL || !body->is_active)
-    return;
   gm_draw_rectangle(body->position.x, body->position.y, body->width,
                       body->height, c);
 }
+void gm_draw_rect_bodies(const gmBody *bodies, size_t number, gmColor c) {
+  for (size_t i = 0; i < number; i++)
+    gm_draw_rect_body(&bodies[i], c);
+}
 
-void gm_draw_round_rect_body(const gmBody *body, double radius_factor,
+void gm_draw_round_rect_body(const gmBody *body, double radius,
                                gmColor c) {
-  if (body == NULL || !body->is_active)
-    return;
-  double radius =
-      (body->width < body->height ? body->width : body->height) * radius_factor;
   gm_draw_rounded_rectangle(body->position.x, body->position.y, body->width,
                               body->height, radius, c);
 }
 
+
 void gm_draw_circle_body(const gmBody *body, gmColor c) {
-  if (body == NULL || !body->is_active)
-    return;
   double radius = body->collider_type == GM_COLLIDER_CIRCLE
                       ? body->radius
                       : (body->width + body->height) / 4.0;
   gm_draw_circle(body->position.x, body->position.y, radius, c);
+}
+
+void gm_draw_circle_bodies(const gmBody *bodies, size_t number, gmColor c) {
+  for (size_t i = 0; i < number; i++)
+    gm_draw_circle_body(&bodies[i], c);
 }
 
 void gm_draw_ellipse_body(const gmBody *body, gmColor c) {
@@ -117,6 +118,10 @@ void gm_draw_ellipse_body(const gmBody *body, gmColor c) {
                     body->height, c);
 }
 
+void gm_draw_ellipse_bodies(const gmBody *bodies, size_t number, gmColor c) {
+  for (size_t i = 0; i < number; i++)
+    gm_draw_ellipse_body(&bodies[i], c);
+}
 void gm_draw_triangle_body(const gmBody *body, double x2_offset,
                              double y2_offset, double x3_offset,
                              double y3_offset, gmColor c) {
@@ -126,8 +131,15 @@ void gm_draw_triangle_body(const gmBody *body, double x2_offset,
                      body->position.x + x2_offset, body->position.y + y2_offset,
                      body->position.x + x3_offset, body->position.y + y3_offset,
                      c);
+
 }
 
+void gm_draw_triangle_bodies(const gmBody *bodies, size_t number, double x2_offset,
+                             double y2_offset, double x3_offset,
+                             double y3_offset, gmColor c) {
+  for (size_t i = 0; i < number; i++)
+    gm_draw_triangle_body(&bodies[i], x2_offset, y2_offset, x3_offset, y3_offset, c);
+}
 void gm_draw_image_body(const gmBody *body, gmImage img) {
   if (body == NULL || !body->is_active)
     return;
@@ -135,9 +147,19 @@ void gm_draw_image_body(const gmBody *body, gmImage img) {
                   body->height);
 }
 
+void gm_draw_image_bodies(const gmBody *bodies, size_t number, gmImage img) {
+  for (size_t i = 0; i < number; i++)
+    gm_draw_image_body(&bodies[i], img);
+}
 void gm_draw_text_body(const gmBody *body, const char *text,
                          double font_size, gmColor c) {
   if (body == NULL || !body->is_active)
     return;
   gm_draw_text(body->position.x, body->position.y, text, font_size, c);
+}
+
+void gm_draw_text_bodies(const gmBody *bodies, size_t number,  const char *text,
+                         double font_size, gmColor c) {
+  for (size_t i = 0; i < number; i++)
+    gm_draw_text_body(&bodies[i], text, font_size, c);
 }
