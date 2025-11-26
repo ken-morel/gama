@@ -33,8 +33,8 @@ gmBodies gm_bodies_push(gmBodies list, gmBody* obj) {
 
 gmBodies gm_bodies_pop(gmBodies list) {
   size_t len = gm_bodies_length(list);
-  gmBodies new_list = reallocarray(list, len + 1, sizeof(gmBody*));
-  new_list[len] = NULL;
+  gmBodies new_list = reallocarray(list, len, sizeof(gmBody*));
+  new_list[len - 1] = NULL;
   return new_list;
 }
 gmBodies gm_bodies_remove(gmBodies list, gmBody* obj) {
@@ -44,8 +44,8 @@ gmBodies gm_bodies_remove(gmBodies list, gmBody* obj) {
   size_t index = 0;
   for (size_t i = 0; i < len; i++) {
     if (list[i] != obj) {
-      new_list[i] = list[i];
-      i++;
+      new_list[index] = list[i];
+      index++;
     }
   }
   return new_list;

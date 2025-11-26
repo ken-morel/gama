@@ -12,6 +12,7 @@
 #include "key.h"
 #include "physics.h"
 #include "system.h"
+#include "animate.h"
 #include <stdio.h>
 
 void gm_init(int width, int height, const char *title) {
@@ -39,3 +40,8 @@ static inline int gm_yield() {
 static inline void gm_quit() { return gapi_quit(); }
 
 void gm_sync() { gapi_wait_queue(); }
+
+void gm_bg_color(gmColor c) {
+  gapi_set_bg_color(gm_red(c), gm_green(c),
+                          gm_blue(c), gm_alpha(c)  );
+}

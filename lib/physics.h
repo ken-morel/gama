@@ -15,40 +15,33 @@ void gm_collision_resolve(gmSystem *, gmBody *a, gmBody *b);
 // ---------------------------------------------------------------------------
 
 void gm_system_update_body_dt(gmSystem *sys, gmBody *body, double dt) {
-
-  if (body == NULL || (sys != NULL && !sys->is_active) || !body->is_active) {
+  if (body->is_static ||body == NULL || (sys != NULL && !sys->is_active) || !body->is_active) {
     return; // Don't update inactive or static bodies
   }
-  if (body->mass == 0 && sys != NULL) { // for static bodies
+  // Step 1: Update velocity based on accelerations (both body and system)
+  body->velocity.x += body->acceleration.x * dt;
+  body->velocity.y += body->acceleration.y * dt;
+
+  if (sys != NULL) {
+    body->velocity.x += sys->acceleration.x * dt;
+    body->velocity.y += sys->acceleration.y * dt;
+  }
+
+  // Step 2: Apply damping to velocity (after all force updates)
+  if (sys != NULL) {
+    double damp_factor = 1.0 / (1.0 + (sys->damping * dt));
+    body->velocity.x *= damp_factor;
+    body->velocity.y *= damp_factor;
+  }
+
+  // Step 3: Update position based on the new velocity
+  body->position.x += body->velocity.x * dt;
+  body->position.y += body->velocity.y * dt;
+
+  if (sys != NULL) {
     body->position.x +=
         sys->velocity.x * dt; // Update position with system velocity
     body->position.y += sys->velocity.y * dt;
-  } else {
-    // Step 1: Update velocity based on accelerations (both body and system)
-    body->velocity.x += body->acceleration.x * dt;
-    body->velocity.y += body->acceleration.y * dt;
-
-    if (sys != NULL) {
-      body->velocity.x += sys->acceleration.x * dt;
-      body->velocity.y += sys->acceleration.y * dt;
-    }
-
-    // Step 2: Apply damping to velocity (after all force updates)
-    if (sys != NULL) {
-      double damp_factor = 1.0 / (1.0 + (sys->damping * dt));
-      body->velocity.x *= damp_factor;
-      body->velocity.y *= damp_factor;
-    }
-
-    // Step 3: Update position based on the new velocity
-    body->position.x += body->velocity.x * dt;
-    body->position.y += body->velocity.y * dt;
-
-    if (sys != NULL) {
-      body->position.x +=
-          sys->velocity.x * dt; // Update position with system velocity
-      body->position.y += sys->velocity.y * dt;
-    }
   }
 }
 
@@ -69,11 +62,6 @@ void gm_system_update_dt(gmSystem *sys, unsigned substeps, double dt) {
     for (int j = 0; j < count; j++) {
       for (int k = j + 1; k < count; k++) {
         if (!sys->bodies[j]->is_active || !sys->bodies[k]->is_active) {
-          continue;
-        }
-        // Note: We usually skip if both masses are 0 (static vs static),
-        // but checking it inside resolve is safer if you want triggers.
-        if (sys->bodies[j]->mass == 0 && sys->bodies[k]->mass == 0) {
           continue;
         }
 

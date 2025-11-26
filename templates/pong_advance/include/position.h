@@ -1,5 +1,6 @@
 #pragma once
 
+#include <math.h>
 typedef struct {
   double x, y;
 } gmPos;
@@ -17,4 +18,8 @@ void gm_pos_set(gmPos *p, double x, double y) {
 void gm_pos_reset(gmPos *p) {
   p->x = 0;
   p->y = 0;
+}
+
+double gm_pos_magniture(gmPos p) {
+  return sqrt(p.x * p.x + p.y * p.y);
 }

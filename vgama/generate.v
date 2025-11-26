@@ -8,15 +8,14 @@ pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTempla
 	os.mkdir(project_dir) or {
 		println(term.warn_message('Could not create project directory: ${err}'))
 	}
+	template.copy_to(project_dir) or {
+		println(term.warn_message('Could not copy template to directory: ${err}'))
+	}
 	os.mkdir_all(os.join_path(project_dir, 'assets', 'images')) or {}
 	os.cp(os.join_path(inst.assets, 'images', 'icon.png'), os.join_path(project_dir, 'assets',
 		'images', 'icon.png')) or {}
 	os.cp(os.join_path(inst.assets, 'images', 'icon.ico'), os.join_path(project_dir, 'assets',
 		'images', 'icon.ico')) or {}
-
-	template.copy_to(project_dir) or {
-		println(term.warn_message('Could not copy template to directory: ${err}'))
-	}
 
 	project := Project{
 		path: os.abs_path(project_dir)
