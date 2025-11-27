@@ -33,9 +33,13 @@ void pong_scene() {
 
   do {
     double dt = gm_dt();
-    printf("%lf", dt);
-    gm_max_speed_anim(&ball_body, 0.5, gm_anim_spring, dt, 1);
-    gm_max_speed_anim(&goal_body, 0.1, gm_anim_spring, dt, 1);
+    printf("%lf\n", dt);
+    gm_max_speed_anim(&ball_body, 0.6, gm_anim_linear, dt, 0.3);
+    gm_max_speed_anim(&goal_body, 0.1, gm_anim_linear, dt, 0.3);
+    if (fabs(goal_body.position.x) > 1)
+      goal_body.position.x *= -0.99;
+    if (fabs(goal_body.position.y) > 1)
+      goal_body.position.y *= -0.95;
 
     if (gm_collision_detect(&ball_body, &goal_body)) {
       score++;
