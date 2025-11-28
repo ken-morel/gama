@@ -1,4 +1,3 @@
-#include "animate.h"
 #include <gama.h>
 #include <stdio.h>
 
@@ -14,6 +13,7 @@ void pong_scene() {
   gmBody ball_body = gm_circle_body(100, 0, 0, 0.2);
   ball_body.velocity.y = 0.4;
   ball_body.velocity.x = 0.4;
+  ball_body.restitution = 1.3;
   gm_system_push(&sys, &ball_body);
 
   gmBody walls[2] = {
@@ -30,6 +30,7 @@ void pong_scene() {
 
   gmBody goal_body = gm_circle_body(500, 0, -0.5, 0.05);
   gm_system_push(&sys, &goal_body);
+  double paddley = 0;
 
   do {
     double dt = gm_dt();
@@ -41,7 +42,7 @@ void pong_scene() {
     if (fabs(goal_body.position.y) > 1)
       goal_body.position.y *= -0.95;
 
-    if (gm_collision_detect(&ball_body, &goal_body)) {
+    if (gm_system_get_collision(&sys, &ball_body, &goal_body) != NULL) {
       score++;
     } else if (fabs(ball_body.position.x) >= 1) {
       score--;
@@ -50,7 +51,6 @@ void pong_scene() {
       else if (ball_body.position.x < -1)
         ball_body.position.x = 1;
     } else if (score < 0) {
-      // gameover = 1;
       score = 10;
       // return;
     }
@@ -59,13 +59,18 @@ void pong_scene() {
       ball_body.velocity.x -= 0.01;
     }
 
-    double velocity = gm_key('U') ? -4 : gm_key('D') ? 4 : 0;
-    gm_anim_spring(&paddles[0].velocity.y, velocity, dt, 0.1);
-    gm_anim_spring(&paddles[1].velocity.y, velocity, dt, 0.1);
+    if (gm_key('U'))
+      paddley += 50 * dt;
+    else if (gm_key('D'))
+      paddley -= 50 * dt;
+    else
+      paddley = 0;
+    gm_anim_linear(&paddles[0].velocity.y, paddley, dt, 0.1);
+    gm_anim_linear(&paddles[1].velocity.y, paddley, dt, 0.1);
 
     sprintf(score_text, "Score: %d", score);
 
-    gm_system_update(&sys, 500);
+    gm_system_update(&sys);
 
     gm_draw_circle_body(&ball_body, GM_BISQUE);
     gm_draw_rect_bodies(paddles, 2, GM_DARKGOLDENROD);

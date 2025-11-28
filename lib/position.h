@@ -20,6 +20,12 @@ void gm_pos_reset(gmPos *p) {
   p->y = 0;
 }
 
-double gm_pos_magniture(gmPos p) {
-  return sqrt(p.x * p.x + p.y * p.y);
+double gm_pos_magniture(gmPos p) { return sqrt(p.x * p.x + p.y * p.y); }
+
+gmPos gmpos(double x, double y) {
+  gmPos pos = {
+      .x = x,
+      .y = y,
+  };
+  return pos;
 }

@@ -8,8 +8,6 @@
  */
 
 #pragma once
-
-#define CP_USE_DOUbles 1
 // NOTE: The order is important, major, minor, patch
 #define GAMA_VERSION_MAJOR 0
 #define GAMA_VERSION_MINOR 1
@@ -49,18 +47,21 @@ void gm_init(int width, int height, const char *title) {
 /**
  * @brief Checks if the main game loop should continue running.
  * @return 1 if the window is open and the game should continue, 0 otherwise.
- * @deprecated This function is deprecated and will be removed. Use gm_yield() instead.
+ * @deprecated This function is deprecated and will be removed. Use gm_yield()
+ * instead.
  */
 static inline int gm_runs() { return gapi_runs(); }
 
 /**
- * @brief Processes events, updates input state, and prepares for the next frame.
+ * @brief Processes events, updates input state, and prepares for the next
+ * frame.
  *
  * This function should be called at the end of the main game loop. It handles
  * window events, polls for input, updates mouse and keyboard states, and
  * swaps the graphics buffers.
  *
- * @return 1 if the game should continue to the next frame, 0 if the window has been closed.
+ * @return 1 if the game should continue to the next frame, 0 if the window has
+ * been closed.
  * @example
  * while (gm_yield()) {
  *   // Your game logic and rendering here

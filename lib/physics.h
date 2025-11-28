@@ -1,21 +1,23 @@
 #pragma once
 
 #include "body.h"
+#include "body_list.h"
+#include "collision.h"
 #include "gapi.h"
 #include "position.h"
 #include "system.h"
 #include <math.h>
 #include <stdio.h>
 
-int gm_collision_detect(gmBody *a, gmBody *b);
-void gm_collision_resolve(gmSystem *, gmBody *a, gmBody *b);
+void gm_collision_resolve(gmCollision *collision);
 
 // ---------------------------------------------------------------------------
 // ------------------------------ Core Physics Update ------------------------
 // ---------------------------------------------------------------------------
 
 void gm_system_update_body_dt(gmSystem *sys, gmBody *body, double dt) {
-  if (body->is_static ||body == NULL || (sys != NULL && !sys->is_active) || !body->is_active) {
+  if (body->is_static || body == NULL || (sys != NULL && !sys->is_active) ||
+      !body->is_active) {
     return; // Don't update inactive or static bodies
   }
   // Step 1: Update velocity based on accelerations (both body and system)
@@ -45,12 +47,22 @@ void gm_system_update_body_dt(gmSystem *sys, gmBody *body, double dt) {
   }
 }
 
-void gm_system_update_dt(gmSystem *sys, unsigned substeps, double dt) {
+gmCollision *gm_collision_detect(gmBody *, gmBody *);
+static inline int gm_collision_bodies_are(gmCollision *c, gmBody *a,
+                                          gmBody *b) {
+  return c->bodies[0] == a && c->bodies[1] == b ||
+         c->bodies[0] == b && c->bodies[1] == a;
+}
+void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
   if (sys == NULL)
     return;
   if (!sys->is_active)
     return;
 
+  gmCollision **newCollisions = NULL;
+  gmCollision **prevCollisions = sys->collisions;
+
+  const unsigned int substeps = (dt / unit) + 1;
   const double sub_dt = gm_dt() / substeps;
   const unsigned count = gm_system_size(sys);
 
@@ -65,24 +77,53 @@ void gm_system_update_dt(gmSystem *sys, unsigned substeps, double dt) {
           continue;
         }
 
-        if (gm_collision_detect(sys->bodies[j], sys->bodies[k])) {
-          gm_collision_resolve(sys, sys->bodies[j], sys->bodies[k]);
+        gmCollision *collision =
+            gm_collision_detect(sys->bodies[j], sys->bodies[k]);
+        if (collision != NULL) {
+          collision->sys = sys;
+          gm_collision_resolve(collision);
+          gm_ptr_list_push((void **)newCollisions, collision);
         }
       }
     }
   }
+  gmCollision *prevC, *newC;
+  gm_ptr_list_for_each(prevC, prevCollisions) {
+    gm_ptr_list_for_each(newC, newCollisions) {
+      if (gm_collision_bodies_are(prevC, newC->bodies[0], newC->bodies[1])) {
+        newC->since = prevC->since + dt;
+        break;
+      }
+    }
+    // free(prevC);
+  }
+  sys->collisions = newCollisions;
+  // free(prevCollisions);
 }
 
-static inline void gm_system_update(gmSystem *sys, unsigned substeps) {
-  return gm_system_update_dt(sys, substeps, gm_dt());
+gmCollision *gm_system_get_collision(gmSystem *sys, gmBody *a, gmBody *b) {
+  gmCollision *coll;
+  gm_ptr_list_for_each(coll, sys->collisions) {
+    if (gm_collision_bodies_are(coll, a, b))
+      return coll;
+  }
+  return NULL;
+}
+
+static inline void gm_system_update_unit(gmSystem *sys, double unit) {
+  return gm_system_update_dt(sys, unit, gm_dt());
+}
+double gm_system_frame_time = 0.001; // ~15 updates per frame.
+static inline void gm_system_update(gmSystem *sys) {
+  return gm_system_update_unit(sys, gm_system_frame_time);
 }
 
 // ---------------------------------------------------------------------------
 // ------------------------------ Collision Response -------------------------
 // ---------------------------------------------------------------------------
 
-
-double gm_collision_penetration_normals(gmBody *a, gmBody *b, double * normal_x, double *normal_y) {
+double gm_collision_penetration_normals(gmBody *a, gmBody *b, double *normal_x,
+                                        double *normal_y) {
   double penetration_depth;
   // CASE: Circle vs Circle
   if (a->collider_type == GM_COLLIDER_CIRCLE &&
@@ -95,7 +136,7 @@ double gm_collision_penetration_normals(gmBody *a, gmBody *b, double * normal_x,
       dx = 0.001; // Avoid division by zero
     }
     penetration_depth = a->radius + b->radius - distance;
-    if (penetration_depth > 0 && normal_x !=NULL && normal_y != NULL) {
+    if (penetration_depth > 0 && normal_x != NULL && normal_y != NULL) {
       *normal_x = dx / distance;
       *normal_y = dy / distance;
     }
@@ -168,16 +209,17 @@ double gm_collision_penetration_normals(gmBody *a, gmBody *b, double * normal_x,
 
         // We add radius because we need to push the circle entirely out
         // so its edge touches the rect edge, not just its center.
-        if(normal_x != NULL && normal_y != NULL) {
-        if (min_x < min_y) {
-          penetration_depth = min_x + circle->radius;
-          *normal_x = (left_pen < right_pen) ? -1 : 1;
-          *normal_y = 0;
-        } else {
-          penetration_depth = min_y + circle->radius;
-          *normal_x = 0;
-          *normal_y = (bottom_pen < top_pen) ? -1 : 1;
-        }}
+        if (normal_x != NULL && normal_y != NULL) {
+          if (min_x < min_y) {
+            penetration_depth = min_x + circle->radius;
+            *normal_x = (left_pen < right_pen) ? -1 : 1;
+            *normal_y = 0;
+          } else {
+            penetration_depth = min_y + circle->radius;
+            *normal_x = 0;
+            *normal_y = (bottom_pen < top_pen) ? -1 : 1;
+          }
+        }
       }
 
       // --- CRITICAL FIX ---
@@ -197,20 +239,23 @@ double gm_collision_penetration_normals(gmBody *a, gmBody *b, double * normal_x,
 
 double gm_collision_penetration(gmBody *a, gmBody *b) {
   return gm_collision_penetration_normals(a, a, NULL, NULL);
-
 }
-void gm_collision_resolve(gmSystem *sys, gmBody *a, gmBody *b) {
-  double normal_x, normal_y;
-  double penetration_depth = gm_collision_penetration_normals(a, b, &normal_x, &normal_y);
+void gm_collision_resolve(gmCollision *coll) {
+  if (coll == NULL)
+    return;
+  gmBody *a = coll->bodies[0];
+  gmBody *b = coll->bodies[1];
+  coll->penetration = gm_collision_penetration_normals(a, b, &coll->normals.x,
+                                                       &coll->normals.y);
 
-  if (penetration_depth <= 0) {
+  if (coll->penetration <= 0) {
     return; // No collision to resolve
   }
 
   // --- 2. Resolve Velocity ---
   double rel_vx = b->velocity.x - a->velocity.x;
   double rel_vy = b->velocity.y - a->velocity.y;
-  double vel_along_normal = rel_vx * normal_x + rel_vy * normal_y;
+  double vel_along_normal = rel_vx * coll->normals.x + rel_vy * coll->normals.y;
 
   // Do not resolve if velocities are separating
   if (vel_along_normal > 0) {
@@ -228,8 +273,8 @@ void gm_collision_resolve(gmSystem *sys, gmBody *a, gmBody *b) {
 
   j /= (inv_mass_a + inv_mass_b);
 
-  double impulse_x = j * normal_x;
-  double impulse_y = j * normal_y;
+  double impulse_x = j * coll->normals.x;
+  double impulse_y = j * coll->normals.y;
 
   if (a->mass > 0) {
     a->velocity.x -= inv_mass_a * impulse_x;
@@ -244,10 +289,10 @@ void gm_collision_resolve(gmSystem *sys, gmBody *a, gmBody *b) {
   const double percent = 0.2; // Percentage of penetration to correct
   const double slop = 0.01;   // Penetration allowance to prevent jitter
   double correction_amount =
-      fmax(penetration_depth - slop, 0.0) / (inv_mass_a + inv_mass_b) * percent;
+      fmax(coll->penetration - slop, 0.0) / (inv_mass_a + inv_mass_b) * percent;
 
-  double correction_x = correction_amount * normal_x;
-  double correction_y = correction_amount * normal_y;
+  double correction_x = correction_amount * coll->normals.x;
+  double correction_y = correction_amount * coll->normals.y;
 
   if (a->mass > 0) {
     a->position.x -= inv_mass_a * correction_x;
@@ -258,5 +303,3 @@ void gm_collision_resolve(gmSystem *sys, gmBody *a, gmBody *b) {
     b->position.y += inv_mass_b * correction_y;
   }
 }
-
-

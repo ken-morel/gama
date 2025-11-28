@@ -4,11 +4,10 @@
 #include <stdlib.h>
 #define gnothing NULL
 
+#include "gapi.h"
 #include "position.h"
 #include <stdint.h>
 #include <stdlib.h>
-#include "gapi.h"
-
 
 typedef enum { GM_COLLIDER_CIRCLE, GM_COLLIDER_RECT } gmColliderType;
 typedef struct {
@@ -26,7 +25,7 @@ typedef struct {
   double friction;
 } gmBody;
 
-gmBody gm_body_create(double mass,double x, double y, double w, double h,
+gmBody gm_body_create(double mass, double x, double y, double w, double h,
                       gmColliderType c) {
   gmBody body = {
       .is_active = 1,
@@ -46,7 +45,7 @@ gmBody gm_body_create(double mass,double x, double y, double w, double h,
 
 void gm_max_speed(gmBody *body, double max_speed) {
   double current_speed = gm_pos_magniture(body->velocity);
-  if(current_speed > max_speed) {
+  if (current_speed > max_speed) {
     double factor = max_speed / current_speed;
     body->velocity.x *= factor;
     body->velocity.y *= factor;
@@ -54,7 +53,9 @@ void gm_max_speed(gmBody *body, double max_speed) {
 }
 
 void gm_max_speed_anim(gmBody *body, double max_speed,
-                       void animator(double *value, double target, double dt, double t), double dt, double t) {
+                       void animator(double *value, double target, double dt,
+                                     double t),
+                       double dt, double t) {
   double current_speed = gm_pos_magniture(body->velocity);
   if (current_speed > max_speed) {
     double factor = max_speed / current_speed;
@@ -64,15 +65,14 @@ void gm_max_speed_anim(gmBody *body, double max_speed,
     animator(&body->velocity.y, y_target, dt, t);
   }
 }
-gmBody gm_rectangle_body(double m,double x, double y, double w, double h) {
+gmBody gm_rectangle_body(double m, double x, double y, double w, double h) {
   return gm_body_create(m, x, y, w, h, GM_COLLIDER_RECT);
 }
 gmBody gm_circle_body(double m, double x, double y, double r) {
   return gm_body_create(m, x, y, r, r, GM_COLLIDER_CIRCLE);
 }
 
-#include "collision.h"
-
+int gm_body_contains(gmBody *body, double x, double y);
 static inline int gm_hovered(gmBody *body) {
   return gm_body_contains(body, gm_mouse.position.x, gm_mouse.position.y);
 }

@@ -3,9 +3,20 @@
 #include "body.h"
 #include "body_list.h"
 #include "position.h"
+
 typedef struct {
+  struct gm_system *sys;
+  gmBody *bodies[2];
+  double penetration;
+  double since;
+  gmPos normals;
+} gmCollision;
+
+typedef struct gm_system {
   int is_active;
   gmBodies bodies;
+
+  gmCollision **collisions;
 
   gmPos velocity;
   gmPos acceleration;
@@ -18,7 +29,8 @@ gmSystem gm_system_create() {
                   .bodies = NULL,
                   .velocity = {0, 0},
                   .acceleration = {0, 0},
-                  .damping = 0};
+                  .damping = 0,
+                  .collisions = NULL};
   return sys;
 }
 

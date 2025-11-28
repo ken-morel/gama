@@ -1,6 +1,7 @@
 #pragma once
 
 #include "body.h"
+#include "system.h"
 #include <math.h>
 
 // ---------------------------------------------------------------------------
@@ -35,8 +36,7 @@ static inline int gm_circle_vs_circle(gmBody *a, gmBody *b) {
   return distance_sq < (total_radius * total_radius);
 }
 // Accurate Circle vs Axis-Aligned Bounding Box collision
-static inline int gm_circle_vs_aabb(const gmBody *circle,
-                                      const gmBody *rect) {
+static inline int gm_circle_vs_aabb(const gmBody *circle, const gmBody *rect) {
   double half_w = rect->width * 0.5;
   double half_h = rect->height * 0.5;
 
@@ -56,24 +56,34 @@ static inline int gm_circle_vs_aabb(const gmBody *circle,
 }
 
 // Main collision detection dispatcher
-int gm_collision_detect(gmBody *a, gmBody *b) {
+gmCollision *gm_collision_detect(gmBody *a, gmBody *b) {
+  int collided = 0;
   if (a->collider_type == GM_COLLIDER_RECT &&
       b->collider_type == GM_COLLIDER_RECT) {
-    return gm_aabb_vs_aabb(a, b);
+    collided = gm_aabb_vs_aabb(a, b);
   }
   if (a->collider_type == GM_COLLIDER_CIRCLE &&
       b->collider_type == GM_COLLIDER_CIRCLE) {
-    return gm_circle_vs_circle(a, b);
+    collided = gm_circle_vs_circle(a, b);
   }
   if (a->collider_type == GM_COLLIDER_CIRCLE &&
       b->collider_type == GM_COLLIDER_RECT) {
-    return gm_circle_vs_aabb(a, b);
+    collided = gm_circle_vs_aabb(a, b);
   }
   if (a->collider_type == GM_COLLIDER_RECT &&
       b->collider_type == GM_COLLIDER_CIRCLE) {
-    return gm_circle_vs_aabb(b, a);
+    collided = gm_circle_vs_aabb(b, a);
   }
-  return 0; // No collision for other combinations
+  if (!collided)
+    return NULL; // No collision for other combinations
+  gmCollision *collision = malloc(sizeof(gmCollision));
+  collision->bodies[0] = a;
+  collision->bodies[1] = b;
+  collision->normals = gmpos(0, 0);
+  collision->penetration = 0;
+  collision->since = 0;
+  collision->sys = NULL;
+  return collision;
 }
 
 int gm_body_contains(gmBody *body, double x, double y) {

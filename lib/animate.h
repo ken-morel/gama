@@ -10,12 +10,15 @@ General notes on animation functions:
 - value:  A pointer to the variable to be animated.
 - target: The target value to animate towards.
 - dt:     Delta time - the time elapsed since the last frame (in seconds).
-- t:      The approximate time the animation should take (in seconds). It acts as a time constant.
+- t:      The approximate time the animation should take (in seconds). It acts
+as a time constant.
 */
 
 /**
- * @brief Moves a value towards a target with spring-like motion (exponential ease-out).
- * @param t The animation's approximate duration. A smaller 't' results in a faster animation.
+ * @brief Moves a value towards a target with spring-like motion (exponential
+ * ease-out).
+ * @param t The animation's approximate duration. A smaller 't' results in a
+ * faster animation.
  */
 void gm_anim_spring(double *value, double target, double dt, double t) {
   if (value == NULL || t <= 0)
@@ -39,7 +42,8 @@ typedef struct {
 } gmAnimLinearState;
 
 /**
- * @brief Moves a value towards a target at a constant speed over a specified duration.
+ * @brief Moves a value towards a target at a constant speed over a specified
+ * duration.
  *
  * This function is stateful. It tracks all ongoing linear animations and will
  * correctly interpolate the value over the specified time 't'. If the target
@@ -106,24 +110,27 @@ void gm_anim_linear(double *value, double target, const double dt,
     // Find the index again in case it was just added.
     state_idx = gm_ptr_list_find(active_anims, state);
     if (state_idx != -1) {
-        // Remove the state from the list and free memory.
-        gmPtrList old_list = active_anims;
-        active_anims = gm_ptr_list_pop_at(old_list, state_idx);
-        free(old_list);
+      // Remove the state from the list and free memory.
+      gmPtrList old_list = active_anims;
+      active_anims = gm_ptr_list_pop_at(old_list, state_idx);
+      free(old_list);
     }
     free(state);
   } else {
     // Perform linear interpolation (lerp).
     double fraction = state->elapsed_time / state->total_time;
-    *value = state->start_value + (state->target_value - state->start_value) * fraction;
+    *value = state->start_value +
+             (state->target_value - state->start_value) * fraction;
   }
 }
 
 /**
- * @brief Starts fast and decelerates quadratically to the target. More pronounced than spring.
+ * @brief Starts fast and decelerates quadratically to the target. More
+ * pronounced than spring.
  * @param t The animation's approximate duration.
  */
-void gm_anim_ease_out_quad(double *value, const double target, const double dt, double t) {
+void gm_anim_ease_out_quad(double *value, const double target, const double dt,
+                           double t) {
   if (value == NULL || t <= 0)
     return;
   double difference = target - *value;
@@ -138,7 +145,8 @@ void gm_anim_ease_out_quad(double *value, const double target, const double dt, 
 }
 
 /**
- * @brief Starts very fast and decelerates cubically to the target. More pronounced than quad.
+ * @brief Starts very fast and decelerates cubically to the target. More
+ * pronounced than quad.
  * @param t The animation's approximate duration.
  */
 void gm_anim_ease_out_cubic(double *value, double target, double dt, double t) {
@@ -170,9 +178,10 @@ void gm_anim_ease_in_quad(double *value, double target, double dt, double t) {
   double speed_factor = 1.0 / (1.0 + sqrt(fabs(difference)));
   double move = (dt * difference * speed_factor) / t;
 
-  // For ease-in, it's possible for the calculated move to be tiny, so we ensure minimum progress.
+  // For ease-in, it's possible for the calculated move to be tiny, so we ensure
+  // minimum progress.
   if (fabs(move) < 0.0001) {
-      move = 0.0001 * (difference > 0 ? 1 : -1);
+    move = 0.0001 * (difference > 0 ? 1 : -1);
   }
 
   if (fabs(move) >= fabs(difference)) {
