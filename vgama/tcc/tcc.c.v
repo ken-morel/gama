@@ -1,8 +1,15 @@
 module tcc
 
-#flag -L@VROOT/tcc
+#flag -L../tcc
 #flag -ltcc
-#include "tcc/libtcc.h"
+#flag -I../tcc
+#include "libtcc.h"
+
+// TCC output types, mirrored from libtcc.h for readability
+const output_memory = 0
+const output_exe = 1
+const output_dll = 2
+const output_obj = 3
 
 // Redeclare the C struct TCCState
 struct C.TCCState {}
@@ -47,7 +54,7 @@ pub fn build_exe(opts BuildOptions) ! {
 	C.tcc_set_error_func(state, unsafe { nil }, tcc_error_callback)
 
 	// Set output type to executable
-	if C.tcc_set_output_type(state, 1) != 0 { // 1 = TCC_OUTPUT_EXE
+	if C.tcc_set_output_type(state, output_exe) != 0 {
 		return error('Failed to set output type to EXE')
 	}
 

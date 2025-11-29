@@ -111,7 +111,7 @@ fn main() {
 			},
 			cli.Command{
 				name:        'build'
-				usage:       'build [-r]'
+				usage:       'build [-r] [-tcc]'
 				description: 'Builds the current gama project'
 				flags:       [
 					cli.Flag{
@@ -120,15 +120,22 @@ fn main() {
 						description: 'Run the project after building'
 						required:    false
 					},
+					cli.Flag{
+						name:        'tcc'
+						abbrev:      'tcc'
+						description: 'Build the project using builtin tcc compiler'
+						required:    false
+					},
 				]
 				execute:     fn (cmd cli.Command) ! {
 					run_after_build := cmd.flags.get_bool('run') or { false }
+					force_tcc := cmd.flags.get_bool('run') or { false }
 					project := get_project()!
 
 					println(term.ok_message('Building project at: ${project.path}'))
 					installation := get_installation()!
 
-					project.build_native(installation) or {
+					project.build_native(installation, force_tcc) or {
 						println(term.fail_message('Build failed: ${err}'))
 						return
 					}
@@ -156,9 +163,18 @@ fn main() {
 			},
 			cli.Command{
 				name:        'dev'
-				usage:       'dev'
+				usage:       'dev [-tcc]'
 				description: 'Build and re-run the project on code changes'
-				execute:     fn (_ cli.Command) ! {
+				flags:       [
+					cli.Flag{
+						name:        'tcc'
+						abbrev:      'tcc'
+						description: 'Build the project using builtin tcc compiler'
+						required:    false
+					},
+				]
+				execute:     fn (cmd cli.Command) ! {
+					force_tcc := cmd.flags.get_bool('tcc') or { false }
 					inst := get_installation()!
 					project := get_project()!
 					println(term.ok_message('Running project at: ${project.path} in dev mode'))
@@ -173,7 +189,7 @@ fn main() {
 					}
 
 					loop_dev: for {
-						exe := project.build_native(inst) or {
+						exe := project.build_native(inst, force_tcc) or {
 							println(term.fail_message('Error building: ${err}'))
 							time.sleep(time.second * 2)
 							continue
@@ -357,7 +373,7 @@ fn generator_assistant(cmd cli.Command) ! {
 	mut compiler := &Compiler(nil)
 	compilerloop: for compiler == nil {
 		print(term.cyan(' 0) '))
-		println(term.green('skip'))
+		println(term.green('use builtin tcc compiler'))
 		for index, comp in compilers {
 			print(term.cyan(' ${index + 1}) '))
 			print(term.green(comp.name))
@@ -368,18 +384,8 @@ fn generator_assistant(cmd cli.Command) ! {
 		}
 		mut index := os.input(term.blue('> ')).int()
 		if index == 0 {
-			if os.input("so you don't want a compiler? (Yep/nop)") in [
-				'n',
-				'N',
-				'no',
-				'nop',
-				'nope',
-			] {
-				continue
-			} else {
-				compiler = nil
-				break compilerloop
-			}
+			compiler = nil
+			break compilerloop
 		}
 		index -= 1
 		if index < 0 || index > templates.len {
