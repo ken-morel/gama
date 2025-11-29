@@ -331,7 +331,7 @@ fn generator_assistant(cmd cli.Command) ! {
 			println(term.gray('  ${tmpl.description}'))
 		}
 		index := os.input(term.blue('> ')).int()
-		if index < 0 || index > templates.len {
+		if index < 0 || index >= templates.len {
 			println(term.fail_message('Invalid index'))
 			continue templateloop
 		} else {
