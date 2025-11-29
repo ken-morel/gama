@@ -1,5 +1,5 @@
 ; =============================================================================
-; NSIS Installer Script for "gama" (Verified, Compilable Version)
+; NSIS Installer Script for "gama" 
 ;
 ; Features:
 ; - Self-contained and robust function to add the installation directory to the PATH.
