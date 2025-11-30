@@ -24,6 +24,7 @@ fn C.tcc_add_library(&C.TCCState, &char) int
 fn C.tcc_add_file(&C.TCCState, &char) int
 fn C.tcc_output_file(&C.TCCState, &char) int
 fn C.tcc_set_error_func(&C.TCCState, voidptr, fn (voidptr, &char))
+fn C.tcc_set_lib_path(&C.TCCState, &char)
 
 // V-native struct for build options
 pub struct BuildOptions {
@@ -50,6 +51,9 @@ pub fn build_exe(opts BuildOptions) ! {
 		C.tcc_delete(state)
 	}
 
+	// Set TCC's internal library path (where it finds crt1.o, libtcc1.a, etc.)
+	C.tcc_set_lib_path(state, c'../tcc')
+
 	// Set error function
 	C.tcc_set_error_func(state, unsafe { nil }, tcc_error_callback)
 
@@ -65,7 +69,12 @@ pub fn build_exe(opts BuildOptions) ! {
 		}
 	}
 
-	// Add library paths
+	// Add system library path for things like libm.so
+	if C.tcc_add_library_path(state, c'/usr/lib') != 0 {
+		return error('Failed to add system library path /usr/lib')
+	}
+
+	// Add project-specific library paths
 	for path in opts.library_paths {
 		if C.tcc_add_library_path(state, &char(path.str)) != 0 {
 			return error('Failed to add library path: ${path}')

@@ -40,13 +40,13 @@ void pong_scene() {
     gm_speed_anim(&goal_body, 0.5, gm_anim_spring, dt, 0.3);
 
     gm_body_bound_reflect(&goal_body, -1.05, 1.05, -1.05, 1.05);
-    gm_body_bound_reflect(&ball_body, -1.2, 1.2, -1.2, 1.2);
+    if (0b1100 &&
+        gm_body_bound_reflect(&ball_body, -1.2, 1.2, -1.2, 1.2) != 0b0000)
+      score--;
 
     if (gm_system_get_collision(&sys, &ball_body, &goal_body) != NULL) {
       score++;
-    } else if (fabs(ball_body.position.x) >= 1) {
-      score--;
-    } else if (score < -5) {
+    } else if (score < -1) {
       gameover = 1;
       gm_yield();
       return;
@@ -68,8 +68,7 @@ void pong_scene() {
     gm_draw_circle_body(&ball_body, GM_BISQUE);
     gm_draw_rect_bodies(paddles, 2, GM_DARKGOLDENROD);
     gm_draw_circle_body(&goal_body, GM_GREEN);
-    gm_draw_text(0, 0.8, score_text, 20, GM_BLACK);
-    gm_draw_text(0, -2, "Game Over", 4, GM_RED);
+    gm_draw_text(0, 0.9, score_text, "", 0.1, GM_BLACK);
     if (paddles[0].position.y < -1.2)
       gm_draw_rectangle(0, -1, 2, 0.05, GM_RED);
     else if (paddles[0].position.y > 1.2)
@@ -80,7 +79,7 @@ void pong_scene() {
 
 void gameover_scene() {
   do {
-    gm_draw_text(0, 0, "Game Over", 0.4, GM_RED);
+    gm_draw_text(0, 0, "Game Over", "", 0.5, GM_RED);
   } while (gm_yield());
 }
 

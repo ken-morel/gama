@@ -29,10 +29,10 @@ function vgama -a name
     switch "$name"
         case windows
             echo "Building vgama for windows"
-            v . -os windows -cc clang -shared -enable-globals -o ./bin/libvgama
+            v runners/native -os windows -cc clang -shared -enable-globals -o ./runners/native/libvgama
         case "*"
             echo "Building vgama for host"
-            v . -cc clang -shared -enable-globals -o ./bin/libvgama
+            v runners/native -cc clang -shared -enable-globals -o ./runners/native/libvgama
     end
 end
 

@@ -129,7 +129,7 @@ fn main() {
 				]
 				execute:     fn (cmd cli.Command) ! {
 					run_after_build := cmd.flags.get_bool('run') or { false }
-					force_tcc := cmd.flags.get_bool('run') or { false }
+					force_tcc := cmd.flags.get_bool('tcc') or { false }
 					project := get_project()!
 
 					println(term.ok_message('Building project at: ${project.path}'))

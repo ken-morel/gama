@@ -76,8 +76,7 @@ extern int32_t gapi_draw_image_part(uint32_t handle, uint32_t slice_x,
 // --- Text Functions ---
 extern int32_t gapi_draw_text(double x, double y, double height,
                               const char *txt, const char *font, uint8_t style,
-                              char align, uint8_t cr, uint8_t cg, uint8_t cb,
-                              uint8_t ca);
+                              uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca);
 
 // --- Event Functions ---
 extern int32_t gapi_key_pressed(char t, char k);
