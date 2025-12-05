@@ -55,7 +55,8 @@ pub fn (p Project) build_native(inst Installation, force_tcc bool) !string {
 			output_executable: executable_path
 			include_paths:     [os.join_path(p.path, 'include')]
 			library_paths:     [build_dir]
-			libraries:         ['vgama', 'm']
+			libraries:         ['vgama']
+			tcc_path:          os.join_path(inst.runners, 'tcc')
 		}
 		tcc.build_exe(tcc_opts)!
 	} else {

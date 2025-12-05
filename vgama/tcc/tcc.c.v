@@ -1,5 +1,7 @@
 module tcc
 
+import os
+
 #flag -L../tcc
 #flag -ltcc
 #flag -I../tcc
@@ -34,6 +36,7 @@ pub:
 	include_paths     []string
 	library_paths     []string
 	libraries         []string
+	tcc_path          string
 }
 
 // Error callback function to be passed to TCC
@@ -52,7 +55,7 @@ pub fn build_exe(opts BuildOptions) ! {
 	}
 
 	// Set TCC's internal library path (where it finds crt1.o, libtcc1.a, etc.)
-	C.tcc_set_lib_path(state, c'../tcc')
+	C.tcc_set_lib_path(state, &char(os.join_path(opts.tcc_path, 'lib', 'linux').str))
 
 	// Set error function
 	C.tcc_set_error_func(state, unsafe { nil }, tcc_error_callback)
@@ -68,12 +71,18 @@ pub fn build_exe(opts BuildOptions) ! {
 			return error('Failed to add include path: ${path}')
 		}
 	}
+	C.tcc_add_include_path(state, c'/usr/include')
+	C.tcc_add_include_path(state, c'/usr/include/x86_64-linux-gnu')
+	C.tcc_add_include_path(state, &char(os.join_path(opts.tcc_path, 'include', 'linux').str))
 
 	// Add system library path for things like libm.so
-	if C.tcc_add_library_path(state, c'/usr/lib') != 0 {
+
+	if C.tcc_add_library_path(state, c'/usr/lib/x86_64-linux-gnu/') != 0 {
 		return error('Failed to add system library path /usr/lib')
 	}
-
+	if C.tcc_add_library_path(state, c'/usr/lib/') != 0 {
+		return error('Failed to add system library path /usr/lib')
+	}
 	// Add project-specific library paths
 	for path in opts.library_paths {
 		if C.tcc_add_library_path(state, &char(path.str)) != 0 {

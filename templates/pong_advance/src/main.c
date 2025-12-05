@@ -7,7 +7,6 @@ int gameover = 0;
 
 void pong_scene() {
   int score = 1;
-
   char score_text[20];
 
   gmSystem sys = gm_system_create();
@@ -28,16 +27,15 @@ void pong_scene() {
   gm_system_push_array(&sys, 2, paddles);
 
   gmBody goal_body = gm_circle_body(50, 0, -0.5, 0.05);
-  ball_body.restitution = 5;
   gm_system_push(&sys, &goal_body);
+
   double paddlev = 0;
 
   do {
-    if (gm_dt() > 0.01)
-      _gm_dt = 0.01;
     double dt = gm_dt();
-    gm_speed_anim(&ball_body, 1, gm_anim_spring, dt, 0.3);
-    gm_speed_anim(&goal_body, 0.5, gm_anim_spring, dt, 0.3);
+
+    gm_speed_anim(&ball_body, 1.3, gm_anim_spring, dt, 0.5);
+    gm_speed_anim(&goal_body, 0.5, gm_anim_spring, dt, 2);
 
     gm_body_bound_reflect(&goal_body, -1.05, 1.05, -1.05, 1.05);
     if (0b1100 &&
@@ -48,7 +46,6 @@ void pong_scene() {
       score++;
     } else if (score < -1) {
       gameover = 1;
-      gm_yield();
       return;
     }
 
@@ -58,6 +55,7 @@ void pong_scene() {
       paddlev = 1;
     else
       paddlev *= 0.90; // decrease smoothly
+
     gm_anim_linear(&paddles[0].velocity.y, paddlev, dt, 0.3);
     gm_anim_linear(&paddles[1].velocity.y, paddlev, dt, 0.3);
 
@@ -69,6 +67,7 @@ void pong_scene() {
     gm_draw_rect_bodies(paddles, 2, GM_DARKGOLDENROD);
     gm_draw_circle_body(&goal_body, GM_GREEN);
     gm_draw_text(0, 0.9, score_text, "", 0.1, GM_BLACK);
+
     if (paddles[0].position.y < -1.2)
       gm_draw_rectangle(0, -1, 2, 0.05, GM_RED);
     else if (paddles[0].position.y > 1.2)

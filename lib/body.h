@@ -1,13 +1,9 @@
 #pragma once
 
-#include <stddef.h>
-#include <stdlib.h>
 #define gnothing NULL
 
 #include "gapi.h"
-#include "position.h"
 #include <stdint.h>
-#include <stdlib.h>
 
 typedef enum { GM_COLLIDER_CIRCLE, GM_COLLIDER_RECT } gmColliderType;
 typedef struct {

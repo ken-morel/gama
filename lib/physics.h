@@ -7,7 +7,6 @@
 #include "position.h"
 #include "system.h"
 #include <math.h>
-#include <stdio.h>
 
 void gm_collision_resolve(gmCollision *collision);
 
@@ -80,7 +79,8 @@ void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
         if (collision != NULL) {
           collision->sys = sys;
           gm_collision_resolve(collision);
-          newCollisions = (gmCollision**)gm_ptr_list_push((gmPtrList)newCollisions, collision);
+          newCollisions = (gmCollision **)gm_ptr_list_push(
+              (gmPtrList)newCollisions, collision);
         }
       }
     }
@@ -97,11 +97,14 @@ void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
       }
     }
     // Only free previous collisions that are not in the new list
-    if(!found) free(prevC);
+    if (!found)
+      free(prevC);
   }
-  
-  // Free the previous list container, not its elements which are either freed or carried over
-  if(prevCollisions) free(prevCollisions);
+
+  // Free the previous list container, not its elements which are either freed
+  // or carried over
+  if (prevCollisions)
+    free(prevCollisions);
 
   sys->collisions = newCollisions;
 }

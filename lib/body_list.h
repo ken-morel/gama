@@ -13,7 +13,6 @@
 #pragma once
 
 #include "body.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 // ---------------------------------------------------------------------------
