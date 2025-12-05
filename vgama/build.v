@@ -34,7 +34,10 @@ pub fn (p Project) get_src_c_files() ![]string {
 
 pub fn (p Project) build_native(inst Installation, force_tcc bool) !string {
 	conf := p.get_conf()!
-	use_tcc := force_tcc || conf.gama.compiler == ''
+	use_tcc := false // force_tcc || conf.gama.compiler == ''
+	if conf.gama.compiler == '' {
+		return error('No compiler configured')
+	}
 
 	// Prepare common build parameters
 	build_dir := p.build_path('native')
