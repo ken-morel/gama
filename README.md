@@ -1,107 +1,55 @@
+# Gama Engine
 
-# Gama
+![Gama Logo](./gama.png)
 
-[![Deploy mdBook site to Pages](https://github.com/ken-morel/gama/actions/workflows/mdbook.yml/badge.svg)](https://github.com/ken-morel/gama/actions/workflows/mdbook.yml)
+Gama is a lightweight, minimalist game engine designed for simplicity and speed. It combines a powerful C library for game logic with a modern toolchain written in V, giving you a fast, fun, and productive development experience.
 
-Gama is a beginner-friendly toolkit and command-line utility for building native C projects—especially games—on both Linux and Windows. It provides a streamlined workflow, project templates (like Pong), and cross-platform build capabilities. Gama is aimed at high-schoolers and anyone with C basics who wants a fast, modern project setup.
-
----
+With an embedded TCC compiler, Gama is a zero-dependency tool. You can create, build, and run your games right out of the box without installing any external compilers.
 
 ## Features
 
-- **Cross-platform:** Works on Linux and Windows.
-- **Seamless Windows builds on Linux:** Uses `winegcc` for compiling Windows binaries from Linux.
-- **Backend flexibility:** Uses WinAPI on Windows and GLFW on Linux.
-- **Project templates:** Quickly start projects like Pong, skeleton apps, and more.
-- **Easy CLI:** `gama` command to create, build, and manage projects.
-- **Beginner-friendly:** Simple structure and extensive documentation.
+-   **Simple C API:** A straightforward, easy-to-learn C library for creating your game.
+-   **2D Physics Engine:** Built-in support for bodies, shapes, and collision detection.
+-   **Rendering Primitives:** Functions for drawing shapes, lines, images, and text.
+-   **Animation Helpers:** A set of functions to easily animate values over time.
+-   **Modern CLI Tool:** A simple and fast project manager written in V.
+-   **Zero-Dependency:** Comes with a built-in TCC compiler for a hassle-free setup.
+-   **Cross-Platform (in development):** Aims to support Windows, Linux, and Web.
 
----
+## Getting Started
 
-## Quick Start
+Getting started with Gama is easy. Once you have the `gama` executable, you can create your first project.
 
-### Installation
+## Your First Project
 
-See the full [installation guide](https://gama.readthedocs.io/en/latest/installation.html) for details.
+1.  **Create a new project:**
+    ```bash
+    gama create
+    ```
+    This will launch an interactive assistant to help you name your project and choose a template.
 
+2.  **Run the development server:**
+    ```bash
+    cd your_project_name
+    gama dev
+    ```
+    This command will build and run your project. It also watches for any changes in your `src/` directory and automatically rebuilds and restarts the application, giving you a live-reloading development environment.
 
----
+## CLI Commands
 
-## Creating a New Project
+The `gama` CLI is your main tool for managing projects.
 
-Use the `gama` command-line utility to quickly bootstrap a new project:
-
-```sh
-gama create MyPongGame
-cd MyPongGame
-gama build -r
-```
-
-Available templates include:
-- **pong** — A complete Pong game in C
-- **skeleton** — Minimal starter project
-
-See the [Templates Guide](https://gama.readthedocs.io/en/latest/gamatool.html#templates) for the full list.
-
----
-
-## Building
-
-Gama supports cross-compiling Windows binaries directly from Linux using `winegcc`:
-
-```sh
-gama build       # build for platform
-gama build -r    # build then run
-gama build -wine # build for windows using wine, also takes -r
-```
-
-
----
-
-## Backends
-
-Gama abstracts away platform details, so you focus on writing portable C code. On Windows, Gama uses WinAPI; on Linux, it uses GLFW automatically.
-
----
-
-## Command-Line Usage
-
-See all available commands with:
-
-```sh
-gama help
-```
-
-**Common commands:**
-- `gama new <template> <project_name>` — Create a new project
-- `gama build` — Build the current project
-- `gama run` — Build and run
-- `gama build --platform=windows` — Cross-compile for Windows (from Linux)
-
-See the [Gama CLI Reference](https://gama.readthedocs.io/en/latest/gamatool.html) for more.
-
----
-
-## Documentation
-**Full docs:** [gama.readthedocs.io](https://gama.readthedocs.io)
-
----
-
-## Example Projects
-
-- [Pong Game Template](assets/templates/pong/README.md)
-- [Robi](https://GitHub.com/ken-morel/robi)
-
-
----
+| Command       | Description                                                 |
+|---------------|-------------------------------------------------------------|
+| `gama create` | Starts an interactive assistant to create a new project.    |
+| `gama build`  | Compiles your project into an executable in the `build/` dir. |
+| `gama run`    | Runs a previously built project.                            |
+| `gama dev`    | Builds and runs the project, with auto-rebuild on changes.  |
 
 ## Contributing
 
-Contributions are welcome! Check [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue to get started.
+Gama is an open-source project and contributions are welcome! Feel free to open an issue or submit a pull request.
 
----
+## License
 
-Gama is designed to help new programmers build and run real native C projects on any desktop platform, with minimal setup and maximum fun. Happy coding!
-```
-
-
+Gama is licensed under the [MIT License](./LICENSE).

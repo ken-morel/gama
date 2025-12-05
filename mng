@@ -1,0 +1,61 @@
+#!/usr/bin/fish
+#
+
+function cli-build -a target
+    mkdir -p bin
+    switch "$target"
+        case windows
+            v -os windows cli.v -o bin/gama $argv[2..]
+        case linux
+            v -os linux cli.v -o bin/gama $argv[2..]
+        case ""
+            echo "Building gama cli for host system"
+            v cli.v -o bin/gama $argv[2..]
+        case "*"
+            echo "Invalid build target system"
+    end
+end
+
+function cli -a cmd
+    switch "$cmd"
+        case build
+            cli-build $argv[2..]
+        case "*"
+            echo "Invalid command for cli"
+    end
+end
+
+function vgama -a name
+    switch "$name"
+        case windows
+            echo "Building vgama for windows"
+            v runners/native -os windows -cc clang -shared -enable-globals -o ./runners/native/libvgama
+        case "*"
+            echo "Building vgama for host"
+            v runners/native -cc clang -shared -enable-globals -o ./runners/native/libvgama
+    end
+end
+
+function package -a target
+    switch "$target"
+        case nsis
+            vgama windows; and cli-build windows; and cd nsis; and makensis ./setup.nsi
+        case "*"
+            echo "No package target specified, use nsis"
+    end
+end
+
+function mng -a cmd
+    switch "$cmd"
+        case cli
+            cli $argv[2..]
+        case vgama
+            vgama $argv[2..]
+        case package
+            package $argv[2..]
+        case "*"
+            echo "No or invalid command specified"
+    end
+end
+
+mng $argv[1..]

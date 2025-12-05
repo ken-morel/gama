@@ -1,0 +1,10 @@
+
+name = "pong_advance"
+description = "A sup"
+version = "0.1.0"
+author = "gama"
+
+[gama]
+
+version = "0.1.0"
+compiler = "/usr/bin/clang"

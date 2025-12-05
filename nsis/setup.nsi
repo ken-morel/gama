@@ -1,5 +1,5 @@
 ; =============================================================================
-; NSIS Installer Script for "gama" (Verified, Compilable Version)
+; NSIS Installer Script for "gama"
 ;
 ; Features:
 ; - Self-contained and robust function to add the installation directory to the PATH.
@@ -18,16 +18,16 @@ ${Using:StrFunc} StrStr ; <-- THIS IS THE FIX for the new error.
 ;--------------------------------
 ; General
 Name "gama"
-OutFile "../bin/gama-installer.exe"
+OutFile "../bin/gama-0.1.0-setup.exe"
 InstallDir "$PROFILE\.gama"
-InstallDirRegKey HKCU "Software\cm.engon.gama" "InstallDir"
+InstallDirRegKey HKCU "Software\cm.ama.gama" "InstallDir"
 RequestExecutionLevel user
 
 ;--------------------------------
 ; Modern UI Configuration
 !define MUI_ABORTWARNING
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE
+!insertmacro MUI_PAGE_LICENSE ../LICENSE
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
@@ -46,7 +46,7 @@ Function AddGamaToPath
   ; we wrap the existing PATH and our path in semicolons for a precise check.
   ; This reliably finds the entry whether it's at the start, middle, or end.
   ${StrStr} $R1 ";$R0;" ";$INSTDIR;"
-  
+
   ; If $R1 is empty, our path was not found.
   ${If} $R1 == ""
     ; It's not in the PATH, so let's add it.
@@ -56,7 +56,6 @@ Function AddGamaToPath
     ${Else}
       WriteRegExpandStr HKCU "Environment" "Path" "$R0;$INSTDIR"
     ${EndIf}
-    
     ; Broadcast a message to notify other processes of the change.
     SendMessage ${HWND_BROADCAST} ${WM_SETTINGCHANGE} 0 "STR:Environment" /TIMEOUT=5000
   ${EndIf}
@@ -67,21 +66,27 @@ FunctionEnd
 ;=============================================================================
 Section "Install gama" SecInstall
   SetOutPath "$INSTDIR"
-  
+
   ; --- Install application files ---
   File "..\bin\gama.exe"
-  File /r "..\assets\fonts"
-  File /r "..\assets\gama"
-  File /r "..\assets\templates"
-  File /r "..\assets\images"
+  File "..\gama.png"
+  File "..\gama.svg"
+  File "..\LICENSE"
+  File "..\README.md"
+  File /r "..\lib"
+  File /r "..\templates"
+  File /r "..\assets"
+
+  SetOutPath "$INSTDIR\runners\native"
+  File /r "..\runners\native\libvgama.dll"
 
   ; --- Add the installation directory to the user's PATH ---
   Call AddGamaToPath
-  
+
   ; --- Create Uninstaller and Registry entries for Add/Remove Programs ---
   WriteRegStr HKCU "Software\cm.engon.gama" "InstallDir" "$INSTDIR"
   WriteUninstaller "$INSTDIR\uninstall.exe"
-  
+
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\cm.engon.gama" "DisplayName" "gama"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\cm.engon.gama" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\cm.engon.gama" "NoModify" 1
@@ -101,11 +106,11 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\gama\gama.lnk"
   Delete "$DESKTOP\gama.lnk"
   RMDir "$SMPROGRAMS\gama"
-  
+
   ; --- Remove registry keys ---
   DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\cm.engon.gama"
   DeleteRegKey HKCU "Software\cm.engon.gama"
-  
+
   ; --- Remove all installed files and directories ---
   RMDir /r "$INSTDIR"
 SectionEnd

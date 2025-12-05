@@ -1,3 +1,0 @@
-package gama
-
-const nsisTemplate = ``
