@@ -7,7 +7,6 @@
 #include "position.h"
 #include "system.h"
 #include <math.h>
-#include <stdio.h>
 
 void gm_collision_resolve(gmCollision *collision);
 
@@ -54,19 +53,17 @@ static inline int gm_collision_bodies_are(gmCollision *c, gmBody *a,
          c->bodies[0] == b && c->bodies[1] == a;
 }
 void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
-  if (sys == NULL)
-    return;
-  if (!sys->is_active)
+  if (sys == NULL || !sys->is_active)
     return;
 
   gmCollision **newCollisions = NULL;
   gmCollision **prevCollisions = sys->collisions;
 
-  const unsigned int substeps = (dt / unit) + 1;
-  const double sub_dt = gm_dt() / substeps;
+  const unsigned int subSteps = (dt / unit) + 1;
+  const double sub_dt = gm_dt() / subSteps;
   const unsigned count = gm_system_size(sys);
 
-  for (int i = 0; i < substeps; i++) {
+  for (int i = 0; i < subSteps; i++) {
     for (int j = 0; j < count; j++) {
       gm_system_update_body_dt(sys, sys->bodies[j], sub_dt);
     }
@@ -82,23 +79,34 @@ void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
         if (collision != NULL) {
           collision->sys = sys;
           gm_collision_resolve(collision);
-          gm_ptr_list_push((void **)newCollisions, collision);
+          newCollisions = (gmCollision **)gm_ptr_list_push(
+              (gmPtrList)newCollisions, collision);
         }
       }
     }
   }
+
   gmCollision *prevC, *newC;
   gm_ptr_list_for_each(prevC, prevCollisions) {
+    int found = 0;
     gm_ptr_list_for_each(newC, newCollisions) {
       if (gm_collision_bodies_are(prevC, newC->bodies[0], newC->bodies[1])) {
         newC->since = prevC->since + dt;
+        found = 1;
         break;
       }
     }
-    // free(prevC);
+    // Only free previous collisions that are not in the new list
+    if (!found)
+      free(prevC);
   }
+
+  // Free the previous list container, not its elements which are either freed
+  // or carried over
+  if (prevCollisions)
+    free(prevCollisions);
+
   sys->collisions = newCollisions;
-  // free(prevCollisions);
 }
 
 gmCollision *gm_system_get_collision(gmSystem *sys, gmBody *a, gmBody *b) {

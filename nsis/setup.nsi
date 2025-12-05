@@ -1,5 +1,5 @@
 ; =============================================================================
-; NSIS Installer Script for "gama" (Verified, Compilable Version)
+; NSIS Installer Script for "gama"
 ;
 ; Features:
 ; - Self-contained and robust function to add the installation directory to the PATH.
@@ -78,7 +78,7 @@ Section "Install gama" SecInstall
   File /r "..\assets"
 
   SetOutPath "$INSTDIR\runners\native"
-  File /r "..\bin\libvgama.dll"
+  File /r "..\runners\native\libvgama.dll"
 
   ; --- Add the installation directory to the user's PATH ---
   Call AddGamaToPath

@@ -89,36 +89,28 @@ const text_style_italic__ = u8(1 << 2)
 fn gapi_draw_text(x f64, y f64,
 	height f64,
 	txt &char, font &char,
-	style u8, align char,
+	style u8,
 	cr u8, cg u8, cb u8, ca u8) i32 {
-	gx, gy, _, gh := c_redimension_rect(x, y, 0, height)
+	gx, gy := c_redimension_coord(x, y)
+	size := i32(c_redimension_one(height))
 	vtext := txt.vstring()
 	vfont := font.vstring()
-	italic := (style & text_style_italic__) > 0
-	bold := (style & text_style_bold__) > 0
-	mono := (style & text_style_mono__) > 0
+	italic := (style & text_style_italic__) != 0
+	bold := (style & text_style_bold__) != 0
+	mono := (style & text_style_mono__) != 0
 
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx, gy, gh, vtext, vfont, italic, bold, mono, c, align] () {
-		gapi_ctx__.draw_text2(gg.DrawTextParams{
-			x:         i32(gx)
-			y:         i32(gy)
-			text:      vtext
-			color:     c
-			size:      i32(gh)
-			align:     if align == `l` {
-				.left
-			} else if align == `c` {
-				.center
-			} else {
-				.right
-			}
-			max_width: gapi_width__
-			family:    vfont
-			bold:      bold
-			mono:      mono
-			italic:    italic
+	gapi_queue__ <- fn [gx, gy, size, vtext, vfont, italic, bold, mono, c] () {
+		gapi_ctx__.draw_text(i32(gx), i32(gy), vtext, gg.TextCfg{
+			color:          c
+			size:           size
+			align:          .center
+			mono:           mono
+			vertical_align: .middle
+			italic:         italic
+			bold:           bold
+			family:         vfont
 		})
 	}
 	return 0

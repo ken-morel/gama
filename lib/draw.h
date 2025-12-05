@@ -3,8 +3,8 @@
  * @brief Functions for drawing shapes, text, and images.
  *
  * This file provides a set of functions for immediate-mode rendering of
- * various primitives, as well as helper functions to draw physics bodies (`gmBody`).
- * All coordinates are in world space.
+ * various primitives, as well as helper functions to draw physics bodies
+ * (`gmBody`). All coordinates are in world space.
  */
 
 #pragma once
@@ -30,7 +30,7 @@
  * @return An identifier for the drawing command.
  */
 int32_t gm_draw_line(double x1, double y1, double x2, double y2,
-                       double thickness, gmColor c) {
+                     double thickness, gmColor c) {
   return gapi_draw_line(x1, y1, x2, y2, thickness, gm_red(c), gm_green(c),
                         gm_blue(c), gm_alpha(c));
 }
@@ -60,7 +60,7 @@ int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c) {
  * @return An identifier for the drawing command.
  */
 int32_t gm_draw_rounded_rectangle(double x, double y, double w, double h,
-                                    double r, gmColor c) {
+                                  double r, gmColor c) {
   return gapi_draw_rounded_rect(x, y, w, h, r, gm_red(c), gm_green(c),
                                 gm_blue(c), gm_alpha(c));
 }
@@ -74,7 +74,7 @@ int32_t gm_draw_rounded_rectangle(double x, double y, double w, double h,
  * @return An identifier for the drawing command.
  */
 int32_t gm_draw_circle(double center_x, double center_y, double radius,
-                         gmColor c) {
+                       gmColor c) {
   return gapi_draw_circle(center_x, center_y, radius, gm_red(c), gm_green(c),
                           gm_blue(c), gm_alpha(c));
 }
@@ -104,8 +104,8 @@ int32_t gm_draw_ellipse(double x, double y, double w, double h, gmColor c) {
  * @param c The color of the triangle.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_triangle(double x1, double y1, double x2, double y2,
-                           double x3, double y3, gmColor c) {
+int32_t gm_draw_triangle(double x1, double y1, double x2, double y2, double x3,
+                         double y3, gmColor c) {
   return gapi_draw_triangle(x1, y1, x2, y2, x3, y3, gm_red(c), gm_green(c),
                             gm_blue(c), gm_alpha(c));
 }
@@ -119,31 +119,23 @@ int32_t gm_draw_triangle(double x1, double y1, double x2, double y2,
  * @param h The height to draw the image.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_image(gmImage img, double x, double y, double w,
-                        double h) {
+int32_t gm_draw_image(gmImage img, double x, double y, double w, double h) {
   return gapi_draw_image(img.handle, x, y, w, h);
 }
-
-/// @brief The default font used for drawing text. Can be changed globally.
-char *gm_text_font = "Monospace";
-/// @brief The default text alignment ('l'eft, 'c'enter, 'r'ight). Can be changed globally.
-char gm_text_align = 'c';
-
 /**
  * @brief Draws text.
  * @param x The x-coordinate for the text position.
  * @param y The y-coordinate for the text position.
  * @param text The null-terminated string to draw.
+ * @param font The null-terminated font name to use.
  * @param font_size The size of the font.
  * @param c The color of the text.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_text(double x, double y, const char *text, double font_size,
-                       gmColor c) {
-  return gapi_draw_text(
-      x, y, font_size, text, gm_text_font, 0,
-      gm_text_align,
-      gm_red(c), gm_green(c), gm_blue(c), gm_alpha(c));
+int32_t gm_draw_text(double x, double y, const char *text, const char *font,
+                     double font_size, gmColor c) {
+  return gapi_draw_text(x, y, font_size, text, font, 0, gm_red(c), gm_green(c),
+                        gm_blue(c), gm_alpha(c));
 }
 
 // ---------------------------------------------------------------------------
@@ -166,7 +158,7 @@ void gm_draw_body(const gmBody *body, gmColor c) {
   switch (body->collider_type) {
   case GM_COLLIDER_RECT:
     gm_draw_rectangle(body->position.x, body->position.y, body->width,
-                        body->height, c);
+                      body->height, c);
     break;
   case GM_COLLIDER_CIRCLE:
     gm_draw_circle(body->position.x, body->position.y, body->radius, c);
@@ -181,7 +173,7 @@ void gm_draw_body(const gmBody *body, gmColor c) {
  */
 void gm_draw_rect_body(const gmBody *body, gmColor c) {
   gm_draw_rectangle(body->position.x, body->position.y, body->width,
-                      body->height, c);
+                    body->height, c);
 }
 
 /**
@@ -201,12 +193,10 @@ void gm_draw_rect_bodies(const gmBody *bodies, size_t number, gmColor c) {
  * @param radius The corner radius.
  * @param c The color to draw the body.
  */
-void gm_draw_round_rect_body(const gmBody *body, double radius,
-                               gmColor c) {
+void gm_draw_round_rect_body(const gmBody *body, double radius, gmColor c) {
   gm_draw_rounded_rectangle(body->position.x, body->position.y, body->width,
-                              body->height, radius, c);
+                            body->height, radius, c);
 }
-
 
 /**
  * @brief Draws a circular physics body.
@@ -242,8 +232,8 @@ void gm_draw_circle_bodies(const gmBody *bodies, size_t number, gmColor c) {
 void gm_draw_ellipse_body(const gmBody *body, gmColor c) {
   if (body == NULL || !body->is_active)
     return;
-  gm_draw_ellipse(body->position.x, body->position.y, body->width,
-                    body->height, c);
+  gm_draw_ellipse(body->position.x, body->position.y, body->width, body->height,
+                  c);
 }
 
 /**
@@ -271,15 +261,14 @@ void gm_draw_ellipse_bodies(const gmBody *bodies, size_t number, gmColor c) {
  * @param c The color to draw the body.
  */
 void gm_draw_triangle_body(const gmBody *body, double x2_offset,
-                             double y2_offset, double x3_offset,
-                             double y3_offset, gmColor c) {
+                           double y2_offset, double x3_offset, double y3_offset,
+                           gmColor c) {
   if (body == NULL || !body->is_active)
     return;
   gm_draw_triangle(body->position.x, body->position.y,
-                     body->position.x + x2_offset, body->position.y + y2_offset,
-                     body->position.x + x3_offset, body->position.y + y3_offset,
-                     c);
-
+                   body->position.x + x2_offset, body->position.y + y2_offset,
+                   body->position.x + x3_offset, body->position.y + y3_offset,
+                   c);
 }
 
 /**
@@ -292,11 +281,12 @@ void gm_draw_triangle_body(const gmBody *body, double x2_offset,
  * @param y3_offset The y-offset of the third vertex for all triangles.
  * @param c The color to draw the bodies.
  */
-void gm_draw_triangle_bodies(const gmBody *bodies, size_t number, double x2_offset,
-                             double y2_offset, double x3_offset,
-                             double y3_offset, gmColor c) {
+void gm_draw_triangle_bodies(const gmBody *bodies, size_t number,
+                             double x2_offset, double y2_offset,
+                             double x3_offset, double y3_offset, gmColor c) {
   for (size_t i = 0; i < number; i++)
-    gm_draw_triangle_body(&bodies[i], x2_offset, y2_offset, x3_offset, y3_offset, c);
+    gm_draw_triangle_body(&bodies[i], x2_offset, y2_offset, x3_offset,
+                          y3_offset, c);
 }
 
 /**
@@ -308,7 +298,7 @@ void gm_draw_image_body(const gmBody *body, gmImage img) {
   if (body == NULL || !body->is_active)
     return;
   gm_draw_image(img, body->position.x, body->position.y, body->width,
-                  body->height);
+                body->height);
 }
 
 /**
@@ -329,11 +319,11 @@ void gm_draw_image_bodies(const gmBody *bodies, size_t number, gmImage img) {
  * @param font_size The size of the font.
  * @param c The color of the text.
  */
-void gm_draw_text_body(const gmBody *body, const char *text,
-                         double font_size, gmColor c) {
+void gm_draw_text_body(const gmBody *body, const char *text, const char *font,
+                       double font_size, gmColor c) {
   if (body == NULL || !body->is_active)
     return;
-  gm_draw_text(body->position.x, body->position.y, text, font_size, c);
+  gm_draw_text(body->position.x, body->position.y, text, font, font_size, c);
 }
 
 /**
@@ -344,8 +334,8 @@ void gm_draw_text_body(const gmBody *body, const char *text,
  * @param font_size The size of the font.
  * @param c The color of the text.
  */
-void gm_draw_text_bodies(const gmBody *bodies, size_t number,  const char *text,
-                         double font_size, gmColor c) {
+void gm_draw_text_bodies(const gmBody *bodies, size_t number, const char *text,
+                         const char *font, double font_size, gmColor c) {
   for (size_t i = 0; i < number; i++)
-    gm_draw_text_body(&bodies[i], text, font_size, c);
+    gm_draw_text_body(&bodies[i], text, font, font_size, c);
 }
