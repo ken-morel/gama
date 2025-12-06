@@ -19,6 +19,7 @@
 #include "gapi.h"
 #include "key.h"
 #include "physics.h"
+#include "sprite.h"
 #include "system.h"
 #include <stdio.h>
 
