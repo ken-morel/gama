@@ -15,8 +15,6 @@ gmImage gm_image_open(const char *path) {
   return img;
 }
 
-
 void gm_image_draw(gmImage i, double x, double y, double w, double h) {
   gapi_draw_image(i.handle, x, y, w, h);
 }
-
