@@ -109,9 +109,9 @@ fn main() {
 				description: 'Create a new gama project with the assistant'
 				execute:     generator_assistant
 			},
-			cli.Command{
+			cli.Command{ // x86_64-w64-mingw32-gcc
 				name:        'build'
-				usage:       'build [-r] [-tcc]'
+				usage:       'build [-r] [-cc name] [-tcc]'
 				description: 'Builds the current gama project'
 				flags:       [
 					cli.Flag{
@@ -121,21 +121,22 @@ fn main() {
 						required:    false
 					},
 					cli.Flag{
-						name:        'tcc'
-						abbrev:      'tcc'
-						description: 'Build the project using builtin tcc compiler'
+						flag:        .string
+						name:        'cc'
+						abbrev:      'cc'
+						description: 'Use an alternative compiler'
 						required:    false
 					},
 				]
 				execute:     fn (cmd cli.Command) ! {
 					run_after_build := cmd.flags.get_bool('run') or { false }
-					force_tcc := cmd.flags.get_bool('tcc') or { false }
+					force_cc := cmd.flags.get_string('cc') or { '' }
 					project := get_project()!
 
 					println(term.ok_message('Building project at: ${project.path}'))
 					installation := get_installation()!
 
-					project.build_native(installation, force_tcc) or {
+					project.build_native(installation, force_cc) or {
 						println(term.fail_message('Build failed: ${err}'))
 						return
 					}
@@ -163,18 +164,18 @@ fn main() {
 			},
 			cli.Command{
 				name:        'dev'
-				usage:       'dev [-tcc]'
+				usage:       'dev [-tcc] [-cc name]'
 				description: 'Build and re-run the project on code changes'
 				flags:       [
 					cli.Flag{
-						name:        'tcc'
-						abbrev:      'tcc'
-						description: 'Build the project using builtin tcc compiler'
+						name:        'cc'
+						abbrev:      'cc'
+						description: 'Use an alternative compiler'
 						required:    false
 					},
 				]
 				execute:     fn (cmd cli.Command) ! {
-					force_tcc := cmd.flags.get_bool('tcc') or { false }
+					force_cc := cmd.flags.get_string('cc') or { '' }
 					inst := get_installation()!
 					project := get_project()!
 					println(term.ok_message('Running project at: ${project.path} in dev mode'))
@@ -189,7 +190,7 @@ fn main() {
 					}
 
 					loop_dev: for {
-						exe := project.build_native(inst, force_tcc) or {
+						exe := project.build_native(inst, force_cc) or {
 							println(term.fail_message('Error building: ${err}'))
 							time.sleep(time.second * 2)
 							continue
