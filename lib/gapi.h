@@ -19,7 +19,6 @@ struct {
             .x = 0,
             .y = 0,
         },
-
     .movement =
         {
             .x = 0,
