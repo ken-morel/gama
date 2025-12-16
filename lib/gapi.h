@@ -4,8 +4,10 @@
 #include "position.h"
 
 double _gm_dt = 0;
+double _gm_t = 0;
 
 static inline double gm_dt() { return _gm_dt; }
+static inline double gm_t() { return _gm_t; }
 
 struct {
   gmPos position;

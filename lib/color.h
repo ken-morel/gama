@@ -14,21 +14,17 @@ static inline gmColor gm_rgba(int r, int g, int b, int a) {
          (unsigned)(abs(b) % 256) << 8 | (unsigned)(abs(a) % 256);
 }
 
-static inline void gama_set_red(int *col, int red) {
-  *col &= 0x00FFFFFF;
-  *col |= (unsigned)(abs(red) % 256) << 24;
+static inline gmColor gm_set_red(gmColor col, int red) {
+  return (col & 0x00FFFFFF) | (unsigned)(abs(red) % 256) << 24;
 }
-static inline void gama_set_green(int *col, int green) {
-  *col &= 0xFF00FFFF;
-  *col |= (unsigned)(abs(green) % 256) << 16;
+static inline gmColor gm_set_green(gmColor col, int green) {
+  return (col & 0xFF00FFFF) | (unsigned)(abs(green) % 256) << 16;
 }
-static inline void gama_set_blue(int *col, int blue) {
-  *col &= 0xFFFF00FF;
-  *col |= (unsigned)(abs(blue) % 256) << 8;
+static inline gmColor gm_set_blue(gmColor col, int blue) {
+  return (col & 0xFFFF00FF) | (unsigned)(abs(blue) % 256) << 8;
 }
-static inline void gama_set_alpha(int *col, int alpha) {
-  *col &= 0xFFFFFF00;
-  *col |= (unsigned)(abs(alpha) % 256);
+static inline gmColor gm_set_alpha(gmColor col, int alpha) {
+  return (col & 0xFFFFFF00) | (unsigned)(abs(alpha) % 256);
 }
 
 #define GM_ALICEBLUE (gmColor)0xF0F8FFFF

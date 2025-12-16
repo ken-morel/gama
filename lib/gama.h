@@ -70,6 +70,7 @@ static inline int gm_runs() { return gapi_runs(); }
  */
 static inline int gm_yield() {
   if (gapi_yield(&_gm_dt)) {
+    _gm_t += _gm_dt;
     gapi_get_mouse_move(&gm_mouse.movement.x, &gm_mouse.movement.y);
     gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
     gm_mouse.down = gapi_mouse_down();

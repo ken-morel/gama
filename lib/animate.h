@@ -80,7 +80,7 @@ void gm_anim_linear(double *value, double target, const double dt,
   if (state && state->target_value != target) {
     // Free the old state and remove it from the list.
     free(state);
-     active_anims = gm_ptr_list_pop_at(active_anims, state_idx);
+    active_anims = gm_ptr_list_pop_at(active_anims, state_idx);
     state = NULL; // Force creation of a new state.
   }
 
@@ -109,7 +109,7 @@ void gm_anim_linear(double *value, double target, const double dt,
     state_idx = gm_ptr_list_find(active_anims, state);
     if (state_idx != -1) {
       // Remove the state from the list and free memory.
-       active_anims = gm_ptr_list_pop_at(active_anims, state_idx);
+      active_anims = gm_ptr_list_pop_at(active_anims, state_idx);
     }
     free(state);
   } else {
@@ -185,4 +185,14 @@ void gm_anim_ease_in_quad(double *value, double target, double dt, double t) {
   } else {
     *value += move;
   }
+}
+
+static inline double gm_anim_sin(double center, double radius, double speed,
+                                 double offset) {
+  return center + (radius * sin(speed * (gm_t() + offset) * M_PI * 2));
+}
+
+static inline double gm_anim_cos(double center, double radius, double speed,
+                                 double offset) {
+  return center + (radius * cos(speed * (gm_t() + offset) * M_PI * 2));
 }
