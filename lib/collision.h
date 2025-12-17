@@ -101,10 +101,10 @@ int gm_body_contains(gmBody *body, double x, double y) {
 
 int gm_mouse_in_rect(const double x, const double y, const double w,
                      const double h) {
-  return pow(gm_mouse.position.x - x, 2) < pow(w / 2, 2) &&
-         pow(gm_mouse.position.y - y, 2) < pow(h / 2, 2);
+  return fabs(gm_mouse.position.x - x) < w / 2 &&
+         fabs(gm_mouse.position.y - y) < h / 2;
 }
 int gm_mouse_in_circle(const double x, const double y, const double r) {
-  return pow(gm_mouse.position.x - x, 2) + pow(gm_mouse.position.y, 2) <
+  return pow(gm_mouse.position.x - x, 2) + pow(gm_mouse.position.y - y, 2) <
          pow(r, 2);
 }
