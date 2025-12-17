@@ -34,7 +34,7 @@ gmwFrameTheme gmwFrame = {.enabled = 1,
                               {
                                   .background = 0x3A2A3AE8,
                                   .border = 0xBA87BAAF,
-                                  .scale = 1.02,
+                                  .scale = 1.01,
                               },
 
                           // Inactive (background panels)
