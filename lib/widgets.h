@@ -1,0 +1,5 @@
+#include "widgets/button.h"
+#include "widgets/frame.h"
+#include "widgets/joystick.h"
+#include "widgets/scale.h"
+#include "widgets/switch.h"

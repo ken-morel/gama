@@ -1,7 +1,6 @@
 #pragma once
-#include <image.h>
-#include <stddef.h>
-#include <stdint.h>
+#include "image.h"
+#include <stdlib.h>
 #ifndef GAMA_MAX_SPRITE_ANIM_LENGTH
 #define GAMA_MAX_SPRITE_ANIM_LENGTH 10
 #endif

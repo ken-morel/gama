@@ -32,15 +32,17 @@ struct {
 
 // --- Windowing ---
 extern void gapi_set_title(const char *title);
-extern void gapi_resize(int32_t width, int32_t height);
-extern void gapi_set_bg_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-extern void gapi_fullscreen(int32_t fullscreen);
+extern void gapi_resize(const int32_t width, const int32_t height);
+extern void gapi_set_bg_color(const uint8_t r, const uint8_t g, const uint8_t b,
+                              const uint8_t a);
+extern void gapi_fullscreen(const int32_t fullscreen);
 
 // --- Utils ---
 extern void gapi_log(const char *message);
 
 // --- Game Loop ---
-extern int32_t gapi_init(int32_t width, int32_t height, const char *title);
+extern int32_t gapi_init(const int32_t width, const int32_t height,
+                         const char *title);
 extern int32_t gapi_yield(double *dt); // Changed to int32_t return type
 extern void gapi_quit();
 extern int32_t gapi_runs();
