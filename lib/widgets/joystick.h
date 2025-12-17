@@ -1,7 +1,7 @@
 #include "../animate.h"
 #include "../draw.h"
 
-struct {
+typedef struct {
   int enabled;
 
   double scale;       // overall joystick size scale
@@ -22,20 +22,22 @@ struct {
   gmColor knob_border;
 
   double border_width; // circle border width
-} gmJoystick = {.enabled = 1,
-                .scale = 1.0,
-                .background = 0x3A2A3AE0,
-                .border = 0x7F4F7FFF,
-                .focussed = {.scale = 1.05, .border = 0xAA77AAFF},
-                .active = {.scale = 0.95, .border = 0x7F4F7FFF},
-                .knob = 0xAA77AAFF,
-                .knob_border = 0x6F3F6FFF,
-                .border_width = 0.01};
+} gmwJoystickTheme;
+gmwJoystickTheme gmwJoystick = {
+    .enabled = 1,
+    .scale = 1.0,
+    .background = 0x3A2A3AE0,
+    .border = 0x7F4F7FFF,
+    .focussed = {.scale = 1.05, .border = 0xAA77AAFF},
+    .active = {.scale = 0.95, .border = 0x7F4F7FFF},
+    .knob = 0xAA77AAFF,
+    .knob_border = 0x6F3F6FFF,
+    .border_width = 0.01};
 
 int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
                      gmPos *vpos) {
 
-  if (!gmJoystick.enabled)
+  if (!gmwJoystick.enabled)
     return 0;
   if (vpos == NULL)
     vpos = pos;
@@ -75,22 +77,23 @@ int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
   gm_anim_ease_out_quad(&vpos->y, pos->y, gm_dt(), 0.05);
 
   // Draw joystick circle (border + background)
-  double draw_radius = radius * gmJoystick.scale;
-  gm_draw_circle(x, y, draw_radius + gmJoystick.border_width,
-                 gmJoystick.border);
-  gm_draw_circle(x, y, draw_radius, gmJoystick.background);
+  double draw_radius = radius * gmwJoystick.scale;
+  gm_draw_circle(x, y, draw_radius + gmwJoystick.border_width,
+                 gmwJoystick.border);
+  gm_draw_circle(x, y, draw_radius, gmwJoystick.background);
 
   // Draw knob
   double knob_radius = draw_radius * 0.3; // 30% of radius
   gm_draw_circle(x + vpos->x * draw_radius, y + vpos->y * draw_radius,
-                 knob_radius + gmJoystick.border_width, gmJoystick.knob_border);
+                 knob_radius + gmwJoystick.border_width,
+                 gmwJoystick.knob_border);
   gm_draw_circle(
       x + vpos->x * draw_radius, y + vpos->y * draw_radius, knob_radius,
-      nx == 0 && ny == 0 ? gmJoystick.knob & 0xEEEEFF44 : gmJoystick.knob);
+      nx == 0 && ny == 0 ? gmwJoystick.knob & 0xEEEEFF44 : gmwJoystick.knob);
 
   return hovered;
 }
 
-int gm_joystick(double x, double y, double radius, gmPos *pos) {
+int gmw_joystick(double x, double y, double radius, gmPos *pos) {
   return gm_joystick_anim(x, y, radius, pos, NULL);
 }

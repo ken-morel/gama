@@ -1,7 +1,7 @@
 #include "../collision.h"
 #include "../draw.h"
 
-struct {
+typedef struct {
   int enabled;
 
   double scale;
@@ -31,85 +31,86 @@ struct {
 
   double border_thickness;
   const char *font;
-} gmButton = {.enabled = 1,
+} gmwButtonTheme;
+gmwButtonTheme gmwButton = {.enabled = 1,
 
-              // Normal
-              .background = 0xAA77AAFF,
-              .border = 0x7F4F7FFF,
-              .text = GM_WHITE,
-              .scale = 1.0,
+                            // Normal
+                            .background = 0xAA77AAFF,
+                            .border = 0x7F4F7FFF,
+                            .text = GM_WHITE,
+                            .scale = 1.0,
 
-              // Focus / Hover
-              .focussed =
-                  {
-                      .background = 0xBA87BAFF,
-                      .border = 0x9F6F9FFF,
-                      .scale = 1.04,
-                      .text = GM_WHITE,
-                  },
+                            // Focus / Hover
+                            .focussed =
+                                {
+                                    .background = 0xBA87BAFF,
+                                    .border = 0x9F6F9FFF,
+                                    .scale = 1.04,
+                                    .text = GM_WHITE,
+                                },
 
-              // Active / Pressed
-              .active =
-                  {
-                      .background = 0x9B5F9BFF,
-                      .border = 0x6F3F6FFF,
-                      .scale = 0.97,
-                      .text = GM_WHITE,
-                  },
+                            // Active / Pressed
+                            .active =
+                                {
+                                    .background = 0x9B5F9BFF,
+                                    .border = 0x6F3F6FFF,
+                                    .scale = 0.97,
+                                    .text = GM_WHITE,
+                                },
 
-              // Disabled
-              .disabled =
-                  {
-                      .background = 0x9A8F9AFF,
-                      .border = 0x6E646EFF,
-                      .text = 0xDDDDDDFF,
-                  },
+                            // Disabled
+                            .disabled =
+                                {
+                                    .background = 0x9A8F9AFF,
+                                    .border = 0x6E646EFF,
+                                    .text = 0xDDDDDDFF,
+                                },
 
-              .border_thickness = 0.01,
-              .font = "default-ui"};
+                            .border_thickness = 0.01,
+                            .font = "default-ui"};
 
-int gm_button(double x, double y, double width, double height, const char *text,
-              double fontsize) {
+int gmw_button(double x, double y, double width, double height,
+               const char *text, double fontsize) {
 
-  int enabled = gmButton.enabled;
+  int enabled = gmwButton.enabled;
 
   int hovered = enabled && gm_mouse_in_rect(x, y, width, height);
   int clicked = enabled && gm_mouse.down && hovered;
 
-  double scale = !enabled  ? gmButton.scale
-                 : clicked ? gmButton.active.scale
-                 : hovered ? gmButton.focussed.scale
-                           : gmButton.scale;
+  double scale = !enabled  ? gmwButton.scale
+                 : clicked ? gmwButton.active.scale
+                 : hovered ? gmwButton.focussed.scale
+                           : gmwButton.scale;
 
-  gmColor bg = !enabled  ? gmButton.disabled.background
-               : clicked ? gmButton.active.background
-               : hovered ? gmButton.focussed.background
-                         : gmButton.background;
+  gmColor bg = !enabled  ? gmwButton.disabled.background
+               : clicked ? gmwButton.active.background
+               : hovered ? gmwButton.focussed.background
+                         : gmwButton.background;
 
-  gmColor border = !enabled  ? gmButton.disabled.border
-                   : clicked ? gmButton.active.border
-                   : hovered ? gmButton.focussed.border
-                             : gmButton.border;
+  gmColor border = !enabled  ? gmwButton.disabled.border
+                   : clicked ? gmwButton.active.border
+                   : hovered ? gmwButton.focussed.border
+                             : gmwButton.border;
 
-  gmColor fg = !enabled  ? gmButton.disabled.text
-               : clicked ? gmButton.active.text
-               : hovered ? gmButton.focussed.text
-                         : gmButton.text;
+  gmColor fg = !enabled  ? gmwButton.disabled.text
+               : clicked ? gmwButton.active.text
+               : hovered ? gmwButton.focussed.text
+                         : gmwButton.text;
 
   // Scale expands symmetrically from the center
   double sw = width * scale;
   double sh = height * scale;
 
   // Border (square, centered)
-  gm_draw_rectangle(x, y, sw + gmButton.border_thickness * 2,
-                    sh + gmButton.border_thickness * 2, border);
+  gm_draw_rectangle(x, y, sw + gmwButton.border_thickness * 2,
+                    sh + gmwButton.border_thickness * 2, border);
 
   // Background (centered)
   gm_draw_rectangle(x, y, sw, sh, bg);
 
   // Text (already center-based)
   if (text) {
-    gm_draw_text(x, y, text, gmButton.font, fontsize * scale, fg);
+    gm_draw_text(x, y, text, gmwButton.font, fontsize * scale, fg);
   }
 
   return enabled && hovered;

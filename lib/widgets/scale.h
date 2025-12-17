@@ -2,7 +2,7 @@
 #include "../collision.h"
 #include "../draw.h"
 
-struct {
+typedef struct {
   int enabled;
 
   double scale; // overall widget scale
@@ -25,25 +25,26 @@ struct {
 
   double border_width; // track border thickness
   double step;         // 0 = free, >0 = stepped increments
-} gmScale = {.enabled = 1,
-             .scale = 1.0,
+} gmwScaleTheme;
+gmwScaleTheme gmwScale = {.enabled = 1,
+                          .scale = 1.0,
 
-             .background = 0x3A2A3AE0,
-             .border = 0x7F4F7FFF,
+                          .background = 0x3A2A3AE0,
+                          .border = 0x7F4F7FFF,
 
-             .focussed = {.scale = 1.03, .border = 0xAA77AAFF},
-             .active = {.scale = 0.97, .border = 0x7F4F7FFF},
+                          .focussed = {.scale = 1.03, .border = 0xAA77AAFF},
+                          .active = {.scale = 0.97, .border = 0x7F4F7FFF},
 
-             .knob = 0xAA77AAFF,
-             .knob_border = 0x6F3F6FFF,
+                          .knob = 0xAA77AAFF,
+                          .knob_border = 0x6F3F6FFF,
 
-             .border_width = 0.01,
-             .step = 0.0};
+                          .border_width = 0.01,
+                          .step = 0.0};
 
-int gm_scale_anim(double x, double y, double width, double height,
-                  double *value, double *anim) {
+int gmw_scale_anim(double x, double y, double width, double height,
+                   double *value, double *anim) {
 
-  int enabled = gmScale.enabled;
+  int enabled = gmwScale.enabled;
 
   // Hover test uses full widget size (logical width/height)
   int hovered = enabled && gm_mouse_in_rect(x, y, width, height);
@@ -56,15 +57,15 @@ int gm_scale_anim(double x, double y, double width, double height,
 
   // Visual scale / border
   double scale = 1.0;
-  gmColor border = gmScale.border;
+  gmColor border = gmwScale.border;
   if (active) {
-    scale = gmScale.active.scale;
-    border = gmScale.active.border;
+    scale = gmwScale.active.scale;
+    border = gmwScale.active.border;
   } else if (hovered) {
-    scale = gmScale.focussed.scale;
-    border = gmScale.focussed.border;
+    scale = gmwScale.focussed.scale;
+    border = gmwScale.focussed.border;
   } else {
-    scale = gmScale.scale;
+    scale = gmwScale.scale;
   }
 
   // Draw sizes (scaled visually)
@@ -75,11 +76,11 @@ int gm_scale_anim(double x, double y, double width, double height,
   gm_draw_rectangle(x, y, sw, sh, border);
 
   // Track inner size (for knob movement)
-  double track_w = sw - gmScale.border_width * 2;
-  double track_h = sh - gmScale.border_width * 2;
+  double track_w = sw - gmwScale.border_width * 2;
+  double track_h = sh - gmwScale.border_width * 2;
 
   // Draw track
-  gm_draw_rectangle(x, y, track_w, track_h, gmScale.background);
+  gm_draw_rectangle(x, y, track_w, track_h, gmwScale.background);
 
   // Orientation
   int horizontal = (width >= height);
@@ -87,26 +88,26 @@ int gm_scale_anim(double x, double y, double width, double height,
   // Handle dragging along logical track (not scaled)
   if (active) {
     if (horizontal) {
-      double left = x - width * 0.5 + gmScale.border_width;
+      double left = x - width * 0.5 + gmwScale.border_width;
       double rel =
-          (gm_mouse.position.x - left) / (width - gmScale.border_width * 2);
+          (gm_mouse.position.x - left) / (width - gmwScale.border_width * 2);
       if (rel < 0.0)
         rel = 0.0;
       if (rel > 1.0)
         rel = 1.0;
-      if (gmScale.step > 0.0)
-        rel = ((int)(rel / gmScale.step + 0.5)) * gmScale.step;
+      if (gmwScale.step > 0.0)
+        rel = ((int)(rel / gmwScale.step + 0.5)) * gmwScale.step;
       *value = rel;
     } else {
-      double bottom = y - height * 0.5 + gmScale.border_width;
+      double bottom = y - height * 0.5 + gmwScale.border_width;
       double rel =
-          (gm_mouse.position.y - bottom) / (height - gmScale.border_width * 2);
+          (gm_mouse.position.y - bottom) / (height - gmwScale.border_width * 2);
       if (rel < 0.0)
         rel = 0.0;
       if (rel > 1.0)
         rel = 1.0;
-      if (gmScale.step > 0.0)
-        rel = ((int)(rel / gmScale.step + 0.5)) * gmScale.step;
+      if (gmwScale.step > 0.0)
+        rel = ((int)(rel / gmwScale.step + 0.5)) * gmwScale.step;
       *value = rel;
     }
   }
@@ -128,16 +129,17 @@ int gm_scale_anim(double x, double y, double width, double height,
   }
 
   // Draw knob border
-  gm_draw_rectangle(knob_x, knob_y, knob_size + gmScale.border_width * 2,
-                    knob_size + gmScale.border_width * 2, gmScale.knob_border);
+  gm_draw_rectangle(knob_x, knob_y, knob_size + gmwScale.border_width * 2,
+                    knob_size + gmwScale.border_width * 2,
+                    gmwScale.knob_border);
 
   // Draw knob
-  gm_draw_rectangle(knob_x, knob_y, knob_size, knob_size, gmScale.knob);
+  gm_draw_rectangle(knob_x, knob_y, knob_size, knob_size, gmwScale.knob);
 
   return hovered;
 }
 
-static inline int gm_scale(double x, double y, double width, double height,
-                           double *value) {
-  return gm_scale_anim(x, y, width, height, value, NULL);
+static inline int gmw_scale(double x, double y, double width, double height,
+                            double *value) {
+  return gmw_scale_anim(x, y, width, height, value, NULL);
 }
