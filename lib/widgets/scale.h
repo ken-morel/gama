@@ -44,6 +44,13 @@ gmwScaleTheme gmwScale = {.enabled = 1,
 int gmw_scale_anim(double x, double y, double width, double height,
                    double *value, double *anim) {
 
+  if (value == NULL)
+    return 0;
+  if (*value < 0)
+    *value = 0;
+  if (*value > 1)
+    *value = 1;
+
   int enabled = gmwScale.enabled;
 
   // Hover test uses full widget size (logical width/height)

@@ -64,15 +64,22 @@ void gm_show_fps(int show) { __gm_show_fps = show; }
 void _gm_fps() {
   static const double alpha = 0.9;
   static double _fps = 0;
+  static double dt = 1;
+  static double _display_fps = 0;
+  dt += gm_dt();
   double fps = 1 / gm_dt();
   if (_fps == 0)
     _fps = 60;
   else
     _fps = (_fps * alpha) + (fps * (1 - alpha));
+  if (dt >= 0.5) {
+    dt = 0;
+    _display_fps = _fps;
+  }
 
   if (__gm_show_fps) {
     char fps_text[20];
-    sprintf(fps_text, "fps: %.2lf", _fps);
+    sprintf(fps_text, "fps: %.2lf", _display_fps);
     gmw_frame(0.9, -0.9, 0.4, 0.1);
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }
