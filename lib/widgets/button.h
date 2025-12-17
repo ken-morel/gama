@@ -113,5 +113,5 @@ int gmw_button(double x, double y, double width, double height,
     gm_draw_text(x, y, text, gmwButton.font, fontsize * scale, fg);
   }
 
-  return enabled && hovered;
+  return hovered;
 }

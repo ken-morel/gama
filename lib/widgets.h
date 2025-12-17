@@ -12,6 +12,7 @@ typedef struct {
   gmwSwitchTheme switch_;
   gmwScaleTheme scale;
   gmwJoystickTheme joystick;
+  gmwFrameTheme frame;
 } gmwThemeCache;
 gmwThemeCache _theme_cache[GAMA_MAX_THEME_CACHE_SIZE];
 short gm_theme_cache_index = -1;
@@ -24,15 +25,16 @@ gmwThemeCache *gmw_save() {
   _theme_cache[gm_theme_cache_index].switch_ = gmwSwitch;
   _theme_cache[gm_theme_cache_index].scale = gmwScale;
   _theme_cache[gm_theme_cache_index].joystick = gmwJoystick;
+  _theme_cache[gm_theme_cache_index].frame = gmwFrame;
   return &_theme_cache[gm_theme_cache_index];
 }
-gmwThemeCache *gmw_restore() {
+void gmw_restore() {
   if (gm_theme_cache_index < 0)
-    return NULL;
+    return;
   gmwButton = _theme_cache[gm_theme_cache_index].button;
   gmwSwitch = _theme_cache[gm_theme_cache_index].switch_;
   gmwScale = _theme_cache[gm_theme_cache_index].scale;
   gmwJoystick = _theme_cache[gm_theme_cache_index].joystick;
+  gmwFrame = _theme_cache[gm_theme_cache_index].frame;
   gm_theme_cache_index--;
-  return &_theme_cache[gm_theme_cache_index + 1];
 }
