@@ -21,7 +21,10 @@
 #include "physics.h"
 #include "sprite.h"
 #include "system.h"
+#include "widgets.h"
 #include <stdio.h>
+
+void gm_fullscreen(int fullscreen) { return gapi_fullscreen(fullscreen); }
 
 /**
  * @brief Initializes the Gama engine and opens a window.
@@ -45,6 +48,8 @@ void gm_init(int width, int height, const char *title) {
   }
 }
 
+void gm_log(const char *txt) { return gapi_log(txt); }
+
 /**
  * @brief Checks if the main game loop should continue running.
  * @return 1 if the window is open and the game should continue, 0 otherwise.
@@ -52,6 +57,27 @@ void gm_init(int width, int height, const char *title) {
  * instead.
  */
 static inline int gm_runs() { return gapi_runs(); }
+
+int __gm_show_fps = 0;
+void gm_show_fps(int show) { __gm_show_fps = show; }
+
+void _gm_fps() {
+  static const double alpha = 0.9;
+  static double _fps = 0;
+  double fps = 1 / gm_dt();
+  double sum = fps;
+  if (_fps == 0)
+    _fps = 60;
+  else
+    _fps = (_fps * alpha) + (fps * (1 - alpha));
+
+  if (__gm_show_fps) {
+    char fps_text[20];
+    sprintf(fps_text, "fps: %.2lf", _fps);
+    gm_frame(0.9, -0.9, 0.4, 0.1);
+    gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
+  }
+}
 
 /**
  * @brief Processes events, updates input state, and prepares for the next
@@ -75,6 +101,7 @@ static inline int gm_yield() {
     gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
     gm_mouse.down = gapi_mouse_down();
     gm_mouse.pressed = gapi_mouse_pressed();
+    _gm_fps();
     return 1;
   } else
     return 0;
@@ -91,12 +118,14 @@ static inline void gm_quit() { return gapi_quit(); }
  * This can be used for synchronization purposes, but it is rarely needed as
  * gm_yield() handles buffer swapping automatically.
  */
-void gm_sync() { gapi_wait_queue(); }
+void gm_sync() { return gapi_wait_queue(); }
 
 /**
  * @brief Sets the background color of the window.
  * @param c The color to set as the background.
  */
-void gm_bg_color(gmColor c) {
-  gapi_set_bg_color(gm_red(c), gm_green(c), gm_blue(c), gm_alpha(c));
+void gm_background(gmColor c) {
+  return gapi_set_bg_color(gm_red(c), gm_green(c), gm_blue(c), gm_alpha(c));
 }
+
+void gm_resize(int width, int height) { return gapi_resize(width, height); }

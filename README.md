@@ -53,3 +53,21 @@ Gama is an open-source project and contributions are welcome! Feel free to open 
 ## License
 
 Gama is licensed under the [MIT License](./LICENSE).
+
+## future ideas
+
+- An `int gm_draw_cache(char *name) `, it runs the content once and caches
+  the produced designs so on next runs it does not run them again but shows
+  cache, usefull for static objects which done move, esp with other methods
+  to invalidate the cache.
+  - first run returns 1 and starts cache
+  - seconds run returns 0 and stops cache
+  - consecutive runs return 0, but returns 1 if cache invalidated(and thus
+    starts back recording), which will then stop and return 0 on next run.
+   ```c
+    while(gm_draw_cache("gridlines")) {
+        for(double i = -10;i <= 10;i += 0.01)
+            // draw...
+        // draw...
+    }
+   ```
