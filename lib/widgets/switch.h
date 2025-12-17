@@ -126,7 +126,7 @@ int gmw_switch_anim(double x, double y, double width, double height, int *value,
   // Knob
   gm_draw_rectangle(x + knob_x_offset, y, knob_size, knob_size, knob);
 
-  return hovered;
+  return clicked;
 }
 int gmw_switch(double x, double y, double width, double height, int *value) {
   return gmw_switch_anim(x, y, width, height, value, NULL);

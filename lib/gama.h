@@ -65,7 +65,6 @@ void _gm_fps() {
   static const double alpha = 0.9;
   static double _fps = 0;
   double fps = 1 / gm_dt();
-  double sum = fps;
   if (_fps == 0)
     _fps = 60;
   else
@@ -74,7 +73,7 @@ void _gm_fps() {
   if (__gm_show_fps) {
     char fps_text[20];
     sprintf(fps_text, "fps: %.2lf", _fps);
-    gm_frame(0.9, -0.9, 0.4, 0.1);
+    gmw_frame(0.9, -0.9, 0.4, 0.1);
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }
 }

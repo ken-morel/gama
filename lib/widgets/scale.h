@@ -136,7 +136,7 @@ int gmw_scale_anim(double x, double y, double width, double height,
   // Draw knob
   gm_draw_rectangle(knob_x, knob_y, knob_size, knob_size, gmwScale.knob);
 
-  return hovered;
+  return active;
 }
 
 static inline int gmw_scale(double x, double y, double width, double height,
