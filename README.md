@@ -1,73 +1,87 @@
-# Gama Engine
+# Gama
 
-![Gama Logo](./gama.png)
+![Gama logo](./gama.svg)
 
-Gama is a lightweight, minimalist game engine designed for simplicity and speed. It combines a powerful C library for game logic with a modern toolchain written in V, giving you a fast, fun, and productive development experience.
+website: https://gama.rbs.cm
 
-With an embedded TCC compiler, Gama is a zero-dependency tool. You can create, build, and run your games right out of the box without installing any external compilers.
+Gama project aims to provide a convenient way for students and beginers in
+C, to ship portable and safe 2d games, putting accent on simplicity, safety
+and control.
 
-## Features
+[Gama cli](https://gama.rbs.cm/cli) is a command line tool built in [V](https://github.com/vlang/v) which
+provides a build system and project manager for gama projects.
 
--   **Simple C API:** A straightforward, easy-to-learn C library for creating your game.
--   **2D Physics Engine:** Built-in support for bodies, shapes, and collision detection.
--   **Rendering Primitives:** Functions for drawing shapes, lines, images, and text.
--   **Animation Helpers:** A set of functions to easily animate values over time.
--   **Modern CLI Tool:** A simple and fast project manager written in V.
--   **Zero-Dependency:** Comes with a built-in TCC compiler for a hassle-free setup.
--   **Cross-Platform (in development):** Aims to support Windows, Linux, and Web.
+Gama.h, a gama library providing an easy to use immediate mode interface
+to render game components, gama.h is tailored to adapt to web assembly
+or [`vgama` shared library](https://gama.rbs.cm/vgama).
 
-## Getting Started
+## Principles, or design
 
-Getting started with Gama is easy. Once you have the `gama` executable, you can create your first project.
+- **stack more, heap less**: gama aims to let students rely on
+  automatic stack allocation and deallocation in functions.
+- **you have control**: Alot of work is put in gama backend
+  so that your code owns a mainloop.
+- **no global state/scenes**: Functions can be different scenes with
+  their initialization, destruction and objects, getting automatically dropped.
+- **imediate mode**: Reducing further the need for pointers, you don't create
+  shapes to draw when needed, you draw the shapes, this may increase the work
+  that you have to do, but makes it simplier and efficient for a game.
 
-## Your First Project
+## What does it look like?
 
-1.  **Create a new project:**
-    ```bash
-    gama create
-    ```
-    This will launch an interactive assistant to help you name your project and choose a template.
+sample from [line up project](https://github.com/ken-morel/lineup)
 
-2.  **Run the development server:**
-    ```bash
-    cd your_project_name
-    gama dev
-    ```
-    This command will build and run your project. It also watches for any changes in your `src/` directory and automatically rebuilds and restarts the application, giving you a live-reloading development environment.
+```c
+#include <gama.h>
+#include <math.h>
+// ...includes
 
-## CLI Commands
 
-The `gama` CLI is your main tool for managing projects.
+int main() {
+  gm_init(800, 500, "Lineup");
+  gm_background(GM_BLACK);
+  gm_fullscreen(1);
+  gm_show_fps(1);
 
-| Command       | Description                                                 |
-|---------------|-------------------------------------------------------------|
-| `gama create` | Starts an interactive assistant to create a new project.    |
-| `gama build`  | Compiles your project into an executable in the `build/` dir. |
-| `gama run`    | Runs a previously built project.                            |
-| `gama dev`    | Builds and runs the project, with auto-rebuild on changes.  |
+  double learn_scaled = sqrt(sqrt(learn_rate)),
+         learn_anim = learn_scaled;
+
+  do {
+    draw_gridlines();
+    show_text_messages();
+    plot_user_points();
+    plot_line();
+
+    int controls_hovered = gmw_frame(1, 0.75, 0.45, 0.36);
+    gmw_switch_anim(0.9, 0.85, 0.18, 0.09, &autoplay, &swanim);
+    gm_draw_text(1.1, 0.85, "auto", "", 0.1, GM_WHITE);
+    gmw_scale_anim(1, 0.75, 0.4, 0.02, &learn_scaled, &learn_anim);
+    if (gmw_button(1, 0.65, 0.2, 0.08, "step", 0.1) && gm_mouse.down)
+      one_epoch();
+    learn_rate = pow(learn_scaled, 4);
+
+    if (gm_mouse.pressed && selected_point == -1) {
+      if (!controls_hovered && !joy_hovered)
+        add_user_point(gm_mouse.position.x, gm_mouse.position.y);
+    } else if (gm_mouse.down) {
+      if (selected_point >= 0)
+        user_points[selected_point] = gm_mouse.position;
+    } else if (gm_key('d') || gm_key_pressed('s', 'd')) {
+      delete_selected_point();
+    }
+    if (gm_key('f'))
+      learn_scaled += 0.01;
+
+    find_selected_point();
+    if (gm_key_pressed('s', 'x'))
+      gm_quit();
+  } while (gm_yield());
+  return 0;
+}
+```
 
 ## Contributing
 
-Gama is an open-source project and contributions are welcome! Feel free to open an issue or submit a pull request.
+Always nice to see pr's and issues(at least almost always); which are not mine :smiley: .
 
-## License
 
-Gama is licensed under the [MIT License](./LICENSE).
-
-## future ideas
-
-- An `int gm_draw_cache(char *name) `, it runs the content once and caches
-  the produced designs so on next runs it does not run them again but shows
-  cache, usefull for static objects which done move, esp with other methods
-  to invalidate the cache.
-  - first run returns 1 and starts cache
-  - seconds run returns 0 and stops cache
-  - consecutive runs return 0, but returns 1 if cache invalidated(and thus
-    starts back recording), which will then stop and return 0 on next run.
-   ```c
-    while(gm_draw_cache("gridlines")) {
-        for(double i = -10;i <= 10;i += 0.01)
-            // draw...
-        // draw...
-    }
-   ```
