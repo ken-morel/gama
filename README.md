@@ -8,12 +8,12 @@ Gama project aims to provide a convenient way for students and beginers in
 C, to ship portable and safe 2d games, putting accent on simplicity, safety
 and control.
 
-[Gama cli](https://gama.rbs.cm/cli) is a command line tool built in [V](https://github.com/vlang/v) which
+[Gama cli](https://gama.rbs.cm/docs/cli) is a command line tool built in [V](https://github.com/vlang/v) which
 provides a build system and project manager for gama projects.
 
 Gama.h, a gama library providing an easy to use immediate mode interface
 to render game components, gama.h is tailored to adapt to web assembly
-or [`vgama` shared library](https://gama.rbs.cm/vgama).
+or [`vgama` shared library](https://gama.rbs.cm/docs/vgama).
 
 ## Principles, or design
 
