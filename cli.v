@@ -14,7 +14,7 @@ struct Compiler {
 const compiler_descriptions = {
 	'clang': 'A relatively fast compiler for modern systems'
 	'gcc':   'Robust compiler(comes with code blocks)'
-	'tcc':   'Tiny and extremely fast compiler(but the resulting app is not as fast)'
+	'tcc':   'Tiny and extremely fast compiler'
 	'msvc':  'A compiler for windows systems, support not guaranteed'
 }
 
@@ -109,9 +109,9 @@ fn main() {
 				description: 'Create a new gama project with the assistant'
 				execute:     generator_assistant
 			},
-			cli.Command{ // x86_64-w64-mingw32-gcc
+			cli.Command{
 				name:        'build'
-				usage:       'build [-r] [-cc name] [-tcc]'
+				usage:       'build [-r] [-cc name]'
 				description: 'Builds the current gama project'
 				flags:       [
 					cli.Flag{
@@ -374,7 +374,7 @@ fn generator_assistant(cmd cli.Command) ! {
 	mut compiler := &Compiler(nil)
 	compilerloop: for compiler == nil {
 		print(term.cyan(' 0) '))
-		println(term.green('use builtin tcc compiler'))
+		println(term.green('no compiler'))
 		for index, comp in compilers {
 			print(term.cyan(' ${index + 1}) '))
 			print(term.green(comp.name))

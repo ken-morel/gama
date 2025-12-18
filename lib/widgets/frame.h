@@ -1,27 +1,36 @@
+#pragma once
+
 #include "../collision.h"
 #include "../draw.h"
 
+/**
+ * @brief Structure defining the visual theme for a frame widget.
+ */
 typedef struct {
-  int enabled;
+  int enabled;              /**< Whether the frame is enabled */
 
-  gmColor background;
-  gmColor border;
-  double scale;
+  gmColor background;       /**< Background color when normal */
+  gmColor border;           /**< Border color when normal */
+  double scale;             /**< Scale factor when normal */
 
   struct {
-    gmColor background;
-    gmColor border;
-    double scale;
+    gmColor background;     /**< Background color when focused */
+    gmColor border;         /**< Border color when focused */
+    double scale;           /**< Scale factor when focused */
   } focussed;
 
   struct {
-    gmColor background;
-    gmColor border;
-    double scale;
+    gmColor background;     /**< Background color when inactive */
+    gmColor border;         /**< Border color when inactive */
+    double scale;           /**< Scale factor when inactive */
   } inactive;
 
-  double border_width;
+  double border_width;      /**< Width of the frame border */
 } gmwFrameTheme;
+
+/**
+ * @brief Global frame theme instance with default values.
+ */
 gmwFrameTheme gmwFrame = {.enabled = 1,
 
                           // Normal (semi-transparent overlay)
@@ -34,7 +43,7 @@ gmwFrameTheme gmwFrame = {.enabled = 1,
                               {
                                   .background = 0x3A2A3AE8,
                                   .border = 0xBA87BAAF,
-                                  .scale = 1.02,
+                                  .scale = 1.01,
                               },
 
                           // Inactive (background panels)
@@ -47,6 +56,14 @@ gmwFrameTheme gmwFrame = {.enabled = 1,
 
                           .border_width = 0.015};
 
+/**
+ * @brief Creates and renders a frame widget (a bordered panel).
+ * @param x The x-coordinate of the frame's center.
+ * @param y The y-coordinate of the frame's center.
+ * @param width The width of the frame.
+ * @param height The height of the frame.
+ * @return 1 if the frame is currently hovered, 0 otherwise.
+ */
 int gmw_frame(double x, double y, double width, double height) {
   int enabled = gmwFrame.enabled;
   int hovered = enabled && gm_mouse_in_rect(x, y, width, height);

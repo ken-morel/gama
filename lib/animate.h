@@ -5,20 +5,24 @@
 #include <stdio.h>
 #include <stdlib.h> // For malloc and free
 
-/*
-General notes on animation functions:
-- value:  A pointer to the variable to be animated.
-- target: The target value to animate towards.
-- dt:     Delta time - the time elapsed since the last frame (in seconds).
-- t:      The approximate time the animation should take (in seconds). It acts
-as a time constant.
-*/
+/**
+ * @file animate.h
+ * @brief Functions for animating values with various easing functions.
+ *
+ * General notes on animation functions:
+ * - value:  A pointer to the variable to be animated.
+ * - target: The target value to animate towards.
+ * - dt:     Delta time - the time elapsed since the last frame (in seconds).
+ * - t:      The approximate time the animation should take (in seconds). It acts
+ * as a time constant.
+ */
 
 /**
- * @brief Moves a value towards a target with spring-like motion (exponential
- * ease-out).
- * @param t The animation's approximate duration. A smaller 't' results in a
- * faster animation.
+ * @brief Moves a value towards a target with spring-like motion (exponential ease-out).
+ * @param value A pointer to the double value to animate.
+ * @param target The target value to animate towards.
+ * @param dt Delta time since the last frame.
+ * @param t The animation's approximate duration. A smaller 't' results in a faster animation.
  */
 void gm_anim_spring(double *value, double target, double dt, double t) {
   if (value == NULL || t <= 0)
@@ -32,18 +36,19 @@ void gm_anim_spring(double *value, double target, double dt, double t) {
   }
 }
 
-// Struct to hold the state of a single linear animation instance.
+/**
+ * @brief Structure to hold the state of a single linear animation instance.
+ */
 typedef struct {
-  double *value_ptr;   // Pointer to the double being animated
-  double start_value;  // The value when the animation started
-  double target_value; // The target value of the animation
-  double elapsed_time; // Time elapsed since the animation started
-  double total_time;   // The total duration of the animation
+  double *value_ptr;   /**< Pointer to the double being animated */
+  double start_value;  /**< The value when the animation started */
+  double target_value; /**< The target value of the animation */
+  double elapsed_time; /**< Time elapsed since the animation started */
+  double total_time;   /**< The total duration of the animation */
 } gmAnimLinearState;
 
 /**
- * @brief Moves a value towards a target at a constant speed over a specified
- * duration.
+ * @brief Moves a value towards a target at a constant speed over a specified duration.
  *
  * This function is stateful. It tracks all ongoing linear animations and will
  * correctly interpolate the value over the specified time 't'. If the target
@@ -121,8 +126,10 @@ void gm_anim_linear(double *value, double target, const double dt,
 }
 
 /**
- * @brief Starts fast and decelerates quadratically to the target. More
- * pronounced than spring.
+ * @brief Starts fast and decelerates quadratically to the target. More pronounced than spring.
+ * @param value A pointer to the double value to animate.
+ * @param target The target value to animate towards.
+ * @param dt Delta time since the last frame.
  * @param t The animation's approximate duration.
  */
 void gm_anim_ease_out_quad(double *value, const double target, const double dt,
@@ -141,8 +148,10 @@ void gm_anim_ease_out_quad(double *value, const double target, const double dt,
 }
 
 /**
- * @brief Starts very fast and decelerates cubically to the target. More
- * pronounced than quad.
+ * @brief Starts very fast and decelerates cubically to the target. More pronounced than quad.
+ * @param value A pointer to the double value to animate.
+ * @param target The target value to animate towards.
+ * @param dt Delta time since the last frame.
  * @param t The animation's approximate duration.
  */
 void gm_anim_ease_out_cubic(double *value, double target, double dt, double t) {
@@ -161,6 +170,9 @@ void gm_anim_ease_out_cubic(double *value, double target, double dt, double t) {
 
 /**
  * @brief Starts slow and accelerates quadratically towards the target.
+ * @param value A pointer to the double value to animate.
+ * @param target The target value to animate towards.
+ * @param dt Delta time since the last frame.
  * @param t The animation's approximate duration.
  */
 void gm_anim_ease_in_quad(double *value, double target, double dt, double t) {
@@ -187,11 +199,27 @@ void gm_anim_ease_in_quad(double *value, double target, double dt, double t) {
   }
 }
 
+/**
+ * @brief Returns a sinusoidal animation value based on time.
+ * @param center The center value around which the animation oscillates.
+ * @param radius The amplitude of the oscillation.
+ * @param speed The speed of the oscillation.
+ * @param offset The phase offset for the oscillation.
+ * @return The current animated value based on a sine wave.
+ */
 static inline double gm_anim_sin(double center, double radius, double speed,
                                  double offset) {
   return center + (radius * sin(speed * (gm_t() + offset) * M_PI * 2));
 }
 
+/**
+ * @brief Returns a cosine animation value based on time.
+ * @param center The center value around which the animation oscillates.
+ * @param radius The amplitude of the oscillation.
+ * @param speed The speed of the oscillation.
+ * @param offset The phase offset for the oscillation.
+ * @return The current animated value based on a cosine wave.
+ */
 static inline double gm_anim_cos(double center, double radius, double speed,
                                  double offset) {
   return center + (radius * cos(speed * (gm_t() + offset) * M_PI * 2));

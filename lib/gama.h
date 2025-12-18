@@ -135,3 +135,14 @@ void gm_background(gmColor c) {
 }
 
 void gm_resize(int width, int height) { return gapi_resize(width, height); }
+
+void gm_logo(double x, double y, double s) {
+  double top_thickness = 0.15 * s;
+  double left_thickness = 0.1 * s;
+  double ratio = 0.6;
+  // top bar
+  gm_draw_rectangle(x, y + s / 2 - top_thickness / 2, s * ratio, top_thickness,
+                    GM_GAMA);
+  gm_draw_rectangle(x + (-s / 2) + (left_thickness / 2) + (s / 2 * (1 - ratio)),
+                    y, left_thickness, s, GM_GAMA);
+}
