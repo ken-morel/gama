@@ -434,7 +434,7 @@ Always use `gm_dt()` for time-based calculations to ensure consistent game speed
 player.position.x += 100 * gm_dt();
 ```
 
-### 3. Physics Body Management
+### 4. Physics Body Management
 - Set static bodies for objects that shouldn't move (platforms, walls)
 - Use appropriate masses for different objects (heavier objects should have higher mass)
 - Consider using boundary functions to keep objects within game bounds
