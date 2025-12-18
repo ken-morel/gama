@@ -6,7 +6,7 @@ const config = {
 
   kit: {
     adapter: adapter({
-      runtime: 'nodejs18.x'
+      runtime: 'nodejs20.x'
     }),
     prerender: {
       handleMissingId: "warn",
