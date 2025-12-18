@@ -1,8 +1,3 @@
-# Pong
-
-A simple pong game down with gama physics
-
-
 ## Development
 
 ### Using gama cli

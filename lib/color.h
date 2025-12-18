@@ -27,6 +27,10 @@ static inline gmColor gm_set_alpha(gmColor col, int alpha) {
   return (col & 0xFFFFFF00) | (unsigned)(abs(alpha) % 256);
 }
 
+#define GM_OPAQUE (gmColor)0xFFFFFFFF
+#define GM_TRANSPARENT (gmColor)0xFFFFFF00
+#define GM_TRANSLUCENT (gmColor)0xFFFFFF99
+
 #define GM_ALICEBLUE (gmColor)0xF0F8FFFF
 #define GM_ANTIQUEWHITE (gmColor)0xFAEBD7FF
 #define GM_AQUA (gmColor)0x00FFFFFF
