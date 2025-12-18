@@ -35,7 +35,7 @@
     const { activeCategory } = createSidebarContext(sidebar);
 
     $: category = $activeCategory ? `${$activeCategory}: ` : "";
-    $: title = meta ? `${category}${meta.title} | Svelte` : null;
+    $: title = meta ? `${category}${meta.title} | Gama` : null;
     $: description = meta?.description;
 </script>
 
