@@ -16,6 +16,10 @@ With an embedded TCC compiler, Gama is a zero-dependency tool. You can create, b
 -   **Zero-Dependency:** Comes with a built-in TCC compiler for a hassle-free setup.
 -   **Cross-Platform (in development):** Aims to support Windows, Linux, and Web.
 
+## Documentation
+
+For comprehensive documentation, see [gama_docs.md](./gama_docs.md).
+
 ## Getting Started
 
 Getting started with Gama is easy. Once you have the `gama` executable, you can create your first project.
