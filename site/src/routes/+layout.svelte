@@ -24,11 +24,11 @@
     const navbar = {
         links: [
             { title: "Docs", slug: "/docs", match: /\/docs/ },
-            {
-                title: "Tutorials",
-                slug: "/docs/tutorials",
-                match: /\/docs\/tutorials/,
-            },
+            // {
+            //     title: "Tutorials",
+            //     slug: "/docs/tutorials",
+            //     match: /\/docs\/tutorials/,
+            // },
         ],
     };
 

@@ -26,6 +26,7 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
+    "@sveltejs/adapter-vercel": "^6.2.0",
     "clsx": "^2.0.0"
   }
 }
