@@ -1,38 +1,47 @@
+#pragma once
+
 #include "../animate.h"
 #include "../collision.h"
 #include "../draw.h"
 
+/**
+ * @brief Structure defining the visual theme for a switch widget.
+ */
 typedef struct {
-  int enabled;
+  int enabled;              /**< Whether the switch is enabled */
 
-  double scale;
+  double scale;             /**< Default scale of the switch */
 
   struct {
-    gmColor background;
-    gmColor border;
-    gmColor knob;
-    gmColor knob_border;
+    gmColor background;     /**< Background color when switched off */
+    gmColor border;         /**< Border color when switched off */
+    gmColor knob;           /**< Knob color when switched off */
+    gmColor knob_border;    /**< Knob border color when switched off */
   } off;
 
   struct {
-    gmColor background;
-    gmColor border;
-    gmColor knob;
-    gmColor knob_border;
+    gmColor background;     /**< Background color when switched on */
+    gmColor border;         /**< Border color when switched on */
+    gmColor knob;           /**< Knob color when switched on */
+    gmColor knob_border;    /**< Knob border color when switched on */
   } on;
 
   struct {
-    double scale;
-    gmColor border;
+    double scale;           /**< Scale factor when focused/hovered */
+    gmColor border;         /**< Border color when focused/hovered */
   } focussed;
 
   struct {
-    double scale;
-    gmColor border;
+    double scale;           /**< Scale factor when active pressed */
+    gmColor border;         /**< Border color when active pressed */
   } active;
 
-  double border_width;
+  double border_width;      /**< Width of the switch border */
 } gmwSwitchTheme;
+
+/**
+ * @brief Global switch theme instance with default values.
+ */
 gmwSwitchTheme gmwSwitch = {.enabled = 1,
 
                             // OFF state (muted)
@@ -69,6 +78,16 @@ gmwSwitchTheme gmwSwitch = {.enabled = 1,
 
                             .border_width = 0.01};
 
+/**
+ * @brief Creates and renders an animated switch widget that toggles on click.
+ * @param x The x-coordinate of the switch's center.
+ * @param y The y-coordinate of the switch's center.
+ * @param width The width of the switch.
+ * @param height The height of the switch.
+ * @param value Pointer to an integer to store the switch state (0=off, 1=on).
+ * @param anim Pointer to a double for animated visual position (can be NULL to use value).
+ * @return 1 if the switch was clicked (toggled), 0 otherwise.
+ */
 int gmw_switch_anim(double x, double y, double width, double height, int *value,
                     double *anim) {
 
@@ -128,6 +147,16 @@ int gmw_switch_anim(double x, double y, double width, double height, int *value,
 
   return clicked;
 }
+
+/**
+ * @brief Creates and renders a switch widget that toggles on click.
+ * @param x The x-coordinate of the switch's center.
+ * @param y The y-coordinate of the switch's center.
+ * @param width The width of the switch.
+ * @param height The height of the switch.
+ * @param value Pointer to an integer to store the switch state (0=off, 1=on).
+ * @return 1 if the switch was clicked (toggled), 0 otherwise.
+ */
 int gmw_switch(double x, double y, double width, double height, int *value) {
   return gmw_switch_anim(x, y, width, height, value, NULL);
 }
