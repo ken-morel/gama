@@ -413,8 +413,8 @@ int main() {
   .hero {
     padding: 4rem 0 2rem;
     text-align: center;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-bottom: 1px solid #e2e8f0;
+    background: linear-gradient(135deg, #f0f0f7 0%, #e5e5ec 100%);
+    border-bottom: 1px solid #d1d1e0;
   }
 
   @keyframes fadeInUp {
@@ -791,7 +791,7 @@ int main() {
 
   .button {
     display: inline-block;
-    background: #3b82f6;
+    background: #aa77aa;
     color: white;
     padding: 1rem 2rem;
     border-radius: 0.5rem;
@@ -806,19 +806,19 @@ int main() {
   }
 
   .button:hover {
-    background: #2563eb;
+    background: #955da5;
     transform: translateY(-2px);
   }
 
   .button-secondary {
     background: transparent;
-    color: #3b82f6;
-    border: 2px solid #3b82f6;
+    color: #aa77aa;
+    border: 2px solid #aa77aa;
     margin-left: 1rem;
   }
 
   .button-secondary:hover {
-    background: #eff6ff;
+    background: #f0e6f0;
   }
 
   .buttons-container {
@@ -832,6 +832,7 @@ int main() {
     padding: 2rem 0;
     text-align: center;
     color: #64748b;
+    background-color: #f8fafc;
     border-top: 1px solid #e2e8f0;
     margin-top: 2rem;
   }
@@ -918,16 +919,10 @@ int main() {
     color: #94a3b8;
   }
 
-  :global(.dark) .button {
-    background: #2563eb;
-  }
-
-  :global(.dark) .button:hover {
-    background: #3b82f6;
-  }
 
   :global(.dark) .footer {
-    color: #94a3b8;
+    color: #cbd5e1;
+    background-color: #0f172a;
     border-top: 1px solid #334155;
   }
 
@@ -937,22 +932,22 @@ int main() {
   }
 
   :global(.dark) .button {
-    background: #3b82f6;
+    background: #aa77aa;
     color: white;
   }
 
   :global(.dark) .button:hover {
-    background: #2563eb;
+    background: #955da5;
   }
 
   :global(.dark) .button-secondary {
     background: transparent;
-    color: #3b82f6;
-    border: 2px solid #3b82f6;
+    color: #aa77aa;
+    border: 2px solid #aa77aa;
   }
 
   :global(.dark) .button-secondary:hover {
-    background: #1e3a8a;
+    background: #4a3a4a;
   }
 
   :global(.dark) .feature-icon,
