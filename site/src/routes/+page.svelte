@@ -434,11 +434,7 @@ int main() {
   .hero-content {
     opacity: 0;
     transform: translateY(20px);
-    animation: fadeInUp 2s ease forwards;
-  }
-  .hero-content:hover {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
+    animation: fadeInUp 0.8s ease forwards;
   }
   h1 {
     font-size: 3.5rem;
@@ -563,6 +559,7 @@ int main() {
   }
 
   .principle-item {
+    font-size: large;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -592,7 +589,10 @@ int main() {
   .principle-item:nth-child(even) .principle-card {
     transform: translateX(20px);
   }
-
+  .principle-content:nth-child(even),
+  .principle-icon:nth-child(even) {
+    text-align: right;
+  }
   .principle-content {
     flex: 1;
     padding: 0 2rem;
@@ -929,6 +929,36 @@ int main() {
   :global(.dark) .footer {
     color: #94a3b8;
     border-top: 1px solid #334155;
+  }
+
+  /* Additional dark mode improvements */
+  :global(.dark) .logo-container img {
+    filter: brightness(0.9);
+  }
+
+  :global(.dark) .button {
+    background: #3b82f6;
+    color: white;
+  }
+
+  :global(.dark) .button:hover {
+    background: #2563eb;
+  }
+
+  :global(.dark) .button-secondary {
+    background: transparent;
+    color: #3b82f6;
+    border: 2px solid #3b82f6;
+  }
+
+  :global(.dark) .button-secondary:hover {
+    background: #1e3a8a;
+  }
+
+  :global(.dark) .feature-icon,
+  :global(.dark) .application-icon,
+  :global(.dark) .principle-icon {
+    filter: brightness(0.9);
   }
 
   @media (max-width: 768px) {
