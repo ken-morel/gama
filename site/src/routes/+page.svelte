@@ -1,43 +1,16 @@
 <script>
   import { onMount } from "svelte";
 
-  // Animation state
-  let heroVisible = false;
-  let featuresVisible = false;
-  let principlesVisible = false;
-  let applicationsVisible = false;
-  let ctaVisible = false;
-
+  // Set up animation when component mounts
   onMount(() => {
-    // Simple fade-in animations
-    setTimeout(() => {
-      heroVisible = true;
-    }, 100);
-    setTimeout(() => {
-      featuresVisible = true;
-    }, 600);
-    setTimeout(() => {
-      principlesVisible = true;
-    }, 1000);
-    setTimeout(() => {
-      applicationsVisible = true;
-    }, 1200);
-    setTimeout(() => {
-      ctaVisible = true;
-    }, 1400);
-  });
+    // Add animation class to trigger hero animation on mount
+    // Use a small delay to ensure DOM is ready
 
-  $: heroClasses = `hero-content ${heroVisible ? "show" : ""}`;
-  $: featureCards = features.map((_, i) =>
-    featuresVisible ? "feature-card show" : "feature-card",
-  );
-  $: principleCards = principles.map((_, i) =>
-    principlesVisible ? "principle-card show" : "principle-card",
-  );
-  $: applicationCards = applications.map((_, i) =>
-    applicationsVisible ? "application-card show" : "application-card",
-  );
-  $: ctaClasses = `cta-content ${ctaVisible ? "show" : ""}`;
+    const hero = document.querySelector(".hero-content");
+    console.log(hero);
+    if (hero) hero.classList.add("animate-in");
+    else alert("Could not show hero");
+  });
 
   // Features data expanded with more specific Gama features
   const features = [
@@ -198,7 +171,7 @@ int main() {
 
 <div class="hero">
   <div class="content-wrapper">
-    <div class={heroClasses}>
+    <div class="hero-content">
       <div class="logo-container">
         <img src="/gama-text.png" alt="Gama Logo" />
       </div>
@@ -227,7 +200,7 @@ int main() {
     </div>
     <div class="features-grid">
       {#each features as feature, i}
-        <div class={featureCards[i]}>
+        <div class="feature-card">
           <span class="feature-icon">{feature.icon}</span>
           <h3 class="feature-title">{feature.title}</h3>
           <p class="feature-description">{feature.description}</p>
@@ -268,12 +241,12 @@ int main() {
               <h3 class="principle-title">{principle.title}</h3>
             </div>
             <!-- Right side: Card with description -->
-            <div class={principleCards[i]}>
+            <div class="principle-card">
               <p class="principle-description">{principle.description}</p>
             </div>
           {:else}
             <!-- Left side: Card with description -->
-            <div class={principleCards[i]}>
+            <div class="principle-card">
               <p class="principle-description">{principle.description}</p>
             </div>
             <!-- Right side: Icon/Title -->
@@ -313,7 +286,7 @@ int main() {
       </div>
       <div class="applications-grid">
         {#each applications as app, i}
-          <div class={applicationCards[i]}>
+          <div class="application-card">
             <span class="application-icon">{app.icon}</span>
             <h3 class="application-title">{app.title}</h3>
             <p class="application-description">{app.description}</p>
@@ -398,7 +371,7 @@ int main() {
 
 <div class="cta">
   <div class="container">
-    <div class={ctaClasses}>
+    <div class="cta-content">
       <h2 class="cta-title">Ready to Start Building?</h2>
       <p class="cta-subtitle">
         Join thousands of students learning game development with Gama's
@@ -444,19 +417,29 @@ int main() {
     border-bottom: 1px solid #e2e8f0;
   }
 
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    50% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   .hero-content {
     opacity: 0;
     transform: translateY(20px);
-    transition:
-      opacity 0.8s ease,
-      transform 0.8s ease;
+    animation: fadeInUp 2s ease forwards;
   }
-
-  .hero-content.show {
-    opacity: 1;
-    transform: translateY(0);
+  .hero-content:hover {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
   }
-
   h1 {
     font-size: 3.5rem;
     margin: 0 0 1rem;
@@ -529,16 +512,6 @@ int main() {
     transition:
       transform 0.3s ease,
       box-shadow 0.3s ease;
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 0.6s ease,
-      transform 0.6s ease;
-  }
-
-  .feature-card.show {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .feature-card:nth-child(2n) {
@@ -582,12 +555,6 @@ int main() {
     padding: 0 1.5rem;
   }
 
-  .principles-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-
   .principles-grid {
     display: flex;
     flex-direction: column;
@@ -614,7 +581,6 @@ int main() {
     backdrop-filter: blur(10px);
     border-radius: 1rem;
     padding: 2rem;
-    opacity: 0;
     transform: translateX(-20px);
     transition:
       opacity 0.6s ease,
@@ -623,17 +589,8 @@ int main() {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  .principle-card.show {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
   .principle-item:nth-child(even) .principle-card {
     transform: translateX(20px);
-  }
-
-  .principle-item:nth-child(even) .principle-card.show {
-    transform: translateX(0);
   }
 
   .principle-content {
@@ -681,16 +638,10 @@ int main() {
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
-    opacity: 0;
     transform: translateY(20px);
     transition:
       opacity 0.6s ease,
       transform 0.6s ease;
-  }
-
-  .application-card.show {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .application-icon {
@@ -773,18 +724,6 @@ int main() {
     white-space: pre;
   }
 
-  .highlight-comment {
-    color: #94a3b8;
-  }
-
-  .highlight-function {
-    color: #60a5fa;
-  }
-
-  .highlight {
-    color: #34d399;
-  }
-
   .cli-section {
     padding: 4rem 0;
     background: white;
@@ -836,16 +775,6 @@ int main() {
   .cta-content {
     max-width: 600px;
     margin: 0 auto;
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 0.8s ease,
-      transform 0.8s ease;
-  }
-
-  .cta-content.show {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .cta-title {
@@ -1048,6 +977,5 @@ int main() {
       flex-direction: column !important;
       text-align: center;
     }
-
   }
 </style>
