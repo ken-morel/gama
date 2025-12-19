@@ -161,8 +161,8 @@ int main() {
   }
 
   .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0;
     padding: 0 1.5rem;
   }
 
@@ -216,6 +216,7 @@ int main() {
 
   .features {
     padding: 4rem 0;
+    background-color: #f8fafc;
   }
 
   .section-header {
@@ -241,6 +242,10 @@ int main() {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1.5rem;
   }
 
   .feature-card {
@@ -292,25 +297,30 @@ int main() {
 
   .principles {
     padding: 4rem 0;
-    background-color: #f8fafc;
+    background-color: #f1f5f9;
   }
 
   .principles-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 1.5rem;
   }
 
   .principles-grid {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
     margin-top: 3rem;
   }
 
   .principle-card {
-    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
     border-radius: 1rem;
     padding: 2rem;
-    border-left: 4px solid #3b82f6;
     opacity: 0;
     transform: translateX(-20px);
     transition: opacity 0.6s ease, transform 0.6s ease;
@@ -321,20 +331,28 @@ int main() {
     transform: translateX(0);
   }
 
-  .principle-card:nth-child(2n) {
-    transition-delay: 0.1s;
+  .principle-card:nth-child(even) {
+    flex-direction: row-reverse;
   }
 
-  .principle-card:nth-child(3n) {
-    transition-delay: 0.2s;
+  .principle-card .title-container {
+    flex: 1;
+    text-align: left;
+    padding-right: 2rem;
   }
 
-  .principle-card:nth-child(4n) {
-    transition-delay: 0.3s;
+  .principle-card:nth-child(even) .title-container {
+    padding-right: 0;
+    padding-left: 2rem;
+  }
+
+  .principle-card .icon-container {
+    flex: 0 0 auto;
+    font-size: 3rem;
   }
 
   .principle-title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     color: #0f172a;
     margin: 0 0 1rem;
   }
@@ -351,8 +369,9 @@ int main() {
   }
 
   .applications-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 1.5rem;
   }
 
   .applications-grid {
@@ -475,8 +494,9 @@ int main() {
   }
 
   .cli-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 1.5rem;
   }
 
   .cli-commands {
@@ -586,6 +606,101 @@ int main() {
     margin-top: 2rem;
   }
 
+  /* Dark mode styles */
+  :global(.dark) .hero,
+  :global(.dark) .cta {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  }
+
+  :global(.dark) .hero h1,
+  :global(.dark) .hero .subtitle,
+  :global(.dark) .section-title,
+  :global(.dark) .section-subtitle {
+    color: #f1f5f9;
+  }
+
+  :global(.dark) .features {
+    background-color: #0f172a;
+  }
+
+  :global(.dark) .feature-card {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+
+  :global(.dark) .feature-title {
+    color: #f1f5f9;
+  }
+
+  :global(.dark) .feature-description {
+    color: #cbd5e1;
+  }
+
+  :global(.dark) .applications {
+    background-color: #0f172a;
+  }
+
+  :global(.dark) .application-card {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+
+  :global(.dark) .application-title {
+    color: #f1f5f9;
+  }
+
+  :global(.dark) .application-description {
+    color: #cbd5e1;
+  }
+
+  :global(.dark) .principles {
+    background-color: #0c1a2b;
+  }
+
+  :global(.dark) .principle-card {
+    background: rgba(30, 41, 59, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  :global(.dark) .principle-title {
+    color: #f1f5f9;
+  }
+
+  :global(.dark) .principle-description {
+    color: #cbd5e1;
+  }
+
+  :global(.dark) .cli-section {
+    background-color: #0f172a;
+  }
+
+  :global(.dark) .cli-command {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+
+  :global(.dark) .cli-command-text {
+    color: #f1f5f9;
+    background: #334155;
+  }
+
+  :global(.dark) .cli-description {
+    color: #94a3b8;
+  }
+
+  :global(.dark) .button {
+    background: #2563eb;
+  }
+
+  :global(.dark) .button:hover {
+    background: #3b82f6;
+  }
+
+  :global(.dark) .footer {
+    color: #94a3b8;
+    border-top: 1px solid #334155;
+  }
+
   @media (max-width: 768px) {
     h1 {
       font-size: 2.5rem;
@@ -626,6 +741,16 @@ int main() {
 
     .cli-description {
       margin-left: 0;
+    }
+
+    .principle-card {
+      flex-direction: column !important;
+      text-align: center;
+    }
+
+    .principle-card .title-container {
+      padding-right: 0 !important;
+      padding-left: 0 !important;
     }
   }
 </style>
@@ -682,8 +807,16 @@ int main() {
       <div class="principles-grid">
         {#each principles as principle, i}
           <div class={principleCards[i]}>
-            <h3 class="principle-title">{principle.title}</h3>
-            <p class="principle-description">{principle.description}</p>
+            <div class="title-container">
+              <h3 class="principle-title">{principle.title}</h3>
+              <p class="principle-description">{principle.description}</p>
+            </div>
+            <div class="icon-container">
+              {#if i == 0} 🏗️ {/if}
+              {#if i == 1} ⚙️ {/if}
+              {#if i == 2} 🔄 {/if}
+              {#if i == 3} ⚡ {/if}
+            </div>
           </div>
         {/each}
       </div>
