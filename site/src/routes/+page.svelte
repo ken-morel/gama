@@ -211,7 +211,7 @@ int main() {
       </p>
       <div class="buttons-container">
         <a href="/docs" class="button">Get Started</a>
-        <a href="/docs/cli" class="button button-secondary">CLI Guide</a>
+        <a href="/docs" class="button button-secondary">Documentation</a>
       </div>
     </div>
   </div>
@@ -773,15 +773,15 @@ int main() {
     white-space: pre;
   }
 
-  .code-block .highlight-comment {
+  .highlight-comment {
     color: #94a3b8;
   }
 
-  .code-block .highlight-function {
+  .highlight-function {
     color: #60a5fa;
   }
 
-  .code-block .highlight {
+  .highlight {
     color: #34d399;
   }
 
@@ -1049,9 +1049,5 @@ int main() {
       text-align: center;
     }
 
-    .principle-card .title-container {
-      padding-right: 0 !important;
-      padding-left: 0 !important;
-    }
   }
 </style>
