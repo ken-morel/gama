@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount } from "svelte";
 
   // Animation state
   let heroVisible = false;
@@ -10,105 +10,137 @@
 
   onMount(() => {
     // Simple fade-in animations
-    setTimeout(() => { heroVisible = true; }, 100);
-    setTimeout(() => { featuresVisible = true; }, 600);
-    setTimeout(() => { principlesVisible = true; }, 1000);
-    setTimeout(() => { applicationsVisible = true; }, 1200);
-    setTimeout(() => { ctaVisible = true; }, 1400);
+    setTimeout(() => {
+      heroVisible = true;
+    }, 100);
+    setTimeout(() => {
+      featuresVisible = true;
+    }, 600);
+    setTimeout(() => {
+      principlesVisible = true;
+    }, 1000);
+    setTimeout(() => {
+      applicationsVisible = true;
+    }, 1200);
+    setTimeout(() => {
+      ctaVisible = true;
+    }, 1400);
   });
 
-  $: heroClasses = `hero-content ${heroVisible ? 'show' : ''}`;
-  $: featureCards = features.map((_, i) => featuresVisible ? 'feature-card show' : 'feature-card');
-  $: principleCards = principles.map((_, i) => principlesVisible ? 'principle-card show' : 'principle-card');
-  $: applicationCards = applications.map((_, i) => applicationsVisible ? 'application-card show' : 'application-card');
-  $: ctaClasses = `cta-content ${ctaVisible ? 'show' : ''}`;
+  $: heroClasses = `hero-content ${heroVisible ? "show" : ""}`;
+  $: featureCards = features.map((_, i) =>
+    featuresVisible ? "feature-card show" : "feature-card",
+  );
+  $: principleCards = principles.map((_, i) =>
+    principlesVisible ? "principle-card show" : "principle-card",
+  );
+  $: applicationCards = applications.map((_, i) =>
+    applicationsVisible ? "application-card show" : "application-card",
+  );
+  $: ctaClasses = `cta-content ${ctaVisible ? "show" : ""}`;
 
   // Features data expanded with more specific Gama features
   const features = [
     {
       title: "Lightweight C Library",
-      description: "Simple, easy-to-learn C API with clear function names designed specifically for students and beginners.",
-      icon: "⚙️"
+      description:
+        "Simple, easy-to-learn C API with clear function names designed specifically for students and beginners.",
+      icon: "⚙️",
     },
     {
       title: "Built-in 2D Physics Engine",
-      description: "Physics system with bodies, shapes, and collision detection supporting restitution, friction, and constraints.",
-      icon: "⚖️"
+      description:
+        "Physics system with bodies, shapes, and collision detection supporting restitution, friction, and constraints.",
+      icon: "⚖️",
     },
     {
       title: "Immediate Mode Rendering",
-      description: "Draw shapes directly without creating objects. Reduces pointer usage and manual memory management.",
-      icon: "🎯"
+      description:
+        "Draw shapes directly without creating objects. Reduces pointer usage and manual memory management.",
+      icon: "🎯",
     },
     {
       title: "Comprehensive Animation System",
-      description: "Multiple easing functions and wave animations for smooth, professional-looking motion.",
-      icon: "⏱️"
+      description:
+        "Multiple easing functions and wave animations for smooth, professional-looking motion.",
+      icon: "⏱️",
     },
     {
       title: "Modern CLI Tool",
-      description: "Fast project manager written in V with zero-dependency setup using embedded TCC compiler.",
-      icon: "🔧"
+      description:
+        "Fast project manager written in V with zero-dependency setup using embedded TCC compiler.",
+      icon: "🔧",
     },
     {
       title: "Advanced Input System",
-      description: "Intuitive key and mouse input with predefined shortcuts for arrows, space, and mouse buttons.",
-      icon: "🎮"
+      description:
+        "Intuitive key and mouse input with predefined shortcuts for arrows, space, and mouse buttons.",
+      icon: "🎮",
     },
     {
       title: "Cross-Platform Development",
-      description: "Target Windows, Linux, and Web with consistent APIs and behavior.",
-      icon: "🌐"
+      description:
+        "Target Windows, Linux, and Web with consistent APIs and behavior.",
+      icon: "🌐",
     },
     {
       title: "Educational Focus",
-      description: "Designed specifically for teaching C programming with safety and simplicity in mind.",
-      icon: "🎓"
-    }
+      description:
+        "Designed specifically for teaching C programming with safety and simplicity in mind.",
+      icon: "🎓",
+    },
   ];
 
   // Principles data
   const principles = [
     {
       title: "Stack More, Heap Less",
-      description: "Gama encourages stack allocation in functions for safer memory management, reducing common C pitfalls for beginners."
+      description:
+        "Gama encourages stack allocation in functions for safer memory management, reducing common C pitfalls for beginners.",
     },
     {
       title: "You Have Control",
-      description: "Your code owns the mainloop, allowing you to control exactly how your game runs without hidden abstractions."
+      description:
+        "Your code owns the mainloop, allowing you to control exactly how your game runs without hidden abstractions.",
     },
     {
       title: "No Global State",
-      description: "Functions can serve as scenes with automatic initialization, destruction, and object management."
+      description:
+        "Functions can serve as scenes with automatic initialization, destruction, and object management.",
     },
     {
       title: "Immediate Mode",
-      description: "Draw shapes directly when needed rather than creating and managing objects, simplifying game logic."
-    }
+      description:
+        "Draw shapes directly when needed rather than creating and managing objects, simplifying game logic.",
+    },
   ];
 
   // Applications data
   const applications = [
     {
       title: "Game Development",
-      description: "Create 2D games with physics, animation and user input handling using simple C code.",
-      icon: "🎮"
+      description:
+        "Create 2D games with physics, animation and user input handling using simple C code.",
+      icon: "🎮",
     },
     {
       title: "Data Visualization",
-      description: "Build interactive tools to visualize data and algorithms with animated elements.",
-      icon: "📊"
+      description:
+        "Build interactive tools to visualize data and algorithms with animated elements.",
+      icon: "📊",
     },
     {
       title: "Scientific Simulations",
-      description: "Develop physics simulations, mathematical visualizations, and educational tools.",
-      icon: "🔬"
+      description:
+        "Develop physics simulations, mathematical visualizations, and educational tools.",
+      icon: "🔬",
     },
     {
       title: "Educational Tools",
-      description: "Create interactive applications for teaching programming, math, and science concepts.",
-      icon: "📚"
-    }
+      description:
+        "Create interactive applications for teaching programming, math, and science concepts.",
+      icon: "📚",
+    },
   ];
 
   // Code example based on the lineup project
@@ -145,24 +177,263 @@ int main() {
 
   // CLI commands
   const cliCommands = [
-    { command: "gama create", description: "Create a new Gama project interactively" },
-    { command: "gama dev", description: "Build and run with auto-rebuild on changes" },
-    { command: "gama build", description: "Compile your project to an executable" },
-    { command: "gama package", description: "Package your project for distribution" }
+    {
+      command: "gama create",
+      description: "Create a new Gama project interactively",
+    },
+    {
+      command: "gama dev",
+      description: "Build and run with auto-rebuild on changes",
+    },
+    {
+      command: "gama build",
+      description: "Compile your project to an executable",
+    },
+    {
+      command: "gama package",
+      description: "Package your project for distribution",
+    },
   ];
 </script>
+
+<div class="hero">
+  <div class="content-wrapper">
+    <div class={heroClasses}>
+      <div class="logo-container">
+        <img src="/gama-text.png" alt="Gama Logo" />
+      </div>
+      <h1>Gama Engine - Simple 2D Game Development in C</h1>
+      <p class="subtitle">
+        A lightweight, minimalist game engine that combines a powerful C library
+        with a modern toolchain. Perfect for students learning C programming and
+        developers who want a zero-dependency, educational approach to game
+        development.
+      </p>
+      <div class="buttons-container">
+        <a href="/docs" class="button">Get Started</a>
+        <a href="/docs/cli" class="button button-secondary">CLI Guide</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="features">
+  <div class="content-wrapper">
+    <div class="section-header">
+      <h2 class="section-title">Powerful Features</h2>
+      <p class="section-subtitle">
+        Everything you need to build impressive 2D games and visualizations
+      </p>
+    </div>
+    <div class="features-grid">
+      {#each features as feature, i}
+        <div class={featureCards[i]}>
+          <span class="feature-icon">{feature.icon}</span>
+          <h3 class="feature-title">{feature.title}</h3>
+          <p class="feature-description">{feature.description}</p>
+        </div>
+      {/each}
+    </div>
+  </div>
+</div>
+
+<div class="principles">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Design Principles</h2>
+      <p class="section-subtitle">
+        Built with educational excellence and practical safety at its core
+      </p>
+    </div>
+    <div class="principles-grid">
+      {#each principles as principle, i}
+        <div class="principle-item">
+          {#if i % 2 === 0}
+            <!-- Left side: Icon/Title -->
+            <div class="principle-content">
+              <div class="principle-icon">
+                {#if i == 0}
+                  🏗️
+                {/if}
+                {#if i == 1}
+                  ⚙️
+                {/if}
+                {#if i == 2}
+                  🔄
+                {/if}
+                {#if i == 3}
+                  ⚡
+                {/if}
+              </div>
+              <h3 class="principle-title">{principle.title}</h3>
+            </div>
+            <!-- Right side: Card with description -->
+            <div class={principleCards[i]}>
+              <p class="principle-description">{principle.description}</p>
+            </div>
+          {:else}
+            <!-- Left side: Card with description -->
+            <div class={principleCards[i]}>
+              <p class="principle-description">{principle.description}</p>
+            </div>
+            <!-- Right side: Icon/Title -->
+            <div class="principle-content">
+              <div class="principle-icon">
+                {#if i == 0}
+                  🏗️
+                {/if}
+                {#if i == 1}
+                  ⚙️
+                {/if}
+                {#if i == 2}
+                  🔄
+                {/if}
+                {#if i == 3}
+                  ⚡
+                {/if}
+              </div>
+              <h3 class="principle-title">{principle.title}</h3>
+            </div>
+          {/if}
+        </div>
+      {/each}
+    </div>
+  </div>
+</div>
+
+<div class="applications">
+  <div class="container">
+    <div class="applications-container">
+      <div class="section-header">
+        <h2 class="section-title">Real-World Applications</h2>
+        <p class="section-subtitle">
+          Gama is not just for games! Perfect for education, visualization, and
+          scientific applications
+        </p>
+      </div>
+      <div class="applications-grid">
+        {#each applications as app, i}
+          <div class={applicationCards[i]}>
+            <span class="application-icon">{app.icon}</span>
+            <h3 class="application-title">{app.title}</h3>
+            <p class="application-description">{app.description}</p>
+          </div>
+        {/each}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="code-section">
+  <div class="container">
+    <div class="code-header">
+      <h2 class="code-title">Clean & Readable Code</h2>
+      <p class="code-subtitle">
+        Build games with minimal, easy-to-understand C code
+      </p>
+    </div>
+    <div class="code-container">
+      <div class="code-header-tabs">
+        <div class="tab-dot"></div>
+        <div class="tab-dot"></div>
+        <div class="tab-dot"></div>
+      </div>
+      <pre class="code-block"><code
+          >{`// Interactive physics example with Gama
+#include <gama.h>
+
+int main() {
+  // Initialize with window size and title
+  gm_init(800, 600, "My Game");
+  gm_background(GM_BLACK);
+
+  // Create a physics body
+  gmBody player = gm_rectangle_body(1.0, 400, 300, 32, 32);
+
+  // Game loop
+  do {
+    // Handle input
+    if (gm_key('U')) player.velocity.y += 5.0;  // Move up
+    if (gm_key('D')) player.velocity.y -= 5.0;  // Move down
+    if (gm_key('L')) player.velocity.x -= 5.0;  // Move left
+    if (gm_key('R')) player.velocity.x += 5.0;  // Move right
+
+    // Draw elements
+    gm_draw_body(&player, GM_BLUE);
+
+    // Check for exit condition
+    if (gm_key_pressed('s', 'x')) {
+      gm_quit();
+    }
+
+  } while (gm_yield());
+
+  return 0;
+}`}</code
+        ></pre>
+    </div>
+  </div>
+</div>
+
+<div class="cli-section">
+  <div class="container">
+    <div class="cli-container">
+      <div class="section-header">
+        <h2 class="section-title">Powerful CLI Tool</h2>
+        <p class="section-subtitle">
+          Fast project management with zero dependencies
+        </p>
+      </div>
+      <div class="cli-commands">
+        {#each cliCommands as cmd, i}
+          <div class="cli-command">
+            <span class="cli-command-text">{cmd.command}</span>
+            <span class="cli-description">{cmd.description}</span>
+          </div>
+        {/each}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cta">
+  <div class="container">
+    <div class={ctaClasses}>
+      <h2 class="cta-title">Ready to Start Building?</h2>
+      <p class="cta-subtitle">
+        Join thousands of students learning game development with Gama's
+        beginner-friendly approach
+      </p>
+      <div class="buttons-container">
+        <a href="/docs" class="button">Start Learning</a>
+        <a
+          href="https://github.com/ken-morel/gama"
+          class="button button-secondary">View on GitHub</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="container">
+    <p>Gama Engine - A C toolkit for safe and simple 2D game development</p>
+    <p>Website: <a href="https://gama.rbs.cm">https://gama.rbs.cm</a></p>
+  </div>
+</div>
 
 <style>
   :global(body) {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     background-color: #f8fafc;
   }
 
   .container {
-    max-width: 100%;
-    margin: 0;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 0 1.5rem;
   }
 
@@ -176,7 +447,9 @@ int main() {
   .hero-content {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
   }
 
   .hero-content.show {
@@ -253,10 +526,14 @@ int main() {
     border-radius: 1rem;
     padding: 2rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
   }
 
   .feature-card.show {
@@ -300,6 +577,11 @@ int main() {
     background-color: #f1f5f9;
   }
 
+  .principles .container {
+    max-width: 100%;
+    padding: 0 1.5rem;
+  }
+
   .principles-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -309,21 +591,36 @@ int main() {
   .principles-grid {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 4rem;
     margin-top: 3rem;
   }
 
-  .principle-card {
+  .principle-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .principle-item:nth-child(odd) {
+    justify-content: flex-start;
+  }
+
+  .principle-item:nth-child(even) {
+    justify-content: flex-end;
+  }
+
+  .principle-card {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     border-radius: 1rem;
     padding: 2rem;
     opacity: 0;
     transform: translateX(-20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   .principle-card.show {
@@ -331,24 +628,22 @@ int main() {
     transform: translateX(0);
   }
 
-  .principle-card:nth-child(even) {
-    flex-direction: row-reverse;
+  .principle-item:nth-child(even) .principle-card {
+    transform: translateX(20px);
   }
 
-  .principle-card .title-container {
+  .principle-item:nth-child(even) .principle-card.show {
+    transform: translateX(0);
+  }
+
+  .principle-content {
     flex: 1;
-    text-align: left;
-    padding-right: 2rem;
+    padding: 0 2rem;
   }
 
-  .principle-card:nth-child(even) .title-container {
-    padding-right: 0;
-    padding-left: 2rem;
-  }
-
-  .principle-card .icon-container {
-    flex: 0 0 auto;
-    font-size: 3rem;
+  .principle-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
   }
 
   .principle-title {
@@ -388,7 +683,9 @@ int main() {
     text-align: center;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
   }
 
   .application-card.show {
@@ -463,7 +760,7 @@ int main() {
 
   .code-block {
     padding: 1.5rem;
-    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-family: "Fira Code", "Monaco", "Consolas", monospace;
     font-size: 0.9rem;
     line-height: 1.6;
     overflow-x: auto;
@@ -516,7 +813,7 @@ int main() {
   }
 
   .cli-command-text {
-    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-family: "Fira Code", "Monaco", "Consolas", monospace;
     font-size: 1.1rem;
     color: #0f172a;
     font-weight: 600;
@@ -541,7 +838,9 @@ int main() {
     margin: 0 auto;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
   }
 
   .cta-content.show {
@@ -570,7 +869,9 @@ int main() {
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition:
+      background-color 0.3s ease,
+      transform 0.2s ease;
     border: none;
     cursor: pointer;
   }
@@ -754,186 +1055,3 @@ int main() {
     }
   }
 </style>
-
-<div class="hero">
-  <div class="container">
-    <div class={heroClasses}>
-      <div class="logo-container">
-        <img src="/gama-text.png" alt="Gama Logo" />
-      </div>
-      <h1>Gama Engine - Simple 2D Game Development in C</h1>
-      <p class="subtitle">
-        A lightweight, minimalist game engine that combines a powerful C library with a modern toolchain.
-        Perfect for students learning C programming and developers who want a zero-dependency,
-        educational approach to game development.
-      </p>
-      <div class="buttons-container">
-        <a href="/docs" class="button">Get Started</a>
-        <a href="/docs/cli" class="button button-secondary">CLI Guide</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="features">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Powerful Features</h2>
-      <p class="section-subtitle">
-        Everything you need to build impressive 2D games and visualizations
-      </p>
-    </div>
-    <div class="features-grid">
-      {#each features as feature, i}
-        <div class={featureCards[i]}>
-          <span class="feature-icon">{feature.icon}</span>
-          <h3 class="feature-title">{feature.title}</h3>
-          <p class="feature-description">{feature.description}</p>
-        </div>
-      {/each}
-    </div>
-  </div>
-</div>
-
-<div class="principles">
-  <div class="container">
-    <div class="principles-container">
-      <div class="section-header">
-        <h2 class="section-title">Design Principles</h2>
-        <p class="section-subtitle">
-          Built with educational excellence and practical safety at its core
-        </p>
-      </div>
-      <div class="principles-grid">
-        {#each principles as principle, i}
-          <div class={principleCards[i]}>
-            <div class="title-container">
-              <h3 class="principle-title">{principle.title}</h3>
-              <p class="principle-description">{principle.description}</p>
-            </div>
-            <div class="icon-container">
-              {#if i == 0} 🏗️ {/if}
-              {#if i == 1} ⚙️ {/if}
-              {#if i == 2} 🔄 {/if}
-              {#if i == 3} ⚡ {/if}
-            </div>
-          </div>
-        {/each}
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="applications">
-  <div class="container">
-    <div class="applications-container">
-      <div class="section-header">
-        <h2 class="section-title">Real-World Applications</h2>
-        <p class="section-subtitle">
-          Gama is not just for games! Perfect for education, visualization, and scientific applications
-        </p>
-      </div>
-      <div class="applications-grid">
-        {#each applications as app, i}
-          <div class={applicationCards[i]}>
-            <span class="application-icon">{app.icon}</span>
-            <h3 class="application-title">{app.title}</h3>
-            <p class="application-description">{app.description}</p>
-          </div>
-        {/each}
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="code-section">
-  <div class="container">
-    <div class="code-header">
-      <h2 class="code-title">Clean & Readable Code</h2>
-      <p class="code-subtitle">
-        Build games with minimal, easy-to-understand C code
-      </p>
-    </div>
-    <div class="code-container">
-      <div class="code-header-tabs">
-        <div class="tab-dot"></div>
-        <div class="tab-dot"></div>
-        <div class="tab-dot"></div>
-      </div>
-      <pre class="code-block"><code>{`// Interactive physics example with Gama
-#include <gama.h>
-
-int main() {
-  // Initialize with window size and title
-  gm_init(800, 600, "My Game");
-  gm_background(GM_BLACK);
-
-  // Create a physics body
-  gmBody player = gm_rectangle_body(1.0, 400, 300, 32, 32);
-
-  // Game loop
-  do {
-    // Handle input
-    if (gm_key('U')) player.velocity.y += 5.0;  // Move up
-    if (gm_key('D')) player.velocity.y -= 5.0;  // Move down
-    if (gm_key('L')) player.velocity.x -= 5.0;  // Move left
-    if (gm_key('R')) player.velocity.x += 5.0;  // Move right
-
-    // Draw elements
-    gm_draw_body(&player, GM_BLUE);
-
-    // Check for exit condition
-    if (gm_key_pressed('s', 'x')) {
-      gm_quit();
-    }
-
-  } while (gm_yield());
-
-  return 0;
-}`}</code></pre>
-    </div>
-  </div>
-</div>
-
-<div class="cli-section">
-  <div class="container">
-    <div class="cli-container">
-      <div class="section-header">
-        <h2 class="section-title">Powerful CLI Tool</h2>
-        <p class="section-subtitle">
-          Fast project management with zero dependencies
-        </p>
-      </div>
-      <div class="cli-commands">
-        {#each cliCommands as cmd, i}
-          <div class="cli-command">
-            <span class="cli-command-text">{cmd.command}</span>
-            <span class="cli-description">{cmd.description}</span>
-          </div>
-        {/each}
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="cta">
-  <div class="container">
-    <div class={ctaClasses}>
-      <h2 class="cta-title">Ready to Start Building?</h2>
-      <p class="cta-subtitle">
-        Join thousands of students learning game development with Gama's beginner-friendly approach
-      </p>
-      <div class="buttons-container">
-        <a href="/docs" class="button">Start Learning</a>
-        <a href="https://github.com/ken-morel/gama" class="button button-secondary">View on GitHub</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="footer">
-  <div class="container">
-    <p>Gama Engine - A C toolkit for safe and simple 2D game development</p>
-    <p>Website: <a href="https://gama.rbs.cm">https://gama.rbs.cm</a></p>
-  </div>
-</div>
