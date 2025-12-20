@@ -127,24 +127,27 @@ int main() {
   gm_background(GM_BLACK);
 
   // Create a physics body
-  gmBody player = gm_rectangle_body(1.0, 400, 300, 32, 32);
+  gmBody player = gm_circle_body(1.0, 400, 300, 32, 32);
+  player.acceleration.y = 0.9;
 
   // Game loop
   do {
+    // update position
+    gm_body_update(&player);
     // Handle input
-    if (gm_key('U')) player.velocity.y += 5.0;  // Move up
-    if (gm_key('D')) player.velocity.y -= 5.0;  // Move down
-    if (gm_key('L')) player.velocity.x -= 5.0;  // Move left
-    if (gm_key('R')) player.velocity.x += 5.0;  // Move right
+    if (gm_key('L')) player.velocity.x -= 0.1;  // Move left
+    if (gm_key('R')) player.velocity.x += 0.1;  // Move right
+
+    if(gm_mouse.pressed && gm_button(0, 0.9, 0.3, 0.1, "jump", 0.1))
+      player.velocity.y  += 1;
+
 
     // Draw elements
-    gm_draw_body(&player, GM_BLUE);
+    gm_draw_circle_body(&player, GM_BLUE);
 
     // Check for exit condition
-    if (gm_key_pressed('s', 'x')) {
+    if (gm_key('E))
       gm_quit();
-    }
-
   } while (gm_yield());
 
   return 0;
@@ -355,7 +358,7 @@ int main() {
         <div class="cta-content">
             <h2 class="cta-title">Ready to Start Building?</h2>
             <p class="cta-subtitle">
-                Join thousands of students learning game development with Gama's
+                Become another student learning game development with Gama's
                 beginner-friendly approach
             </p>
             <div class="buttons-container">
@@ -769,7 +772,7 @@ int main() {
 
     .cta-title {
         font-size: 2.5rem;
-        color: #0f172a;
+        color: #3f475a;
         margin: 0 0 1rem;
     }
 
@@ -824,7 +827,6 @@ int main() {
         color: #64748b;
         background-color: #f8fafc;
         border-top: 1px solid #e2e8f0;
-        margin-top: 2rem;
     }
 
     /* Dark mode styles */

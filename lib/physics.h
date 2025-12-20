@@ -59,6 +59,25 @@ void gm_system_update_body_dt(gmSystem *sys, gmBody *body, double dt) {
 }
 
 /**
+ * @brief Updates a single body by integrating its position and
+ * velocity over time.
+ * @param body Pointer to the body to update.
+ * @param dt The time step for the update.
+ */
+void gm_body_update_dt(gmBody *body, double dt) {
+  return gm_system_update_body_dt(NULL, body, dt);
+}
+
+/**
+ * @brief Updates a single body by integrating its position and
+ * velocity over time.
+ * @param body Pointer to the body to update.
+ */
+void gm_body_update(gmBody *body) {
+  return gm_system_update_body_dt(NULL, body, gm_dt());
+}
+
+/**
  * @brief Detects collision between two bodies.
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
