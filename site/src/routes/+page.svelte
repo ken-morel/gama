@@ -146,7 +146,7 @@ int main() {
     gm_draw_circle_body(&player, GM_BLUE);
 
     // Check for exit condition
-    if (gm_key('E))
+    if (gm_key('E'))
       gm_quit();
   } while (gm_yield());
 

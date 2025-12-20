@@ -11,10 +11,10 @@ For animated joysticks with smooth transitions, you can use <a href="/reference/
 ```c
 #include <gama.h>
 
-double joy_x = 0, joy_y = 0; // Variables to store joystick position
-double joy_x_anim, joy_y_anim; // Animation state variables
-
 int main() {
+    double joy_x = 0, joy_y = 0; // Variables to store joystick position
+    double joy_x_anim, joy_y_anim; // Animation state variables
+
     gm_init(500, 500, "Joystick Example");
 
     do {
@@ -31,8 +31,12 @@ int main() {
         }
 
         // Display current values
-        gm_draw_text(-0.9, 0.6, "X: %.2f", "", 0.08, GM_WHITE);
-        gm_draw_text(-0.9, 0.5, "Y: %.2f", "", 0.08, GM_WHITE);
+        char text[10];
+        sprintf(text, "X: %.2f", joy_x);
+        gm_draw_text(-0.9, 0.6, text, "", 0.08, GM_WHITE);
+    
+        sprintf(text, "Y: %.2f", joy_y);
+        gm_draw_text(-0.9, 0.5, text, "", 0.08, GM_WHITE);
 
         // Visualize the animated joystick position (use joy_x_anim, joy_y_anim if using animated version)
         gm_draw_circle(joy_x * 0.5, joy_y * 0.5, 0.05, GM_YELLOW);
