@@ -42,13 +42,45 @@ fn copy_html_docs() ! {
 	println(term.ok_message('HTML documentation copied to static/reference!'))
 }
 
-// Get the command from arguments
-mut cmd := 'help'
-if os.args.len > 1 {
-	cmd = os.args[1]
+fn build() {
+	println('Building gama for linux')
+	mut result := execute('v -os linux cli.v -o bin/gama')
+	if result.exit_code != 0 {
+		println(term.fail_message('host build failed: ${result.output}'))
+		return
+	}
+	println('Building gama for windows')
+	result = execute('v -os windows cli.v -o bin/gama')
+	if result.exit_code != 0 {
+		println(term.fail_message('windows build failed: ${result.output}'))
+		return
+	}
 }
 
-if cmd == 'docs' {
+fn package() {
+	println('Packaging with nsis')
+	result := execute('makensis nsis/setup.nsi')
+	if result.exit_code != 0 {
+		println(term.fail_message('makensis failed: ${result.output}'))
+		return
+	}
+	println('Packaging deb with nfpm')
+	result := execute('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
+	if result.exit_code != 0 {
+		println(term.fail_message(result.output))
+		return
+
+	}
+}
+
+fn help() {
+	println('Gama Documentation Generator')
+	println('Usage: mng build|docs')
+	println('  build/docs - Generate Doxygen documentation and integrate into Svelte site')
+	println('  help       - Show this help message')
+}
+
+fn docs() {
 	// Generate documentation from source
 	println(term.ok_message('Generating documentation...'))
 
@@ -65,32 +97,26 @@ if cmd == 'docs' {
 	copy_html_docs() or { println(term.fail_message('Error copying HTML docs: ${err}')) }
 
 	println(term.ok_message('Documentation integrated into Svelte site!'))
+}
+
+
+// Get the command from arguments
+mut cmd := 'help'
+if os.args.len > 1 {
+	cmd = os.args[1]
+}
+
+if cmd == 'docs' {
+	docs()
 } else if cmd == 'help' {
-	println('Gama Documentation Generator')
-	println('Usage: mng build|docs')
-	println('  build/docs - Generate Doxygen documentation and integrate into Svelte site')
-	println('  help       - Show this help message')
+	help()
 } else if cmd == 'build' {
-	println('Building for linux')
-	mut result := execute('v -os linux cli.v -o bin/gama')
-	if result.exit_code != 0 {
-		println(term.fail_message('host build failed: ${result.output}'))
-		return
-	}
-	println('building for windows')
-	result = execute('v -os windows cli.v -o bin/gama')
-	if result.exit_code != 0 {
-		println(term.fail_message('windows build failed: ${result.output}'))
-		return
-	}
+	build()
 } else if cmd == 'package' {
-	println('Packaging with nsis')
-	result := execute('makensis nsis/setup.nsi')
-	if result.exit_code != 0 {
-		println(term.fail_message('makensis failed: ${result.output}'))
-		return
-	}
+	build()
+	vgama()
+	package()
 } else {
 	println(term.fail_message('Unknown command: ${cmd}'))
-	println('Run "mng help" for available commands')
+	help()
 }
