@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@sveltejs/adapter-vercel": "^3.1.0",
-    "clsx": "^2.0.0"
+    "clsx": "^2.0.0",
+    "svelte-highlight": "^7.9.0"
   }
 }

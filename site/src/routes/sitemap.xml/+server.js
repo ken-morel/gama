@@ -1,30 +1,30 @@
-import path from 'path';
+import path from "path";
 
 export async function GET() {
-  const filePaths = Object.keys(await import.meta.glob('../**/*.{svelte,md}'));
+  const filePaths = Object.keys(await import.meta.glob("../**/*.{svelte,md}"));
 
   const urls = filePaths
     .map((filePath) =>
       filePath
         .slice(3)
-        .replace(path.extname(filePath), '')
-        .replace(/\+page$/, '')
+        .replace(path.extname(filePath), "")
+        .replace(/\+page$/, "")
         // remove last slash
-        .replace(/\/$/, '')
+        .replace(/\/$/, "")
         // remove all instances of [...x] from string, where x is a number
-        .replace(/\[\.\.\.\d+\]/g, ''),
+        .replace(/\[\.\.\.\d+\]/g, ""),
     )
-    .filter((url) => !url.endsWith('+layout'))
+    .filter((url) => !url.endsWith("+layout"))
     .map(
       (url) => `
 			<url>
-				<loc>https://kit-docs-demo.vercel.app/${url}</loc>
+				<loc>https://gama.rbs.cm/${url}</loc>
 				<changefreq>daily</changefreq>
 				<priority>0.7</priority>
 			</url>
 		`,
     )
-    .join('\n');
+    .join("\n");
 
   return new Response(
     `
@@ -42,8 +42,8 @@ export async function GET() {
     `.trim(),
     {
       headers: {
-        'Cache-Control': 'max-age=0, s-maxage=3600',
-        'Content-Type': 'application/xml',
+        "Cache-Control": "max-age=0, s-maxage=3600",
+        "Content-Type": "application/xml",
       },
     },
   );

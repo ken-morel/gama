@@ -22,11 +22,12 @@
     $: ({ meta, sidebar } = data);
 
     // Determine if we're on the home page
-    $: isHomePage = $page.url.pathname === '/';
+    $: isHomePage = $page.url.pathname === "/";
 
     const navbar = {
         links: [
             { title: "Docs", slug: "/docs", match: /\/docs/ },
+            { title: "Reference", slug: "/reference/index.html" },
             // {
             //     title: "Tutorials",
             //     slug: "/docs/tutorials",

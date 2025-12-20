@@ -24,28 +24,29 @@
 #include "widgets.h"
 #include <stdio.h>
 
+/**
+ * @brief Puts the window in fullscreen.
+ *
+ * @param fullscreen Enable or disable fullscreen.
+ */
 void gm_fullscreen(int fullscreen) { return gapi_fullscreen(fullscreen); }
 
 /**
- * @brief Initializes the Gama engine and opens a window.
+ * @brief Draws gama logo.
  *
- * This must be the first Gama function called. It sets up the graphics context
- * and creates a window with the specified dimensions and title.
- *
- * @param width The width of the window in pixels.
- * @param height The height of the window in pixels.
- * @param title The title of the window.
+ * @param x The x position to draw the logo.
+ * @param y The y position to draw the logo.
+ * @param s The logo size.
  */
-void gm_init(int width, int height, const char *title) {
-  int code = gapi_init(width, height, title);
-  char msg[100];
-
-  if (code != 0) {
-    sprintf(msg,
-            "Error starting gama, initialization exited with non zero code %d",
-            code);
-    gapi_log(msg);
-  }
+void gm_logo(double x, double y, double s) {
+  double top_thickness = 0.15 * s;
+  double left_thickness = 0.1 * s;
+  double ratio = 0.6;
+  // top bar
+  gm_draw_rectangle(x, y + s / 2 - top_thickness / 2, s * ratio, top_thickness,
+                    GM_GAMA);
+  gm_draw_rectangle(x + (-s / 2) + (left_thickness / 2) + (s / 2 * (1 - ratio)),
+                    y, left_thickness, s, GM_GAMA);
 }
 
 void gm_log(const char *txt) { return gapi_log(txt); }
@@ -79,7 +80,7 @@ void _gm_fps() {
 
   if (__gm_show_fps) {
     char fps_text[20];
-    sprintf(fps_text, "fps: %.2lf", _display_fps);
+    snprintf(fps_text, sizeof(fps_text), "fps: %.2lf", _display_fps);
     gmw_frame(0.9, -0.9, 0.4, 0.1);
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }
@@ -136,13 +137,28 @@ void gm_background(gmColor c) {
 
 void gm_resize(int width, int height) { return gapi_resize(width, height); }
 
-void gm_logo(double x, double y, double s) {
-  double top_thickness = 0.15 * s;
-  double left_thickness = 0.1 * s;
-  double ratio = 0.6;
-  // top bar
-  gm_draw_rectangle(x, y + s / 2 - top_thickness / 2, s * ratio, top_thickness,
-                    GM_GAMA);
-  gm_draw_rectangle(x + (-s / 2) + (left_thickness / 2) + (s / 2 * (1 - ratio)),
-                    y, left_thickness, s, GM_GAMA);
+/**
+ * @brief Initializes the Gama engine and opens a window.
+ *
+ * This must be the first Gama function called. It sets up the graphics context
+ * and creates a window with the specified dimensions and title.
+ *
+ * @param width The width of the window in pixels.
+ * @param height The height of the window in pixels.
+ * @param title The title of the window.
+ */
+void gm_init(int width, int height, const char *title) {
+  int code = gapi_init(width, height, title);
+  char msg[100];
+
+  if (code != 0) {
+    snprintf(msg, sizeof(msg),
+            "Error starting gama, initialization exited with non zero code %d",
+            code);
+    gapi_log(msg);
+    printf("%s", msg);
+  }
+  gm_background(GM_BLACK);
+  gm_logo(0, 0, 2);
+  gm_yield();
 }

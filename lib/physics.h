@@ -9,7 +9,8 @@
 #include <math.h>
 
 /**
- * @brief Resolves a collision between two bodies by applying appropriate forces and corrections.
+ * @brief Resolves a collision between two bodies by applying appropriate forces
+ * and corrections.
  * @param collision Pointer to the collision to resolve.
  */
 void gm_collision_resolve(gmCollision *collision);
@@ -19,7 +20,8 @@ void gm_collision_resolve(gmCollision *collision);
 // ---------------------------------------------------------------------------
 
 /**
- * @brief Updates a single body in the system by integrating its position and velocity over time.
+ * @brief Updates a single body in the system by integrating its position and
+ * velocity over time.
  * @param sys Pointer to the system containing the body (can be NULL).
  * @param body Pointer to the body to update.
  * @param dt The time step for the update.
@@ -57,10 +59,30 @@ void gm_system_update_body_dt(gmSystem *sys, gmBody *body, double dt) {
 }
 
 /**
+ * @brief Updates a single body by integrating its position and
+ * velocity over time.
+ * @param body Pointer to the body to update.
+ * @param dt The time step for the update.
+ */
+void gm_body_update_dt(gmBody *body, double dt) {
+  return gm_system_update_body_dt(NULL, body, dt);
+}
+
+/**
+ * @brief Updates a single body by integrating its position and
+ * velocity over time.
+ * @param body Pointer to the body to update.
+ */
+void gm_body_update(gmBody *body) {
+  return gm_system_update_body_dt(NULL, body, gm_dt());
+}
+
+/**
  * @brief Detects collision between two bodies.
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
- * @return A pointer to a gmCollision structure if collision occurs, NULL otherwise.
+ * @return A pointer to a gmCollision structure if collision occurs, NULL
+ * otherwise.
  */
 gmCollision *gm_collision_detect(gmBody *, gmBody *);
 
@@ -78,7 +100,8 @@ static inline int gm_collision_bodies_are(gmCollision *c, gmBody *a,
 }
 
 /**
- * @brief Updates the physics system with collision detection at specified time intervals.
+ * @brief Updates the physics system with collision detection at specified time
+ * intervals.
  * @param sys Pointer to the system to update.
  * @param unit The time unit for sub-step calculations.
  * @param dt The total time step to simulate.
@@ -142,18 +165,23 @@ void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
 
 /**
  * @brief Gets the collision information for two specific bodies in a system.
+ * @param collision Pointer to the collision where to copy the result, or NULL.
  * @param sys Pointer to the system to search in.
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
- * @return Pointer to the collision information if found, NULL otherwise.
+ * @return 1 if it found a collision else 0.
  */
-gmCollision *gm_system_get_collision(gmSystem *sys, gmBody *a, gmBody *b) {
+int gm_system_get_collision(gmCollision *collision, gmSystem *sys, gmBody *a,
+                            gmBody *b) {
   gmCollision *coll;
   gm_ptr_list_for_each(coll, sys->collisions) {
-    if (gm_collision_bodies_are(coll, a, b))
-      return coll;
+    if (gm_collision_bodies_are(coll, a, b)) {
+      if (collision != NULL)
+        *collision = *coll;
+      return 1;
+    }
   }
-  return NULL;
+  return 0;
 }
 
 /**
@@ -183,11 +211,14 @@ static inline void gm_system_update(gmSystem *sys) {
 // ---------------------------------------------------------------------------
 
 /**
- * @brief Calculates the penetration depth and normal vector for a collision between two bodies.
+ * @brief Calculates the penetration depth and normal vector for a collision
+ * between two bodies.
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
- * @param normal_x Pointer to store the x component of the collision normal (can be NULL).
- * @param normal_y Pointer to store the y component of the collision normal (can be NULL).
+ * @param normal_x Pointer to store the x component of the collision normal (can
+ * be NULL).
+ * @param normal_y Pointer to store the y component of the collision normal (can
+ * be NULL).
  * @return The penetration depth between the bodies.
  */
 double gm_collision_penetration_normals(gmBody *a, gmBody *b, double *normal_x,
@@ -316,7 +347,8 @@ double gm_collision_penetration(gmBody *a, gmBody *b) {
 }
 
 /**
- * @brief Resolves a collision by adjusting positions and velocities of colliding bodies.
+ * @brief Resolves a collision by adjusting positions and velocities of
+ * colliding bodies.
  * @param coll Pointer to the collision to resolve.
  */
 void gm_collision_resolve(gmCollision *coll) {
