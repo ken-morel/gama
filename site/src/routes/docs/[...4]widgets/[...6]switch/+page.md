@@ -14,13 +14,16 @@ Like other widgets, you can also use the animated version
 #include <gama.h>
 
 int light_on = 0; // Variable to store switch state
+double light_switch_anim;
 
 int main() {
     gm_init(500, 500, "Switch Example");
     
     do {
         // Draw the switch and update its state
-        light_on = gmw_switch(0, 0.3, 0.2, 0.1);
+         gmw_switch(0, 0.3, 0.2, 0.1, &light_on);
+     // OR
+         gmw_switch_anim(0, 0.3, 0.2, 0.1, &light_on, &ligh_switch_anim);
         
         // Draw based on switch state
         if(light_on) {

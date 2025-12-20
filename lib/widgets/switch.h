@@ -8,35 +8,35 @@
  * @brief Structure defining the visual theme for a switch widget.
  */
 typedef struct {
-  int enabled;              /**< Whether the switch is enabled */
+  int enabled; /**< Whether the switch is enabled */
 
-  double scale;             /**< Default scale of the switch */
+  double scale; /**< Default scale of the switch */
 
   struct {
-    gmColor background;     /**< Background color when switched off */
-    gmColor border;         /**< Border color when switched off */
-    gmColor knob;           /**< Knob color when switched off */
-    gmColor knob_border;    /**< Knob border color when switched off */
+    gmColor background;  /**< Background color when switched off */
+    gmColor border;      /**< Border color when switched off */
+    gmColor knob;        /**< Knob color when switched off */
+    gmColor knob_border; /**< Knob border color when switched off */
   } off;
 
   struct {
-    gmColor background;     /**< Background color when switched on */
-    gmColor border;         /**< Border color when switched on */
-    gmColor knob;           /**< Knob color when switched on */
-    gmColor knob_border;    /**< Knob border color when switched on */
+    gmColor background;  /**< Background color when switched on */
+    gmColor border;      /**< Border color when switched on */
+    gmColor knob;        /**< Knob color when switched on */
+    gmColor knob_border; /**< Knob border color when switched on */
   } on;
 
   struct {
-    double scale;           /**< Scale factor when focused/hovered */
-    gmColor border;         /**< Border color when focused/hovered */
+    double scale;   /**< Scale factor when focused/hovered */
+    gmColor border; /**< Border color when focused/hovered */
   } focussed;
 
   struct {
-    double scale;           /**< Scale factor when active pressed */
-    gmColor border;         /**< Border color when active pressed */
+    double scale;   /**< Scale factor when active pressed */
+    gmColor border; /**< Border color when active pressed */
   } active;
 
-  double border_width;      /**< Width of the switch border */
+  double border_width; /**< Width of the switch border */
 } gmwSwitchTheme;
 
 /**
@@ -85,7 +85,8 @@ gmwSwitchTheme gmwSwitch = {.enabled = 1,
  * @param width The width of the switch.
  * @param height The height of the switch.
  * @param value Pointer to an integer to store the switch state (0=off, 1=on).
- * @param anim Pointer to a double for animated visual position (can be NULL to use value).
+ * @param anim Pointer to a double for animated visual position (can be NULL to
+ * use value).
  * @return 1 if the switch was clicked (toggled), 0 otherwise.
  */
 int gmw_switch_anim(double x, double y, double width, double height, int *value,
@@ -101,13 +102,16 @@ int gmw_switch_anim(double x, double y, double width, double height, int *value,
   }
   double knob_pos;
   if (anim != NULL) {
-    gm_anim_ease_out_quad(anim, (double)(*value), gm_dt(), 0.05);
+    if (*anim > 1)
+      *anim = 1;
+    else if (*anim < 0)
+      *anim = 0;
+    gm_anim_ease_out_quad(anim, (double)(*value), 0.05);
     knob_pos = *anim;
-
   } else {
     knob_pos = (double)(*value);
   }
-  int on = (*value != 0);
+  int on = *value != 0;
 
   double scale = gm_mouse.down && hovered ? gmwSwitch.active.scale
                  : hovered                ? gmwSwitch.focussed.scale
