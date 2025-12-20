@@ -112,8 +112,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:a249b7c9b7732fd0cb0708994d9aec3f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detects collision between two bodies.  <br /></td></tr>
 <tr class="memitem:a3bf74162bee0abd7b551bb01926ed7c7" id="r_a3bf74162bee0abd7b551bb01926ed7c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3bf74162bee0abd7b551bb01926ed7c7">gm_system_update_dt</a> (<a class="el" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys, double unit, double dt)</td></tr>
 <tr class="memdesc:a3bf74162bee0abd7b551bb01926ed7c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the physics system with collision detection at specified time intervals.  <br /></td></tr>
-<tr class="memitem:a3ec8f8dd08849eb6004b44c035b4a66d" id="r_a3ec8f8dd08849eb6004b44c035b4a66d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_collision.html">gmCollision</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ec8f8dd08849eb6004b44c035b4a66d">gm_system_get_collision</a> (<a class="el" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys, <a class="el" href="structgm_body.html">gmBody</a> *a, <a class="el" href="structgm_body.html">gmBody</a> *b)</td></tr>
-<tr class="memdesc:a3ec8f8dd08849eb6004b44c035b4a66d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the collision information for two specific bodies in a system.  <br /></td></tr>
+<tr class="memitem:a6e23f19116c7a9eb9a3e3f9ef0cc4112" id="r_a6e23f19116c7a9eb9a3e3f9ef0cc4112"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e23f19116c7a9eb9a3e3f9ef0cc4112">gm_system_get_collision</a> (<a class="el" href="structgm_collision.html">gmCollision</a> *collision, <a class="el" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys, <a class="el" href="structgm_body.html">gmBody</a> *a, <a class="el" href="structgm_body.html">gmBody</a> *b)</td></tr>
+<tr class="memdesc:a6e23f19116c7a9eb9a3e3f9ef0cc4112"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the collision information for two specific bodies in a system.  <br /></td></tr>
 <tr class="memitem:a4c56b60f43b7436eddb908b92b36047e" id="r_a4c56b60f43b7436eddb908b92b36047e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c56b60f43b7436eddb908b92b36047e">gm_collision_penetration_normals</a> (<a class="el" href="structgm_body.html">gmBody</a> *a, <a class="el" href="structgm_body.html">gmBody</a> *b, double *normal_x, double *normal_y)</td></tr>
 <tr class="memdesc:a4c56b60f43b7436eddb908b92b36047e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the penetration depth and normal vector for a collision between two bodies.  <br /></td></tr>
 <tr class="memitem:af20c4f59223177cc8e19a517a5bced53" id="r_af20c4f59223177cc8e19a517a5bced53"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af20c4f59223177cc8e19a517a5bced53">gm_collision_penetration</a> (<a class="el" href="structgm_body.html">gmBody</a> *a, <a class="el" href="structgm_body.html">gmBody</a> *b)</td></tr>
@@ -257,15 +257,20 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a3ec8f8dd08849eb6004b44c035b4a66d" name="a3ec8f8dd08849eb6004b44c035b4a66d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ec8f8dd08849eb6004b44c035b4a66d">&#9670;&#160;</a></span>gm_system_get_collision()</h2>
+<a id="a6e23f19116c7a9eb9a3e3f9ef0cc4112" name="a6e23f19116c7a9eb9a3e3f9ef0cc4112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e23f19116c7a9eb9a3e3f9ef0cc4112">&#9670;&#160;</a></span>gm_system_get_collision()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structgm_collision.html">gmCollision</a> * gm_system_get_collision </td>
+          <td class="memname">int gm_system_get_collision </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="structgm_collision.html">gmCollision</a> *</td>          <td class="paramname"><span class="paramname"><em>collision</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype"><a class="el" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *</td>          <td class="paramname"><span class="paramname"><em>sys</em></span>, </td>
         </tr>
         <tr>
@@ -284,13 +289,14 @@ Variables</h2></td></tr>
 <p>Gets the collision information for two specific bodies in a system. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">collision</td><td>Pointer to the collision where to copy the result, or NULL. </td></tr>
     <tr><td class="paramname">sys</td><td>Pointer to the system to search in. </td></tr>
     <tr><td class="paramname">a</td><td>Pointer to the first body. </td></tr>
     <tr><td class="paramname">b</td><td>Pointer to the second body. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the collision information if found, NULL otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if it found a collision else 0. </dd></dl>
 
 </div>
 </div>

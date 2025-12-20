@@ -117,136 +117,152 @@ $(function(){initNavTree('gama_8h_source.html','',''); });
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;<a class="code" href="system_8h.html">system.h</a>&quot;</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;<a class="code" href="widgets_8h.html">widgets.h</a>&quot;</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">   27</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gm_fullscreen</a>(<span class="keywordtype">int</span> fullscreen) { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a33685759bfe738fd920e7f328d561ccc">gapi_fullscreen</a>(fullscreen); }</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"></span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> * @brief Initializes the Gama engine and opens a window.</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * This must be the first Gama function called. It sets up the graphics context</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> * and creates a window with the specified dimensions and title.</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> * @param width The width of the window in pixels.</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> * @param height The height of the window in pixels.</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> * @param title The title of the window.</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment"> */</span></div>
-<div class="foldopen" id="foldopen00039" data-start="{" data-end="}">
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="gama_8h.html#afe888881882c032aeecb0e3e4e6de460">   39</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#afe888881882c032aeecb0e3e4e6de460">gm_init</a>(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keyword">const</span> <span class="keywordtype">char</span> *title) {</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keywordtype">int</span> code = <a class="code hl_function" href="gapi_8h.html#a4ae4f9434b6179e6d7148c2b187dfa41">gapi_init</a>(width, height, title);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  <span class="keywordtype">char</span> msg[100];</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <span class="keywordflow">if</span> (code != 0) {</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    sprintf(msg,</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            <span class="stringliteral">&quot;Error starting gama, initialization exited with non zero code %d&quot;</span>,</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            code);</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <a class="code hl_function" href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731">gapi_log</a>(msg);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  }</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>}</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"></span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> * @brief Puts the window in fullscreen.</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> * @param fullscreen Enable or disable fullscreen.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">   32</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gm_fullscreen</a>(<span class="keywordtype">int</span> fullscreen) { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a33685759bfe738fd920e7f328d561ccc">gapi_fullscreen</a>(fullscreen); }</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"></span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> * @brief Draws gama logo.</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> * @param x The x position to draw the logo.</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment"> * @param y The y position to draw the logo.</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"> * @param s The logo size.</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00041" data-start="{" data-end="}">
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">   41</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> s) {</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <span class="keywordtype">double</span> top_thickness = 0.15 * s;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <span class="keywordtype">double</span> left_thickness = 0.1 * s;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  <span class="keywordtype">double</span> ratio = 0.6;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  <span class="comment">// top bar</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <a class="code hl_function" href="draw_8h.html#a2a7a927b01836ad2067e35f12b9c26ea">gm_draw_rectangle</a>(x, y + s / 2 - top_thickness / 2, s * ratio, top_thickness,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                    <a class="code hl_define" href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a>);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  <a class="code hl_function" href="draw_8h.html#a2a7a927b01836ad2067e35f12b9c26ea">gm_draw_rectangle</a>(x + (-s / 2) + (left_thickness / 2) + (s / 2 * (1 - ratio)),</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                    y, left_thickness, s, <a class="code hl_define" href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a>);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>}</div>
 </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">   51</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">gm_log</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *txt) { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731">gapi_log</a>(txt); }</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"></span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * @brief Checks if the main game loop should continue running.</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * @return 1 if the window is open and the game should continue, 0 otherwise.</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * @deprecated This function is deprecated and will be removed. Use gm_yield()</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * instead.</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">int</span> gm_runs() { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#aba1dc1654054d397e6325d4c55cae27b">gapi_runs</a>(); }</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">   61</a></span><span class="keywordtype">int</span> <a class="code hl_variable" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a> = 0;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">   62</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">gm_show_fps</a>(<span class="keywordtype">int</span> show) { <a class="code hl_variable" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a> = show; }</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="foldopen" id="foldopen00064" data-start="{" data-end="}">
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">   64</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">_gm_fps</a>() {</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> alpha = 0.9;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="keyword">static</span> <span class="keywordtype">double</span> _fps = 0;</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keyword">static</span> <span class="keywordtype">double</span> dt = 1;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keyword">static</span> <span class="keywordtype">double</span> _display_fps = 0;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  dt += gm_dt();</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <span class="keywordtype">double</span> fps = 1 / gm_dt();</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keywordflow">if</span> (_fps == 0)</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    _fps = 60;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    _fps = (_fps * alpha) + (fps * (1 - alpha));</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  <span class="keywordflow">if</span> (dt &gt;= 0.5) {</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    dt = 0;</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    _display_fps = _fps;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  }</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a>) {</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keywordtype">char</span> fps_text[20];</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    sprintf(fps_text, <span class="stringliteral">&quot;fps: %.2lf&quot;</span>, _display_fps);</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_function" href="frame_8h.html#ac7eb9487dca540d1bfd9adce50dc636c">gmw_frame</a>(0.9, -0.9, 0.4, 0.1);</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <a class="code hl_function" href="draw_8h.html#a0afcc18a7c8c63fcab848d8848ca2176">gm_draw_text</a>(0.9, -0.9, fps_text, <span class="stringliteral">&quot;&quot;</span>, 0.1, <a class="code hl_define" href="color_8h.html#ac9ccb21a482aae91b3d0658fa8f8ef27">GM_WHITE</a>);</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  }</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>}</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">   52</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">gm_log</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *txt) { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731">gapi_log</a>(txt); }</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"></span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * @brief Checks if the main game loop should continue running.</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * @return 1 if the window is open and the game should continue, 0 otherwise.</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * @deprecated This function is deprecated and will be removed. Use gm_yield()</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * instead.</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">int</span> gm_runs() { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#aba1dc1654054d397e6325d4c55cae27b">gapi_runs</a>(); }</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">   62</a></span><span class="keywordtype">int</span> <a class="code hl_variable" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a> = 0;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">   63</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">gm_show_fps</a>(<span class="keywordtype">int</span> show) { <a class="code hl_variable" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a> = show; }</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="foldopen" id="foldopen00065" data-start="{" data-end="}">
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">   65</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">_gm_fps</a>() {</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> alpha = 0.9;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keyword">static</span> <span class="keywordtype">double</span> _fps = 0;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keyword">static</span> <span class="keywordtype">double</span> dt = 1;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="keyword">static</span> <span class="keywordtype">double</span> _display_fps = 0;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  dt += gm_dt();</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keywordtype">double</span> fps = 1 / gm_dt();</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keywordflow">if</span> (_fps == 0)</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    _fps = 60;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    _fps = (_fps * alpha) + (fps * (1 - alpha));</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <span class="keywordflow">if</span> (dt &gt;= 0.5) {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    dt = 0;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    _display_fps = _fps;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  }</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a>) {</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordtype">char</span> fps_text[20];</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    sprintf(fps_text, <span class="stringliteral">&quot;fps: %.2lf&quot;</span>, _display_fps);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <a class="code hl_function" href="frame_8h.html#ac7eb9487dca540d1bfd9adce50dc636c">gmw_frame</a>(0.9, -0.9, 0.4, 0.1);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <a class="code hl_function" href="draw_8h.html#a0afcc18a7c8c63fcab848d8848ca2176">gm_draw_text</a>(0.9, -0.9, fps_text, <span class="stringliteral">&quot;&quot;</span>, 0.1, <a class="code hl_define" href="color_8h.html#ac9ccb21a482aae91b3d0658fa8f8ef27">GM_WHITE</a>);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  }</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>}</div>
 </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"></span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * @brief Processes events, updates input state, and prepares for the next</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> * frame.</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * This function should be called at the end of the main game loop. It handles</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * window events, polls for input, updates mouse and keyboard states, and</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * swaps the graphics buffers.</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> * @return 1 if the game should continue to the next frame, 0 if the window has</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> * been closed.</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> * @example</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> * while (gm_yield()) {</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> *   // Your game logic and rendering here</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> * }</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">int</span> gm_yield() {</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  <span class="keywordflow">if</span> (<a class="code hl_function" href="gapi_8h.html#a7fda7996bff29edf614c0ca8ae54f0a0">gapi_yield</a>(&amp;<a class="code hl_variable" href="gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a>)) {</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <a class="code hl_variable" href="gapi_8h.html#a47fd570f212b7717d9d2013930fbe5d0">_gm_t</a> += <a class="code hl_variable" href="gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a>;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <a class="code hl_function" href="gapi_8h.html#a71815a94eadbae9e2309925abd0e8f2c">gapi_get_mouse_move</a>(&amp;<a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.movement.x, &amp;<a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.movement.y);</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <a class="code hl_function" href="gapi_8h.html#af06e27344257a957a108c5830fdd20d2">gapi_mouse_get</a>(&amp;<a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.position.x, &amp;<a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.position.y);</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.down = <a class="code hl_function" href="gapi_8h.html#a13c454d2ca7b47724dd5b085111a66e6">gapi_mouse_down</a>();</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.pressed = <a class="code hl_function" href="gapi_8h.html#a388096a314e98f8db8b43167b5af37e3">gapi_mouse_pressed</a>();</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <a class="code hl_function" href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">_gm_fps</a>();</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  } <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>}</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment"></span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment"> * @brief Closes the window and terminates the Gama engine.</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> gm_quit() { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a75992a93a66aeea7d867a59e0911889f">gapi_quit</a>(); }</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment"></span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"> * @brief Waits for all pending graphics operations to complete.</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment"> * This can be used for synchronization purposes, but it is rarely needed as</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment"> * gm_yield() handles buffer swapping automatically.</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="gama_8h.html#ae7d8eef7f2d5000a4775808c20abd485">  127</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#ae7d8eef7f2d5000a4775808c20abd485">gm_sync</a>() { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a525d0a7cdce45ac13f1a303ecfd3b35d">gapi_wait_queue</a>(); }</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment"></span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment"> * @brief Sets the background color of the window.</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"> * @param c The color to set as the background.</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment"> */</span></div>
-<div class="foldopen" id="foldopen00133" data-start="{" data-end="}">
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno"><a class="line" href="gama_8h.html#acf62b5795b66bce9b310277356575c66">  133</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a>(<a class="code hl_typedef" href="color_8h.html#a509eb56a8a48cd54ba4ff0caf8b9147c">gmColor</a> c) {</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a46f335e765ff6360235f4f591c1e3206">gapi_set_bg_color</a>(<a class="code hl_define" href="color_8h.html#a7a5b040d2ae3d2776f4cc3d21c111dcc">gm_red</a>(c), <a class="code hl_define" href="color_8h.html#a45d5d65dafab83c09112d8a9eee235fe">gm_green</a>(c), <a class="code hl_define" href="color_8h.html#a0e570620bec78a8254bbaff4050ead6b">gm_blue</a>(c), <a class="code hl_define" href="color_8h.html#a9132579c0ea6e7941bace8c50729fb95">gm_alpha</a>(c));</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>}</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"></span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> * @brief Processes events, updates input state, and prepares for the next</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * frame.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * This function should be called at the end of the main game loop. It handles</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * window events, polls for input, updates mouse and keyboard states, and</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> * swaps the graphics buffers.</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> * @return 1 if the game should continue to the next frame, 0 if the window has</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> * been closed.</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> * @example</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> * while (gm_yield()) {</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> *   // Your game logic and rendering here</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> * }</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">int</span> gm_yield() {</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <span class="keywordflow">if</span> (<a class="code hl_function" href="gapi_8h.html#a7fda7996bff29edf614c0ca8ae54f0a0">gapi_yield</a>(&amp;<a class="code hl_variable" href="gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a>)) {</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <a class="code hl_variable" href="gapi_8h.html#a47fd570f212b7717d9d2013930fbe5d0">_gm_t</a> += <a class="code hl_variable" href="gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a>;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <a class="code hl_function" href="gapi_8h.html#a71815a94eadbae9e2309925abd0e8f2c">gapi_get_mouse_move</a>(&amp;<a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.movement.x, &amp;<a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.movement.y);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <a class="code hl_function" href="gapi_8h.html#af06e27344257a957a108c5830fdd20d2">gapi_mouse_get</a>(&amp;<a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.position.x, &amp;<a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.position.y);</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.down = <a class="code hl_function" href="gapi_8h.html#a13c454d2ca7b47724dd5b085111a66e6">gapi_mouse_down</a>();</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <a class="code hl_variable" href="gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a>.pressed = <a class="code hl_function" href="gapi_8h.html#a388096a314e98f8db8b43167b5af37e3">gapi_mouse_pressed</a>();</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <a class="code hl_function" href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">_gm_fps</a>();</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  } <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>}</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"></span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"> * @brief Closes the window and terminates the Gama engine.</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> gm_quit() { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a75992a93a66aeea7d867a59e0911889f">gapi_quit</a>(); }</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment"></span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment"> * @brief Waits for all pending graphics operations to complete.</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment"> * This can be used for synchronization purposes, but it is rarely needed as</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment"> * gm_yield() handles buffer swapping automatically.</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="gama_8h.html#ae7d8eef7f2d5000a4775808c20abd485">  128</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#ae7d8eef7f2d5000a4775808c20abd485">gm_sync</a>() { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a525d0a7cdce45ac13f1a303ecfd3b35d">gapi_wait_queue</a>(); }</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment"></span> </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"> * @brief Sets the background color of the window.</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment"> * @param c The color to set as the background.</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00134" data-start="{" data-end="}">
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="gama_8h.html#acf62b5795b66bce9b310277356575c66">  134</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a>(<a class="code hl_typedef" href="color_8h.html#a509eb56a8a48cd54ba4ff0caf8b9147c">gmColor</a> c) {</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a46f335e765ff6360235f4f591c1e3206">gapi_set_bg_color</a>(<a class="code hl_define" href="color_8h.html#a7a5b040d2ae3d2776f4cc3d21c111dcc">gm_red</a>(c), <a class="code hl_define" href="color_8h.html#a45d5d65dafab83c09112d8a9eee235fe">gm_green</a>(c), <a class="code hl_define" href="color_8h.html#a0e570620bec78a8254bbaff4050ead6b">gm_blue</a>(c), <a class="code hl_define" href="color_8h.html#a9132579c0ea6e7941bace8c50729fb95">gm_alpha</a>(c));</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>}</div>
 </div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="gama_8h.html#aa65985ca5b8454ee69087f2243276e77">  137</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#aa65985ca5b8454ee69087f2243276e77">gm_resize</a>(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a5807835814d6e9575b1c3bddff3fed5a">gapi_resize</a>(width, height); }</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
-<div class="foldopen" id="foldopen00139" data-start="{" data-end="}">
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">  139</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> s) {</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  <span class="keywordtype">double</span> top_thickness = 0.15 * s;</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>  <span class="keywordtype">double</span> left_thickness = 0.1 * s;</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  <span class="keywordtype">double</span> ratio = 0.6;</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>  <span class="comment">// top bar</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>  <a class="code hl_function" href="draw_8h.html#a2a7a927b01836ad2067e35f12b9c26ea">gm_draw_rectangle</a>(x, y + s / 2 - top_thickness / 2, s * ratio, top_thickness,</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>                    <a class="code hl_define" href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a>);</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  <a class="code hl_function" href="draw_8h.html#a2a7a927b01836ad2067e35f12b9c26ea">gm_draw_rectangle</a>(x + (-s / 2) + (left_thickness / 2) + (s / 2 * (1 - ratio)),</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                    y, left_thickness, s, <a class="code hl_define" href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a>);</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>}</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="gama_8h.html#aa65985ca5b8454ee69087f2243276e77">  138</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#aa65985ca5b8454ee69087f2243276e77">gm_resize</a>(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) { <span class="keywordflow">return</span> <a class="code hl_function" href="gapi_8h.html#a5807835814d6e9575b1c3bddff3fed5a">gapi_resize</a>(width, height); }</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment"></span> </div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment"> * @brief Initializes the Gama engine and opens a window.</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment"> * This must be the first Gama function called. It sets up the graphics context</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment"> * and creates a window with the specified dimensions and title.</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment"> * @param width The width of the window in pixels.</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment"> * @param height The height of the window in pixels.</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment"> * @param title The title of the window.</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00150" data-start="{" data-end="}">
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="gama_8h.html#afe888881882c032aeecb0e3e4e6de460">  150</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#afe888881882c032aeecb0e3e4e6de460">gm_init</a>(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keyword">const</span> <span class="keywordtype">char</span> *title) {</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <span class="keywordtype">int</span> code = <a class="code hl_function" href="gapi_8h.html#a4ae4f9434b6179e6d7148c2b187dfa41">gapi_init</a>(width, height, title);</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="keywordtype">char</span> msg[100];</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>  <span class="keywordflow">if</span> (code != 0) {</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    sprintf(msg,</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>            <span class="stringliteral">&quot;Error starting gama, initialization exited with non zero code %d&quot;</span>,</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            code);</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <a class="code hl_function" href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731">gapi_log</a>(msg);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    printf(<span class="stringliteral">&quot;%s&quot;</span>, msg);</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>  }</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  <a class="code hl_function" href="gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a>(<a class="code hl_define" href="color_8h.html#a8f79450a8d64d2ed9d5a7165939cc9c2">GM_BLACK</a>);</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  <a class="code hl_function" href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a>(0, 0, 2);</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  gm_yield();</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>}</div>
 </div>
 <div class="ttc" id="aanimate_8h_html"><div class="ttname"><a href="animate_8h.html">animate.h</a></div><div class="ttdoc">Functions for animating values with various easing functions.</div></div>
 <div class="ttc" id="abody_8h_html"><div class="ttname"><a href="body_8h.html">body.h</a></div></div>
@@ -254,23 +270,24 @@ $(function(){initNavTree('gama_8h_source.html','',''); });
 <div class="ttc" id="acolor_8h_html_a45d5d65dafab83c09112d8a9eee235fe"><div class="ttname"><a href="color_8h.html#a45d5d65dafab83c09112d8a9eee235fe">gm_green</a></div><div class="ttdeci">#define gm_green(col)</div><div class="ttdoc">Extracts the green component from a color.</div><div class="ttdef"><b>Definition</b> color.h:22</div></div>
 <div class="ttc" id="acolor_8h_html_a509eb56a8a48cd54ba4ff0caf8b9147c"><div class="ttname"><a href="color_8h.html#a509eb56a8a48cd54ba4ff0caf8b9147c">gmColor</a></div><div class="ttdeci">unsigned int gmColor</div><div class="ttdoc">Type definition for color values in RGBA format.</div><div class="ttdef"><b>Definition</b> color.h:8</div></div>
 <div class="ttc" id="acolor_8h_html_a7a5b040d2ae3d2776f4cc3d21c111dcc"><div class="ttname"><a href="color_8h.html#a7a5b040d2ae3d2776f4cc3d21c111dcc">gm_red</a></div><div class="ttdeci">#define gm_red(col)</div><div class="ttdoc">Extracts the red component from a color.</div><div class="ttdef"><b>Definition</b> color.h:15</div></div>
-<div class="ttc" id="acolor_8h_html_a85816fef50d777b609f81cd0f1f52c04"><div class="ttname"><a href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a></div><div class="ttdeci">#define GM_GAMA</div><div class="ttdoc">The official Gama brand color.</div><div class="ttdef"><b>Definition</b> color.h:115</div></div>
+<div class="ttc" id="acolor_8h_html_a85816fef50d777b609f81cd0f1f52c04"><div class="ttname"><a href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a></div><div class="ttdeci">#define GM_GAMA</div><div class="ttdoc">The official Gama brand color.</div><div class="ttdef"><b>Definition</b> color.h:126</div></div>
+<div class="ttc" id="acolor_8h_html_a8f79450a8d64d2ed9d5a7165939cc9c2"><div class="ttname"><a href="color_8h.html#a8f79450a8d64d2ed9d5a7165939cc9c2">GM_BLACK</a></div><div class="ttdeci">#define GM_BLACK</div><div class="ttdoc">Black color.</div><div class="ttdef"><b>Definition</b> color.h:166</div></div>
 <div class="ttc" id="acolor_8h_html_a9132579c0ea6e7941bace8c50729fb95"><div class="ttname"><a href="color_8h.html#a9132579c0ea6e7941bace8c50729fb95">gm_alpha</a></div><div class="ttdeci">#define gm_alpha(col)</div><div class="ttdoc">Extracts the alpha component from a color.</div><div class="ttdef"><b>Definition</b> color.h:36</div></div>
-<div class="ttc" id="acolor_8h_html_ac9ccb21a482aae91b3d0658fa8f8ef27"><div class="ttname"><a href="color_8h.html#ac9ccb21a482aae91b3d0658fa8f8ef27">GM_WHITE</a></div><div class="ttdeci">#define GM_WHITE</div><div class="ttdoc">White color.</div><div class="ttdef"><b>Definition</b> color.h:840</div></div>
+<div class="ttc" id="acolor_8h_html_ac9ccb21a482aae91b3d0658fa8f8ef27"><div class="ttname"><a href="color_8h.html#ac9ccb21a482aae91b3d0658fa8f8ef27">GM_WHITE</a></div><div class="ttdeci">#define GM_WHITE</div><div class="ttdoc">White color.</div><div class="ttdef"><b>Definition</b> color.h:851</div></div>
 <div class="ttc" id="adraw_8h_html"><div class="ttname"><a href="draw_8h.html">draw.h</a></div><div class="ttdoc">Functions for drawing shapes, text, and images.</div></div>
 <div class="ttc" id="adraw_8h_html_a0afcc18a7c8c63fcab848d8848ca2176"><div class="ttname"><a href="draw_8h.html#a0afcc18a7c8c63fcab848d8848ca2176">gm_draw_text</a></div><div class="ttdeci">int32_t gm_draw_text(double x, double y, const char *text, const char *font, double font_size, gmColor c)</div><div class="ttdoc">Draws text.</div><div class="ttdef"><b>Definition</b> draw.h:135</div></div>
 <div class="ttc" id="adraw_8h_html_a2a7a927b01836ad2067e35f12b9c26ea"><div class="ttname"><a href="draw_8h.html#a2a7a927b01836ad2067e35f12b9c26ea">gm_draw_rectangle</a></div><div class="ttdeci">int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c)</div><div class="ttdoc">Draws a rectangle.</div><div class="ttdef"><b>Definition</b> draw.h:47</div></div>
 <div class="ttc" id="aframe_8h_html_ac7eb9487dca540d1bfd9adce50dc636c"><div class="ttname"><a href="frame_8h.html#ac7eb9487dca540d1bfd9adce50dc636c">gmw_frame</a></div><div class="ttdeci">int gmw_frame(double x, double y, double width, double height)</div><div class="ttdoc">Creates and renders a frame widget (a bordered panel).</div><div class="ttdef"><b>Definition</b> frame.h:67</div></div>
-<div class="ttc" id="agama_8h_html_a0c22ed781536b72d723dc3d3a0245b53"><div class="ttname"><a href="gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">gm_log</a></div><div class="ttdeci">void gm_log(const char *txt)</div><div class="ttdef"><b>Definition</b> gama.h:51</div></div>
-<div class="ttc" id="agama_8h_html_a11b841ac66eacd657c78efaea6c07b01"><div class="ttname"><a href="gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">gm_show_fps</a></div><div class="ttdeci">void gm_show_fps(int show)</div><div class="ttdef"><b>Definition</b> gama.h:62</div></div>
-<div class="ttc" id="agama_8h_html_a75099652e829ac61185b5e12deb06040"><div class="ttname"><a href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a></div><div class="ttdeci">int __gm_show_fps</div><div class="ttdef"><b>Definition</b> gama.h:61</div></div>
-<div class="ttc" id="agama_8h_html_a84303615041512b2591abf6e3de9c9ca"><div class="ttname"><a href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">_gm_fps</a></div><div class="ttdeci">void _gm_fps()</div><div class="ttdef"><b>Definition</b> gama.h:64</div></div>
-<div class="ttc" id="agama_8h_html_aa65985ca5b8454ee69087f2243276e77"><div class="ttname"><a href="gama_8h.html#aa65985ca5b8454ee69087f2243276e77">gm_resize</a></div><div class="ttdeci">void gm_resize(int width, int height)</div><div class="ttdef"><b>Definition</b> gama.h:137</div></div>
-<div class="ttc" id="agama_8h_html_aae83aab0cf87d11fba0fc0b5779ad6a0"><div class="ttname"><a href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a></div><div class="ttdeci">void gm_logo(double x, double y, double s)</div><div class="ttdef"><b>Definition</b> gama.h:139</div></div>
-<div class="ttc" id="agama_8h_html_ac1855c15ae19bfb11c9876b5261b9f75"><div class="ttname"><a href="gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gm_fullscreen</a></div><div class="ttdeci">void gm_fullscreen(int fullscreen)</div><div class="ttdef"><b>Definition</b> gama.h:27</div></div>
-<div class="ttc" id="agama_8h_html_acf62b5795b66bce9b310277356575c66"><div class="ttname"><a href="gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a></div><div class="ttdeci">void gm_background(gmColor c)</div><div class="ttdoc">Sets the background color of the window.</div><div class="ttdef"><b>Definition</b> gama.h:133</div></div>
-<div class="ttc" id="agama_8h_html_ae7d8eef7f2d5000a4775808c20abd485"><div class="ttname"><a href="gama_8h.html#ae7d8eef7f2d5000a4775808c20abd485">gm_sync</a></div><div class="ttdeci">void gm_sync()</div><div class="ttdoc">Waits for all pending graphics operations to complete.</div><div class="ttdef"><b>Definition</b> gama.h:127</div></div>
-<div class="ttc" id="agama_8h_html_afe888881882c032aeecb0e3e4e6de460"><div class="ttname"><a href="gama_8h.html#afe888881882c032aeecb0e3e4e6de460">gm_init</a></div><div class="ttdeci">void gm_init(int width, int height, const char *title)</div><div class="ttdoc">Initializes the Gama engine and opens a window.</div><div class="ttdef"><b>Definition</b> gama.h:39</div></div>
+<div class="ttc" id="agama_8h_html_a0c22ed781536b72d723dc3d3a0245b53"><div class="ttname"><a href="gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">gm_log</a></div><div class="ttdeci">void gm_log(const char *txt)</div><div class="ttdef"><b>Definition</b> gama.h:52</div></div>
+<div class="ttc" id="agama_8h_html_a11b841ac66eacd657c78efaea6c07b01"><div class="ttname"><a href="gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">gm_show_fps</a></div><div class="ttdeci">void gm_show_fps(int show)</div><div class="ttdef"><b>Definition</b> gama.h:63</div></div>
+<div class="ttc" id="agama_8h_html_a75099652e829ac61185b5e12deb06040"><div class="ttname"><a href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a></div><div class="ttdeci">int __gm_show_fps</div><div class="ttdef"><b>Definition</b> gama.h:62</div></div>
+<div class="ttc" id="agama_8h_html_a84303615041512b2591abf6e3de9c9ca"><div class="ttname"><a href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">_gm_fps</a></div><div class="ttdeci">void _gm_fps()</div><div class="ttdef"><b>Definition</b> gama.h:65</div></div>
+<div class="ttc" id="agama_8h_html_aa65985ca5b8454ee69087f2243276e77"><div class="ttname"><a href="gama_8h.html#aa65985ca5b8454ee69087f2243276e77">gm_resize</a></div><div class="ttdeci">void gm_resize(int width, int height)</div><div class="ttdef"><b>Definition</b> gama.h:138</div></div>
+<div class="ttc" id="agama_8h_html_aae83aab0cf87d11fba0fc0b5779ad6a0"><div class="ttname"><a href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a></div><div class="ttdeci">void gm_logo(double x, double y, double s)</div><div class="ttdoc">Draws gama logo.</div><div class="ttdef"><b>Definition</b> gama.h:41</div></div>
+<div class="ttc" id="agama_8h_html_ac1855c15ae19bfb11c9876b5261b9f75"><div class="ttname"><a href="gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gm_fullscreen</a></div><div class="ttdeci">void gm_fullscreen(int fullscreen)</div><div class="ttdoc">Puts the window in fullscreen.</div><div class="ttdef"><b>Definition</b> gama.h:32</div></div>
+<div class="ttc" id="agama_8h_html_acf62b5795b66bce9b310277356575c66"><div class="ttname"><a href="gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a></div><div class="ttdeci">void gm_background(gmColor c)</div><div class="ttdoc">Sets the background color of the window.</div><div class="ttdef"><b>Definition</b> gama.h:134</div></div>
+<div class="ttc" id="agama_8h_html_ae7d8eef7f2d5000a4775808c20abd485"><div class="ttname"><a href="gama_8h.html#ae7d8eef7f2d5000a4775808c20abd485">gm_sync</a></div><div class="ttdeci">void gm_sync()</div><div class="ttdoc">Waits for all pending graphics operations to complete.</div><div class="ttdef"><b>Definition</b> gama.h:128</div></div>
+<div class="ttc" id="agama_8h_html_afe888881882c032aeecb0e3e4e6de460"><div class="ttname"><a href="gama_8h.html#afe888881882c032aeecb0e3e4e6de460">gm_init</a></div><div class="ttdeci">void gm_init(int width, int height, const char *title)</div><div class="ttdoc">Initializes the Gama engine and opens a window.</div><div class="ttdef"><b>Definition</b> gama.h:150</div></div>
 <div class="ttc" id="agapi_8h_html"><div class="ttname"><a href="gapi_8h.html">gapi.h</a></div></div>
 <div class="ttc" id="agapi_8h_html_a13c454d2ca7b47724dd5b085111a66e6"><div class="ttname"><a href="gapi_8h.html#a13c454d2ca7b47724dd5b085111a66e6">gapi_mouse_down</a></div><div class="ttdeci">int32_t gapi_mouse_down()</div></div>
 <div class="ttc" id="agapi_8h_html_a15035e5990e81f9cbb5e450265679ed9"><div class="ttname"><a href="gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a></div><div class="ttdeci">double _gm_dt</div><div class="ttdef"><b>Definition</b> gapi.h:6</div></div>
