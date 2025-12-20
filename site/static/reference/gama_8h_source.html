@@ -177,7 +177,7 @@ $(function(){initNavTree('gama_8h_source.html','',''); });
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a>) {</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordtype">char</span> fps_text[20];</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    sprintf(fps_text, <span class="stringliteral">&quot;fps: %.2lf&quot;</span>, _display_fps);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    snprintf(fps_text, <span class="keyword">sizeof</span>(fps_text), <span class="stringliteral">&quot;fps: %.2lf&quot;</span>, _display_fps);</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <a class="code hl_function" href="frame_8h.html#ac7eb9487dca540d1bfd9adce50dc636c">gmw_frame</a>(0.9, -0.9, 0.4, 0.1);</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <a class="code hl_function" href="draw_8h.html#a0afcc18a7c8c63fcab848d8848ca2176">gm_draw_text</a>(0.9, -0.9, fps_text, <span class="stringliteral">&quot;&quot;</span>, 0.1, <a class="code hl_define" href="color_8h.html#ac9ccb21a482aae91b3d0658fa8f8ef27">GM_WHITE</a>);</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  }</div>
@@ -253,9 +253,9 @@ $(function(){initNavTree('gama_8h_source.html','',''); });
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="keywordtype">char</span> msg[100];</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>  <span class="keywordflow">if</span> (code != 0) {</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    sprintf(msg,</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>            <span class="stringliteral">&quot;Error starting gama, initialization exited with non zero code %d&quot;</span>,</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            code);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    snprintf(msg, <span class="keyword">sizeof</span>(msg),</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>             <span class="stringliteral">&quot;Error starting gama, initialization exited with non zero code %d&quot;</span>,</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>             code);</div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <a class="code hl_function" href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731">gapi_log</a>(msg);</div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    printf(<span class="stringliteral">&quot;%s&quot;</span>, msg);</div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>  }</div>
@@ -264,6 +264,21 @@ $(function(){initNavTree('gama_8h_source.html','',''); });
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  gm_yield();</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>}</div>
 </div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment"></span> </div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="comment"> * @brief Sleep(wait) for aproximately the specified number of milliseconds</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment"> * @param miliseconds the number of milliseconds to sleep</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#ab7997f4879229850843f681e9eb36c59">gm_sleep</a>(<span class="keywordtype">int</span> milliseconds);</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="preprocessor">#ifdef _WIN32</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="preprocessor">#include &lt;windows.h&gt;</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#ab7997f4879229850843f681e9eb36c59">gm_sleep</a>(<span class="keywordtype">int</span> milliseconds) { Sleep(milliseconds); }</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="preprocessor">#include &lt;unistd.h&gt;</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="gama_8h.html#ab7997f4879229850843f681e9eb36c59">  178</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="gama_8h.html#ab7997f4879229850843f681e9eb36c59">gm_sleep</a>(<span class="keywordtype">int</span> milliseconds) { usleep(milliseconds * 1000); }</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aanimate_8h_html"><div class="ttname"><a href="animate_8h.html">animate.h</a></div><div class="ttdoc">Functions for animating values with various easing functions.</div></div>
 <div class="ttc" id="abody_8h_html"><div class="ttname"><a href="body_8h.html">body.h</a></div></div>
 <div class="ttc" id="acolor_8h_html_a0e570620bec78a8254bbaff4050ead6b"><div class="ttname"><a href="color_8h.html#a0e570620bec78a8254bbaff4050ead6b">gm_blue</a></div><div class="ttdeci">#define gm_blue(col)</div><div class="ttdoc">Extracts the blue component from a color.</div><div class="ttdef"><b>Definition</b> color.h:29</div></div>
@@ -284,6 +299,7 @@ $(function(){initNavTree('gama_8h_source.html','',''); });
 <div class="ttc" id="agama_8h_html_a84303615041512b2591abf6e3de9c9ca"><div class="ttname"><a href="gama_8h.html#a84303615041512b2591abf6e3de9c9ca">_gm_fps</a></div><div class="ttdeci">void _gm_fps()</div><div class="ttdef"><b>Definition</b> gama.h:65</div></div>
 <div class="ttc" id="agama_8h_html_aa65985ca5b8454ee69087f2243276e77"><div class="ttname"><a href="gama_8h.html#aa65985ca5b8454ee69087f2243276e77">gm_resize</a></div><div class="ttdeci">void gm_resize(int width, int height)</div><div class="ttdef"><b>Definition</b> gama.h:138</div></div>
 <div class="ttc" id="agama_8h_html_aae83aab0cf87d11fba0fc0b5779ad6a0"><div class="ttname"><a href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a></div><div class="ttdeci">void gm_logo(double x, double y, double s)</div><div class="ttdoc">Draws gama logo.</div><div class="ttdef"><b>Definition</b> gama.h:41</div></div>
+<div class="ttc" id="agama_8h_html_ab7997f4879229850843f681e9eb36c59"><div class="ttname"><a href="gama_8h.html#ab7997f4879229850843f681e9eb36c59">gm_sleep</a></div><div class="ttdeci">void gm_sleep(int milliseconds)</div><div class="ttdoc">Sleep(wait) for aproximately the specified number of milliseconds.</div><div class="ttdef"><b>Definition</b> gama.h:178</div></div>
 <div class="ttc" id="agama_8h_html_ac1855c15ae19bfb11c9876b5261b9f75"><div class="ttname"><a href="gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gm_fullscreen</a></div><div class="ttdeci">void gm_fullscreen(int fullscreen)</div><div class="ttdoc">Puts the window in fullscreen.</div><div class="ttdef"><b>Definition</b> gama.h:32</div></div>
 <div class="ttc" id="agama_8h_html_acf62b5795b66bce9b310277356575c66"><div class="ttname"><a href="gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a></div><div class="ttdeci">void gm_background(gmColor c)</div><div class="ttdoc">Sets the background color of the window.</div><div class="ttdef"><b>Definition</b> gama.h:134</div></div>
 <div class="ttc" id="agama_8h_html_ae7d8eef7f2d5000a4775808c20abd485"><div class="ttname"><a href="gama_8h.html#ae7d8eef7f2d5000a4775808c20abd485">gm_sync</a></div><div class="ttdeci">void gm_sync()</div><div class="ttdoc">Waits for all pending graphics operations to complete.</div><div class="ttdef"><b>Definition</b> gama.h:128</div></div>

@@ -4,10 +4,9 @@ var searchData=
   ['scale_2eh_1',['scale.h',['../scale_8h.html',1,'']]],
   ['since_2',['since',['../structgm_collision.html#a66f55e550ef604cb60565ea6897a1b3b',1,'gmCollision']]],
   ['sprite_2eh_3',['sprite.h',['../sprite_8h.html',1,'']]],
-  ['start_5fvalue_4',['start_value',['../structgm_anim_linear_state.html#afb0628fb0b2c27c26cde6fd6257bbc69',1,'gmAnimLinearState']]],
-  ['step_5',['step',['../structgmw_scale_theme.html#a5ef3a75f06d57adb8ea21ffeb57d5a8f',1,'gmwScaleTheme']]],
-  ['switch_2eh_6',['switch.h',['../switch_8h.html',1,'']]],
-  ['switch_5f_7',['switch_',['../structgmw_theme_cache.html#a184d15ca4bc01ddfcee572898f5602e9',1,'gmwThemeCache']]],
-  ['sys_8',['sys',['../structgm_collision.html#af18bac9d6b3db9a91ea6123807256017',1,'gmCollision']]],
-  ['system_2eh_9',['system.h',['../system_8h.html',1,'']]]
+  ['step_4',['step',['../structgmw_scale_theme.html#a5ef3a75f06d57adb8ea21ffeb57d5a8f',1,'gmwScaleTheme']]],
+  ['switch_2eh_5',['switch.h',['../switch_8h.html',1,'']]],
+  ['switch_5f_6',['switch_',['../structgmw_theme_cache.html#a184d15ca4bc01ddfcee572898f5602e9',1,'gmwThemeCache']]],
+  ['sys_7',['sys',['../structgm_collision.html#af18bac9d6b3db9a91ea6123807256017',1,'gmCollision']]],
+  ['system_2eh_8',['system.h',['../system_8h.html',1,'']]]
 ];
