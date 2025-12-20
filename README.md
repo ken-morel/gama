@@ -2,34 +2,58 @@
 
 ![Gama logo](./gama.svg)
 
-website: https://gama.rbs.cm
+**Website:** https://gama.rbs.cm
+**Documentation:** https://gama.rbs.cm/docs
 
-Gama project aims to provide a convenient way for students and beginers in
-C, to ship portable and safe 2d games, putting accent on simplicity, safety
+Gama project aims to provide a convenient way for students and beginners in
+C, to ship portable and safe 2D games, putting emphasis on simplicity, safety
 and control.
 
-[Gama cli](https://gama.rbs.cm/docs/cli) is a command line tool built in [V](https://github.com/vlang/v) which
-provides a build system and project manager for gama projects.
+## Features
 
-Gama.h, a gama library providing an easy to use immediate mode interface
-to render game components, gama.h is tailored to adapt to web assembly
-or [`vgama` shared library](https://gama.rbs.cm/docs/vgama).
+- **Lightweight C Library**: Simple, easy-to-learn C API with clear function names designed specifically for students and beginners.
+- **Built-in 2D Physics Engine**: Physics system with bodies, shapes, and collision detection supporting restitution, friction, and constraints.
+- **Immediate Mode Rendering**: Draw shapes directly without creating objects. Reduces pointer usage and manual memory management.
+- **Comprehensive Animation System**: Multiple easing functions and wave animations for smooth, professional-looking motion.
+- **Modern CLI Tool**: Fast project manager written in V with zero-dependency setup using embedded TCC compiler.
+- **Advanced Input System**: Intuitive key and mouse input with predefined shortcuts for arrows, space, and mouse buttons.
+- **Cross-Platform Development**: Target Windows, Linux, and Web with consistent APIs and behavior.
+- **Educational Focus**: Designed specifically for teaching C programming with safety and simplicity in mind.
+
+## Commands
+
+This project uses the `mng` script for various tasks:
+
+- `./mng build` - Builds the Gama CLI tool for both Linux and Windows
+- `./mng docs` - Generates Doxygen documentation and integrates it into the Svelte site
+- `./mng package` - Builds, compiles vgama, and creates installers/packages
+- `./mng vgama` - Builds the vgama shared library for native platforms
+- `./mng help` - Shows available commands
+
+## Website & Documentation
+
+The official website is built with SvelteKit and provides comprehensive documentation:
+
+- **Main Site**: https://gama.rbs.cm - Features project information, design principles, and getting started guides
+- **API Reference**: Automatically generated from source code using Doxygen and integrated into the site
+- **Tutorials**: Step-by-step guides for installation, development, and advanced features
+- **Widget Documentation**: Detailed guides for all UI components (frames, buttons, scales, joysticks, switches)
 
 ## Principles, or design
 
 - **stack more, heap less**: gama aims to let students rely on
   automatic stack allocation and deallocation in functions.
-- **you have control**: Alot of work is put in gama backend
+- **you have control**: A lot of work is put in gama backend
   so that your code owns a mainloop.
 - **no global state/scenes**: Functions can be different scenes with
   their initialization, destruction and objects, getting automatically dropped.
-- **imediate mode**: Reducing further the need for pointers, you don't create
+- **immediate mode**: Reducing further the need for pointers, you don't create
   shapes to draw when needed, you draw the shapes, this may increase the work
-  that you have to do, but makes it simplier and efficient for a game.
+  that you have to do, but makes it simpler and efficient for a game.
 
 ## What does it look like?
 
-sample from [line up project](https://github.com/ken-morel/lineup)
+Sample from [line up project](https://github.com/ken-morel/lineup)
 
 ```c
 #include <gama.h>
@@ -82,6 +106,10 @@ int main() {
 
 ## Contributing
 
-Always nice to see pr's and issues(at least almost always); which are not mine :smiley: .
+Always nice to see PRs and issues (at least almost always); which are not mine :smiley:.
 
-
+To contribute to the documentation or the site:
+- Website source code is located in the `site/` directory
+- Documentation is generated automatically with Doxygen and the `mng docs` command
+- Add new tutorials/pages in `site/src/routes/docs/`
+- The build system automatically serves Doxygen documentation at `/reference/`
