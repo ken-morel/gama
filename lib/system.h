@@ -148,6 +148,10 @@ static inline size_t gm_system_size(gmSystem *sys) {
  * @param sys Pointer to the system to destroy.
  */
 void gm_system_destroy(gmSystem *sys) {
-  if (sys->collisions != NULL)
+  if (sys->collisions != NULL) {
+    for (size_t i = 0; sys->collisions[i] != NULL; i++) {
+      free(sys->collisions[i]);
+    }
     free(sys->collisions);
+  }
 }
