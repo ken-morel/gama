@@ -4,7 +4,7 @@
 To draw a simple scale you use `gmw_scale`, which returns
 if the scale is currently pressed(and maybe moving).
 
-you can make the scale animated by using [`gmw_scale_anim`](/reference/scale_8h.html#a6e11a61188aef49b7e1705da260b748c),
+you can make the scale animated by using <a href="/reference/scale_8h.html#a6e11a61188aef49b7e1705da260b748c">`gmw_scale_anim`</a>,
 and passing an additional
 double pointer argument it will use for animations.
 The value of the scale is between 0 and 1, so you will have to convert and round to
@@ -32,4 +32,4 @@ do {
 
 ## Reference
 
-See reference at [scale.h reference](/reference/scale_8h.html)
+See reference at <a href="/reference/scale_8h.html">scale.h reference</a>

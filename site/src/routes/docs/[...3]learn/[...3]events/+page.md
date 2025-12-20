@@ -28,7 +28,7 @@ As such:
   is reported only once even if the user holds the mouse down,
   you can use this to tests for clicks.
 
-See [gm_mouse reference](/reference/gapi_8h.html#ae348e1e764210f492ce421ed6460db40)
+See <a href="/reference/gapi_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse reference</a>
 
 ### Little example
 

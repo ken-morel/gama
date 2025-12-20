@@ -1,20 +1,20 @@
 # Creating and managing systems
 
-See [system.h reference](/reference/system_8h.html)
+See <a href="/reference/system_8h.html">system.h reference</a>
 
 If you want to add physics processing to your game, 
 you can use gama built in physics.
 
 ## Creating a system
 
-You create a system using [`gm_system_create`](/reference/system_8h.html#r_a12674760bc8132b8a9c64afe03ac7106).
+You create a system using <a href="/reference/system_8h.html#r_a12674760bc8132b8a9c64afe03ac7106">`gm_system_create`</a>.
 ```c
 gmSystem world = gm_system_create();
 ```
 This creates a new structure of type `gmSystem` which you can configure,
-for properties, you can see [gm_system reference](/reference/structgm__system.html)
+for properties, you can see <a href="/reference/structgm__system.html">gm_system reference</a>
 
-And for more information about systems, you can view the [system.h reference](/reference/system_8h.html).
+And for more information about systems, you can view the <a href="/reference/system_8h.html">system.h reference</a>.
 
 ## Creating bodies
 
@@ -22,10 +22,10 @@ A body is an entity in the system, it is like a physics body with it's own mass,
 and forces acting on it.
 Gama currently supports only two shapes of bodies, circles and rectangles, and
 provide differenc functions for creating objects of those different shapes:
-- [`gm_rectangle_body`](/reference/body_8h.html#a1cabf192f8e65f00161d2a9344884505)
-- [`gm_circle_body`](/reference/body_8h.html#aa4fb765e44193dec7646c814ebd526c2)
+- <a href="/reference/body_8h.html#a1cabf192f8e65f00161d2a9344884505">`gm_rectangle_body`</a>
+- <a href="/reference/body_8h.html#aa4fb765e44193dec7646c814ebd526c2">`gm_circle_body`</a>
 
-[body.h reference](/reference/body_8h.html)
+<a href="/reference/body_8h.html">body.h reference</a>
 
 Bodies have properties you can modify to change their behavious
 - `mass`: holds the mass of the body which is used in collisions,
@@ -38,7 +38,7 @@ Bodies have properties you can modify to change their behavious
   `gmPos`, having `.x` and `.y`.
 - ...
 
-You can view other properties in the [`gmBody` reference](/reference/structgm_body.html).
+You can view other properties in the <a hRef="/reference/structgm_body.html">`gmbody` reference</a>.
 
 ## Adding the bodies to the system
 
@@ -86,9 +86,9 @@ int main() {
 
 ## Getting collisions
 
-When two bodies collide, gama creates a new [`gmCollision`](/reference/structgm_collision.html)
+When two bodies collide, gama creates a new <a hRef="/reference/structgm_collision.html">`gmcollision`</a>
 object which holds information about the collision,
-you can get and test for a collision with [`gm_collision_detect`](/reference/physics_8h.html#a249b7c9b7732fd0cb0708994d9aec3f1)
+you can get and test for a collision with <a href="/reference/physics_8h.html#a249b7c9b7732fd0cb0708994d9aec3f1">`gm_collision_detect`</a>
 
 ```c
 gmCollision myCollision;
@@ -105,7 +105,7 @@ if(gm_collision_detect(NULL, &mySystem, &bodyA, &bodyB))
 
 ## References
 
-- [physics.h reference](/reference/physics_8h.html)
-- [collision.h reference](/reference/collision_8h.html)
-- [system.h reference](/reference/system_8h.html)
-- [body.h reference](/reference/body_8h.html)
+- <a href="/reference/physics_8h.html">physics.h reference</a>
+- <a href="/reference/collision_8h.html">collision.h reference</a>
+- <a href="/reference/system_8h.html">system.h reference</a>
+- <a href="/reference/body_8h.html">body.h reference</a>

@@ -1,7 +1,7 @@
 # Button
 
-The button configuration is at `gmwButton`, see [`gmwButtonTheme`](/reference/structgmw_button_theme.html).
-You draw a button with [`gmw_button`](/reference/button_8h.html#a0526f242e6862847894392ece14a424f),
+The button configuration is at `gmwButton`, see <a hrEf="/rEference/structgmw_button_theme.html">`gmwbuttonTheme`</a>.
+You draw a button with <a href="/reference/button_8h.html#a0526f242e6862847894392ece14a424f">`gmw_button`</a>,
 the `gmw_button` function also returns one if the button is hovered, this
 permits you to test if the button is clicked by testing if the function returns 1
 and `gm_mouse.pressed` or `gm_mouse.down`.
@@ -25,4 +25,4 @@ if(hovered && gm_mouse.pressed) {
 
 ## Reference
 
-[button.h reference](/reference/button_8h.html)
+<a href="/reference/button_8h.html">button.h reference</a>

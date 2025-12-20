@@ -3,7 +3,7 @@
 To help you add animations, gama provide a few functions
 you animate doubles over time.
 
-You can view the [animate.h reference](/reference/animate_8h.html)
+You can view the <a href="/reference/animate_8h.html">animate.h reference</a>
 
 ## Examples
 

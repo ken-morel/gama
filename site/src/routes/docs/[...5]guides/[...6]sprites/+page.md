@@ -32,16 +32,16 @@ gmSprite player = gm_sprite_create(img, 9);
 number of slices(sub images).
 
 You may also create a sprite from an image file directly with
-[`gm_sprite_open`](/reference/sprite_8h.html#a7342953abee5e846d950d246c1c8607a)
+<a href="/reference/sprite_8h.html#a7342953abee5e846d950d246c1c8607a">`gm_sprite_open`</a>
 
 ## animating the sprite
 
 For the sprite to move and switch between it's images you are going
 to create `gmSpriteAnim` objects,
-See [`gmSpriteAnim` reference](/reference/structgm_sprite_anim.html),
+See <a hRef="/Reference/structgm_sprite_anim.html">`gmspriteanim` reference</a>,
 
 you can create an animation using
-[`gm_sprite_anim_create`](/reference/sprite_8h.html#a54b463efc50065a0c4569d2e5fbf93b7).
+<a href="/reference/sprite_8h.html#a54b463efc50065a0c4569d2e5fbf93b7">`gm_sprite_anim_create`</a>.
 
 
 ## Example
@@ -61,4 +61,4 @@ gm_sprite_draw(&player, 0, 0, 0.1, 0.1);
 
 ## Reference
 
-For more information on sprites, see [sprite.h reference](/reference/sprite_8h.html)
+For more information on sprites, see <a href="/reference/sprite_8h.html">sprite.h reference</a>

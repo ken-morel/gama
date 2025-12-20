@@ -5,7 +5,7 @@ Gama has a special `gmColor` type it uses to store colors,
 ```c
 typedef unsigned int gmColor
 ```
-You can use predefined colors, see [reference](/reference/color_8h.html#header-doc-define-members)
+You can use predefined colors, see <a href="/reference/color_8h.html#header-doc-define-members">reference</a>
 there are more than a hundred of colors there like `GM_RED`, `GM_BURLYWOOD`, and so on.
 
 ```c

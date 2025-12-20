@@ -36,4 +36,4 @@ Thus a rectangle of width 2 occupies the whole square window.
 
 ## Reference
 
-You can find other draw functions in the [draw.h reference](/reference/draw_8h.html)
+You can find other draw functions in the <a href="/reference/draw_8h.html">draw.h reference</a>

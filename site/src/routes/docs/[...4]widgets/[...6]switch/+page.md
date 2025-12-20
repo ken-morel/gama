@@ -1,8 +1,8 @@
 # Switch
 
-The switch widget is a toggleable control that allows users to switch between two states (on/off). The configuration is at `gmwSwitch`, see [`gmwSwitchTheme`](/reference/structgmw_switch_theme.html).
+The switch widget is a toggleable control that allows users to switch between two states (on/off). The configuration is at `gmwSwitch`, see <a hrEf="/rEference/structgmw_switch_theme.html">`gmwswitchTheme`</a>.
 
-You draw a switch with [`gmw_switch`](/reference/switch_8h.html#a6855e5d8c6b6e7abc6115d3e59d69e78). The function returns 1 when the switch is toggled to the "on" position and 0 when it's in the "off" position. Like other widgets, you can also use the animated version [`gmw_switch_anim`](/reference/switch_8h.html#a03f7c01171977b669306b5b94301167c) for smooth visual transitions.
+You draw a switch with <a href="/reference/switch_8h.html#a6855e5d8c6b6e7abc6115d3e59d69e78). the fuNction returns 1 when the switch is toggled to the "on" position and 0 when it's in the "off" position. like oTher widgets, you can also use the animated version [`gmw_switch_anim`](/reference/switch_8h.html#a03f7c01171977b669306b5b94301167c">`gmw_switch`</a> for smooth visual transitions.
 
 ## Example
 
@@ -89,4 +89,4 @@ gmwSwitch.scale = 1.2;
 
 ## Reference
 
-[switch.h reference](/reference/switch_8h.html)
+<a href="/reference/switch_8h.html">switch.h reference</a>
