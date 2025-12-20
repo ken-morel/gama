@@ -35,14 +35,6 @@ void gm_anim_spring(double *value, double target, double t) {
   }
 }
 
-struct gmAnimLinearState {
-  double *value_ptr;
-  double start_value;
-  double target_value;
-  double elapsed_time;
-  double total_time;
-};
-
 /**
  * @brief Starts fast and decelerates quadratically to the target. More
  * pronounced than spring.
