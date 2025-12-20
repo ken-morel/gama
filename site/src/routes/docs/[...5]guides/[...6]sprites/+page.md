@@ -38,7 +38,7 @@ You may also create a sprite from an image file directly with
 
 For the sprite to move and switch between it's images you are going
 to create `gmSpriteAnim` objects,
-See <a hRef="/Reference/structgm_sprite_anim.html">`gmspriteanim` reference</a>,
+See <a href="/reference/structgm_sprite_anim.html">`gmspriteanim` reference</a>,
 
 you can create an animation using
 <a href="/reference/sprite_8h.html#a54b463efc50065a0c4569d2e5fbf93b7">`gm_sprite_anim_create`</a>.

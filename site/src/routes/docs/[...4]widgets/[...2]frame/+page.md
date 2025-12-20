@@ -7,7 +7,7 @@ it returns 1 if the cursor is currently on the frame(i.e the frame is hovered up
 
 
 Frame configuration is located in `gmwFrame`
-see <a hrEf="/Reference/structgmw_frame_theme.html">`gmwframetheme` reference</a>.
+see <a href="/reference/structgmw_frame_theme.html">`gmwframetheme` reference</a>.
 
 ```c
 gmwFrame.border = GM_RED;

@@ -1,6 +1,6 @@
 # Joystick
 
-The joystick widget is interactive controller that allows users to input directional movement, commonly used in games for character or camera control. The configuration is at `gmwJoystick`, see <a hrEf="/reference/structgmw_joystick_theme.html">`gmwjoystickTheme`</a>.
+The joystick widget is interactive controller that allows users to input directional movement, commonly used in games for character or camera control. The configuration is at `gmwJoystick`, see <a href="/reference/structgmw_joystick_theme.html">`gmwjoystickTheme`</a>.
 
 You draw a joystick with <a href="/reference/joystick_8h.html#a4129148e0bdd6a651900a45d62ceed5e). the function returns 1 when the joystick is active (being manipulated">`gmw_joystick`</a> and provides the X and Y position values of the joystick knob.
 

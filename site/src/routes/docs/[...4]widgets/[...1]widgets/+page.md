@@ -13,7 +13,7 @@ have global structures like `gmwFrame` which you can change.
 If you want to change a single object's theme, you can temporarily change the theme,
 using `gmw_save()`, and then restore it with `gmw_restore()`, you can save and restore
 several times(by the time of this writing, you can save 10 times),
-but you can configure that by defining <a HREf="/rEFEREnCE/WIdgets_8h.html#a1c14c94de7b1d5b10cdab5ffd123b0f8">`gama_max_theme_CACHE`</a>
+but you can configure that by defining <a href="/reference/widgets_8h.html#a1c14c94de7b1d5b10cdab5ffd123b0f8">`gama_max_theme_CACHE`</a>
 
 ```c
 gmw_save(); // save default theme #0
