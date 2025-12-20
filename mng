@@ -59,13 +59,13 @@ fn build() {
 
 fn package() {
 	println('Packaging with nsis')
-	result := execute('makensis nsis/setup.nsi')
+	mut result := execute('makensis nsis/setup.nsi')
 	if result.exit_code != 0 {
 		println(term.fail_message('makensis failed: ${result.output}'))
 		return
 	}
 	println('Packaging deb with nfpm')
-	result := execute('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
+	result = execute('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
 	if result.exit_code != 0 {
 		println(term.fail_message(result.output))
 		return
@@ -99,6 +99,22 @@ fn docs() {
 	println(term.ok_message('Documentation integrated into Svelte site!'))
 }
 
+fn vgama() {
+	println('Building vgama for windows')
+	mut result := execute('v runners/native -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
+	if result.exit_code != 0 {
+		println(term.fail_message('vgama windows build failed : ${result.output}'))
+		return
+	}
+	println("Building vgama for linux")
+	result = execute('v runners/native -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
+	if result.exit_code != 0 {
+		println(term.fail_message('vgama linux build failed : ${result.output}'))
+		return
+	}
+
+}
+
 
 // Get the command from arguments
 mut cmd := 'help'
@@ -116,6 +132,8 @@ if cmd == 'docs' {
 	build()
 	vgama()
 	package()
+} else if cmd == 'vgama' {
+	vgama()
 } else {
 	println(term.fail_message('Unknown command: ${cmd}'))
 	help()
