@@ -1,2 +1,4 @@
-bin/
-ama/
+/cli
+/bin/
+/build/
+/docs

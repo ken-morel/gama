@@ -23,7 +23,7 @@ int main() {
 
   do {
     double dt = gm_dt();
-    gm_system_update(&sys, 500);
+    gm_system_update(&sys);
 
     gm_draw_circle_body(&ball_body, GM_BISQUE);
     gm_draw_rect_bodies(paddles, 2, GM_DARKGOLDENROD);

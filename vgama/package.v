@@ -7,8 +7,8 @@ pub fn (p Project) package_native(inst Installation) ! {
 
 	// 1. Define paths
 	template_path := os.join_path(inst.runners, 'native', 'installer.nsi')
-	build_dir := p.build_path('windows')
-	os.mkdir_all(build_dir) or { return error('failed to create windows build directory: ${err}') }
+	build_dir := p.build_path('nsis')
+	os.mkdir_all(build_dir) or { return error('failed to create nsis build directory: ${err}') }
 
 	nsi_script_path := os.join_path(build_dir, 'installer.nsi')
 

@@ -1,4 +1,4 @@
-j; =============================================================================
+; =============================================================================
 ; NSIS Installer Script for "{{project.name}}"
 ;
 ; Features:
@@ -15,7 +15,7 @@ j; =============================================================================
 ;--------------------------------
 ; General
 Name "{{project.name}}"
-OutFile ".\build\windows\{{project.name}}-{{project.version}}-installer.exe"
+OutFile ".\{{project.name}}-{{project.version}}-installer.exe"
 InstallDir "$APPDATA\gama\{{author.name}}\{{project.name}}"
 InstallDirRegKey HKCU "Software\{{author.name}}\{{project.name}}" "InstallDir"
 RequestExecutionLevel user
@@ -25,8 +25,8 @@ RequestExecutionLevel user
 ; Modern UI Configuration
 !define MUI_ABORTWARNING
 
-!define MUI_ICON "../../assets/images/icon.ico"
-!define MUI_UNICON "../.../assets/images/icon.ico"
+!define MUI_ICON "..\..\assets\images\icon.ico"
+!define MUI_UNICON "..\..\assets\images\icon.ico"
 
 !insertmacro MUI_PAGE_WELCOME
 ;!insertmacro MUI_PAGE_LICENSE LICENSE
@@ -44,8 +44,8 @@ Section "Install {{project.name}}" SecInstall
   SetOutPath "$INSTDIR"
 
   ; --- Install application files ---
-  File ".\{{project.name}}.exe"
-  File ".\libvgama.dll"
+  File "..\native\{{project.name}}.exe"
+  File "..\native\libvgama.dll"
   File /r "..\..\assets"
 
   ; --- Create Uninstaller and Registry entries for Add/Remove Programs ---
