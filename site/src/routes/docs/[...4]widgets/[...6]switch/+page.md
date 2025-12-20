@@ -40,36 +40,6 @@ int main() {
 }
 ```
 
-## Animated Example
-
-```c
-#include <gama.h>
-
-int power_on = 0; // Variable to store switch state
-double power_on_anim = 0; // Animation state variable
-
-int main() {
-    gm_init(500, 500, "Animated Switch Example");
-    
-    do {
-        // Draw the animated switch and update its state
-        power_on = gmw_switch_anim(0, 0.3, 0.2, 0.1, &power_on_anim);
-        
-        // Draw based on animated switch state
-        if(power_on_anim) {
-            gm_draw_text(-0.9, 0.8, "Power: ON", "", 0.1, GM_WHITE);
-            gm_draw_circle(0, -0.2, 0.1, GM_YELLOW); // Animated power indicator
-        } else {
-            gm_draw_text(-0.9, 0.8, "Power: OFF", "", 0.1, GM_GRAY);
-            gm_draw_circle(0, -0.2, 0.1, GM_DARK_GRAY); // Animated power indicator
-        }
-        
-    } while(gm_yield());
-    
-    return 0;
-}
-```
-
 ## Configuration
 
 The switch appearance and behavior can be customized through the `gmwSwitch` global variable:
