@@ -153,8 +153,8 @@ void gm_init(int width, int height, const char *title) {
 
   if (code != 0) {
     snprintf(msg, sizeof(msg),
-            "Error starting gama, initialization exited with non zero code %d",
-            code);
+             "Error starting gama, initialization exited with non zero code %d",
+             code);
     gapi_log(msg);
     printf("%s", msg);
   }
@@ -162,3 +162,18 @@ void gm_init(int width, int height, const char *title) {
   gm_logo(0, 0, 2);
   gm_yield();
 }
+
+/**
+ * @brief Sleep(wait) for aproximately the specified number of milliseconds
+ *
+ * @param miliseconds the number of milliseconds to sleep
+ */
+void gm_sleep(int milliseconds);
+
+#ifdef _WIN32
+#include <windows.h>
+void gm_sleep(int milliseconds) { Sleep(milliseconds); }
+#else
+#include <unistd.h>
+void gm_sleep(int milliseconds) { usleep(milliseconds * 1000); }
+#endif

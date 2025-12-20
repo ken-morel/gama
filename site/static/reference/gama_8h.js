@@ -11,6 +11,7 @@ var gama_8h =
     [ "gm_logo", "gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0", null ],
     [ "gm_resize", "gama_8h.html#aa65985ca5b8454ee69087f2243276e77", null ],
     [ "gm_show_fps", "gama_8h.html#a11b841ac66eacd657c78efaea6c07b01", null ],
+    [ "gm_sleep", "gama_8h.html#ab7997f4879229850843f681e9eb36c59", null ],
     [ "gm_sync", "gama_8h.html#ae7d8eef7f2d5000a4775808c20abd485", null ],
     [ "__gm_show_fps", "gama_8h.html#a75099652e829ac61185b5e12deb06040", null ]
 ];

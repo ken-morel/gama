@@ -1,6 +1,5 @@
 var animate_8h =
 [
-    [ "gmAnimLinearState", "structgm_anim_linear_state.html", "structgm_anim_linear_state" ],
     [ "gm_anim_ease_in_quad", "animate_8h.html#a8134061858847e4b5e80d8f79834b166", null ],
     [ "gm_anim_ease_out_cubic", "animate_8h.html#ad7ec9b6d0a0714a18f600bc4207da8e1", null ],
     [ "gm_anim_ease_out_quad", "animate_8h.html#af913f89fbbffd08428a99d653f9170a5", null ],

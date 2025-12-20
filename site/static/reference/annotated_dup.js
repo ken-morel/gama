@@ -2,7 +2,6 @@ var annotated_dup =
 [
     [ "_gmMouse", "struct__gm_mouse.html", "struct__gm_mouse" ],
     [ "gm_system", "structgm__system.html", "structgm__system" ],
-    [ "gmAnimLinearState", "structgm_anim_linear_state.html", "structgm_anim_linear_state" ],
     [ "gmBody", "structgm_body.html", "structgm_body" ],
     [ "gmCollision", "structgm_collision.html", "structgm_collision" ],
     [ "gmImage", "structgm_image.html", "structgm_image" ],

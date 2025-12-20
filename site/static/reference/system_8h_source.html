@@ -249,9 +249,13 @@ $(function(){initNavTree('system_8h_source.html','',''); });
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment"> */</span></div>
 <div class="foldopen" id="foldopen00150" data-start="{" data-end="}">
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="system_8h.html#a625e32ce9bd9e7ce217ffd01b87990df">  150</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="system_8h.html#a625e32ce9bd9e7ce217ffd01b87990df">gm_system_destroy</a>(<a class="code hl_typedef" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys) {</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <span class="keywordflow">if</span> (sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a> != NULL)</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    free(sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>);</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>}</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <span class="keywordflow">if</span> (sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a> != NULL) {</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>[i] != NULL; i++) {</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>      free(sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>[i]);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    }</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    free(sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>);</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>  }</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>}</div>
 </div>
 <div class="ttc" id="abody_8h_html"><div class="ttname"><a href="body_8h.html">body.h</a></div></div>
 <div class="ttc" id="abody__list_8h_html"><div class="ttname"><a href="body__list_8h.html">body_list.h</a></div><div class="ttdoc">Provides a dynamic, NULL-terminated pointer list implementation.</div></div>

@@ -105,6 +105,7 @@ $(function(){initNavTree('gama_8h.html','',''); });
 <code>#include &quot;<a class="el" href="system_8h_source.html">system.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="widgets_8h_source.html">widgets.h</a>&quot;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;unistd.h&gt;</code><br />
 </div>
 <p><a href="gama_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -130,6 +131,8 @@ Functions</h2></td></tr>
 <tr class="memitem:aa65985ca5b8454ee69087f2243276e77" id="r_aa65985ca5b8454ee69087f2243276e77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa65985ca5b8454ee69087f2243276e77">gm_resize</a> (int width, int height)</td></tr>
 <tr class="memitem:afe888881882c032aeecb0e3e4e6de460" id="r_afe888881882c032aeecb0e3e4e6de460"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe888881882c032aeecb0e3e4e6de460">gm_init</a> (int width, int height, const char *title)</td></tr>
 <tr class="memdesc:afe888881882c032aeecb0e3e4e6de460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Gama engine and opens a window.  <br /></td></tr>
+<tr class="memitem:ab7997f4879229850843f681e9eb36c59" id="r_ab7997f4879229850843f681e9eb36c59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7997f4879229850843f681e9eb36c59">gm_sleep</a> (int milliseconds)</td></tr>
+<tr class="memdesc:ab7997f4879229850843f681e9eb36c59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleep(wait) for aproximately the specified number of milliseconds.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -389,6 +392,33 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a9">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="ab7997f4879229850843f681e9eb36c59" name="ab7997f4879229850843f681e9eb36c59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7997f4879229850843f681e9eb36c59">&#9670;&#160;</a></span>gm_sleep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gm_sleep </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>milliseconds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sleep(wait) for aproximately the specified number of milliseconds. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">miliseconds</td><td>the number of milliseconds to sleep </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a37">/home/engon/gama/gama/lib/gama.h</a>.</dd>
 </dl>
 
 </div>

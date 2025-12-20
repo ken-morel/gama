@@ -7,26 +7,26 @@
  * @brief Structure defining the visual theme for a joystick widget.
  */
 typedef struct {
-  int enabled;              /**< Whether the joystick is enabled */
+  int enabled; /**< Whether the joystick is enabled */
 
-  double scale;             /**< Overall joystick size scale */
-  gmColor background;       /**< Circle background color */
-  gmColor border;           /**< Border color */
+  double scale;       /**< Overall joystick size scale */
+  gmColor background; /**< Circle background color */
+  gmColor border;     /**< Border color */
 
   struct {
-    double scale;           /**< Scale factor when focused/hovered */
-    gmColor border;         /**< Border color when focused/hovered */
+    double scale;   /**< Scale factor when focused/hovered */
+    gmColor border; /**< Border color when focused/hovered */
   } focussed;
 
   struct {
-    double scale;           /**< Scale factor when active pressed */
-    gmColor border;         /**< Border color when active pressed */
+    double scale;   /**< Scale factor when active pressed */
+    gmColor border; /**< Border color when active pressed */
   } active;
 
-  gmColor knob;             /**< Knob color */
-  gmColor knob_border;      /**< Knob border color */
+  gmColor knob;        /**< Knob color */
+  gmColor knob_border; /**< Knob border color */
 
-  double border_width;      /**< Width of the circle border */
+  double border_width; /**< Width of the circle border */
 } gmwJoystickTheme;
 
 /**
@@ -44,12 +44,15 @@ gmwJoystickTheme gmwJoystick = {
     .border_width = 0.01};
 
 /**
- * @brief Creates and renders an animated joystick widget that can be manipulated with the mouse.
+ * @brief Creates and renders an animated joystick widget that can be
+ * manipulated with the mouse.
  * @param x The x-coordinate of the joystick's center.
  * @param y The y-coordinate of the joystick's center.
  * @param radius The radius of the joystick base.
- * @param pos Pointer to a gmPos structure to store the joystick's logical position (-1 to 1).
- * @param vpos Pointer to a gmPos structure for animated visual position (can be NULL to use pos).
+ * @param pos Pointer to a gmPos structure to store the joystick's logical
+ * position (-1 to 1).
+ * @param vpos Pointer to a gmPos structure for animated visual position (can be
+ * NULL to use pos).
  * @return 1 if the joystick is currently hovered, 0 otherwise.
  */
 int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
@@ -71,8 +74,8 @@ int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
   int active = hovered && gm_mouse.down;
 
   if (!gm_mouse.down) {
-    gm_anim_spring(&pos->x, 0, gm_dt(), 0.1);
-    gm_anim_spring(&pos->y, 0, gm_dt(), 0.1);
+    gm_anim_ease_out_cubic(&pos->x, 0, 0.1);
+    gm_anim_ease_out_cubic(&pos->y, 0, 0.1);
   }
 
   // Logical joystick position (-1..1)
@@ -91,8 +94,8 @@ int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
   }
 
   // Animate knob smoothly to target pos->x/pos->y
-  gm_anim_ease_out_quad(&vpos->x, pos->x, gm_dt(), 0.05);
-  gm_anim_ease_out_quad(&vpos->y, pos->y, gm_dt(), 0.05);
+  gm_anim_ease_out_quad(&vpos->x, pos->x, 0.05);
+  gm_anim_ease_out_quad(&vpos->y, pos->y, 0.05);
 
   // Draw joystick circle (border + background)
   double draw_radius = radius * gmwJoystick.scale;
@@ -113,11 +116,13 @@ int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
 }
 
 /**
- * @brief Creates and renders a joystick widget that can be manipulated with the mouse.
+ * @brief Creates and renders a joystick widget that can be manipulated with the
+ * mouse.
  * @param x The x-coordinate of the joystick's center.
  * @param y The y-coordinate of the joystick's center.
  * @param radius The radius of the joystick base.
- * @param pos Pointer to a gmPos structure to store the joystick's logical position (-1 to 1).
+ * @param pos Pointer to a gmPos structure to store the joystick's logical
+ * position (-1 to 1).
  * @return 1 if the joystick is currently hovered, 0 otherwise.
  */
 int gmw_joystick(double x, double y, double radius, gmPos *pos) {

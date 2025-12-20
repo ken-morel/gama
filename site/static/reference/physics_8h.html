@@ -108,6 +108,10 @@ Functions</h2></td></tr>
 <tr class="memdesc:af097fcff2f40d53df7608a26cbe3e956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves a collision between two bodies by applying appropriate forces and corrections.  <br /></td></tr>
 <tr class="memitem:ac1ac77805ae41795281e1b06778de5ee" id="r_ac1ac77805ae41795281e1b06778de5ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1ac77805ae41795281e1b06778de5ee">gm_system_update_body_dt</a> (<a class="el" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys, <a class="el" href="structgm_body.html">gmBody</a> *body, double dt)</td></tr>
 <tr class="memdesc:ac1ac77805ae41795281e1b06778de5ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates a single body in the system by integrating its position and velocity over time.  <br /></td></tr>
+<tr class="memitem:ad3f02f65ffbf51cd18ec92095c79fa18" id="r_ad3f02f65ffbf51cd18ec92095c79fa18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3f02f65ffbf51cd18ec92095c79fa18">gm_body_update_dt</a> (<a class="el" href="structgm_body.html">gmBody</a> *body, double dt)</td></tr>
+<tr class="memdesc:ad3f02f65ffbf51cd18ec92095c79fa18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates a single body by integrating its position and velocity over time.  <br /></td></tr>
+<tr class="memitem:af0a997c1e21c8268f0b6d7d8e764e92c" id="r_af0a997c1e21c8268f0b6d7d8e764e92c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0a997c1e21c8268f0b6d7d8e764e92c">gm_body_update</a> (<a class="el" href="structgm_body.html">gmBody</a> *body)</td></tr>
+<tr class="memdesc:af0a997c1e21c8268f0b6d7d8e764e92c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates a single body by integrating its position and velocity over time.  <br /></td></tr>
 <tr class="memitem:a249b7c9b7732fd0cb0708994d9aec3f1" id="r_a249b7c9b7732fd0cb0708994d9aec3f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_collision.html">gmCollision</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a249b7c9b7732fd0cb0708994d9aec3f1">gm_collision_detect</a> (<a class="el" href="structgm_body.html">gmBody</a> *, <a class="el" href="structgm_body.html">gmBody</a> *)</td></tr>
 <tr class="memdesc:a249b7c9b7732fd0cb0708994d9aec3f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detects collision between two bodies.  <br /></td></tr>
 <tr class="memitem:a3bf74162bee0abd7b551bb01926ed7c7" id="r_a3bf74162bee0abd7b551bb01926ed7c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3bf74162bee0abd7b551bb01926ed7c7">gm_system_update_dt</a> (<a class="el" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys, double unit, double dt)</td></tr>
@@ -125,6 +129,61 @@ Variables</h2></td></tr>
 <tr class="memdesc:aaf44d95db95ffe236995ef317d48dfce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default time step for physics system frame updates.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="af0a997c1e21c8268f0b6d7d8e764e92c" name="af0a997c1e21c8268f0b6d7d8e764e92c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0a997c1e21c8268f0b6d7d8e764e92c">&#9670;&#160;</a></span>gm_body_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gm_body_update </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structgm_body.html">gmBody</a> *</td>          <td class="paramname"><span class="paramname"><em>body</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates a single body by integrating its position and velocity over time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">body</td><td>Pointer to the body to update. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad3f02f65ffbf51cd18ec92095c79fa18" name="ad3f02f65ffbf51cd18ec92095c79fa18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3f02f65ffbf51cd18ec92095c79fa18">&#9670;&#160;</a></span>gm_body_update_dt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gm_body_update_dt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structgm_body.html">gmBody</a> *</td>          <td class="paramname"><span class="paramname"><em>body</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>dt</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates a single body by integrating its position and velocity over time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">body</td><td>Pointer to the body to update. </td></tr>
+    <tr><td class="paramname">dt</td><td>The time step for the update. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a249b7c9b7732fd0cb0708994d9aec3f1" name="a249b7c9b7732fd0cb0708994d9aec3f1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a249b7c9b7732fd0cb0708994d9aec3f1">&#9670;&#160;</a></span>gm_collision_detect()</h2>
 
