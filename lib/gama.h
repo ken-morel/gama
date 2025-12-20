@@ -152,7 +152,7 @@ void gm_init(int width, int height, const char *title) {
   char msg[100];
 
   if (code != 0) {
-    sprintf(msg,
+    snprintf(msg, sizeof(msg),
             "Error starting gama, initialization exited with non zero code %d",
             code);
     gapi_log(msg);
