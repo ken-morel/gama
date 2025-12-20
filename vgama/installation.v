@@ -23,6 +23,9 @@ pub fn (i Installation) get_templates() ![]GamaTemplate {
 	names := os.ls(i.templates) or { return error('Error reading gama templates folder: ${err}') }
 	mut templates := []GamaTemplate{cap: names.len}
 	for name in names {
+		if name == 'README.md' {
+			continue
+		}
 		path := os.join_path(i.templates, name)
 		desc := GamaTemplate.get_description(path) or { 'no description(${err})' }
 		templates << GamaTemplate{
@@ -45,5 +48,5 @@ pub fn (i Installation) get_gama_version() !Version {
 }
 
 pub fn (i Installation) copy_gama(dest string, overwrite bool) ! {
-	os.cp_all(i.lib, dest, overwrite) or { return error('Error copying gama') }
+	os.cp_all(i.lib, dest, overwrite) or { return error('Error copying gama: ${err}') }
 }

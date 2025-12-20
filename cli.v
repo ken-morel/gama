@@ -91,7 +91,12 @@ fn get_project() !vgama.Project {
 }
 
 fn get_installation() !vgama.Installation {
-	return vgama.Installation.folder(os.dir(os.executable()))
+	mut location := os.dir(os.executable())
+	if location.starts_with('/usr/bin') {
+		location = '/usr/share/gama'
+	}
+	println(location)
+	return vgama.Installation.folder(location)
 }
 
 fn main() {

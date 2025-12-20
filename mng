@@ -1,7 +1,7 @@
 #!/usr/bin/env -S v -raw-vsh-tmp-prefix tmp run
 
-import os
 import term
+import os
 
 fn copy_html_docs() ! {
 	html_source_dir := 'docs/html'
@@ -10,30 +10,30 @@ fn copy_html_docs() ! {
 	println('Copying HTML docs from ${html_source_dir} to ${static_dest_dir}')
 
 	// Remove existing static reference directory if it exists
-	if os.exists(static_dest_dir) {
-		os.rmdir_all(static_dest_dir) or {} // Don't fail if directory doesn't exist
+	if exists(static_dest_dir) {
+		rmdir_all(static_dest_dir) or {} // Don't fail if directory doesn't exist
 	}
 
 	// Copy HTML documentation to static directory
-	os.mkdir_all(static_dest_dir)!
+	mkdir_all(static_dest_dir)!
 
 	// Copy all files from HTML directory to static directory
-	files := os.glob('${html_source_dir}/**') or { []string{} }
+	files := glob('${html_source_dir}/**') or { []string{} }
 	for file in files {
-		if os.is_file(file) {
+		if is_file(file) {
 			// Extract relative path by slicing the string after html_source_dir
 			rel_start := html_source_dir.len + 1
 			if file.len > rel_start {
 				relative_path := file[rel_start..]
 				if relative_path.len > 0 { // Make sure it's not empty
-					dest_file := os.join_path(static_dest_dir, relative_path)
+					dest_file := join_path(static_dest_dir, relative_path)
 
 					// Create parent directory if needed
-					parent_dir := os.dir(dest_file)
-					os.mkdir_all(parent_dir)!
+					parent_dir := dir(dest_file)
+					mkdir_all(parent_dir)!
 
 					println(' - Copying ${relative_path}')
-					os.cp(file, dest_file)!
+					cp(file, dest_file)!
 				}
 			}
 		}
@@ -42,18 +42,50 @@ fn copy_html_docs() ! {
 	println(term.ok_message('HTML documentation copied to static/reference!'))
 }
 
-// Get the command from arguments
-mut cmd := 'help'
-if os.args.len > 1 {
-	cmd = os.args[1]
+fn build() {
+	println('Building gama for linux')
+	mut result := execute('v -os linux cli.v -o bin/gama')
+	if result.exit_code != 0 {
+		println(term.fail_message('host build failed: ${result.output}'))
+		return
+	}
+	println('Building gama for windows')
+	result = execute('v -os windows cli.v -o bin/gama')
+	if result.exit_code != 0 {
+		println(term.fail_message('windows build failed: ${result.output}'))
+		return
+	}
 }
 
-if cmd == 'docs' {
+fn package() {
+	println('Packaging with nsis')
+	mut result := execute('makensis nsis/setup.nsi')
+	if result.exit_code != 0 {
+		println(term.fail_message('makensis failed: ${result.output}'))
+		return
+	}
+	println('Packaging deb with nfpm')
+	result = execute('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
+	if result.exit_code != 0 {
+		println(term.fail_message(result.output))
+		return
+
+	}
+}
+
+fn help() {
+	println('Gama Documentation Generator')
+	println('Usage: mng build|docs')
+	println('  build/docs - Generate Doxygen documentation and integrate into Svelte site')
+	println('  help       - Show this help message')
+}
+
+fn docs() {
 	// Generate documentation from source
 	println(term.ok_message('Generating documentation...'))
 
 	// Run doxygen to generate HTML and XML
-	result := os.execute('doxygen Doxyfile')
+	result := execute('doxygen Doxyfile')
 	if result.exit_code != 0 {
 		println(term.fail_message('Doxygen failed to run: ${result.output}'))
 		return
@@ -65,12 +97,44 @@ if cmd == 'docs' {
 	copy_html_docs() or { println(term.fail_message('Error copying HTML docs: ${err}')) }
 
 	println(term.ok_message('Documentation integrated into Svelte site!'))
+}
+
+fn vgama() {
+	println('Building vgama for windows')
+	mut result := execute('v runners/native -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
+	if result.exit_code != 0 {
+		println(term.fail_message('vgama windows build failed : ${result.output}'))
+		return
+	}
+	println("Building vgama for linux")
+	result = execute('v runners/native -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
+	if result.exit_code != 0 {
+		println(term.fail_message('vgama linux build failed : ${result.output}'))
+		return
+	}
+
+}
+
+
+// Get the command from arguments
+mut cmd := 'help'
+if os.args.len > 1 {
+	cmd = os.args[1]
+}
+
+if cmd == 'docs' {
+	docs()
 } else if cmd == 'help' {
-	println('Gama Documentation Generator')
-	println('Usage: mng build|docs')
-	println('  build/docs - Generate Doxygen documentation and integrate into Svelte site')
-	println('  help       - Show this help message')
+	help()
+} else if cmd == 'build' {
+	build()
+} else if cmd == 'package' {
+	build()
+	vgama()
+	package()
+} else if cmd == 'vgama' {
+	vgama()
 } else {
 	println(term.fail_message('Unknown command: ${cmd}'))
-	println('Run "mng help" for available commands')
+	help()
 }
