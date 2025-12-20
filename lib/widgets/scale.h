@@ -8,28 +8,28 @@
  * @brief Structure defining the visual theme for a scale (slider) widget.
  */
 typedef struct {
-  int enabled;              /**< Whether the scale is enabled */
+  int enabled; /**< Whether the scale is enabled */
 
-  double scale;             /**< Overall widget scale */
+  double scale; /**< Overall widget scale */
 
-  gmColor background;       /**< Track background color */
-  gmColor border;           /**< Track border color */
+  gmColor background; /**< Track background color */
+  gmColor border;     /**< Track border color */
 
   struct {
-    double scale;           /**< Scale factor when focused/hovered */
-    gmColor border;         /**< Border color when focused/hovered */
+    double scale;   /**< Scale factor when focused/hovered */
+    gmColor border; /**< Border color when focused/hovered */
   } focussed;
 
   struct {
-    double scale;           /**< Scale factor when active pressed */
-    gmColor border;         /**< Border color when active pressed */
+    double scale;   /**< Scale factor when active pressed */
+    gmColor border; /**< Border color when active pressed */
   } active;
 
-  gmColor knob;             /**< Knob color */
-  gmColor knob_border;      /**< Knob border color */
+  gmColor knob;        /**< Knob color */
+  gmColor knob_border; /**< Knob border color */
 
-  double border_width;      /**< Track border thickness */
-  double step;              /**< Step size for discrete values (0 = allow any value) */
+  double border_width; /**< Track border thickness */
+  double step; /**< Step size for discrete values (0 = allow any value) */
 } gmwScaleTheme;
 
 /**
@@ -51,14 +51,18 @@ gmwScaleTheme gmwScale = {.enabled = 1,
                           .step = 0.0};
 
 /**
- * @brief Creates and renders an animated scale (slider) widget that can be manipulated with the mouse.
+ * @brief Creates and renders an animated scale (slider) widget that can be
+ * manipulated with the mouse.
  * @param x The x-coordinate of the scale's center.
  * @param y The y-coordinate of the scale's center.
  * @param width The width of the scale track.
  * @param height The height of the scale track.
- * @param value Pointer to a double to store the current scale value (0.0 to 1.0).
- * @param anim Pointer to a double for animated visual position (can be NULL to use value).
- * @return 1 if the scale is currently being actively manipulated (mouse down), 0 otherwise.
+ * @param value Pointer to a double to store the current scale value (0.0
+ * to 1.0).
+ * @param anim Pointer to a double for animated visual position (can be NULL to
+ * use value).
+ * @return 1 if the scale is currently being actively manipulated (mouse down),
+ * 0 otherwise.
  */
 int gmw_scale_anim(double x, double y, double width, double height,
                    double *value, double *anim) {
@@ -69,6 +73,8 @@ int gmw_scale_anim(double x, double y, double width, double height,
     *value = 0;
   if (*value > 1)
     *value = 1;
+  if (anim != NULL && (*anim > 1 || *anim < 0))
+    *anim = *value;
 
   int enabled = gmwScale.enabled;
 
@@ -79,7 +85,7 @@ int gmw_scale_anim(double x, double y, double width, double height,
   if (anim == NULL)
     anim = value;
   else
-    gm_anim_ease_out_quad(anim, (double)(*value), gm_dt(), 0.05);
+    gm_anim_ease_out_quad(anim, (double)(*value), 0.05);
 
   // Visual scale / border
   double scale = 1.0;
@@ -166,13 +172,16 @@ int gmw_scale_anim(double x, double y, double width, double height,
 }
 
 /**
- * @brief Creates and renders a scale (slider) widget that can be manipulated with the mouse.
+ * @brief Creates and renders a scale (slider) widget that can be manipulated
+ * with the mouse.
  * @param x The x-coordinate of the scale's center.
  * @param y The y-coordinate of the scale's center.
  * @param width The width of the scale track.
  * @param height The height of the scale track.
- * @param value Pointer to a double to store the current scale value (0.0 to 1.0).
- * @return 1 if the scale is currently being actively manipulated (mouse down), 0 otherwise.
+ * @param value Pointer to a double to store the current scale value (0.0
+ * to 1.0).
+ * @return 1 if the scale is currently being actively manipulated (mouse down),
+ * 0 otherwise.
  */
 static inline int gmw_scale(double x, double y, double width, double height,
                             double *value) {

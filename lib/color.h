@@ -49,6 +49,17 @@ static inline gmColor gm_rgba(int r, int g, int b, int a) {
 }
 
 /**
+ * @brief Creates a color from RGB components.
+ * @param r Red component (0-255).
+ * @param g Green component (0-255).
+ * @param b Blue component (0-255).
+ * @return A gmColor value.
+ */
+static inline gmColor gm_rgb(int r, int g, int b) {
+  return (unsigned)(abs(r) % 256) << 24 | (unsigned)(abs(g) % 256) << 16 |
+         (unsigned)(abs(b) % 256) << 8 | 0xFF;
+}
+/**
  * @brief Sets the red component of a color.
  * @param col The original color.
  * @param red The new red component (0-255).
@@ -857,4 +868,3 @@ static inline gmColor gm_set_alpha(gmColor col, int alpha) {
 /**
  * @}
  */
-
