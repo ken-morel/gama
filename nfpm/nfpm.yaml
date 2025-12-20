@@ -1,0 +1,57 @@
+# This is an example nfpm configuration file.
+# Make sure to check the documentation at https://nfpm.goreleaser.com
+#
+# The lines below are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/need to use them.
+# yaml-language-server: $schema=./nfpm.schema.yaml
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+name: "gama"
+
+arch: "amd64"
+platform: "linux"
+version: "0.1.0"
+section: "default"
+priority: "extra"
+provides:
+  - gama
+depends:
+  - tcc
+recommends:
+  - clang
+  - nfpm
+suggests: []
+replaces: []
+conflicts: []
+maintainer: "Engon Ken Morel <engonken8@gmail.com>"
+description: |
+  A lightweight C toolkit for safe and simple 2D
+  game development, a cli tool built in v to build projects,
+  featuring immediate mode rendering, minimal built-in physics and a c-api
+vendor: "ken-morel"
+homepage: "http://gama.rbs.cm"
+license: "MIT"
+contents:
+  - src: ./bin/gama
+    dst: /usr/bin/gama
+  - src: ./lib
+    dst: /usr/share/gama/lib
+  - src: ./assets
+    dst: /usr/share/gama/assets
+  - src: docs
+    dst: /usr/share/gama/docs
+  - src: ./gama.svg
+    dst: /usr/share/gama/gama.svg
+  - src: ./gama.png
+    dst: /usr/share/gama/gama.png
+  - src: ./gama-text.png
+    dst: /usr/share/gama/gama-text.png
+  - src: ./templates
+    dst: /usr/share/gama/templates
+  - src: ./runners/native/libvgama.so
+    dst: /usr/lib/libvgama.so
+  - src: /usr/lib/libvgama.so
+    dst: /usr/share/gama/runners/native/libvgama.so
+    type: symlink
+scripts:
+  postinstall: ./nfpm/postInstall.sh

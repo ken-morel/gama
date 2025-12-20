@@ -6,8 +6,10 @@ pub fn (p Project) copy_build_native_artifacts(inst Installation) ! {
 	build_dir := p.build_path('native')
 	runner_path := os.join_path(inst.runners, 'native')
 	os.mkdir_all(build_dir) or {}
-	os.cp(os.join_path(runner_path, libvgama_name()), os.join_path(build_dir, libvgama_name())) or {
-		return error('Failed to copy libvgama: ${err}')
+	src := os.join_path(runner_path, libvgama_name())
+	dest := os.join_path(build_dir, libvgama_name())
+	if !os.exists(dest) {
+		os.cp(src, dest) or { return error('Failed to copy libvgama: ${err}') }
 	}
 }
 
