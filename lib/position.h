@@ -23,3 +23,7 @@ static inline void gm_pos_reset(gmPos *p) {
 static inline double gm_pos_magniture(gmPos p) {
   return sqrt(p.x * p.x + p.y * p.y);
 }
+
+static inline double gm_pos_distance(gmPos a, gmPos b) {
+  return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+}

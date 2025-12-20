@@ -93,8 +93,8 @@ fn gapi_draw_text(x f64, y f64,
 	cr u8, cg u8, cb u8, ca u8) i32 {
 	gx, gy := c_redimension_coord(x, y)
 	size := i32(c_redimension_one(height))
-	vtext := txt.vstring()
-	vfont := font.vstring()
+	vtext := txt.vstring().clone()
+	vfont := font.vstring().clone()
 	italic := (style & text_style_italic__) != 0
 	bold := (style & text_style_bold__) != 0
 	mono := (style & text_style_mono__) != 0

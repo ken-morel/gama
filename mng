@@ -1,61 +1,76 @@
-#!/usr/bin/fish
-#
+#!/usr/bin/env -S v -raw-vsh-tmp-prefix tmp run
 
-function cli-build -a target
-    mkdir -p bin
-    switch "$target"
-        case windows
-            v -os windows cli.v -o bin/gama $argv[2..]
-        case linux
-            v -os linux cli.v -o bin/gama $argv[2..]
-        case ""
-            echo "Building gama cli for host system"
-            v cli.v -o bin/gama $argv[2..]
-        case "*"
-            echo "Invalid build target system"
-    end
-end
+import os
+import term
 
-function cli -a cmd
-    switch "$cmd"
-        case build
-            cli-build $argv[2..]
-        case "*"
-            echo "Invalid command for cli"
-    end
-end
+fn copy_html_docs() ! {
+	html_source_dir := 'docs/html'
+	static_dest_dir := 'site/static/reference'
 
-function vgama -a name
-    switch "$name"
-        case windows
-            echo "Building vgama for windows"
-            v runners/native -os windows -cc clang -shared -enable-globals -o ./runners/native/libvgama
-        case "*"
-            echo "Building vgama for host"
-            v runners/native -cc clang -shared -enable-globals -o ./runners/native/libvgama
-    end
-end
+	println('Copying HTML docs from ${html_source_dir} to ${static_dest_dir}')
 
-function package -a target
-    switch "$target"
-        case nsis
-            vgama windows; and cli-build windows; and cd nsis; and makensis ./setup.nsi
-        case "*"
-            echo "No package target specified, use nsis"
-    end
-end
+	// Remove existing static reference directory if it exists
+	if os.exists(static_dest_dir) {
+		os.rmdir_all(static_dest_dir) or {} // Don't fail if directory doesn't exist
+	}
 
-function mng -a cmd
-    switch "$cmd"
-        case cli
-            cli $argv[2..]
-        case vgama
-            vgama $argv[2..]
-        case package
-            package $argv[2..]
-        case "*"
-            echo "No or invalid command specified"
-    end
-end
+	// Copy HTML documentation to static directory
+	os.mkdir_all(static_dest_dir)!
 
-mng $argv[1..]
+	// Copy all files from HTML directory to static directory
+	files := os.glob('${html_source_dir}/**') or { []string{} }
+	for file in files {
+		if os.is_file(file) {
+			// Extract relative path by slicing the string after html_source_dir
+			rel_start := html_source_dir.len + 1
+			if file.len > rel_start {
+				relative_path := file[rel_start..]
+				if relative_path.len > 0 { // Make sure it's not empty
+					dest_file := os.join_path(static_dest_dir, relative_path)
+
+					// Create parent directory if needed
+					parent_dir := os.dir(dest_file)
+					os.mkdir_all(parent_dir)!
+
+					println(' - Copying ${relative_path}')
+					os.cp(file, dest_file)!
+				}
+			}
+		}
+	}
+
+	println(term.ok_message('HTML documentation copied to static/reference!'))
+}
+
+// Get the command from arguments
+mut cmd := 'help'
+if os.args.len > 1 {
+	cmd = os.args[1]
+}
+
+if cmd == 'docs' {
+	// Generate documentation from source
+	println(term.ok_message('Generating documentation...'))
+
+	// Run doxygen to generate HTML and XML
+	result := os.execute('doxygen Doxyfile')
+	if result.exit_code != 0 {
+		println(term.fail_message('Doxygen failed to run: ${result.output}'))
+		return
+	}
+
+	println(term.ok_message('Documentation generated successfully!'))
+	println(term.ok_message('Moving HTML documentation to static directory...'))
+
+	copy_html_docs() or { println(term.fail_message('Error copying HTML docs: ${err}')) }
+
+	println(term.ok_message('Documentation integrated into Svelte site!'))
+} else if cmd == 'help' {
+	println('Gama Documentation Generator')
+	println('Usage: mng build|docs')
+	println('  build/docs - Generate Doxygen documentation and integrate into Svelte site')
+	println('  help       - Show this help message')
+} else {
+	println(term.fail_message('Unknown command: ${cmd}'))
+	println('Run "mng help" for available commands')
+}
