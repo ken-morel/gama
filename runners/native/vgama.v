@@ -1,8 +1,10 @@
 module vgama
 
 import gg
-import time
 import term
+
+// #flag -D_SGL_DEFAULT_MAX_VERTICES=4194304
+// #flag -D_SGL_DEFAULT_MAX_COMMANDS=65536
 
 type GapiTask = fn ()
 
@@ -56,9 +58,6 @@ fn frame(mut _ gg.Context) {
 				func()
 			}
 			_ := <-gapi_end_frame__ {
-				break
-			}
-			1 * time.second {
 				break
 			}
 		}

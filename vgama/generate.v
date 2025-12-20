@@ -12,9 +12,10 @@ pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTempla
 		println(term.warn_message('Could not copy template to directory: ${err}'))
 	}
 	os.mkdir_all(os.join_path(project_dir, 'assets', 'images')) or {}
-	os.cp(os.join_path(inst.assets, 'images', 'icon.png'), os.join_path(project_dir, 'assets',
-		'images', 'icon.png')) or {}
-	os.cp(os.join_path(inst.assets, 'images', 'icon.ico'), os.join_path(project_dir, 'assets',
+	os.cp(os.join_path(inst.assets, 'images', 'gama.png'), os.join_path(project_dir, 'assets',
+		'images', 'icon.png')) or {
+	}
+	os.cp(os.join_path(inst.assets, 'images', 'gama.ico'), os.join_path(project_dir, 'assets',
 		'images', 'icon.ico')) or {}
 
 	project := Project{
