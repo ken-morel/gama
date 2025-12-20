@@ -3,21 +3,43 @@
 import os
 import term
 
-fn move_docs_to_svelte() ! {
-	docs_dir := 'site/src/routes/docs/[...10]reference'
-	source_dir := 'docs/reference'
-	println('Copying docs from ${source_dir} to ${docs_dir}')
-	os.mkdir_all(docs_dir)!
-	if os.exists(source_dir) {
-		files := os.glob('${source_dir}/*.md') or { []string{} }
-		for file in files {
-			dest_file := os.join_path(docs_dir, os.base(file))
-			println(' - Copying ${os.base(file)}')
-			os.cp(file, dest_file) or { println(term.fail_message('Error copying ${file}')) }
-		}
-	} else {
-		println(term.fail_message('No documentation found in docs/reference'))
+fn copy_html_docs() ! {
+	html_source_dir := 'docs/html'
+	static_dest_dir := 'site/static/reference'
+
+	println('Copying HTML docs from ${html_source_dir} to ${static_dest_dir}')
+
+	// Remove existing static reference directory if it exists
+	if os.exists(static_dest_dir) {
+		os.rmdir_all(static_dest_dir) or {} // Don't fail if directory doesn't exist
 	}
+
+	// Copy HTML documentation to static directory
+	os.mkdir_all(static_dest_dir)!
+
+	// Copy all files from HTML directory to static directory
+	files := os.glob('${html_source_dir}/**') or { []string{} }
+	for file in files {
+		if os.is_file(file) {
+			// Extract relative path by slicing the string after html_source_dir
+			rel_start := html_source_dir.len + 1
+			if file.len > rel_start {
+				relative_path := file[rel_start..]
+				if relative_path.len > 0 { // Make sure it's not empty
+					dest_file := os.join_path(static_dest_dir, relative_path)
+
+					// Create parent directory if needed
+					parent_dir := os.dir(dest_file)
+					os.mkdir_all(parent_dir)!
+
+					println(' - Copying ${relative_path}')
+					os.cp(file, dest_file)!
+				}
+			}
+		}
+	}
+
+	println(term.ok_message('HTML documentation copied to static/reference!'))
 }
 
 // Get the command from arguments
@@ -27,10 +49,10 @@ if os.args.len > 1 {
 }
 
 if cmd == 'docs' {
-	// Alias for build docs
+	// Generate documentation from source
 	println(term.ok_message('Generating documentation...'))
 
-	// Run doxygen to generate markdown
+	// Run doxygen to generate HTML and XML
 	result := os.execute('doxygen Doxyfile')
 	if result.exit_code != 0 {
 		println(term.fail_message('Doxygen failed to run: ${result.output}'))
@@ -38,9 +60,9 @@ if cmd == 'docs' {
 	}
 
 	println(term.ok_message('Documentation generated successfully!'))
-	println(term.ok_message('Moving documentation to SvelteKit routes...'))
+	println(term.ok_message('Moving HTML documentation to static directory...'))
 
-	move_docs_to_svelte() or { println(term.fail_message('Error copying docs to svelte ${err}')) }
+	copy_html_docs() or { println(term.fail_message('Error copying HTML docs: ${err}')) }
 
 	println(term.ok_message('Documentation integrated into Svelte site!'))
 } else if cmd == 'help' {

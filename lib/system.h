@@ -8,26 +8,28 @@
  * @brief Structure representing a collision between two bodies.
  */
 typedef struct {
-  struct gm_system *sys;     /**< Pointer to the system where the collision occurred */
-  gmBody *bodies[2];         /**< Array containing the two colliding bodies */
-  double penetration;        /**< Depth of penetration between the bodies */
-  double since;              /**< Time since the collision began */
-  gmPos normals;             /**< Normal vector of the collision */
+  struct gm_system
+      *sys;           /**< Pointer to the system where the collision occurred */
+  gmBody *bodies[2];  /**< Array containing the two colliding bodies */
+  double penetration; /**< Depth of penetration between the bodies */
+  double since;       /**< Time since the collision began */
+  gmPos normals;      /**< Normal vector of the collision */
 } gmCollision;
 
 /**
- * @brief Structure representing a physics system containing bodies and collision information.
+ * @brief Structure representing a physics system containing bodies and
+ * collision information.
  */
 typedef struct gm_system {
-  int is_active;             /**< Whether the system is active */
-  gmBodies bodies;           /**< List of bodies in the system */
+  int is_active;   /**< Whether the system is active */
+  gmBodies bodies; /**< List of bodies in the system */
 
-  gmCollision **collisions;  /**< Array of collision information */
+  gmCollision **collisions; /**< Array of collision information */
 
-  gmPos velocity;            /**< Velocity applied to all bodies in the system */
-  gmPos acceleration;        /**< Acceleration applied to all bodies in the system */
+  gmPos velocity;     /**< Velocity applied to all bodies in the system */
+  gmPos acceleration; /**< Acceleration applied to all bodies in the system */
 
-  double damping;            /**< Damping factor applied to all bodies in the system */
+  double damping; /**< Damping factor applied to all bodies in the system */
 } gmSystem;
 
 /**
@@ -139,4 +141,13 @@ static inline void gm_system_pop(gmSystem *sys) {
  */
 static inline size_t gm_system_size(gmSystem *sys) {
   return gm_bodies_length(sys->bodies);
+}
+
+/**
+ * @brief Destroy the system and free memory.
+ * @param sys Pointer to the system to destroy.
+ */
+void gm_system_destroy(gmSystem *sys) {
+  if (sys->collisions != NULL)
+    free(sys->collisions);
 }

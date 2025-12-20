@@ -9,13 +9,14 @@ double _gm_t = 0;
 static inline double gm_dt() { return _gm_dt; }
 static inline double gm_t() { return _gm_t; }
 
-struct {
+struct _gmMouse {
   gmPos position;
   gmPos movement;
 
   int32_t pressed;
   int32_t down;
-} gm_mouse = {
+};
+struct _gmMouse gm_mouse = {
     .position =
         {
             .x = 0,
