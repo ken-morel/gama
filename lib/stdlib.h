@@ -2,7 +2,9 @@
 #include "gapi.h"
 #include <stddef.h>
 #ifndef MEMORY
+// default memory to 10MB
 #define MEMORY 10
+
 #endif
 #ifndef MEMORY_B
 #define MEMORY_B 0
@@ -11,6 +13,7 @@
 #ifndef MEMORY_SPOTS
 #define MEMORY_SPOTS (MEMORY_TOTAL / 100)
 #endif
+
 struct _memory_spot {
   size_t index; // Start index in memory pool
   size_t size;  // Size of this block (0 = free)

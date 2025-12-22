@@ -20,9 +20,9 @@
 #include "key.h"
 #include "physics.h"
 #include "sprite.h"
+#include "stdio.h"
 #include "system.h"
 #include "widgets.h"
-#include <stdio.h>
 
 /**
  * @brief Puts the window in fullscreen.
@@ -169,10 +169,13 @@ void gm_init(int width, int height, const char *title) {
  */
 void gm_sleep(int milliseconds);
 
+#ifdef __ZIG_CC__
+void gm_sleep(int m) {};
+#else
 #ifdef _WIN32
 #include <windows.h>
 void gm_sleep(int milliseconds) { Sleep(milliseconds); }
-#else
 #include <unistd.h>
 void gm_sleep(int milliseconds) { usleep(milliseconds * 1000); }
+#endif
 #endif

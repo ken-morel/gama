@@ -36,7 +36,7 @@ pub fn (p Project) build_web(inst Installation) ! {
 
 	output := os.join_path(build_dir, '${conf.name}.wasm')
 
-	res := os.execute('zig cc -target wasm32-wasi -g ${source_files.join(' ')} -I${include_path} -lc -Wl,--no-entry -o ${output} -D__ZIG_CC__')
+	res := os.execute('zig cc -target wasm32-freestanding -g ${source_files.join(' ')} -I${include_path} -Wl,--no-entry -o ${output} -D__ZIG_CC__')
 
 	if res.exit_code != 0 {
 		return error('Failed to build app: ${res.output}')
