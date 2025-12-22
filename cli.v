@@ -116,7 +116,7 @@ fn main() {
 			},
 			cli.Command{
 				name:        'build'
-				usage:       'build [-r] [-cc name]'
+				usage:       'build [mode] [-r] [-cc name]'
 				description: 'Builds the current gama project'
 				flags:       [
 					cli.Flag{
@@ -153,6 +153,38 @@ fn main() {
 					}
 					return
 				}
+				commands:    [
+					cli.Command{
+						name:        'web'
+						usage:       'build web [-r]'
+						description: 'Builds the project for the web'
+						flags:       [
+							cli.Flag{
+								name:        'run'
+								abbrev:      'r'
+								description: 'Run the project after building'
+								required:    false
+							},
+						]
+						execute:     fn (cmd cli.Command) ! {
+							run_after_build := cmd.flags.get_bool('run') or { false }
+							println('BUilding project for the web')
+
+							project := get_project()!
+							println(term.ok_message('Building project at: ${project.path}'))
+							installation := get_installation()!
+
+							project.build_web(installation) or {
+								println(term.fail_message('${err}'))
+							}
+							if run_after_build {
+								project.run_web_build(installation) or {
+									println(term.fail_message('${err}'))
+								}
+							}
+						}
+					},
+				]
 			},
 			cli.Command{
 				name:        'run'

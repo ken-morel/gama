@@ -32,62 +32,168 @@ struct _gmMouse gm_mouse = {
 };
 
 // --- Windowing ---
-extern void gapi_set_title(const char *title);
-extern void gapi_resize(const int32_t width, const int32_t height);
-extern void gapi_set_bg_color(const uint8_t r, const uint8_t g, const uint8_t b,
-                              const uint8_t a);
-extern void gapi_fullscreen(const int32_t fullscreen);
+
+// #ifdef __ZIG_CC__
+// __attribute__((import_module("env"), import_name("print_test")));
+// #endif
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_set_title")))
+#endif
+    gapi_set_title(const char *title);
+
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_resize")))
+#endif
+    gapi_resize(const int32_t width, const int32_t height);
+
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_set_bg_color")))
+#endif
+    gapi_set_bg_color(const uint8_t r, const uint8_t g, const uint8_t b,
+                      const uint8_t a);
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_fullscreen")))
+#endif
+    gapi_fullscreen(const int32_t fullscreen);
 
 // --- Utils ---
-extern void gapi_log(const char *message);
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_log")))
+#endif
+    gapi_log(const char *message);
 
 // --- Game Loop ---
-extern int32_t gapi_init(const int32_t width, const int32_t height,
-                         const char *title);
-extern int32_t gapi_yield(double *dt); // Changed to int32_t return type
-extern void gapi_quit();
-extern int32_t gapi_runs();
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_init")))
+#endif
+    gapi_init(const int32_t width, const int32_t height, const char *title);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_yield")))
+#endif
+    gapi_yield(double *dt); // Changed to int32_t return type
+
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_quit")))
+#endif
+    gapi_quit();
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_runs")))
+#endif
+    gapi_runs();
 
 // --- Drawing Primitives ---
-extern int32_t gapi_draw_line(double x1, double y1, double x2, double y2,
-                              double thickness, uint8_t r, uint8_t g, uint8_t b,
-                              uint8_t a);
-extern int32_t gapi_draw_rect(double x, double y, double w, double h,
-                              uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca);
-extern int32_t gapi_draw_rounded_rect(double x, double y, double w, double h,
-                                      double r, uint8_t cr, uint8_t cg,
-                                      uint8_t cb, uint8_t ca);
-extern int32_t gapi_draw_circle(double center_x, double center_y, double radius,
-                                uint8_t red, uint8_t green, uint8_t blue,
-                                uint8_t alpha);
-extern int32_t gapi_draw_ellipse(double x, double y, double w, double h,
-                                 uint8_t cr, uint8_t cg, uint8_t cb,
-                                 uint8_t ca);
-extern int32_t gapi_draw_triangle(double x1, double y1, double x2, double y2,
-                                  double x3, double y3, uint8_t cr, uint8_t cg,
-                                  uint8_t cb, uint8_t ca);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_draw_line")))
+#endif
+    gapi_draw_line(double x1, double y1, double x2, double y2, double thickness,
+                   uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_draw_rect")))
+#endif
+    gapi_draw_rect(double x, double y, double w, double h, uint8_t cr,
+                   uint8_t cg, uint8_t cb, uint8_t ca);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name("gapi_draw_rounded_rect")))
+#endif
+    gapi_draw_rounded_rect(double x, double y, double w, double h, double r,
+                           uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_draw_circle")))
+#endif
+    gapi_draw_circle(double center_x, double center_y, double radius,
+                     uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_draw_ellipse")))
+#endif
+    gapi_draw_ellipse(double x, double y, double w, double h, uint8_t cr,
+                      uint8_t cg, uint8_t cb, uint8_t ca);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_draw_triangle")))
+#endif
+    gapi_draw_triangle(double x1, double y1, double x2, double y2, double x3,
+                       double y3, uint8_t cr, uint8_t cg, uint8_t cb,
+                       uint8_t ca);
 
 // --- Image Functions ---
-extern uint32_t gapi_create_image(const char *path, uint32_t *width,
-                                  uint32_t *height);
-extern int32_t gapi_draw_image(uint32_t handle, double x, double y,
-                               double width, double height);
-extern int32_t gapi_draw_image_part(uint32_t handle, uint32_t slice_x,
-                                    uint32_t slice_y, uint32_t slice_width,
-                                    uint32_t slice_height, double x, double y,
-                                    double width, double height);
+extern uint32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_create_image")))
+#endif
+    gapi_create_image(const char *path, uint32_t *width, uint32_t *height);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_draw_image")))
+#endif
+    gapi_draw_image(uint32_t handle, double x, double y, double width,
+                    double height);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_draw_image_part")))
+#endif
+    gapi_draw_image_part(uint32_t handle, uint32_t slice_x, uint32_t slice_y,
+                         uint32_t slice_width, uint32_t slice_height, double x,
+                         double y, double width, double height);
 
 // --- Text Functions ---
-extern int32_t gapi_draw_text(double x, double y, double height,
-                              const char *txt, const char *font, uint8_t style,
-                              uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_draw_text")))
+#endif
+    gapi_draw_text(double x, double y, double height, const char *txt,
+                   const char *font, uint8_t style, uint8_t cr, uint8_t cg,
+                   uint8_t cb, uint8_t ca);
 
 // --- Event Functions ---
-extern int32_t gapi_key_pressed(char t, char k);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_key_pressed")))
+#endif
+    gapi_key_pressed(char t, char k);
 
-extern void gapi_wait_queue();
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_wait_queue")))
+#endif
+    gapi_wait_queue();
 
-extern void gapi_get_mouse_move(double *x, double *y);
-extern int32_t gapi_mouse_down();
-extern int32_t gapi_mouse_pressed();
-extern int32_t gapi_mouse_get(double *x, double *y);
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_get_mouse_move")))
+#endif
+    gapi_get_mouse_move(double *x, double *y);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_mouse_down")))
+#endif
+    gapi_mouse_down();
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_mouse_pressed")))
+#endif
+    gapi_mouse_pressed();
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("env"), import_name(" gapi_mouse_get")))
+#endif
+    gapi_mouse_get(double *x, double *y);

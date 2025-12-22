@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdlib.h>
+#include "stdlib.h"
 
 /**
  * @brief Type definition for color values in RGBA format.

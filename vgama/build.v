@@ -1,5 +1,6 @@
 module vgama
 
+import term
 import os
 
 pub fn (p Project) copy_build_native_artifacts(inst Installation) ! {

@@ -156,7 +156,6 @@ void gm_init(int width, int height, const char *title) {
              "Error starting gama, initialization exited with non zero code %d",
              code);
     gapi_log(msg);
-    printf("%s", msg);
   }
   gm_background(GM_BLACK);
   gm_logo(0, 0, 2);
