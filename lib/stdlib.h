@@ -1,106 +1,150 @@
 #pragma once
-
+#include "gapi.h"
 #include <stddef.h>
-static inline int abs(int a) { return a > 0 ? a : -a; }
-static inline double fabs(double a) { return a > 0 ? a : -a; }
-
 #ifndef MEMORY
 #define MEMORY 10
 #endif
-
 #ifndef MEMORY_B
 #define MEMORY_B 0
 #endif
-
 #define MEMORY_TOTAL ((MEMORY << 20) + MEMORY_B)
-
 #ifndef MEMORY_SPOTS
-#define MEMORY_SPOTS (MEMORY_TOTAL / 10)
+#define MEMORY_SPOTS (MEMORY_TOTAL / 100)
 #endif
-
 struct _memory_spot {
-  size_t index; // array index, could be pointer
-  size_t size;  // size of memory spot, it's zero for unused memory
+  size_t index; // Start index in memory pool
+  size_t size;  // Size of this block (0 = free)
 };
-
-char _memory[MEMORY_TOTAL];
-
-struct _memory_spot _memory_spots[MEMORY_SPOTS];
-size_t _memory_spot_size = 0; // the next memory spot
-
-void _remove_memory_spot(size_t index) {
+// Main memory pool and bookkeeping
+static char _memory[MEMORY_TOTAL];
+static struct _memory_spot _memory_spots[MEMORY_SPOTS];
+static size_t _memory_spot_size = 0;
+static void _remove_memory_spot(size_t index) {
   for (size_t i = index; i < _memory_spot_size - 1; i++) {
     _memory_spots[i] = _memory_spots[i + 1];
   }
-  _memory_spot_size--;
-}
-
-struct _memory_spot _add_memory_spot(size_t index, size_t size) {
-  if (index == 0 && _memory_spot_size > 0) {
-    size_t last_memory = _memory_spots[_memory_spot_size - 1].index +
-                         _memory_spots[_memory_spot_size - 1].size;
-    return _add_memory_spot(last_memory, size);
+  if (_memory_spot_size > 0) {
+    _memory_spot_size--;
   }
-  size_t mem_index = 0;
-  size_t found = 0;
-  for (size_t i = 0; i < MEMORY_SPOTS; i++) {
-    if (_memory_spots[i].index >
-        index) { // memory which goes after it has to be moved forward
-      for (size_t j = _memory_spot_size; j > i; j--)
+}
+static struct _memory_spot _add_memory_spot(size_t index, size_t size) {
+  if (_memory_spot_size >= MEMORY_SPOTS) {
+    gapi_log("OOM: cannot allocate more memory");
+    gapi_quit();
+    return (struct _memory_spot){0, 0}; // Out of spots
+  }
+  // Find insertion point
+  size_t insert_pos = _memory_spot_size;
+  for (size_t i = 0; i < _memory_spot_size; i++) {
+    if (_memory_spots[i].index > index) {
+      // Shift elements to make room
+      for (size_t j = _memory_spot_size; j > i; j--) {
         _memory_spots[j] = _memory_spots[j - 1];
-      // now spot i is free
-      mem_index = i;
-      found = 1;
+      }
+      insert_pos = i;
       break;
     }
   }
-  if (!found) {
-    mem_index = _memory_spot_size;
+  _memory_spots[insert_pos].index = index;
+  _memory_spots[insert_pos].size = size;
+  if (insert_pos == _memory_spot_size) {
     _memory_spot_size++;
   }
-  _memory_spots[mem_index].index = index;
-  _memory_spots[mem_index].size = size;
-  return _memory_spots[mem_index];
+  return _memory_spots[insert_pos];
 }
-
 void *malloc(size_t size) {
   if (size == 0)
     return NULL;
-  for (size_t i = 0; i < _memory_spot_size - 1;
-       i++) {                         // the -1 is safety for the i+1
-    if (_memory_spots[i].size == 0) { // free memory, take and split the rest
-      size_t free_size = _memory_spots[i + 1].index - _memory_spots[i].index;
-      if (free_size >= size) {
-        _memory_spots[i].size = size;
-        if (free_size > size)
-          _add_memory_spot(i + size, 0); // free remaining space
-        return (void *)_memory_spots[i].index;
-      }
-    }
+  if (_memory_spot_size == 0) {
+    // Initialize first free block
+    _memory_spots[0].index = 0;
+    _memory_spots[0].size = 0; // 0 means free
+    _memory_spot_size = 1;
   }
-  struct _memory_spot spot = _add_memory_spot(0, size);
-  return (void *)spot.index;
-}
-
-void _flatten_empty_memory_spots() {
-  size_t done;
-  do {
-    done = 0;
-    for (size_t i = 0; i < _memory_spot_size - 2; i++) {
-      if (_memory_spots[i].size == 0 && _memory_spots[i + 1].size == 0) {
-        _remove_memory_spot(i + 1);
-        done++;
-      }
-    }
-  } while (done > 0);
-}
-
-void free(void *ptr) {
-  size_t index = (size_t)ptr;
+  // Look for a free block that's large enough
   for (size_t i = 0; i < _memory_spot_size; i++) {
-    if (_memory_spots[i].index == index) {
-      _memory_spots[i].size = 0;
+    if (_memory_spots[i].size == 0) { // Free block
+      size_t start = _memory_spots[i].index;
+      size_t end = (i + 1 < _memory_spot_size) ? _memory_spots[i + 1].index
+                                               : MEMORY_TOTAL;
+      size_t available_size = end - start;
+      if (available_size >= size) {
+        _memory_spots[i].size = size; // Mark as used
+        // If there's leftover space, create a new free block
+        if (available_size > size) {
+          _add_memory_spot(start + size, 0); // New free block
+        }
+        return &_memory[start];
+      }
     }
   }
-  _flatten_empty_memory_spots();
+  // No suitable block found, create one at the end if possible
+  if (_memory_spot_size > 0) {
+    struct _memory_spot *last = &_memory_spots[_memory_spot_size - 1];
+    size_t end_of_last = last->index + last->size;
+    if (end_of_last + size < MEMORY_TOTAL) {
+      struct _memory_spot new_spot = _add_memory_spot(end_of_last, size);
+      return &_memory[new_spot.index];
+    }
+  }
+  return NULL; // Out of memory
+}
+void free(void *ptr) {
+  if (!ptr)
+    return;
+  char *char_ptr = (char *)ptr;
+  size_t index = char_ptr - _memory;
+  if (index >= MEMORY_TOTAL)
+    return; // Invalid pointer
+  // Find the block this pointer belongs to
+  for (size_t i = 0; i < _memory_spot_size; i++) {
+    if (_memory_spots[i].index == index && _memory_spots[i].size > 0) {
+      _memory_spots[i].size = 0; // Mark as free
+      return;
+    }
+  }
+}
+void *calloc(size_t count, size_t size) {
+  size_t total_size = count * size;
+  void *ptr = malloc(total_size);
+  if (ptr) {
+    char *p = (char *)ptr;
+    for (size_t i = 0; i < total_size; i++) {
+      p[i] = 0; // zero all block contents
+    }
+  }
+  return ptr;
+}
+void *realloc(void *ptr, size_t size) {
+  if (!ptr)
+    return malloc(size);
+  if (size == 0) {
+    free(ptr);
+    return NULL;
+  }
+  // Find current block size
+  char *char_ptr = (char *)ptr;
+  size_t index = char_ptr - _memory;
+  for (size_t i = 0; i < _memory_spot_size; i++) {
+    if (_memory_spots[i].index == index && _memory_spots[i].size > 0) {
+      if (_memory_spots[i].size >= size) {
+        // Current block is large enough
+        return ptr;
+      } else {
+        // Need to allocate new block and copy
+        void *new_ptr = malloc(size);
+        if (new_ptr) {
+          // Copy old data
+          char *src = (char *)ptr;
+          char *dst = (char *)new_ptr;
+          for (size_t j = 0; j < _memory_spots[i].size; j++) {
+            dst[j] = src[j];
+          }
+          free(ptr);
+        }
+        return new_ptr;
+      }
+    }
+  }
+  return NULL; // Invalid pointer
 }
