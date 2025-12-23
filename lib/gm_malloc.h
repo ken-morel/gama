@@ -14,6 +14,8 @@
 #define MEMORY_SPOTS (MEMORY_TOTAL / 100)
 #endif
 
+#define _MALLOC_H 1
+
 struct _memory_spot {
   size_t index; // Start index in memory pool
   size_t size;  // Size of this block (0 = free)
