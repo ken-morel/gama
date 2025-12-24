@@ -34,15 +34,16 @@ static void _remove_memory_spot(size_t index) {
 }
 static struct _memory_spot _add_memory_spot(size_t index, size_t size) {
   if (_memory_spot_size >= MEMORY_SPOTS) {
-    gapi_log("OOM: cannot allocate more memory");
+    gapi_log("OOM: sorry kid, memory's finish, no _spots left, try "
+             "https://gama.rbs.cm/faq#oom");
     gapi_quit();
-    return (struct _memory_spot){0, 0}; // Out of spots
+    return (struct _memory_spot){0, 0};
   }
-  // Find insertion point
+  // Find new spot
   size_t insert_pos = _memory_spot_size;
   for (size_t i = 0; i < _memory_spot_size; i++) {
     if (_memory_spots[i].index > index) {
-      // Shift elements to make room
+      // move others right to keep order and ease searching
       for (size_t j = _memory_spot_size; j > i; j--) {
         _memory_spots[j] = _memory_spots[j - 1];
       }
@@ -50,23 +51,24 @@ static struct _memory_spot _add_memory_spot(size_t index, size_t size) {
       break;
     }
   }
+  // spot found, use it
   _memory_spots[insert_pos].index = index;
   _memory_spots[insert_pos].size = size;
-  if (insert_pos == _memory_spot_size) {
+  if (insert_pos == _memory_spot_size) // last spot => new spot
     _memory_spot_size++;
-  }
+
   return _memory_spots[insert_pos];
 }
 void *malloc(size_t size) {
   if (size == 0)
     return NULL;
   if (_memory_spot_size == 0) {
-    // Initialize first free block
+    // same as add_memory_spot will do
     _memory_spots[0].index = 0;
-    _memory_spots[0].size = 0; // 0 means free
+    _memory_spots[0].size = 0; // 0, free for now
     _memory_spot_size = 1;
   }
-  // Look for a free block that's large enough
+  // Look for a free spot that's large enough
   for (size_t i = 0; i < _memory_spot_size; i++) {
     if (_memory_spots[i].size == 0) { // Free block
       size_t start = _memory_spots[i].index;
@@ -75,7 +77,7 @@ void *malloc(size_t size) {
       size_t available_size = end - start;
       if (available_size >= size) {
         _memory_spots[i].size = size; // Mark as used
-        // If there's leftover space, create a new free block
+        // If there's leftover space, split it
         if (available_size > size) {
           _add_memory_spot(start + size, 0); // New free block
         }
@@ -83,7 +85,7 @@ void *malloc(size_t size) {
       }
     }
   }
-  // No suitable block found, create one at the end if possible
+  // No suitable block found, create one
   if (_memory_spot_size > 0) {
     struct _memory_spot *last = &_memory_spots[_memory_spot_size - 1];
     size_t end_of_last = last->index + last->size;

@@ -24,6 +24,32 @@
 #include "system.h"
 #include "widgets.h"
 
+#ifdef GM_SETUP
+__attribute__((export_name("gama_mode"))) int gama_mode() { return 2; }
+
+int setup();
+int loop();
+
+__attribute__((export_name("gama_setup"))) int gama_setup() {
+  setup();
+  // ama
+}
+__attribute__((export_name("gama_loop"))) int gama_loop() {
+  if (gapi_yield(&_gm_dt))
+    return loop();
+  else
+    return 0;
+}
+
+#else
+int main(void);
+
+__attribute__((export_name("gama_mode"))) int gama_mode() { return 1; }
+
+__attribute__((export_name("gama_run"))) int gama_run() { return main(); }
+
+#endif
+
 /**
  * @brief Puts the window in fullscreen.
  *
@@ -85,6 +111,7 @@ void _gm_fps() {
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }
 }
+#ifndef GM_SETUP
 
 /**
  * @brief Processes events, updates input state, and prepares for the next
@@ -113,6 +140,7 @@ static inline int gm_yield() {
   } else
     return 0;
 }
+#endif
 
 /**
  * @brief Closes the window and terminates the Gama engine.
@@ -158,8 +186,6 @@ void gm_init(int width, int height, const char *title) {
     gapi_log(msg);
   }
   gm_background(GM_BLACK);
-  gm_logo(0, 0, 2);
-  gm_yield();
 }
 
 /**
