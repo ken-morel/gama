@@ -30,7 +30,7 @@ pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTempla
 	project.add_editor_config(conf, inst) or {
 		println(term.warn_message('Could not create editor configuration: ${err}'))
 	}
-	project.copy_build_native_artifacts(inst) or {
+	project.copy_build_native_artifacts(inst, true) or {
 		println(term.warn_message('Error copying ubild artifacts: ${err}'))
 	}
 	return project

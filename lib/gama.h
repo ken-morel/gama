@@ -27,29 +27,53 @@
 int _gm_loop();
 
 #ifdef GM_SETUP
-__attribute__((export_name("gama_mode"))) int gama_mode() { return 2; }
+__attribute__((export_name("gama_mode"))) int32_t gama_mode() { return 2; }
 
 int setup();
 int loop();
 
-__attribute__((export_name("gama_setup"))) int gama_setup() {
+__attribute__((export_name("gama_setup"))) int32_t gama_setup() {
   return setup();
   // ama
 }
-__attribute__((export_name("gama_loop"))) int gama_loop() {
+__attribute__((export_name("gama_loop"))) int32_t gama_loop() {
   if (_gm_loop()) {
-
     return loop();
   } else
     return 0;
 }
 
+#ifdef GM_NATIVE
+
+#include <stdio.h>
+
+int main(void) {
+  printf("runnning main");
+  // int code = setup();
+  // if (code != 0)
+  //   return code;
+  // while (_gm_loop()) {
+  //   code = loop();
+  //   if (code != 0)
+  //     return code;
+  // }
+  return 0;
+}
+
+#endif
+
 #else
 int main(void);
 
-__attribute__((export_name("gama_mode"))) int gama_mode() { return 1; }
+__attribute__((export_name("gama_mode"))) int32_t gama_mode() { return 1; }
 
-__attribute__((export_name("gama_run"))) int gama_run() { return main(); }
+__attribute__((export_name("gama_run"))) int32_t gama_run() { return main(); }
+
+#ifdef GM_WEB
+
+#warning "To build for the web, your app must be in GM_SETUP mode"
+
+#endif
 
 #endif
 
@@ -136,12 +160,16 @@ static inline int gm_yield() { return _gm_loop(); }
 #endif
 
 int _gm_loop() {
-  int ret = gapi_yield(&_gm_dt);
+  const int ret = gapi_yield(&_gm_dt);
   _gm_t += _gm_dt;
+  gm_mouse.lastPosition = gm_mouse.position;
   gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
-  gapi_get_mouse_move(&gm_mouse.movement.x, &gm_mouse.movement.y);
+  gm_mouse.movement.x = gm_mouse.position.x - gm_mouse.lastPosition.x;
+  gm_mouse.movement.y = gm_mouse.position.y - gm_mouse.lastPosition.y;
   gm_mouse.down = gapi_mouse_down();
-  gm_mouse.pressed = gapi_mouse_pressed();
+  static int last_mouse_down = 0;
+  gm_mouse.clicked = !last_mouse_down && gm_mouse.down;
+  last_mouse_down = gm_mouse.down;
   _gm_fps();
   return ret;
 }

@@ -1,6 +1,7 @@
 # Gama
 
 ![Gama logo](./gama.svg)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G4XYJU6)
 
 **Website:** https://gama.rbs.cm
 **Documentation:** https://gama.rbs.cm/docs

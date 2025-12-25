@@ -132,16 +132,23 @@ fn main() {
 						description: 'Use an alternative compiler'
 						required:    false
 					},
+					cli.Flag{
+						name:        'reset'
+						abbrev:      'reset'
+						description: 'Override vgama'
+						required:    false
+					},
 				]
 				execute:     fn (cmd cli.Command) ! {
 					run_after_build := cmd.flags.get_bool('run') or { false }
+					reset := cmd.flags.get_bool('reset') or { false }
 					force_cc := cmd.flags.get_string('cc') or { '' }
 					project := get_project()!
 
 					println(term.ok_message('Building project at: ${project.path}'))
 					installation := get_installation()!
 
-					project.build_native(installation, force_cc) or {
+					project.build_native(installation, force_cc, reset) or {
 						println(term.fail_message('Build failed: ${err}'))
 						return
 					}
@@ -234,7 +241,7 @@ fn main() {
 					}
 
 					loop_dev: for {
-						exe := project.build_native(inst, force_cc) or {
+						exe := project.build_native(inst, force_cc, false) or {
 							println(term.fail_message('Error building: ${err}'))
 							time.sleep(time.second * 2)
 							continue

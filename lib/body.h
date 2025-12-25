@@ -2,33 +2,38 @@
 
 #define gnothing NULL
 
-#include "gapi.h"
+#include "mouse.h"
+#include "position.h"
 #include <stdint.h>
 
 /**
  * @brief Enum to define the type of collider for a physics body.
  */
 typedef enum {
-    GM_COLLIDER_CIRCLE, /**< Circular collider */
-    GM_COLLIDER_RECT    /**< Rectangular collider */
+  GM_COLLIDER_CIRCLE, /**< Circular collider */
+  GM_COLLIDER_RECT    /**< Rectangular collider */
 } gmColliderType;
 
 /**
- * @brief Structure representing a physics body with properties for collision and movement.
+ * @brief Structure representing a physics body with properties for collision
+ * and movement.
  */
 typedef struct {
-  uint8_t is_active;      /**< Whether the body is active in the physics simulation */
-  uint8_t is_static;      /**< Whether the body is static (immovable) */
+  uint8_t
+      is_active; /**< Whether the body is active in the physics simulation */
+  uint8_t is_static; /**< Whether the body is static (immovable) */
 
   gmColliderType collider_type; /**< Type of collider (rectangle or circle) */
-  gmPos position;         /**< Current position of the body */
-  gmPos velocity;         /**< Current velocity of the body */
-  gmPos acceleration;     /**< Current acceleration of the body */
+  gmPos position;               /**< Current position of the body */
+  gmPos velocity;               /**< Current velocity of the body */
+  gmPos acceleration;           /**< Current acceleration of the body */
 
-  double width, height, radius; /**< Dimensions of the body (width/height for rectangles, radius for circles) */
-  double mass;            /**< Mass of the body */
-  double restitution;     /**< Bounciness of the body (0.0 = no bounce, 1.0+ = bounce) */
-  double friction;        /**< Friction coefficient (not currently used in the code) */
+  double width, height, radius; /**< Dimensions of the body (width/height for
+                                   rectangles, radius for circles) */
+  double mass;                  /**< Mass of the body */
+  double restitution; /**< Bounciness of the body (0.0 = no bounce, 1.0+ =
+                         bounce) */
+  double friction; /**< Friction coefficient (not currently used in the code) */
 } gmBody;
 
 /**
@@ -237,17 +242,19 @@ static inline int gm_hovered(gmBody *body) {
  * @return 1 if the body is being clicked, 0 otherwise.
  */
 static inline int gm_clicked(gmBody *body) {
-  return gm_mouse.pressed && gm_hovered(body);
+  return gm_mouse.clicked && gm_hovered(body);
 }
 
 /**
- * @brief Constrains a body within specified boundaries by clipping its position.
+ * @brief Constrains a body within specified boundaries by clipping its
+ * position.
  * @param body Pointer to the body to constrain.
  * @param bx The beginning x-coordinate of the boundary (0 to ignore).
  * @param ex The ending x-coordinate of the boundary (0 to ignore).
  * @param by The beginning y-coordinate of the boundary (0 to ignore).
  * @param ey The ending y-coordinate of the boundary (0 to ignore).
- * @return A bitmask indicating which boundaries were exceeded (0b1000=left, 0b0100=right, 0b0010=bottom, 0b0001=top).
+ * @return A bitmask indicating which boundaries were exceeded (0b1000=left,
+ * 0b0100=right, 0b0010=bottom, 0b0001=top).
  */
 static inline uint8_t gm_body_bound_clip(gmBody *body, double bx, double ex,
                                          double by, double ey) {

@@ -3,33 +3,13 @@
 
 #include "position.h"
 
+#include "mouse.h"
+
 double _gm_dt = 0;
 double _gm_t = 0;
 
 static inline double gm_dt() { return _gm_dt; }
 static inline double gm_t() { return _gm_t; }
-
-struct _gmMouse {
-  gmPos position;
-  gmPos movement;
-
-  int32_t pressed;
-  int32_t down;
-};
-struct _gmMouse gm_mouse = {
-    .position =
-        {
-            .x = 0,
-            .y = 0,
-        },
-    .movement =
-        {
-            .x = 0,
-            .y = 0,
-        },
-    .pressed = 0,
-    .down = 0,
-};
 
 extern void
 #ifdef __ZIG_CC__
@@ -136,6 +116,7 @@ extern uint32_t
     __attribute__((import_module("gapi"), import_name("create_image")))
 #endif
     gapi_create_image(const char *path, uint32_t *width, uint32_t *height);
+
 extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("draw_image")))
@@ -162,9 +143,9 @@ extern int32_t
 // --- Event Functions ---
 extern int32_t
 #ifdef __ZIG_CC__
-    __attribute__((import_module("gapi"), import_name("key_pressed")))
+    __attribute__((import_module("gapi"), import_name("key_down")))
 #endif
-    gapi_key_pressed(char t, char k);
+    gapi_key_down(char t, char k);
 
 extern void
 #ifdef __ZIG_CC__
@@ -172,21 +153,12 @@ extern void
 #endif
     gapi_wait_queue();
 
-extern void
-#ifdef __ZIG_CC__
-    __attribute__((import_module("gapi"), import_name("get_mouse_move")))
-#endif
-    gapi_get_mouse_move(double *x, double *y);
 extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("mouse_down")))
 #endif
     gapi_mouse_down();
-extern int32_t
-#ifdef __ZIG_CC__
-    __attribute__((import_module("gapi"), import_name("mouse_pressed")))
-#endif
-    gapi_mouse_pressed();
+
 extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("mouse_get")))

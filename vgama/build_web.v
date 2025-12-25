@@ -24,7 +24,9 @@ pub fn (p Project) build_web(inst Installation, reset bool) ! {
 	build_dir := p.build_path('web')
 	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
 	p.copy_build_web_artifacts(inst, reset)!
+	inst.copy_gama(os.join_path(p.path, 'include'), false) or {}
 	source_files := p.get_src_c_files()!
+
 	if source_files.len == 0 {
 		return error('No c source files in src directory')
 	}
@@ -36,7 +38,7 @@ pub fn (p Project) build_web(inst Installation, reset bool) ! {
 
 	output := os.join_path(build_dir, '${conf.name}.wasm')
 
-	res := os.execute('zig cc -target wasm32-wasi -g ${source_files.join(' ')} -I${include_path} -lc -lm -Wl,--export-all-symbols -Wl,--no-entry -o ${output} -D__ZIG_CC__')
+	res := os.execute('zig cc -target wasm32-wasi -g -mexec-model=reactor ${source_files.join(' ')} -I${include_path} -lc -lm -Wl,--export-all-symbols -Wl,--no-entry -o ${output} -DGM_WEB -D__ZIG_CC__')
 
 	if res.exit_code != 0 {
 		return error('Failed to build app: ${res.output}')

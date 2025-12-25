@@ -64,6 +64,13 @@ export class GamaInstance {
         key: getKey(e.key),
       });
     });
+    canvas.addEventListener('touchmove', () => {
+      this.worker.postMessage({
+        type: 'event/mousemove',
+        movement: [],
+        position: []
+      });
+    });
   }
   async setup(wasmPath) {
     this.worker = new Worker(workerUrl, { type: 'module' });
@@ -386,14 +393,16 @@ const workerfn = () => {
     init: { width: 500, height: 500, title: "gama app" },
     last_t: Date.now(),
     mouse: {
-      x: 0, y: 0, mx: 0, my: 0,
+      x: 0, y: 0,
       down: false,
-      pressed: false,
     },
     keyboard: {
       down: [],
     },
   };
+  try {
+    window.p = p;
+  } catch (e) { } //DEBUG: remove this
 
   // Create a proxy to catch any missing WASI functions
   const gapi = {
@@ -469,17 +478,12 @@ const workerfn = () => {
         color: [r, g, b, a],
       });
     },
-    get_mouse_move: (x_ptr, y_ptr) => {
-      setDoublePtr(x_ptr, p.mouse.mx);
-      setDoublePtr(y_ptr, p.mouse.my);
-    },
     mouse_get: (x_ptr, y_ptr) => {
       setDoublePtr(x_ptr, p.mouse.x);
       setDoublePtr(y_ptr, p.mouse.y);
       return 0;
     },
     mouse_down: () => p.mouse.down ? 1 : 0,
-    mouse_pressed: () => p.mouse.pressed ? 1 : 0,
     yield: (dt_ptr) => {
       const now = Date.now();
       const dt = (now - p.last_t) / 1000;
@@ -500,7 +504,8 @@ const workerfn = () => {
       });
     },
     runs: () => p.running ? 1 : 0,
-    key_pressed: (t, k) => {
+    key_down: (t, k) => {
+      console.log(String.fromCodePoint(t, k));
       return p.keyboard.down.includes(String.fromCodePoint(t, k)) ? 1 : 0;
     },
     wait_queue: () => { }
@@ -511,24 +516,17 @@ const workerfn = () => {
   function takeString(ptr) {
     if (!ptr || ptr === 0) return "";
 
-    // 1. Always get a fresh view of the buffer in case it was resized
     const buffer = p.instance.exports.memory.buffer;
     const view = new Uint8Array(buffer);
 
-    // 2. Find the null terminator
     let end = ptr;
-    // Limit the search to prevent infinite loops if C forgot a null terminator
     const maxSearch = 1024;
     while (view[end] !== 0 && (end - ptr) < maxSearch && end < view.length) {
       end++;
     }
 
-    // 3. THE FIX: Use .slice() instead of .subarray()
-    // .slice() creates a brand new byte array (a deep copy).
-    // .subarray() only creates a "view" (pointer) to the existing memory.
     const bytes = view.slice(ptr, end);
 
-    // 4. Decode the copied bytes into a JS string
     return utf8Decoder.decode(bytes);
   }
 
@@ -575,14 +573,10 @@ const workerfn = () => {
         if (event.data.type == 'event/mousemove') {
           p.mouse.x = event.data.position[0];
           p.mouse.y = event.data.position[1];
-          p.mouse.mx = event.data.movement[0];
-          p.mouse.my = event.data.movement[1];
         } else if (event.data.type == 'event/mousedown') {
           p.mouse.down = true;
-          p.mouse.pressed = true;
         } else if (event.data.type == 'event/mouseup') {
           p.mouse.down = false;
-
         } else if (event.data.type == 'event/keydown') {
           p.keyboard.down.push(event.data.key);
         } else if (event.data.type == 'event/keyup') {
