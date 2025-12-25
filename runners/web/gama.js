@@ -32,13 +32,28 @@ export class GamaInstance {
       resized();
     }
   }
+  bindKeyboard(elt) {
+    elt.addEventListener('keydown', e => {
+      console.log(getKey(e.key));
+      this.worker.postMessage({
+        type: 'event/keydown',
+        key: getKey(e.key),
+      });
+    });
+    elt.addEventListener('keyup', e => {
+      this.worker.postMessage({
+        type: 'event/keyup',
+        key: getKey(e.key),
+      });
+    });
+  }
   bind(canvas) {
     this.contexts.push(canvas.getContext('2d'));
+    this.bindKeyboard(canvas);
     canvas.addEventListener('mousemove', e => {
       const r = e.target.getBoundingClientRect();
       this.worker.postMessage({
         type: 'event/mousemove',
-        movement: [this._js_one(e.movementX), this._js_one(e.movementY)],
         position: [...this._js_coord(e.clientX - r.x, e.clientY - r.y)]
       });
     });
@@ -52,23 +67,10 @@ export class GamaInstance {
         type: 'event/mouseup',
       });
     });
-    canvas.addEventListener('keydown', e => {
-      this.worker.postMessage({
-        type: 'event/keydown',
-        key: getKey(e.key),
-      });
-    });
-    canvas.addEventListener('keyup', e => {
-      this.worker.postMessage({
-        type: 'event/keyup',
-        key: getKey(e.key),
-      });
-    });
-    canvas.addEventListener('touchmove', () => {
+    canvas.addEventListener('touchmove', e => {
       this.worker.postMessage({
         type: 'event/mousemove',
-        movement: [],
-        position: []
+        position: [e.touches[0].clientX, e.touches[0].clientY]
       });
     });
   }
@@ -108,13 +110,9 @@ export class GamaInstance {
       this.worker.postMessage(null);
     }); else console.error("Cannot call GamaInstance.yield because gama instance is not initialized(gm_init not called)");
   }
-  handleWorkerMessage(event) {
+  handleWorkerCmd(d) {
     const ctx = this.ctx;
-    const d = event.data;
-    if (d == null) { // loop completed, save and wait for next frame
-      this.yield();
-      return;
-    }
+
     switch (d.type) {
       case 'initialize':
         this.initialized = true;
@@ -211,6 +209,20 @@ export class GamaInstance {
         break;
     }
   }
+  handleWorkerMessage(event) {
+    const d = event.data;
+    if (d == null) { // loop completed, save and wait for next frame
+      this.yield();
+      return;
+    } else if (d.type == 'multiple') {
+      for (const cmd of d.commands) {
+        this.handleWorkerCmd(cmd)
+      }
+    } else {
+      this.handleWorkerCmd(d);
+    }
+
+  }
   applySize() {
     for (const context of this.contexts) {
       context.canvas.width = this.canv.width;
@@ -257,7 +269,7 @@ export class GamaInstance {
   }
 
   _js_one(v) {
-    return (v * 2) / this.ctx.canvas.width;
+    return (v * 2) / this.window.side;
   }
 
   _c_rect(x, y, w, h) {
@@ -505,7 +517,6 @@ const workerfn = () => {
     },
     runs: () => p.running ? 1 : 0,
     key_down: (t, k) => {
-      console.log(String.fromCodePoint(t, k));
       return p.keyboard.down.includes(String.fromCodePoint(t, k)) ? 1 : 0;
     },
     wait_queue: () => { }
@@ -588,9 +599,10 @@ const workerfn = () => {
     }
   };
   function postQueue() {
-    for (const msg of p.queue) {
-      self.postMessage(msg);
-    }
+    self.postMessage({
+      type: 'multiple',
+      commands: p.queue,
+    });
     p.queue = [];
   }
 

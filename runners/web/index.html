@@ -46,6 +46,7 @@
     const instance = new GamaInstance();
 
     instance.bind(document.getElementById("canvas"));
+    instance.bindKeyboard(document);
 
     instance.setup("./{{name}}.wasm").then(() => {
       console.info("starting gama instance");
