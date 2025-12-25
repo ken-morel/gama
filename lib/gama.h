@@ -35,9 +35,13 @@ __attribute__((export_name("gama_setup"))) int gama_setup() {
   // ama
 }
 __attribute__((export_name("gama_loop"))) int gama_loop() {
-  if (gapi_yield(&_gm_dt))
+  if (gapi_yield(&_gm_dt)) {
+    gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
+    gapi_get_mouse_move(&gm_mouse.movement.x, &gm_mouse.movement.y);
+    gm_mouse.down = gapi_mouse_down();
+    gm_mouse.pressed = gapi_mouse_pressed();
     return loop();
-  else
+  } else
     return 0;
 }
 

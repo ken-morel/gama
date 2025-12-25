@@ -3,8 +3,8 @@ module vgama
 import gg
 
 const keys = {
-	// Direction keys -> 'd' class (direction)
 	gg.KeyCode.invalid:       '  '
+	// Direction keys -> 'd' class (direction)
 	gg.KeyCode.up:            'au'
 	gg.KeyCode.down:          'ad'
 	gg.KeyCode.left:          'al'
@@ -13,10 +13,9 @@ const keys = {
 	gg.KeyCode.escape:        'sx'
 	gg.KeyCode.insert:        'si'
 	gg.KeyCode.delete:        'sd'
-	gg.KeyCode.home:          'sh'
-	gg.KeyCode.end:           'sn'
-	gg.KeyCode.page_up:       'su'
-	gg.KeyCode.page_down:     'sp'
+	gg.KeyCode.backspace:     'sb'
+	gg.KeyCode.tab:           'st'
+	gg.KeyCode.enter:         'sn'
 	// Modifiers -> 'm' class (modifiers)
 	gg.KeyCode.left_shift:    'ms'
 	gg.KeyCode.right_shift:   'ms'
@@ -67,8 +66,6 @@ const keys = {
 	gg.KeyCode._9:            'c9'
 	// Whitespace and punctuation
 	gg.KeyCode.space:         'c '
-	gg.KeyCode.tab:           'c\t'
-	gg.KeyCode.enter:         'c\n'
 	gg.KeyCode.comma:         'c,'
 	gg.KeyCode.period:        'c.'
 	gg.KeyCode.slash:         'c/'

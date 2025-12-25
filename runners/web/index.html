@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> my game</title>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <script type="module">
+    import {GamaInstance} from "./gama.js";
+
+    const instance = new GamaInstance();
+
+    instance.bind(document.getElementById("canvas"));
+
+    instance.setup("./gama-worker.js", "./lineup.wasm");
+  </script>
+</body>
+
+</html>
