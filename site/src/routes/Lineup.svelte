@@ -1,13 +1,15 @@
 <script>
-  import { GamaInstance } from "https://github.com/ken-morel/gama/blob/dev/runners/web/gama.js?raw=true";
+  import GamaInstance from "./gama.js";
+  import { onMount } from "svelte";
 
-  const instance = new GamaInstance();
+  onMount(() => {
+    const instance = new GamaInstance();
+    instance.bind(document.getElementById("lineup"));
+    instance.bindKeyboard(document);
 
-  instance.bind(document.getElementById("lineup"));
-  instance.bindKeyboard(document);
-
-  instance.setup("/lineup.wasm").then(() => {
-    instance.start();
+    instance.setup("/lineup.wasm").then(() => {
+      instance.start();
+    });
   });
 </script>
 
