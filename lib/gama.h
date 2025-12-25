@@ -20,9 +20,62 @@
 #include "key.h"
 #include "physics.h"
 #include "sprite.h"
+#include "stdio.h"
 #include "system.h"
 #include "widgets.h"
+
+int _gm_loop();
+
+#ifdef GM_SETUP
+__attribute__((export_name("gama_mode"))) int32_t gama_mode() { return 2; }
+
+int setup();
+int loop();
+
+__attribute__((export_name("gama_setup"))) int32_t gama_setup() {
+  return setup();
+  // ama
+}
+__attribute__((export_name("gama_loop"))) int32_t gama_loop() {
+  if (_gm_loop()) {
+    return loop();
+  } else
+    return 0;
+}
+
+#ifdef GM_NATIVE
+
 #include <stdio.h>
+
+int main(void) {
+  printf("runnning main");
+  // int code = setup();
+  // if (code != 0)
+  //   return code;
+  // while (_gm_loop()) {
+  //   code = loop();
+  //   if (code != 0)
+  //     return code;
+  // }
+  return 0;
+}
+
+#endif
+
+#else
+int main(void);
+
+__attribute__((export_name("gama_mode"))) int32_t gama_mode() { return 1; }
+
+__attribute__((export_name("gama_run"))) int32_t gama_run() { return main(); }
+
+#ifdef GM_WEB
+
+#warning "To build for the web, your app must be in GM_SETUP mode"
+
+#endif
+
+#endif
 
 /**
  * @brief Puts the window in fullscreen.
@@ -79,12 +132,14 @@ void _gm_fps() {
   }
 
   if (__gm_show_fps) {
-    char fps_text[20];
-    snprintf(fps_text, sizeof(fps_text), "fps: %.2lf", _display_fps);
+    char fps_text[20] = {0}; // ERROR: use fps
+    // snprintf(fps_text, sizeof(fps_text), "fps: %.2lf", _display_fps);
+    snprintf(fps_text, sizeof(fps_text), "fps: %d", (int)_display_fps);
     gmw_frame(0.9, -0.9, 0.4, 0.1);
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }
 }
+#ifndef GM_SETUP
 
 /**
  * @brief Processes events, updates input state, and prepares for the next
@@ -101,17 +156,22 @@ void _gm_fps() {
  *   // Your game logic and rendering here
  * }
  */
-static inline int gm_yield() {
-  if (gapi_yield(&_gm_dt)) {
-    _gm_t += _gm_dt;
-    gapi_get_mouse_move(&gm_mouse.movement.x, &gm_mouse.movement.y);
-    gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
-    gm_mouse.down = gapi_mouse_down();
-    gm_mouse.pressed = gapi_mouse_pressed();
-    _gm_fps();
-    return 1;
-  } else
-    return 0;
+static inline int gm_yield() { return _gm_loop(); }
+#endif
+
+int _gm_loop() {
+  const int ret = gapi_yield(&_gm_dt);
+  _gm_t += _gm_dt;
+  gm_mouse.lastPosition = gm_mouse.position;
+  gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
+  gm_mouse.movement.x = gm_mouse.position.x - gm_mouse.lastPosition.x;
+  gm_mouse.movement.y = gm_mouse.position.y - gm_mouse.lastPosition.y;
+  gm_mouse.down = gapi_mouse_down();
+  static int last_mouse_down = 0;
+  gm_mouse.clicked = !last_mouse_down && gm_mouse.down;
+  last_mouse_down = gm_mouse.down;
+  _gm_fps();
+  return ret;
 }
 
 /**
@@ -156,11 +216,8 @@ void gm_init(int width, int height, const char *title) {
              "Error starting gama, initialization exited with non zero code %d",
              code);
     gapi_log(msg);
-    printf("%s", msg);
   }
   gm_background(GM_BLACK);
-  gm_logo(0, 0, 2);
-  gm_yield();
 }
 
 /**
@@ -170,10 +227,13 @@ void gm_init(int width, int height, const char *title) {
  */
 void gm_sleep(int milliseconds);
 
+#ifdef __ZIG_CC__
+void gm_sleep(int m) {};
+#else
 #ifdef _WIN32
 #include <windows.h>
 void gm_sleep(int milliseconds) { Sleep(milliseconds); }
-#else
 #include <unistd.h>
 void gm_sleep(int milliseconds) { usleep(milliseconds * 1000); }
+#endif
 #endif

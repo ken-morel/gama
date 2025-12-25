@@ -116,7 +116,7 @@ fn main() {
 			},
 			cli.Command{
 				name:        'build'
-				usage:       'build [-r] [-cc name]'
+				usage:       'build [mode] [-r] [-cc name]'
 				description: 'Builds the current gama project'
 				flags:       [
 					cli.Flag{
@@ -132,16 +132,23 @@ fn main() {
 						description: 'Use an alternative compiler'
 						required:    false
 					},
+					cli.Flag{
+						name:        'reset'
+						abbrev:      'reset'
+						description: 'Override vgama'
+						required:    false
+					},
 				]
 				execute:     fn (cmd cli.Command) ! {
 					run_after_build := cmd.flags.get_bool('run') or { false }
+					reset := cmd.flags.get_bool('reset') or { false }
 					force_cc := cmd.flags.get_string('cc') or { '' }
 					project := get_project()!
 
 					println(term.ok_message('Building project at: ${project.path}'))
 					installation := get_installation()!
 
-					project.build_native(installation, force_cc) or {
+					project.build_native(installation, force_cc, reset) or {
 						println(term.fail_message('Build failed: ${err}'))
 						return
 					}
@@ -153,6 +160,45 @@ fn main() {
 					}
 					return
 				}
+				commands:    [
+					cli.Command{
+						name:        'web'
+						usage:       'build web [-r] [-reset]'
+						description: 'Builds the project for the web'
+						flags:       [
+							cli.Flag{
+								name:        'run'
+								abbrev:      'r'
+								description: 'Run the project after building'
+								required:    false
+							},
+							cli.Flag{
+								name:        'reset'
+								abbrev:      'reset'
+								description: 'Run the project after building'
+								required:    false
+							},
+						]
+						execute:     fn (cmd cli.Command) ! {
+							run_after_build := cmd.flags.get_bool('run') or { false }
+							reset := cmd.flags.get_bool('reset') or { false }
+							println('BUilding project for the web')
+
+							project := get_project()!
+							println(term.ok_message('Building project at: ${project.path}'))
+							installation := get_installation()!
+
+							project.build_web(installation, reset) or {
+								println(term.fail_message('${err}'))
+							}
+							if run_after_build {
+								project.run_web_build(installation) or {
+									println(term.fail_message('${err}'))
+								}
+							}
+						}
+					},
+				]
 			},
 			cli.Command{
 				name:        'run'
@@ -195,7 +241,7 @@ fn main() {
 					}
 
 					loop_dev: for {
-						exe := project.build_native(inst, force_cc) or {
+						exe := project.build_native(inst, force_cc, false) or {
 							println(term.fail_message('Error building: ${err}'))
 							time.sleep(time.second * 2)
 							continue

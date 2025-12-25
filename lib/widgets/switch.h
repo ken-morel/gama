@@ -95,7 +95,7 @@ int gmw_switch_anim(double x, double y, double width, double height, int *value,
   int enabled = gmwSwitch.enabled;
 
   int hovered = enabled && gm_mouse_in_rect(x, y, width, height);
-  int clicked = enabled && gm_mouse.pressed && hovered;
+  int clicked = enabled && gm_mouse.clicked && hovered;
 
   if (clicked) {
     *value = !(*value);

@@ -9,31 +9,28 @@ import term
 type GapiTask = fn ()
 
 __global (
-	gapi_ctx__           &gg.Context
-	gapi_bg_color__      gg.Color
-	gapi_gama_runs__     bool
-	gapi_title__         string
-	gapi_width__         int
-	gapi_height__        int
-	gapi_queue__         chan GapiTask
-	gapi_end_frame__     chan bool
-	gapi_isfullscreen__  bool
-	gapi_images__        map[u32]gg.Image
-	gapi_image_count__   u32
+	gapi_ctx__          &gg.Context
+	gapi_bg_color__     gg.Color
+	gapi_gama_runs__    bool
+	gapi_title__        string
+	gapi_width__        int
+	gapi_height__       int
+	gapi_queue__        chan GapiTask
+	gapi_end_frame__    chan bool
+	gapi_isfullscreen__ bool
+	gapi_images__       map[u32]gg.Image
+	gapi_image_count__  u32
 	// viewport
-	gapi_game_w__        int
-	gapi_game_h__        int
-	gapi_offset_x__      int
-	gapi_offset_y__      int
-	gapi_queue_wait__    &sync.Mutex
+	gapi_game_w__       int
+	gapi_game_h__       int
+	gapi_offset_x__     int
+	gapi_offset_y__     int
+	gapi_queue_wait__   &sync.Mutex
 	// event
-	gapi_pressed_keys__  []string
-	gapi_mouse_x__       i32
-	gapi_mouse_y__       i32
-	gapi_mouse_move_x__  i32
-	gapi_mouse_move_y__  i32
-	gapi_mouse_down__    bool
-	gapi_mouse_pressed__ bool
+	gapi_pressed_keys__ []string
+	gapi_mouse_x__      i32
+	gapi_mouse_y__      i32
+	gapi_mouse_down__   bool
 )
 
 fn update_virtual_dimensions() {
@@ -78,16 +75,6 @@ fn gapi_wait_queue() {
 fn gapi_yield(dt &f64) i32 {
 	gapi_wait_queue() // wait it processes other events before sending stop
 	gapi_end_frame__ <- true or { return 0 } // close the current frame
-
-	mut static notified_mouse := false
-	if !gapi_mouse_down__ {
-		notified_mouse = false
-	} else if !notified_mouse {
-		gapi_mouse_pressed__ = true
-		notified_mouse = true
-	} else {
-		gapi_mouse_pressed__ = false
-	}
 
 	gapi_pressed_keys__ = []
 
@@ -134,8 +121,6 @@ fn run_gg_loop() {
 			}
 		}
 		move_fn:      fn (x f32, y f32, _ voidptr) {
-			gapi_mouse_move_x__ = i32(x) - gapi_mouse_x__
-			gapi_mouse_move_y__ = i32(y) - gapi_mouse_y__
 			gapi_mouse_x__ = i32(x)
 			gapi_mouse_y__ = i32(y)
 		}

@@ -1,1 +1,6 @@
 native.c
+libvgama.*
+/libvgama.*
+/libvgama.so
+./libvgama.so
+libvgama.so

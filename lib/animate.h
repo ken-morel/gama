@@ -2,7 +2,7 @@
 
 #include "gapi.h"
 #include <math.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * @file animate.h

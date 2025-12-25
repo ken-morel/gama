@@ -56,15 +56,15 @@ fn build() {
 }
 
 fn package() {
-	println('Packaging with nsis')
-	mut result := execute('makensis nsis/setup.nsi')
-	if result.exit_code != 0 {
-		println(term.fail_message('makensis failed: ${result.output}'))
-	}
 	println('Packaging deb with nfpm')
-	result = execute('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
+	mut result := execute('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
 	if result.exit_code != 0 {
 		println(term.fail_message(result.output))
+	}
+	println('Packaging with nsis')
+	result = execute('makensis nsis/setup.nsi')
+	if result.exit_code != 0 {
+		println(term.fail_message('makensis failed: ${result.output}'))
 	}
 }
 
@@ -94,15 +94,15 @@ fn docs() {
 }
 
 fn vgama() {
-	println('Building vgama for windows')
-	mut result := execute('v runners/native -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
-	if result.exit_code != 0 {
-		println(term.fail_message('vgama windows build failed : ${result.output}'))
-	}
 	println('Building vgama for linux')
-	result = execute('v runners/native -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
+	mut result := execute('v runners/native -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
 	if result.exit_code != 0 {
 		println(term.fail_message('vgama linux build failed : ${result.output}'))
+	}
+	println('Building vgama for windows')
+	result = execute('v runners/native -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
+	if result.exit_code != 0 {
+		println(term.fail_message('vgama windows build failed : ${result.output}'))
 	}
 }
 

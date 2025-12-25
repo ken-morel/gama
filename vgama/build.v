@@ -1,14 +1,15 @@
 module vgama
 
+import term
 import os
 
-pub fn (p Project) copy_build_native_artifacts(inst Installation) ! {
+pub fn (p Project) copy_build_native_artifacts(inst Installation, reset bool) ! {
 	build_dir := p.build_path('native')
 	runner_path := os.join_path(inst.runners, 'native')
 	os.mkdir_all(build_dir) or {}
 	src := os.join_path(runner_path, libvgama_name())
 	dest := os.join_path(build_dir, libvgama_name())
-	if !os.exists(dest) {
+	if !os.exists(dest) || reset {
 		os.cp(src, dest) or { return error('Failed to copy libvgama: ${err}') }
 	}
 }
@@ -33,7 +34,7 @@ pub fn (p Project) get_src_c_files() ![]string {
 	return os.glob(os.join_path(p.path, 'src', '**.c'))
 }
 
-pub fn (p Project) build_native(inst Installation, use_cc string) !string {
+pub fn (p Project) build_native(inst Installation, use_cc string, reset bool) !string {
 	conf := p.get_conf()!
 	compiler := if use_cc == '' { conf.gama.compiler } else { use_cc }
 	if conf.gama.compiler == '' {
@@ -43,7 +44,7 @@ pub fn (p Project) build_native(inst Installation, use_cc string) !string {
 	// Prepare common build parameters
 	build_dir := p.build_path('native')
 	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
-	p.copy_build_native_artifacts(inst)!
+	p.copy_build_native_artifacts(inst, reset)!
 	source_files := p.get_src_c_files()!
 	if source_files.len == 0 {
 		return error('No c source files in src directory')
@@ -54,7 +55,7 @@ pub fn (p Project) build_native(inst Installation, use_cc string) !string {
 
 	println('Building with external compiler: ${conf.gama.compiler}')
 	include_path := os.join_path(p.path, 'include')
-	cmd := "${compiler} -o ${executable_path} ${source_files.join(' ')} -I${include_path} -L${build_dir} -Wl,-rpath,'\$ORIGIN' -lvgama -lm -v"
+	cmd := "${compiler} -o ${executable_path} ${source_files.join(' ')} -I${include_path} -L${build_dir} -Wl,-rpath,'\$ORIGIN' -DGM_NATIVE -lvgama -lm -v"
 	println('Executing: ${cmd}')
 	res := os.execute(cmd)
 	if res.exit_code != 0 {
