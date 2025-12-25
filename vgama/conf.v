@@ -19,6 +19,23 @@ pub:
 	gama ProjectGamaConf
 }
 
+pub fn (c ProjectConf) substitute(templ string) string {
+	mut code := templ
+
+	subs := {
+		'name':          c.name
+		'description':   c.description
+		'version':       c.version.str()
+		'author':        c.author
+		'gama.version':  c.gama.version.str()
+		'gama.compiler': c.gama.compiler
+	}
+	for key, val in subs {
+		code = code.replace('{{' + key + '}}', val)
+	}
+	return code
+}
+
 pub fn (c ProjectConf) save(path string) ! {
 	os.write_file(path, '
 name = "${c.name}"

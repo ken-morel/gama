@@ -156,7 +156,7 @@ fn main() {
 				commands:    [
 					cli.Command{
 						name:        'web'
-						usage:       'build web [-r]'
+						usage:       'build web [-r] [-reset]'
 						description: 'Builds the project for the web'
 						flags:       [
 							cli.Flag{
@@ -165,16 +165,23 @@ fn main() {
 								description: 'Run the project after building'
 								required:    false
 							},
+							cli.Flag{
+								name:        'reset'
+								abbrev:      'reset'
+								description: 'Run the project after building'
+								required:    false
+							},
 						]
 						execute:     fn (cmd cli.Command) ! {
 							run_after_build := cmd.flags.get_bool('run') or { false }
+							reset := cmd.flags.get_bool('reset') or { false }
 							println('BUilding project for the web')
 
 							project := get_project()!
 							println(term.ok_message('Building project at: ${project.path}'))
 							installation := get_installation()!
 
-							project.build_web(installation) or {
+							project.build_web(installation, reset) or {
 								println(term.fail_message('${err}'))
 							}
 							if run_after_build {

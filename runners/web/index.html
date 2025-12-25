@@ -2,11 +2,44 @@
 <html>
 
 <head>
-  <title> my game</title>
+  <meta charset="utf-8" />
+
+  <link rel="icon" type="image/png" href="./icon.png" />
+  <link rel="icon" type="icon" href="./icon.png" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <!-- <meta property="og:url" content="https://gama.rbs.cm/" /> -->
+  <meta property="og:title" content="{{name}}" />
+  <meta property="og:description" content="{{description}}" />
+  <meta property="og:image" content="./icon.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <!-- <meta property="twitter:url" content="https://gama.rbs.cm/" /> -->
+  <meta property="twitter:title" content="{{name}}" />
+  <meta property="twitter:description" content="{{description}}" />
+  <meta property="twitter:image" content="./icon.png" />
+
+  <title>{{name}} {{version}}</title>
+
+  <style>
+    canvas#canvas {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+  </style>
 </head>
 
 <body>
   <canvas id="canvas"></canvas>
+
   <script type="module">
     import {GamaInstance} from "./gama.js";
 
@@ -14,7 +47,10 @@
 
     instance.bind(document.getElementById("canvas"));
 
-    instance.setup("./gama-worker.js", "./lineup.wasm");
+    instance.setup("./{{name}}.wasm").then(() => {
+      console.info("starting gama instance");
+      instance.start();
+    });
   </script>
 </body>
 

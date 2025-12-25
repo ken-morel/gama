@@ -24,6 +24,8 @@
 #include "system.h"
 #include "widgets.h"
 
+int _gm_loop();
+
 #ifdef GM_SETUP
 __attribute__((export_name("gama_mode"))) int gama_mode() { return 2; }
 
@@ -31,15 +33,12 @@ int setup();
 int loop();
 
 __attribute__((export_name("gama_setup"))) int gama_setup() {
-  setup();
+  return setup();
   // ama
 }
 __attribute__((export_name("gama_loop"))) int gama_loop() {
-  if (gapi_yield(&_gm_dt)) {
-    gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
-    gapi_get_mouse_move(&gm_mouse.movement.x, &gm_mouse.movement.y);
-    gm_mouse.down = gapi_mouse_down();
-    gm_mouse.pressed = gapi_mouse_pressed();
+  if (_gm_loop()) {
+
     return loop();
   } else
     return 0;
@@ -109,8 +108,9 @@ void _gm_fps() {
   }
 
   if (__gm_show_fps) {
-    char fps_text[20];
-    snprintf(fps_text, sizeof(fps_text), "fps: %.2lf", _display_fps);
+    char fps_text[20] = {0}; // ERROR: use fps
+    // snprintf(fps_text, sizeof(fps_text), "fps: %.2lf", _display_fps);
+    snprintf(fps_text, sizeof(fps_text), "fps: %d", (int)_display_fps);
     gmw_frame(0.9, -0.9, 0.4, 0.1);
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }
@@ -132,19 +132,19 @@ void _gm_fps() {
  *   // Your game logic and rendering here
  * }
  */
-static inline int gm_yield() {
-  if (gapi_yield(&_gm_dt)) {
-    _gm_t += _gm_dt;
-    gapi_get_mouse_move(&gm_mouse.movement.x, &gm_mouse.movement.y);
-    gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
-    gm_mouse.down = gapi_mouse_down();
-    gm_mouse.pressed = gapi_mouse_pressed();
-    _gm_fps();
-    return 1;
-  } else
-    return 0;
-}
+static inline int gm_yield() { return _gm_loop(); }
 #endif
+
+int _gm_loop() {
+  int ret = gapi_yield(&_gm_dt);
+  _gm_t += _gm_dt;
+  gapi_mouse_get(&gm_mouse.position.x, &gm_mouse.position.y);
+  gapi_get_mouse_move(&gm_mouse.movement.x, &gm_mouse.movement.y);
+  gm_mouse.down = gapi_mouse_down();
+  gm_mouse.pressed = gapi_mouse_pressed();
+  _gm_fps();
+  return ret;
+}
 
 /**
  * @brief Closes the window and terminates the Gama engine.
