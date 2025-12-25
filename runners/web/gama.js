@@ -67,12 +67,30 @@ export class GamaInstance {
         type: 'event/mouseup',
       });
     });
+    const touchpos = e => [...this._js_coord(e.touches[0].clientX, e.touches[0].clientY)];
+
     canvas.addEventListener('touchmove', e => {
       this.worker.postMessage({
         type: 'event/mousemove',
-        position: [e.touches[0].clientX, e.touches[0].clientY]
+        position: touchpos(e)
       });
     });
+    canvas.addEventListener('touchstart', e => {
+      this.worker.postMessage({
+        type: 'event/mousemove',
+        position: touchpos(e)
+      });
+      this.worker.postMessage({
+        type: 'event/mousedown',
+      });
+    });
+    const handle = () => {
+      this.worker.postMessage({
+        type: 'event/mouseup',
+      });
+    };
+    canvas.addEventListener('touchcancel', handle);
+    canvas.addEventListener('touchend', handle);
   }
   async setup(wasmPath) {
     this.worker = new Worker(workerUrl, { type: 'module' });
