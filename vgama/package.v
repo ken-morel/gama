@@ -25,10 +25,9 @@ pub fn (p Project) package_native(inst Installation) ! {
 	println('Packaging with: ${cmd}')
 	res := os.execute(cmd)
 
-	return if res.exit_code != 0 {
+	if res.exit_code != 0 {
 		error('Failed to package app: ${res.output}')
 	} else {
 		println(res.output)
-		return
 	}
 }

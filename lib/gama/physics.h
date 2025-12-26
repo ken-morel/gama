@@ -1,12 +1,12 @@
 #pragma once
 
+#include "_math.h"
 #include "body.h"
 #include "body_list.h"
 #include "collision.h"
 #include "gapi.h"
 #include "position.h"
 #include "system.h"
-#include <math.h>
 
 /**
  * @brief Resolves a collision between two bodies by applying appropriate forces

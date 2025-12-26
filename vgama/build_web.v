@@ -42,11 +42,13 @@ pub fn (p Project) build_web(inst Installation, reset bool) ! {
 
 	if res.exit_code != 0 {
 		return error('Failed to build app: ${res.output}')
+	} else {
+		println(res.output)
 	}
 }
 
 pub fn (p Project) run_web_build(inst Installation) ! {
-	conf := p.get_conf()!
+	// conf := p.get_conf()!
 
 	build_dir := p.build_path('web')
 

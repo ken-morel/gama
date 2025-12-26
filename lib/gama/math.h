@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef GM_MATH
+#define GM_MATH
+#endif
+
 #define PI 3.14159265358979324
 #define M_PI PI
 #define EPS 1e-17

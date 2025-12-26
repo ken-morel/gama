@@ -1,7 +1,7 @@
 #pragma once
 
+#include "_math.h"
 #include "gapi.h"
-#include <math.h>
 #include <stdlib.h>
 
 /**

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "math.h"
+#include "_math.h"
+
 typedef struct {
   double x, y;
 } gmPos;

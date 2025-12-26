@@ -1,4 +1,9 @@
 #pragma once
+
+#ifndef GM_MALLOC
+#define GM_MALLOC
+#endif
+
 #include "gapi.h"
 #include <stddef.h>
 #ifndef MEMORY

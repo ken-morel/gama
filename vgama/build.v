@@ -1,6 +1,5 @@
 module vgama
 
-import term
 import os
 
 pub fn (p Project) copy_build_native_artifacts(inst Installation, reset bool) ! {
@@ -60,6 +59,8 @@ pub fn (p Project) build_native(inst Installation, use_cc string, reset bool) !s
 	res := os.execute(cmd)
 	if res.exit_code != 0 {
 		return error('Failed to compile and link app: ${res.output}')
+	} else {
+		println(res.output)
 	}
 
 	return executable_path
