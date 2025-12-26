@@ -330,7 +330,6 @@ int main() {
     </div>
   </div>
 </div>
-
 <div class="cli-section">
   <div class="container">
     <div class="cli-container">
@@ -370,8 +369,19 @@ int main() {
     </div>
   </div>
 </div>
-
-<Lineup />
+<div class="cli-section">
+  <div class="container">
+    <div class="cli-container">
+      <div class="section-header">
+        <h2 class="section-title">Experimental web support</h2>
+        <p class="section-subtitle">
+          A little sample of lineup loaded with gama.js before you go...
+        </p>
+      </div>
+    </div>
+  </div>
+  <Lineup />
+</div>
 
 <div class="footer">
   <div class="container">

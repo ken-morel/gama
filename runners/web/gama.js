@@ -27,7 +27,9 @@ export default class GamaInstance {
         const rect = ctx.canvas.getBoundingClientRect();
         this.resize(rect.width, rect.height);
       };
-      window.addEventListener('resize', resized);
+      try {
+        window.addEventListener('resize', resized);
+      } catch (e) { }
       ctx.canvas.addEventListener('resize', resized);
       resized();
     }

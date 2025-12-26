@@ -13,4 +13,20 @@
   });
 </script>
 
-<canvas id="lineup" style="width: 100%;height: 100%;"></canvas>
+<canvas id="lineup"></canvas>
+
+<style>
+  @media all and (orientation: portrait) {
+    #lineup {
+      width: 100% !important;
+    }
+  }
+  @media all and (orientation: landscape) {
+    #lineup {
+      width: 80% !important;
+    }
+  }
+  #lineup {
+    margin: auto;
+  }
+</style>
