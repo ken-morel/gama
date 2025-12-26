@@ -7,3 +7,5 @@
 *.h linguist-language=C
 v.mod linguist-language=V
 .vdocignore linguist-language=ignore
+
+/site/static/reference/* linguist-vendored
