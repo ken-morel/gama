@@ -48,15 +48,14 @@ __attribute__((export_name("gama_loop"))) int32_t gama_loop() {
 #include <stdio.h>
 
 int main(void) {
-  printf("runnning main");
-  // int code = setup();
-  // if (code != 0)
-  //   return code;
-  // while (_gm_loop()) {
-  //   code = loop();
-  //   if (code != 0)
-  //     return code;
-  // }
+  int code = setup();
+  if (code != 0)
+    return code;
+  while (_gm_loop()) {
+    code = loop();
+    if (code != 0)
+      return code;
+  }
   return 0;
 }
 
