@@ -121,14 +121,16 @@ export default class GamaInstance {
     this.worker.terminate();
   }
   yield() {
-    if (this.initialized) requestAnimationFrame(() => {
-      for (const context of this.contexts) {
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-        context.drawImage(this.ctx.canvas, 0, 0);
-      }
-      this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-      this.worker.postMessage(null);
-    }); else console.error("Cannot call GamaInstance.yield because gama instance is not initialized(gm_init not called)");
+    if (this.initialized) {
+      requestAnimationFrame(() => {
+        for (const context of this.contexts) {
+          context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+          context.drawImage(this.ctx.canvas, 0, 0);
+        }
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        this.worker.postMessage(null);
+      });
+    } else console.error("Cannot call GamaInstance.yield because gama instance is not initialized(gm_init not called)");
   }
   handleWorkerCmd(d) {
     const ctx = this.ctx;
