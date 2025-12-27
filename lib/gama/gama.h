@@ -168,6 +168,7 @@ static inline int gm_yield() { return _gm_loop(); }
 #endif
 
 int _gm_loop() {
+  _gm_fps();
   const int ret = gapi_yield(&_gm_dt);
   _gm_t += _gm_dt;
   gm_mouse.lastPosition = gm_mouse.position;
@@ -178,7 +179,6 @@ int _gm_loop() {
   static int last_mouse_down = 0;
   gm_mouse.clicked = !last_mouse_down && gm_mouse.down;
   last_mouse_down = gm_mouse.down;
-  _gm_fps();
   return ret;
 }
 
