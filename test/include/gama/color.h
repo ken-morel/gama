@@ -99,6 +99,17 @@ static inline gmColor gm_set_alpha(gmColor col, int alpha) {
   return (col & 0xFFFFFF00) | (unsigned)(abs(alpha) % 256);
 }
 
+static inline gmColor gm_scale_color(gmColor col, double factor) {
+  if (factor < 0)
+    factor = 0;
+  if (factor > 1)
+    factor = 1;
+  return gm_rgba(gm_red(col) * factor, gm_green(col) * factor,
+                 gm_blue(col) * factor, gm_alpha(col));
+}
+
+///////////////////////////////////////////////// colors
+
 /* Predefined color constants */
 /**
  * @name Predefined Colors

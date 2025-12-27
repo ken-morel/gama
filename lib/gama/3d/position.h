@@ -58,3 +58,9 @@ static inline gm3Pos gm3_pos_normalize(gm3Pos v) {
 static inline double gm3_pos_dot(gm3Pos a, gm3Pos b) {
   return a.x * b.x + a.y * b.y + a.z * b.z;
 }
+
+static inline void gm3_pos_reset(gm3Pos *p) {
+  p->x = 0;
+  p->y = 0;
+  p->z = 0;
+}

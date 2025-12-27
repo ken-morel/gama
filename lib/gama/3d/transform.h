@@ -45,3 +45,13 @@ gm3Pos gm3_pos_scale(gm3Pos p, gm3Pos trans) {
   res.z *= trans.z;
   return res;
 }
+
+gm3Transform gm3_transform() {
+  gm3Transform t;
+  gm3_pos_reset(&t.position);
+  gm3_pos_reset(&t.rotation);
+  t.scale.x = 1;
+  t.scale.y = 1;
+  t.scale.z = 1;
+  return t;
+}

@@ -1,0 +1,8 @@
+#include "3d/image.h"
+#include "3d/light.h"
+#include "3d/mesh.h"
+#include "3d/obj.h"
+#include "3d/position.h"
+#include "3d/project.h"
+#include "3d/scene.h"
+#include "3d/transform.h"

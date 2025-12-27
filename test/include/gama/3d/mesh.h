@@ -1,4 +1,5 @@
-#include "../position.h"
+#pragma once
+
 #include "position.h"
 #include <float.h>
 #include <stddef.h>
@@ -6,13 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
-
-typedef struct {
-  gmPos position;
-  gmPos rotation;
-  gmPos scale;
-  double matrix[4][4];
-} gm3Transform;
 
 typedef struct {
   size_t vertices[3];
