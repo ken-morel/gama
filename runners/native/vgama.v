@@ -3,8 +3,8 @@ module vgama
 import gg
 import term
 
-// #flag -D_SGL_DEFAULT_MAX_VERTICES=4194304
 // #flag -D_SGL_DEFAULT_MAX_COMMANDS=65536
+// #flag -D_SGL_DEFAULT_MAX_VERTICES=4194304
 
 type GapiTask = fn ()
 
@@ -49,17 +49,27 @@ fn update_virtual_dimensions() {
 
 fn frame(mut _ gg.Context) {
 	gapi_ctx__.begin()
+	gapi_ctx__.end(how: .clear)
+
+	gapi_ctx__.begin()
+	mut count := u64(0)
 	for {
 		select {
 			func := <-gapi_queue__ {
+				if count > 30000 {
+					count = 0
+					gapi_ctx__.end(how: .passthru)
+					gapi_ctx__.begin()
+				}
 				func()
+				count++
 			}
 			_ := <-gapi_end_frame__ {
 				break
 			}
 		}
 	}
-	gapi_ctx__.end()
+	gapi_ctx__.end(how: .passthru)
 }
 
 @[export: 'gapi_wait_queue']

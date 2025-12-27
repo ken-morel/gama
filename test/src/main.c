@@ -16,7 +16,8 @@ int main() {
 
   gm3ObjFile file; // create an obj file
 
-  int code = gm3_load_obj(&file, "assets/obj/12221_Cat_v1_l3.obj",
+  // cube, bgirl, Alien Animal, tree
+  int code = gm3_load_obj(&file, "assets/obj/cat.obj",
                           "assets/obj"); // load the obj file
   if (code < 0) {
     printf("Object load failed: %d", code);
@@ -27,6 +28,7 @@ int main() {
   printf("obj file has %zu objects", file.n_objects);
 
   gm3Scene scene = gm3_scene();
+  scene.far = 20;
   scene.light.position.z = -10;
   scene.light.color = GM_ORANGE;
 
@@ -42,7 +44,7 @@ int main() {
   // then draw
 
   gm3Project.ignore_backward_faces = 1;
-  gm3DrawImage.ignore_small_triangles = 0.01;
+  gm3DrawImage.ignore_small_triangles = 0.000001;
   do {
     double k = gm_dt();
     if (gm_key('U'))

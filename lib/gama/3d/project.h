@@ -95,9 +95,9 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
 
 struct {
   short unsigned ignore_backward_faces;
-} gm3Project = {
-    .ignore_backward_faces = 0,
-};
+  double backward_threshold; // we're talking of a normalized vector, thus
+                             // this'a ratio
+} gm3Project = {.ignore_backward_faces = 0, .backward_threshold = 0.01};
 
 /**
  * Transforms an entire mesh and projects it into a gm3Image.
@@ -148,7 +148,8 @@ int gm3_project(gm3Mesh *mesh, gm3ObjFile *obj, gm3Transform *transform,
     gm3Pos world_norm =
         gm3_pos_rotate(mesh->normals[face->normal], transform->rotation);
 
-    if (gm3Project.ignore_backward_faces && world_norm.z > 0)
+    if (gm3Project.ignore_backward_faces &&
+        world_norm.z > gm3Project.backward_threshold)
       continue;
 
     // Retrieve the material using the encoded index (file_idx << 16 | mat_idx)
