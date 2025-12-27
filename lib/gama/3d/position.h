@@ -32,3 +32,29 @@ static inline gm3Pos gm3_pos_from2(gmPos p, double z) {
 static inline gmPos gm3_pos_project_simple(gm3Pos p) {
   return gmpos(p.x / p.z, p.y / p.z);
 }
+
+static inline gm3Pos gm3_pos_center(gm3Pos va, gm3Pos vb) {
+  gm3Pos center = {(va.x + vb.x) / 2.0, (va.y + vb.y) / 2.0,
+                   (va.z + vb.z) / 2.0};
+  return center;
+}
+static inline gm3Pos gm3_pos_center3(gm3Pos va, gm3Pos vb, gm3Pos vc) {
+  gm3Pos center = {(va.x + vb.x + vc.x) / 3.0, (va.y + vb.y + vc.y) / 3.0,
+                   (va.z + vb.z + vc.z) / 3.0};
+  return center;
+}
+
+static inline gm3Pos gm3_pos_minus(gm3Pos va, gm3Pos vb) {
+  gm3Pos diff = {va.x - vb.x, va.y - vb.y, va.z - vb.z};
+  return diff;
+}
+
+static inline gm3Pos gm3_pos_normalize(gm3Pos v) {
+  double m = gm3_pos_magnitude(v);
+  gm3Pos norm = {v.x / m, v.y / m, v.z / m};
+  return norm;
+}
+
+static inline double gm3_pos_dot(gm3Pos a, gm3Pos b) {
+  return a.x * b.x + a.y * b.y + a.z * b.z;
+}

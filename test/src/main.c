@@ -27,5 +27,7 @@ int main() {
     // do things here
   } while (gm_yield());
   // destroy shapes
+
+  gm3_free_obj(&file);
   return 0;
 }
