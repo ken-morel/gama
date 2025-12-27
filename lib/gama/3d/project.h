@@ -7,6 +7,7 @@
 #include "mesh.h"
 #include "mtl.h"
 #include "obj.h"
+#include "position.h"
 #include "scene.h"
 #include "transform.h"
 #include <math.h>
@@ -67,15 +68,18 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
 int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
                      gm3Material *mat, gm3Scene *scene) {
 
-  // 1. Clipping & Visibility Check
-  for (size_t i = 0; i < 3; i++) {
-    if (vertices[i].z <= scene->near || vertices[i].z > scene->far) {
-      return 0;
-    }
-  }
+  gm3Pos face_center = gm3_pos_centerN(vertices, 3);
 
-  // 2. Lighting Calculation
-  gm3Pos face_center = gm3_pos_center3(vertices[0], vertices[1], vertices[2]);
+  gm3Pos position_from_camera = gm3_pos_minus(face_center, scene->camera_pos);
+  double distance_from_camera = gm3_pos_magnitude(position_from_camera);
+
+  if (distance_from_camera <= scene->near || distance_from_camera >= scene->far)
+    return 0;
+
+  double normal_dot_position = gm3_pos_dot(norm, position_from_camera);
+  if (normal_dot_position >= 0)
+    return 0; // < 0 -> face points backwards , ==0 -> face -|
+
   out->color = gm3_calculate_lighting(norm, face_center, mat, scene);
 
   // 3. Perspective Projection
@@ -94,10 +98,7 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
 }
 
 struct {
-  short unsigned ignore_backward_faces;
-  double backward_threshold; // we're talking of a normalized vector, thus
-                             // this'a ratio
-} gm3Project = {.ignore_backward_faces = 0, .backward_threshold = 0.01};
+} gm3Project = {};
 
 /**
  * Transforms an entire mesh and projects it into a gm3Image.
@@ -147,10 +148,6 @@ int gm3_project(gm3Mesh *mesh, gm3ObjFile *obj, gm3Transform *transform,
 
     gm3Pos world_norm =
         gm3_pos_rotate(mesh->normals[face->normal], transform->rotation);
-
-    if (gm3Project.ignore_backward_faces &&
-        world_norm.z > gm3Project.backward_threshold)
-      continue;
 
     // Retrieve the material using the encoded index (file_idx << 16 | mat_idx)
     gm3Material *mat = NULL;

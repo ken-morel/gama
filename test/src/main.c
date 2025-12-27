@@ -43,7 +43,6 @@ int main() {
       gm3_image(); // the image where we snap the 3d object into a 2d image and
   // then draw
 
-  gm3Project.ignore_backward_faces = 1;
   gm3DrawImage.ignore_small_triangles = 0.000001;
   do {
     double k = gm_dt();

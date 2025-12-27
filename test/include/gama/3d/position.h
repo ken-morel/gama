@@ -2,6 +2,7 @@
 
 #include "../_math.h"
 #include "../position.h"
+#include <stddef.h>
 
 typedef struct {
   double x, y, z;
@@ -72,4 +73,15 @@ static inline void gm3_pos_reset(gm3Pos *p) {
   p->x = 0;
   p->y = 0;
   p->z = 0;
+}
+
+static inline gm3Pos gm3_pos_centerN(gm3Pos *arr, size_t n) {
+  double dn = (double)n;
+  gm3Pos c = {0, 0, 0};
+  for (size_t i = 0; i < n; i++) {
+    c.x += arr[i].x / dn;
+    c.y += arr[i].y / dn;
+    c.z += arr[i].z / dn;
+  }
+  return c;
 }
