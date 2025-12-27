@@ -10,6 +10,8 @@ int main() {
 
   int code = gm3_load_obj(&file, "assets/obj/test.obj"); // load the obj file
 
+  for (size_t i = 0; i < file.n_objects; i++) {
+  }
   printf("obj file has %zu objects", file.n_objects);
 
   gm3Scene scene = gm3_scene();
@@ -17,19 +19,21 @@ int main() {
 
   gm3Transform transform = gm3_transform();
   transform.position.z = 2;
-  transform.position.y -= 1;
 
   gm3Image img; // the image where we snap the 3d object into a 2d image and
-                // then draw
+  // then draw
 
   do {
-    transform.rotation.y += gm_dt(); // update the rotation to make it rotate
-    // transform.rotation.z += gm_dt();
-    // transform.rotation.x += gm_dt();
+    if (gm_mouse.down) {
+      transform.rotation.y -= gm_mouse.movement.x * 2;
+      transform.rotation.x -= gm_mouse.movement.y * 2;
+    }
     for (size_t i = 0; i < file.n_objects;
          i++) { // draw each of the objects in the file
       gm3_project(&file.objects[i], &transform, &scene,
-                  &img);            // snap on the image
+                  &img); // snap on the image
+      for (size_t i = 0; i < img.n_colors; i++)
+        img.colors[i] = gm_set_alpha(img.colors[i], 255);
       gm3_draw_image(&img, -1, -1); // draw the image
     }
   } while (gm_yield());

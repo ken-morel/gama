@@ -24,7 +24,6 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
   for (size_t i = 0; i < 3; i++) {
     // Basic Z-clipping against the scene's near/far planes
     if (vertices[i].z <= scene->near || vertices[i].z > scene->far) {
-      out->visible = 0;
       return 0;
     }
   }
@@ -49,6 +48,7 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
   out->color = gm_scale_color(scene->light.color, final_intensity);
 
   // 3. Perspective Projection (3D -> 2D)
+  out->depth = 0;
   for (int i = 0; i < 3; i++) {
     // Standard perspective: x' = (x/z) * focal_length + offset
     out->vertices[i].x =
@@ -57,12 +57,17 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
     out->vertices[i].y =
         (float)((vertices[i].y / vertices[i].z) * scene->viewport.y +
                 (scene->viewport.y / 2.0));
-    out->vertices[i].z = vertices[i].z; // Keep Z for depth sorting later
+    out->depth += vertices[i].z / 3.0;
   }
 
-  out->visible = 1;
   return 1;
 }
+
+struct {
+  int ignore_black;
+} gm3Project = {
+    .ignore_black = 0,
+};
 
 /**
  * Transforms an entire mesh and projects it into a gm3Image.
@@ -76,6 +81,8 @@ int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
   output->vertices = calloc(output->n_vertices, sizeof(gm3Pos));
   output->triangles = calloc(mesh->n_faces * 3, sizeof(size_t));
   output->colors = calloc(mesh->n_faces, sizeof(gmColor));
+  output->depths = calloc(mesh->n_faces, sizeof(double));
+  output->n_colors = mesh->n_faces;
   output->n_triangles = 0;
 
   // 1. Transform all vertices into World Space first
@@ -106,6 +113,9 @@ int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
     gm3Pos world_norm =
         gm3_pos_rotate(mesh->normals[face->normal], transform->rotation);
 
+    if (world_norm.z > 0)
+      continue;
+
     gm3TriangleImage projected;
     if (gm3_project_face(&projected, world_norm, tri_verts, scene)) {
       // Add to output image
@@ -120,7 +130,7 @@ int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
         output->vertices[v_idx] = projected.vertices[j];
         output->triangles[t_idx * 3 + j] = v_idx;
       }
-
+      output->depths[t_idx] = projected.depth;
       output->colors[t_idx] = projected.color;
       output->n_triangles++;
     }

@@ -59,6 +59,11 @@ static inline double gm3_pos_dot(gm3Pos a, gm3Pos b) {
   return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+static inline gm3Pos gm3_pos_cross(gm3Pos a, gm3Pos b) {
+  return (gm3Pos){a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
+                  a.x * b.y - a.y * b.x};
+}
+
 static inline void gm3_pos_reset(gm3Pos *p) {
   p->x = 0;
   p->y = 0;
