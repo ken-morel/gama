@@ -29,8 +29,8 @@ pub fn (p Project) run_native_build(replace bool) ! {
 	}
 }
 
-pub fn (p Project) get_src_c_files() ![]string {
-	return os.glob(os.join_path(p.path, 'src', '**.c'))
+pub fn (p Project) get_src_c_files() []string {
+	return os.glob(os.join_path(p.path, 'src', '**.c')) or { [] }.filter(it.ends_with('.c'))
 }
 
 pub fn (p Project) build_native(inst Installation, use_cc string, reset bool) !string {
@@ -44,7 +44,7 @@ pub fn (p Project) build_native(inst Installation, use_cc string, reset bool) !s
 	build_dir := p.build_path('native')
 	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
 	p.copy_build_native_artifacts(inst, reset)!
-	source_files := p.get_src_c_files()!
+	source_files := p.get_src_c_files()
 	if source_files.len == 0 {
 		return error('No c source files in src directory')
 	}

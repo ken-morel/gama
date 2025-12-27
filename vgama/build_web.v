@@ -25,7 +25,7 @@ pub fn (p Project) build_web(inst Installation, reset bool) ! {
 	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
 	p.copy_build_web_artifacts(inst, reset)!
 	inst.copy_gama(os.join_path(p.path, 'include'), false) or {}
-	source_files := p.get_src_c_files()!
+	source_files := p.get_src_c_files()
 
 	if source_files.len == 0 {
 		return error('No c source files in src directory')
