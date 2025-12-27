@@ -64,9 +64,9 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
 }
 
 struct {
-  int ignore_black;
+  short unsigned ignore_backward_faces;
 } gm3Project = {
-    .ignore_black = 0,
+    .ignore_backward_faces = 1,
 };
 
 /**
@@ -75,18 +75,31 @@ struct {
 int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
                 gm3Image *output) {
 
-  // Prepare output structure
-  // n_triangles might decrease if some are culled, but we allocate for the max
-  output->n_vertices = mesh->n_vertices;
-  output->vertices = calloc(output->n_vertices, sizeof(gm3Pos));
-  output->triangles = calloc(mesh->n_faces * 3, sizeof(size_t));
-  output->colors = calloc(mesh->n_faces, sizeof(gmColor));
-  output->depths = calloc(mesh->n_faces, sizeof(double));
-  output->n_colors = mesh->n_faces;
-  output->n_triangles = 0;
+  size_t start_vertex = output->n_vertices;
+  size_t start_triangle = output->n_triangles;
 
-  // 1. Transform all vertices into World Space first
-  // We store them in a temporary buffer to avoid modifying the original mesh
+  // 1. Safe Reallocation
+  void *tmp_v = realloc(output->vertices,
+                        (start_vertex + mesh->n_vertices) * sizeof(gm3Pos));
+  void *tmp_t = realloc(output->triangles,
+                        (start_triangle + mesh->n_faces) * 3 * sizeof(size_t));
+  void *tmp_c = realloc(output->colors,
+                        (start_triangle + mesh->n_faces) * sizeof(gmColor));
+  void *tmp_d = realloc(output->depths,
+                        (start_triangle + mesh->n_faces) * sizeof(double));
+
+  if (!tmp_v || !tmp_t || !tmp_c || !tmp_d)
+    return -1; // Allocation failure
+
+  output->vertices = tmp_v;
+  output->triangles = tmp_t;
+  output->colors = tmp_c;
+  output->depths = tmp_d;
+
+  // Important: We update n_vertices now so the offset logic works
+  output->n_vertices += mesh->n_vertices;
+
+  // 2. World Space Transformation
   gm3Pos *world_verts = malloc(sizeof(gm3Pos) * mesh->n_vertices);
   for (size_t i = 0; i < mesh->n_vertices; i++) {
     gm3Pos p = mesh->vertices[i];
@@ -96,40 +109,35 @@ int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
     world_verts[i] = p;
   }
 
-  // 2. Transform the normals (only rotation affects direction)
-  // We simulate face normals by transforming the stored normal index
-  // (Assuming mesh->normals contains the unique normal vectors)
-  // In a real engine, you'd calculate the transformed normal per face or
-  // transform the normal array.
-
-  // 3. Process Faces
+  // 3. Face Processing
   for (size_t i = 0; i < mesh->n_faces; i++) {
     gm3MeshFace *face = &mesh->faces[i];
     gm3Pos tri_verts[3] = {world_verts[face->vertices[0]],
                            world_verts[face->vertices[1]],
                            world_verts[face->vertices[2]]};
 
-    // Transform the normal for this face
     gm3Pos world_norm =
         gm3_pos_rotate(mesh->normals[face->normal], transform->rotation);
 
-    if (world_norm.z > 0)
+    // Simple Backface Culling (Camera is at origin looking towards +Z)
+    // If dot(normal, vector_to_camera) > 0, cull.
+    // Simplified: if normal.z > 0, it faces away from camera.
+    if (gm3Project.ignore_backward_faces && world_norm.z > 0)
       continue;
 
     gm3TriangleImage projected;
     if (gm3_project_face(&projected, world_norm, tri_verts, scene)) {
-      // Add to output image
       size_t t_idx = output->n_triangles;
 
-      // Store the projected 2D coordinates back into the output vertex pool
-      // (Note: This simple version overwrites shared vertices. In complex
-      // engines, unique vertices per triangle are often preferred for flat
-      // shading).
+      // Copy projected 2D vertices into the global vertex buffer
       for (int j = 0; j < 3; j++) {
-        size_t v_idx = face->vertices[j];
-        output->vertices[v_idx] = projected.vertices[j];
-        output->triangles[t_idx * 3 + j] = v_idx;
+        size_t local_v_idx = face->vertices[j];
+        size_t global_v_idx = local_v_idx + start_vertex;
+
+        output->vertices[global_v_idx] = projected.vertices[j];
+        output->triangles[t_idx * 3 + j] = global_v_idx; // FIXED: Added offset
       }
+
       output->depths[t_idx] = projected.depth;
       output->colors[t_idx] = projected.color;
       output->n_triangles++;
