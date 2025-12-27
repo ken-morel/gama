@@ -1,363 +1,275 @@
-// #include "../_math.h"
+#pragma once
+
 #include <ctype.h>
 #include <float.h>
+#include <math.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "mesh.h"
-#include "position.h"
+
+// --- Structures ---
 
 typedef struct {
-  char path[100];
+  size_t total_v;
+  size_t total_vn;
+  size_t total_vt;
+} gm3ObjContext;
+
+typedef struct {
+  char path[256];
   gm3Mesh *objects;
   size_t n_objects;
 } gm3ObjFile;
 
 typedef struct {
   char type;
-  char text[20];       // obj, mtl, group
-  double points[3];    // for normals & vertices & tex
-  long indices[64][3]; // for faces
+  double points[3];
+  long indices[64][3]; // [v, vt, vn]
   size_t n_indices;
 } gm3ObjLine;
 
-int gm3_obj_goto_next_object(FILE *f) {
-  char c;
-  do {
-    c = fgetc(f);
-    if (c == 'o')
-      return 1;
-    while (c != '\n' && c != EOF)
-      c = fgetc(f);
-  } while (c != EOF);
-  return 0;
-}
-int gm3_obj_count_objects(FILE *f, size_t *n) {
-  *n = 0;
-  for (*n = 0; gm3_obj_goto_next_object(f); (*n)++)
-    ;
-  return 0;
+static inline void _gm3_vec_sub(gm3Pos *r, gm3Pos a, gm3Pos b) {
+  r->x = a.x - b.x;
+  r->y = a.y - b.y;
+  r->z = a.z - b.z;
 }
 
-void gm3_obj_reset_line(gm3ObjLine *ln) {
-  ln->type = '?';
-  for (size_t i = 0; i < sizeof(ln->text); i++)
-    ln->text[i] = '\0';
-  for (size_t i = 0; i < sizeof(ln->points) / sizeof(ln->points[0]); i++)
-    ln->points[i] = 0;
-  for (size_t i = 0; i < sizeof(ln->indices) / sizeof(ln->indices[0]); i++)
-    for (size_t j = 0; j < sizeof(ln->indices[0]) / sizeof(ln->indices[0][0]);
-         j++)
-      ln->indices[i][j] = 0;
+static inline gm3Pos _gm3_vec_cross(gm3Pos a, gm3Pos b) {
+  return (gm3Pos){a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
+                  a.x * b.y - a.y * b.x};
 }
 
-size_t _gm3u_read_until_eol(const char *src, char *dest,
-                            const size_t dest_size) {
-  if (dest_size == 0)
+static inline void _gm3_vec_normalize(gm3Pos *v) {
+  double len = sqrt(v->x * v->x + v->y * v->y + v->z * v->z);
+  if (len > 1e-9) {
+    v->x /= len;
+    v->y /= len;
+    v->z /= len;
+  }
+}
+
+static inline char *skip_ws(char *s) {
+  while (*s && isspace((unsigned char)*s))
+    s++;
+  return s;
+}
+
+static long parse_idx(char **ptr, size_t total) {
+  if (!*ptr || isspace((unsigned char)**ptr))
     return 0;
-  while (*src == ' ')
-    src++;
-  size_t i = 0;
-  while (*src != '\0' && *src != '\r' && *src != '\n' && i < dest_size - 1) {
-    dest[i++] = *src++;
-  } // Truncate trailing whitespace
-  while (i > 0 && dest[i - 1] == ' ') {
-    i--;
-  }
-  dest[i] = '\0';
-  return i;
+  char *end;
+  long val = strtol(*ptr, &end, 10);
+  *ptr = end;
+  if (val < 0)
+    return (long)total + val + 1;
+  return val;
 }
 
-int gm3_obj_read_line(FILE *f, gm3ObjLine *ln) {
-  char line_buffer[4096]; // Much larger buffer for face lines
-  size_t line_start;
-  gm3_obj_reset_line(ln);
-  // Read line
-  if (!fgets(line_buffer, sizeof(line_buffer), f))
-    return -2; // EOF or error
+// --- Parsing Logic ---
 
-  // Skip leading whitespace
-  line_start = 0;
-  while (line_start < strlen(line_buffer) && isspace(line_buffer[line_start]))
-    line_start++;
+int gm3_obj_read_line(FILE *f, gm3ObjLine *ln, gm3ObjContext *ctx) {
+  char buf[1024];
+  ln->type = '?';
+  ln->n_indices = 0;
 
-  // Check for empty line or comment
-  if (line_buffer[line_start] == '\0' || line_buffer[line_start] == '\n' ||
-      line_buffer[line_start] == '\r' || line_buffer[line_start] == '#') {
-    if (line_buffer[line_start] == '#') {
-      ln->type = '#';
-      return 0;
-    }
-    ln->type = ' ';
-    return 0; // Empty line
-  }
+  if (!fgets(buf, sizeof(buf), f))
+    return -2; // EOF
 
-  // Check for different commands using proper strncmp (returns 0 when equal)
-  if (strncmp(&line_buffer[line_start], "v ", 2) == 0) {
-    // vertex: v %f %f %f
-    double x, y, z;
-    int fields = sscanf(&line_buffer[line_start], "v %lf %lf %lf", &x, &y, &z);
-    if (fields < 3)
-      return -1;
+  char *p = skip_ws(buf);
+  if (*p == '\0' || *p == '#')
+    return 0;
+
+  if (p[0] == 'v' && isspace((unsigned char)p[1])) {
     ln->type = 'v';
-    ln->points[0] = x;
-    ln->points[1] = y;
-    ln->points[2] = z;
-    return 0;
-  } else if (strncmp(&line_buffer[line_start], "vt ", 3) == 0) {
-    // texture: vt %f %f
-    double u, v;
-    int fields = sscanf(&line_buffer[line_start], "vt %lf %lf", &u, &v);
-    if (fields < 2)
-      return -1;
-    ln->type = 't';
-    ln->points[0] = u;
-    ln->points[1] = v;
-    return 0;
-  } else if (strncmp(&line_buffer[line_start], "vn ", 3) == 0) {
-    // normal: vn %f %f %f
-    double x, y, z;
-    int fields = sscanf(&line_buffer[line_start], "vn %lf %lf %lf", &x, &y, &z);
-    if (fields < 3)
-      return -1;
+    p = skip_ws(p + 1);
+    ln->points[0] = strtod(p, &p);
+    ln->points[1] = strtod(p, &p);
+    ln->points[2] = strtod(p, &p);
+  } else if (p[0] == 'v' && p[1] == 'n') {
     ln->type = 'n';
-    ln->points[0] = x;
-    ln->points[1] = y;
-    ln->points[2] = z;
-    return 0;
-  } else if (strncmp(&line_buffer[line_start], "o ", 2) == 0) {
-    // object: o %s
-    ln->type = 'o';
-    _gm3u_read_until_eol(&line_buffer[line_start + 2], ln->text,
-                         sizeof(ln->text));
-    return 0;
-  } else if (strncmp(&line_buffer[line_start], "g ", 2) == 0) {
-    // group: g %s
-    ln->type = 'g';
-    _gm3u_read_until_eol(&line_buffer[line_start + 2], ln->text,
-                         sizeof(ln->text));
-    return 0; // Missing return!
-  } else if (strncmp(&line_buffer[line_start], "usemtl ", 7) == 0) {
-    // usemtl %s
-    ln->type = 'm';
-    _gm3u_read_until_eol(&line_buffer[line_start + 7], ln->text,
-                         sizeof(ln->text));
-    return 0; // Missing return!
-  } else if (strncmp(&line_buffer[line_start], "f ", 2) == 0) {
-    // face parsing - need to use a separate buffer for tokenization
-    char face_buffer[4096];
-    strcpy(face_buffer, &line_buffer[line_start + 2]);
-
-    char *token;
-    char *saveptr; // For strtok_r (thread-safe version)
-
-    // Use strtok_r to avoid nested strtok issues
-    token = strtok_r(face_buffer, " \t\n\r", &saveptr);
-    int vertex_count = 0;
-
-    while (token != NULL &&
-           vertex_count < sizeof(ln->indices) / sizeof(ln->indices[0])) {
-      // Parse the vertex/texcoord/normal triple: v/vt/vn
-      int v_idx = 0, vt_idx = 0, vn_idx = 0;
-
-      // Create a copy for parsing since strtok modifies the string
-      char vertex_spec[256];
-      strncpy(vertex_spec, token, sizeof(vertex_spec) - 1);
-      vertex_spec[sizeof(vertex_spec) - 1] = '\0';
-      // Find the slashes to split the specification
-      char *part1 = strtok_r(vertex_spec, "/", &saveptr);
-      char *part2 = strtok_r(NULL, "/", &saveptr);
-      char *part3 = strtok_r(NULL, "/", &saveptr);
-      if (part1 && strlen(part1) > 0) {
-        v_idx = atoi(part1);
-      }
-      if (part2 && strlen(part2) > 0) {
-        vt_idx = atoi(part2);
-      }
-      // Note: part2 could be empty (v//vn format), which is OK
-      if (part3 && strlen(part3) > 0) {
-        vn_idx = atoi(part3);
-      }
-      // Store indices (remember to handle negative indices)
-      ln->indices[vertex_count][0] = v_idx;
-      ln->indices[vertex_count][1] = vt_idx;
-      ln->indices[vertex_count][2] = vn_idx;
-      vertex_count++;
-      // Get next token from original string, not the modified copy
-      token = strtok_r(NULL, " \t\n\r", &saveptr);
-    }
+    p = skip_ws(p + 2);
+    ln->points[0] = strtod(p, &p);
+    ln->points[1] = strtod(p, &p);
+    ln->points[2] = strtod(p, &p);
+  } else if (p[0] == 'f' && isspace((unsigned char)p[1])) {
     ln->type = 'f';
-    ln->n_indices = vertex_count;
-    return 0;
+    p = skip_ws(p + 1);
+    while (*p != '\0' && *p != '\n' && ln->n_indices < 64) {
+      ln->indices[ln->n_indices][0] = parse_idx(&p, ctx->total_v);
+      if (*p == '/') {
+        p++;
+        if (*p != '/')
+          ln->indices[ln->n_indices][1] = parse_idx(&p, ctx->total_vt);
+        if (*p == '/') {
+          p++;
+          ln->indices[ln->n_indices][2] = parse_idx(&p, ctx->total_vn);
+        }
+      }
+      ln->n_indices++;
+      p = skip_ws(p);
+    }
+  } else if (p[0] == 'o' || p[0] == 'g') {
+    ln->type = 'o';
   }
-  // Unknown command
-  ln->type = '?';
-  strncpy(ln->text, &line_buffer[line_start], sizeof(ln->text) - 1);
-  ln->text[sizeof(ln->text) - 1] = '\0';
   return 0;
 }
 
-int gm3_obj_count_mesh_components(FILE *f, size_t *vertices, size_t *normals,
-                                  size_t *faces) {
-  *vertices = 0;
-  *normals = 0;
-  *faces = 0;
-  gm3ObjLine ln;
-  int ret;
-  do {
-    ret = gm3_obj_read_line(f, &ln);
-    switch (ln.type) {
-    case 'f':
-      (*faces)++;
-      break;
-    case 'v':
-      (*vertices)++;
-      break;
-    case 'n':
-      (*normals)++;
-      break;
-    }
-  } while (ret >= 0);
+// --- Memory Management ---
 
-  if (ret > 0 || ret == -2)
-    return 0;
-  else
-    return ret;
+void gm3_free_mesh(gm3Mesh *m) {
+  if (!m)
+    return;
+  if (m->vertices)
+    free(m->vertices);
+  if (m->faces)
+    free(m->faces);
+  if (m->normals)
+    free(m->normals);
+  memset(m, 0, sizeof(gm3Mesh));
 }
-int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, size_t obj_idx) {
-  m->n_faces = 0;
-  m->faces = NULL;
-  m->normals = NULL;
-  m->n_vertices = 0;
-  m->vertices = NULL;
 
-  int ret;
+void gm3_free_obj(gm3ObjFile *obj) {
+  if (!obj)
+    return;
+  if (obj->objects) {
+    for (size_t i = 0; i < obj->n_objects; i++) {
+      gm3_free_mesh(&obj->objects[i]);
+    }
+    free(obj->objects);
+  }
+  obj->n_objects = 0;
+}
 
-  size_t i;
-  char c;
-  for (i = 0; i <= obj_idx; i++)
-    if (!gm3_obj_goto_next_object(f))
-      return 1;
-  do {
-    c = fgetc(f);
-  } while (c != '\n' && c != EOF);
-  if (c == EOF)
-    return 2;
-  size_t obj_start = ftell(f);
+// --- High Level Loading ---
 
-  size_t n_vertex_normals;
-  // A face has three normals and three textures for each verex.
-  // Buf for gama we will use a single color and single normal
-  // for each face, using the average of those
-
-  ret = gm3_obj_count_mesh_components(f, &m->n_vertices, &n_vertex_normals,
-                                      &m->n_faces);
-  fseek(f, obj_start, SEEK_SET);
-  if (ret < 0)
-    return ret;
-  gm3Pos *vertex_normals = calloc(n_vertex_normals, sizeof(gm3Pos));
-  m->faces = calloc(m->n_faces, sizeof(gm3MeshFace));
-  m->vertices = calloc(m->n_vertices, sizeof(gm3Pos));
-
-  m->normals = calloc(m->n_faces, sizeof(gm3Pos));
-
+int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, gm3ObjContext *ctx) {
+  long mesh_start_pos = ftell(f);
   gm3ObjLine ln;
-  ret = gm3_obj_read_line(f, &ln);
+  size_t local_v = 0, local_vn = 0, local_f = 0;
 
-  size_t vertex = 0, face = 0, vertex_normal = 0;
-  // TODO: In future shrink normals to save memory
-  // and prevent repetitions, let paralel faces have the same
-  // .normal
-  // cache normals for them to be computed latter
-  //
-  size_t *face_vertices_normals = calloc(m->n_faces * 3, sizeof(size_t));
+  // Pass 1: Scan for counts
+  while (gm3_obj_read_line(f, &ln, ctx) == 0) {
+    if (ln.type == 'o' && local_v > 0)
+      break;
+    if (ln.type == 'v') {
+      local_v++;
+      ctx->total_v++;
+    }
+    if (ln.type == 'n') {
+      local_vn++;
+      ctx->total_vn++;
+    }
+    if (ln.type == 'f')
+      local_f += (ln.n_indices >= 3 ? ln.n_indices - 2 : 0);
+  }
 
-  while (ret >= 0) {
-    switch (ln.type) {
-    case 'v':
-      if (vertex < m->n_vertices) {
-        m->vertices[vertex].x = ln.points[0];
-        m->vertices[vertex].y = ln.points[1];
-        m->vertices[vertex].z = ln.points[2];
-      }
-      vertex++;
-      break;
-    case 'n':
-      if (vertex_normal < n_vertex_normals) {
-        vertex_normals[vertex_normal].x = ln.points[0];
-        vertex_normals[vertex_normal].y = ln.points[1];
-        vertex_normals[vertex_normal].z = ln.points[2];
-      }
-      vertex_normal++;
-      break;
-    case 'f':
-      if (face < m->n_faces && ln.n_indices >= 3) {
-        // correct 1 based index
-        m->faces[face].vertices[0] = ln.indices[0][0] - 1;
-        m->faces[face].vertices[1] = ln.indices[1][0] - 1;
-        m->faces[face].vertices[2] = ln.indices[2][0] - 1;
+  if (local_v == 0)
+    return 0; // Empty object
 
-        face_vertices_normals[0 + face * 3] = ln.indices[0][2] - 1;
-        face_vertices_normals[1 + face * 3] = ln.indices[0][2] - 1;
-        face_vertices_normals[2 + face * 3] = ln.indices[0][2] - 1;
-      }
-      face++;
+  m->n_vertices = local_v;
+  m->n_faces = local_f;
+  m->vertices = calloc(local_v, sizeof(gm3Pos));
+  m->faces = calloc(local_f, sizeof(gm3MeshFace));
+  m->normals = calloc(local_f, sizeof(gm3Pos));
+
+  if (!m->vertices || !m->faces || !m->normals) {
+    gm3_free_mesh(m);
+    return -3; // Memory error
+  }
+
+  // Pass 2: Data Load
+  fseek(f, mesh_start_pos, SEEK_SET);
+  size_t cv = 0, cf = 0, cvn = 0;
+  gm3Pos *temp_vn = calloc(local_vn + 1, sizeof(gm3Pos));
+  size_t v_offset = ctx->total_v - local_v;
+  size_t vn_offset = ctx->total_vn - local_vn;
+
+  while (gm3_obj_read_line(f, &ln, ctx) == 0) {
+    if (ln.type == 'o' && cv > 0)
       break;
-    }
-    ret = gm3_obj_read_line(f, &ln);
-  }
-  if (ret != -2) {
-    // TODO: free memory
-    return ret;
-  }
-  // compute face normals
-  size_t normal_idx = 0; // the normal index
-  size_t fi;             // the face index
-  for (fi = 0; fi < m->n_faces && fi < face; fi++) {
-    m->normals[normal_idx].x = vertex_normals[fi * 3].x +
-                               vertex_normals[1 + fi * 3].x +
-                               vertex_normals[2 + fi * 3].x;
-    m->normals[normal_idx].x = vertex_normals[fi * 3].x +
-                               vertex_normals[1 + fi * 3].x +
-                               vertex_normals[2 + fi * 3].x;
-    m->normals[normal_idx].x = vertex_normals[fi * 3].x +
-                               vertex_normals[1 + fi * 3].x +
-                               vertex_normals[2 + fi * 3].x;
-    m->faces[fi].normal = normal_idx;
-    for (size_t i = 0; i < normal_idx; i++) {
-      if (gm3_pos_distance(m->normals[normal_idx], m->normals[i]) < 0.0001) {
-        m->faces[fi].normal = i;
+    if (ln.type == 'v')
+      m->vertices[cv++] = (gm3Pos){ln.points[0], ln.points[1], ln.points[2]};
+    if (ln.type == 'n' && temp_vn)
+      temp_vn[cvn++] = (gm3Pos){ln.points[0], ln.points[1], ln.points[2]};
+    if (ln.type == 'f') {
+      for (size_t i = 0; i < ln.n_indices - 2; i++) {
+        gm3MeshFace *face = &m->faces[cf];
+        face->vertices[0] = ln.indices[0][0] - v_offset - 1;
+        face->vertices[1] = ln.indices[i + 1][0] - v_offset - 1;
+        face->vertices[2] = ln.indices[i + 2][0] - v_offset - 1;
+
+        gm3Pos n = {0, 0, 0};
+        // If the OBJ provides normals, use them
+        if (ln.indices[0][2] > 0 && temp_vn) {
+          n = temp_vn[ln.indices[0][2] - vn_offset - 1];
+        } else {
+          // Fallback to cross product calculation
+          gm3Pos e1, e2;
+          _gm3_vec_sub(&e1, m->vertices[face->vertices[1]],
+                       m->vertices[face->vertices[0]]);
+          _gm3_vec_sub(&e2, m->vertices[face->vertices[2]],
+                       m->vertices[face->vertices[0]]);
+          n = _gm3_vec_cross(e1, e2);
+        }
+        _gm3_vec_normalize(&n);
+
+        // Normal Deduplication Logic (Basic)
+        size_t found_n = cf;
+        for (size_t j = 0; j < cf; j++) {
+          if (fabs(m->normals[j].x - n.x) < 0.001 &&
+              fabs(m->normals[j].y - n.y) < 0.001 &&
+              fabs(m->normals[j].z - n.z) < 0.001) {
+            found_n = j;
+            break;
+          }
+        }
+        m->normals[found_n] = n;
+        face->normal = found_n;
+        cf++;
       }
     }
-    if (m->faces[fi].normal == normal_idx) {
-      normal_idx++; // just use this normal then
-    }
   }
-  free(vertex_normals);
-  free(face_vertices_normals);
+  if (temp_vn)
+    free(temp_vn);
   return 0;
 }
 
 int gm3_load_obj(gm3ObjFile *obj, const char *path) {
-  int ret;
+  FILE *f = fopen(path, "r");
+  if (!f)
+    return -1;
+
+  memset(obj, 0, sizeof(gm3ObjFile));
   snprintf(obj->path, sizeof(obj->path), "%s", path);
 
-  FILE *f = fopen(path, "r");
-
-  ret = gm3_obj_count_objects(f, &obj->n_objects);
-  fseek(f, 0, SEEK_SET);
-  if (ret != 0)
-    return ret;
+  // Count objects
+  char line[256];
+  while (fgets(line, sizeof(line), f)) {
+    if (line[0] == 'o' && isspace((unsigned char)line[1]))
+      obj->n_objects++;
+  }
+  if (obj->n_objects == 0)
+    obj->n_objects = 1; // Default to 1 if 'o' is missing
 
   obj->objects = calloc(obj->n_objects, sizeof(gm3Mesh));
-  for (size_t obj_index = 0; obj_index < obj->n_objects; obj_index++) {
-    int ret = gm3_obj_load_mesh(&obj->objects[obj_index], f, obj_index);
-    if (ret < 0)
-      return ret;
-    fseek(f, 0, SEEK_SET);
+  if (!obj->objects) {
+    fclose(f);
+    return -3;
   }
 
+  fseek(f, 0, SEEK_SET);
+  gm3ObjContext ctx = {0};
+  for (size_t i = 0; i < obj->n_objects; i++) {
+    if (gm3_obj_load_mesh(&obj->objects[i], f, &ctx) < 0) {
+      gm3_free_obj(obj);
+      fclose(f);
+      return -4;
+    }
+  }
+
+  fclose(f);
   return 0;
 }
