@@ -66,9 +66,12 @@ int _gm3_depth_compare(const void *a, const void *b) {
 struct {
   short unsigned ignore_colors;
   gmColor ignored_colors[10];
+  double ignore_small_triangles;
+
 } gm3DrawImage = {
     .ignore_colors = 0,
     .ignored_colors = {0},
+    .ignore_small_triangles = 0,
 };
 
 int gm3_draw_image(gm3Image *m, double x, double y) {
@@ -99,6 +102,10 @@ int gm3_draw_image(gm3Image *m, double x, double y) {
     for (size_t c = 0; c < gm3DrawImage.ignore_colors; c++)
       if (gm3DrawImage.ignored_colors[c] == m->colors[tidx])
         continue;
+
+    if (gm3DrawImage.ignore_small_triangles > 0 &&
+        gm_triangle_area(v1, v2, v3) <= gm3DrawImage.ignore_small_triangles)
+      continue;
 
     gm_draw_triangle(v1.x + x, v1.y + y, v2.x + x, v2.y + y, v3.x + x, v3.y + y,
                      m->colors[tidx]);

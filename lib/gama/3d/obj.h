@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "mesh.h"
+#include "mtl.h"
 
 // --- Structures ---
 
@@ -20,29 +21,38 @@ typedef struct {
 
 typedef struct {
   char path[256];
+
   gm3Mesh *objects;
   size_t n_objects;
+
+  // Collection of loaded material files
+  gm3MtlFile **mtl_files;
+  size_t n_mtl_files;
 } gm3ObjFile;
 
 typedef struct {
   char type;
+  char name[128]; // For mtllib and usemtl names
   double points[3];
   long indices[64][3]; // [v, vt, vn]
   size_t n_indices;
 } gm3ObjLine;
 
-static inline void _gm3_vec_sub(gm3Pos *r, gm3Pos a, gm3Pos b) {
-  r->x = a.x - b.x;
-  r->y = a.y - b.y;
-  r->z = a.z - b.z;
-}
+// --- Internal Helpers ---
 
-static inline void _gm3_vec_normalize(gm3Pos *v) {
-  double len = sqrt(v->x * v->x + v->y * v->y + v->z * v->z);
-  if (len > 1e-9) {
-    v->x /= len;
-    v->y /= len;
-    v->z /= len;
+static inline void copy_name(char *dest, const char *src, size_t max_len) {
+  while (*src && isspace((unsigned char)*src))
+    src++; // Skip leading space
+  size_t i = 0;
+  while (src[i] != '\0' && src[i] != '\n' && src[i] != '\r' &&
+         i < max_len - 1) {
+    dest[i] = src[i];
+    i++;
+  }
+  dest[i] = '\0';
+  // Trim trailing spaces
+  while (i > 0 && isspace((unsigned char)dest[i - 1])) {
+    dest[--i] = '\0';
   }
 }
 
@@ -69,9 +79,10 @@ int gm3_obj_read_line(FILE *f, gm3ObjLine *ln, gm3ObjContext *ctx) {
   char buf[1024];
   ln->type = '?';
   ln->n_indices = 0;
+  memset(ln->name, 0, sizeof(ln->name));
 
   if (!fgets(buf, sizeof(buf), f))
-    return -2; // EOF
+    return -2;
 
   char *p = skip_ws(buf);
   if (*p == '\0' || *p == '#')
@@ -106,60 +117,65 @@ int gm3_obj_read_line(FILE *f, gm3ObjLine *ln, gm3ObjContext *ctx) {
       ln->n_indices++;
       p = skip_ws(p);
     }
+  } else if (strncmp(p, "mtllib", 6) == 0) {
+    ln->type = 'L';
+    copy_name(ln->name, p + 6, sizeof(ln->name));
+  } else if (strncmp(p, "usemtl", 6) == 0) {
+    ln->type = 'U';
+    copy_name(ln->name, p + 6, sizeof(ln->name));
   } else if (p[0] == 'o' || p[0] == 'g') {
     ln->type = p[0];
+    copy_name(ln->name, p + 1, sizeof(ln->name));
   }
   return 0;
 }
 
 // --- Memory Management ---
 
-void gm3_free_mesh(gm3Mesh *m) {
-  if (!m)
-    return;
-  if (m->vertices)
-    free(m->vertices);
-  if (m->faces)
-    free(m->faces);
-  if (m->normals)
-    free(m->normals);
-  memset(m, 0, sizeof(gm3Mesh));
-}
-
 void gm3_free_obj(gm3ObjFile *obj) {
   if (!obj)
     return;
   if (obj->objects) {
     for (size_t i = 0; i < obj->n_objects; i++) {
-      gm3_free_mesh(&obj->objects[i]);
+      if (obj->objects[i].vertices)
+        free(obj->objects[i].vertices);
+      if (obj->objects[i].faces)
+        free(obj->objects[i].faces);
+      if (obj->objects[i].normals)
+        free(obj->objects[i].normals);
     }
     free(obj->objects);
   }
-  obj->n_objects = 0;
+  // Free material files
+  if (obj->mtl_files) {
+    for (size_t i = 0; i < obj->n_mtl_files; i++) {
+      gm3_mtl_free(obj->mtl_files[i]);
+    }
+    free(obj->mtl_files);
+  }
+  memset(obj, 0, sizeof(gm3ObjFile));
 }
 
-// we make the cordinates of the vertices of the mesh
-// to be about the mesh's center
-int gm3_center_mesh_vertices(gm3Mesh *m) {
-  gm3Pos center = {0, 0, 0};
-  size_t i;
-  double ratio = 1.0 / (double)m->n_vertices;
-  for (i = 0; i < m->n_vertices; i++) {
-    center.x += m->vertices[i].x * ratio;
-    center.y += m->vertices[i].y * ratio;
-    center.z += m->vertices[i].z * ratio;
+// --- Material Helper ---
+
+static size_t gm3_obj_get_material_id(gm3ObjFile *obj, const char *name) {
+  // This is a simple implementation:
+  // We return a global index or pointer. For now, let's assume we store
+  // the index as (mtl_file_index << 16 | material_index_inside_file)
+  for (size_t i = 0; i < obj->n_mtl_files; i++) {
+    for (size_t j = 0; j < obj->mtl_files[i]->n_materials; j++) {
+      if (strcmp(obj->mtl_files[i]->materials[j].name, name) == 0) {
+        return (i << 16) | j;
+      }
+    }
   }
-  // and that's it, we have the center, we can now
-  // substract it in each vertex
-  for (i = 0; i < m->n_vertices; i++) {
-    m->vertices[i] = gm3_pos_minus(m->vertices[i], center);
-  }
-  return 0;
+  return 0; // Default material
 }
+
 // --- High Level Loading ---
-//
 
-int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, gm3ObjContext *ctx) {
+int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, gm3ObjContext *ctx,
+                      gm3ObjFile *parent, const char *dir) {
   long mesh_start_pos = ftell(f);
   gm3ObjLine ln;
   size_t local_v = 0, local_vn = 0, local_f = 0;
@@ -181,7 +197,7 @@ int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, gm3ObjContext *ctx) {
   }
 
   if (local_v == 0)
-    return 0; // Empty object
+    return 0;
 
   m->n_vertices = local_v;
   m->n_faces = local_f;
@@ -189,49 +205,59 @@ int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, gm3ObjContext *ctx) {
   m->faces = calloc(local_f, sizeof(gm3MeshFace));
   m->normals = calloc(local_f, sizeof(gm3Pos));
 
-  if (!m->vertices || !m->faces || !m->normals) {
-    gm3_free_mesh(m);
-    return -3; // Memory error
-  }
-
   // Pass 2: Data Load
   fseek(f, mesh_start_pos, SEEK_SET);
-  size_t cv = 0, cf = 0, cvn = 0;
-  gm3Pos *temp_vn = calloc(local_vn + 1, sizeof(gm3Pos));
+  size_t cv = 0, cf = 0;
   size_t v_offset = ctx->total_v - local_v;
-  size_t vn_offset = ctx->total_vn - local_vn;
+  size_t active_mat_idx = 0;
 
   while (gm3_obj_read_line(f, &ln, ctx) == 0) {
     if (ln.type == 'o' && cv > 0)
       break;
-    if (ln.type == 'v')
+
+    if (ln.type == 'L') { // mtllib
+      // Check if already loaded
+      int loaded = 0;
+      for (size_t i = 0; i < parent->n_mtl_files; i++)
+        if (strcmp(parent->mtl_files[i]->path, ln.name) == 0) {
+          loaded = 1;
+          break;
+        }
+
+      if (!loaded) {
+        gm3MtlFile *mf = calloc(1, sizeof(gm3MtlFile));
+        char path[2048];
+        snprintf(path, sizeof(path), "%s/%s", dir, ln.name);
+
+        if (gm3_mtl_load(mf, path) >= 0) {
+          parent->n_mtl_files++;
+          parent->mtl_files = realloc(
+              parent->mtl_files, sizeof(gm3MtlFile *) * parent->n_mtl_files);
+          parent->mtl_files[parent->n_mtl_files - 1] = mf;
+        }
+      }
+    } else if (ln.type == 'U') { // usemtl
+      active_mat_idx = gm3_obj_get_material_id(parent, ln.name);
+    } else if (ln.type == 'v') {
       m->vertices[cv++] = (gm3Pos){ln.points[0], ln.points[1], ln.points[2]};
-    if (ln.type == 'n' && temp_vn)
-      temp_vn[cvn++] = (gm3Pos){ln.points[0], ln.points[1], ln.points[2]};
-    if (ln.type == 'f') {
-      // we will devide the polygon into triangles
+    } else if (ln.type == 'f') {
       for (size_t i = 0; i < ln.n_indices - 2; i++) {
-        gm3MeshFace *face = &m->faces[cf]; // a new face
-        face->vertices[0] =
-            ln.indices[0][0] - v_offset - 1; // this remains constant
-        face->vertices[1] =
-            ln.indices[i + 1][0] - v_offset - 1; // attach to the previous face
+        gm3MeshFace *face = &m->faces[cf];
+        face->vertices[0] = ln.indices[0][0] - v_offset - 1;
+        face->vertices[1] = ln.indices[i + 1][0] - v_offset - 1;
         face->vertices[2] = ln.indices[i + 2][0] - v_offset - 1;
+        face->material_idx = active_mat_idx; // Associate material
 
-        gm3Pos n = {0, 0, 0};
-        // If the OBJ provides normals, use them
-        // ignore the provided normal: n = temp_vn[ln.indices[0][2] - vn_offset
-        // - 1]; Fallback to cross product calculation
+        // Calculate normal
         gm3Pos e1, e2;
-        // find the face normal by computing (a - b) x (a - c)
-        _gm3_vec_sub(&e1, m->vertices[face->vertices[1]],
-                     m->vertices[face->vertices[0]]);
-        _gm3_vec_sub(&e2, m->vertices[face->vertices[2]],
-                     m->vertices[face->vertices[0]]);
-        n = gm3_pos_cross(e1, e2);
-        _gm3_vec_normalize(&n);
+        e1 = gm3_pos_minus(m->vertices[face->vertices[1]],
+                           m->vertices[face->vertices[0]]);
+        e2 = gm3_pos_minus(m->vertices[face->vertices[2]],
+                           m->vertices[face->vertices[0]]);
+        gm3Pos n = gm3_pos_cross(e1, e2);
+        n = gm3_pos_normalize(n);
 
-        // Normal Deduplication Logic (Basic)
+        // Deduplication
         size_t found_n = cf;
         for (size_t j = 0; j < cf; j++) {
           if (fabs(m->normals[j].x - n.x) < 0.001 &&
@@ -247,54 +273,45 @@ int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, gm3ObjContext *ctx) {
       }
     }
   }
-  if (temp_vn)
-    free(temp_vn);
   return 0;
 }
 
 int gm3_center_obj_vertices(gm3ObjFile *obj) {
-  if (!obj)
+  if (!obj || obj->n_objects == 0)
     return -1;
-  // firstly find the center
-  gm3Pos center = {0, 0, 0};
-  double x[2] = {100000000, -100000000}; // min, max pairs
-  double y[2] = {100000000, -100000000};
-  double z[2] = {100000000, -100000000};
-  double p;
-  for (size_t obj_i = 0; obj_i < obj->n_objects; obj_i++)
-    for (size_t vertex = 0; vertex < obj->objects[obj_i].n_vertices; vertex++) {
-      p = obj->objects[obj_i].vertices[vertex].x;
-      if (p < x[0])
-        x[0] = p;
-      else if (p > x[1])
-        x[1] = p;
+  double min_p[3] = {DBL_MAX, DBL_MAX, DBL_MAX};
+  double max_p[3] = {-DBL_MAX, -DBL_MAX, -DBL_MAX};
 
-      p = obj->objects[obj_i].vertices[vertex].y;
-      if (p < y[0])
-        y[0] = p;
-      else if (p > y[1])
-        y[1] = p;
+  for (size_t i = 0; i < obj->n_objects; i++) {
+    for (size_t v = 0; v < obj->objects[i].n_vertices; v++) {
+      gm3Pos p = obj->objects[i].vertices[v];
+      if (p.x < min_p[0])
+        min_p[0] = p.x;
+      if (p.x > max_p[0])
+        max_p[0] = p.x;
+      if (p.y < min_p[1])
+        min_p[1] = p.y;
+      if (p.y > max_p[1])
+        max_p[1] = p.y;
+      if (p.z < min_p[2])
+        min_p[2] = p.z;
+      if (p.z > max_p[2])
+        max_p[2] = p.z;
+    }
+  }
 
-      p = obj->objects[obj_i].vertices[vertex].z;
-      if (p < z[0])
-        z[0] = p;
-      else if (p > z[1])
-        z[1] = p;
-    }
-  center.x = (x[0] + x[1]) / 2;
-  center.y = (y[0] + y[1]) / 2;
-  center.z = (z[0] + z[1]) / 2;
-  // now we have the center, we center all the vertices
-  for (size_t obj_i = 0; obj_i < obj->n_objects; obj_i++)
-    for (size_t vertex = 0; vertex < obj->objects[obj_i].n_vertices; vertex++) {
-      obj->objects[obj_i].vertices[vertex].x -= center.x;
-      obj->objects[obj_i].vertices[vertex].y -= center.y;
-      obj->objects[obj_i].vertices[vertex].z -= center.z;
-    }
+  gm3Pos center = {(min_p[0] + max_p[0]) / 2, (min_p[1] + max_p[1]) / 2,
+                   (min_p[2] + max_p[2]) / 2};
+
+  for (size_t i = 0; i < obj->n_objects; i++)
+    for (size_t v = 0; v < obj->objects[i].n_vertices; v++)
+      obj->objects[i].vertices[v] =
+          gm3_pos_minus(obj->objects[i].vertices[v], center);
+
   return 0;
 }
 
-int gm3_load_obj(gm3ObjFile *obj, const char *path) {
+int gm3_load_obj(gm3ObjFile *obj, const char *path, const char *dir) {
   FILE *f = fopen(path, "r");
   if (!f)
     return -1;
@@ -302,32 +319,25 @@ int gm3_load_obj(gm3ObjFile *obj, const char *path) {
   memset(obj, 0, sizeof(gm3ObjFile));
   snprintf(obj->path, sizeof(obj->path), "%s", path);
 
-  // Count objects
   char line[256];
   while (fgets(line, sizeof(line), f)) {
     if (line[0] == 'o' && isspace((unsigned char)line[1]))
       obj->n_objects++;
   }
   if (obj->n_objects == 0)
-    obj->n_objects = 1; // Default to 1 if 'o' is missing
+    obj->n_objects = 1;
 
   obj->objects = calloc(obj->n_objects, sizeof(gm3Mesh));
-  if (!obj->objects) {
-    fclose(f);
-    return -3;
-  }
-
   fseek(f, 0, SEEK_SET);
   gm3ObjContext ctx = {0};
   for (size_t i = 0; i < obj->n_objects; i++) {
-    if (gm3_obj_load_mesh(&obj->objects[i], f, &ctx) < 0) {
+    if (gm3_obj_load_mesh(&obj->objects[i], f, &ctx, obj, dir) < 0) {
       gm3_free_obj(obj);
       fclose(f);
       return -4;
     }
   }
   gm3_center_obj_vertices(obj);
-
   fclose(f);
   return 0;
 }

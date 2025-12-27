@@ -1,3 +1,4 @@
+#include "gama/color.h"
 #include <gama.h>
 #include <gama/3d.h>
 
@@ -15,11 +16,19 @@ int main() {
 
   gm3ObjFile file; // create an obj file
 
-  int code = gm3_load_obj(&file, "assets/obj/Bowl.obj"); // load the obj file
+  int code = gm3_load_obj(&file, "assets/obj/12221_Cat_v1_l3.obj",
+                          "assets/obj"); // load the obj file
+  if (code < 0) {
+    printf("Object load failed: %d", code);
+  } else if (code > 0) {
+    printf("Object load notified: %d", code);
+  }
 
   printf("obj file has %zu objects", file.n_objects);
 
   gm3Scene scene = gm3_scene();
+  scene.light.position.z = -10;
+  scene.light.color = GM_ORANGE;
 
   gm3Transform transform = gm3_transform();
   double scale = 0.5;
@@ -32,6 +41,8 @@ int main() {
       gm3_image(); // the image where we snap the 3d object into a 2d image and
   // then draw
 
+  gm3Project.ignore_backward_faces = 1;
+  gm3DrawImage.ignore_small_triangles = 0.01;
   do {
     double k = gm_dt();
     if (gm_key('U'))
@@ -53,7 +64,7 @@ int main() {
 
     for (size_t i = 0; i < file.n_objects;
          i++) { // draw each of the objects in the file
-      gm3_project(&file.objects[i], &transform, &scene,
+      gm3_project(&file.objects[i], &file, &transform, &scene,
                   &img); // snap on the image
       for (size_t i = 0; i < img.n_colors; i++)
         img.colors[i] = gm_set_alpha(img.colors[i], 255);

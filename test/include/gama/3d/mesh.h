@@ -11,6 +11,7 @@
 typedef struct {
   size_t vertices[3];
   size_t normal;
+  size_t material_idx;
 } gm3MeshFace;
 
 typedef struct {

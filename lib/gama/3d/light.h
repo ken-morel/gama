@@ -2,6 +2,7 @@
 
 #include "../color.h"
 #include "position.h"
+
 typedef struct {
   gm3Pos position;
   gm3Pos direction;

@@ -8,6 +8,8 @@ typedef struct {
   double near;
   double far;
   gm3Light light;
+  gm3Pos camera_pos;
+  double ambient;
 } gm3Scene;
 
 int gm3_scene_create(gm3Scene *s, double w, double h) {
@@ -19,6 +21,8 @@ int gm3_scene_create(gm3Scene *s, double w, double h) {
   s->light.direction = gm3pos(0, -1, 1);
   s->light.intensity = 1;
   s->light.position = gm3pos(0, 1, 0);
+  gm3_pos_reset(&s->camera_pos);
+  s->ambient = 1;
   return 0;
 }
 

@@ -1,56 +1,86 @@
 #pragma once
 
 #include "../color.h"
-
 #include "../position.h"
 #include "image.h"
 #include "light.h"
 #include "mesh.h"
-#include "position.h"
+#include "mtl.h"
+#include "obj.h"
 #include "scene.h"
 #include "transform.h"
+#include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
 
 /**
+ * Calculates the final color of a face using the Blinn-Phong model.
+ */
+static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
+                                             gm3Material *mat,
+                                             gm3Scene *scene) {
+  // 1. Vector Setup
+  // Light vector: from face to light
+  gm3Pos l_vec =
+      gm3_pos_normalize(gm3_pos_minus(scene->light.position, face_center));
+  // View vector: from face to camera (Camera is at origin)
+  gm3Pos v_vec =
+      gm3_pos_normalize(gm3_pos_minus((gm3Pos){0, 0, 0}, face_center));
+  // Halfway vector for Specular
+  gm3Pos h_vec = gm3_pos_normalize(gm3_pos_plus(l_vec, v_vec));
+
+  // 2. Diffuse Component (Lambert)
+  double dot_l = gm3_pos_dot(norm, l_vec);
+  double diffuse_factor = (dot_l < 0) ? 0 : dot_l;
+
+  // 3. Specular Component (Shiny Highlight)
+  double specular_factor = 0;
+  if (diffuse_factor > 0 && mat->shininess > 0) {
+    double dot_h = gm3_pos_dot(norm, h_vec);
+    if (dot_h > 0) {
+      specular_factor = pow(dot_h, mat->shininess);
+    }
+  }
+
+  // 4. Intensity Application
+  double intensity = scene->light.intensity;
+  double amb = scene->ambient;
+
+  // Blend Light Color + Material Diffuse + Material Specular
+  // Final = MatDiffuse * (DiffuseFactor * LightInt + Ambient) + (MatSpecular *
+  // SpecularFactor * LightInt)
+
+  int r = (int)((gm_red(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+                (gm_red(mat->specular) * specular_factor * intensity));
+  int g = (int)((gm_green(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+                (gm_green(mat->specular) * specular_factor * intensity));
+  int b = (int)((gm_blue(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+                (gm_blue(mat->specular) * specular_factor * intensity));
+  int a = (int)(mat->alpha * 255);
+
+  return gm_rgba(r, g, b, a);
+}
+
+/**
  * Projects a single face, calculates lighting, and checks visibility.
- * Note: Vertices and Normal must already be transformed into World/Camera
- * space.
  */
 int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
-                     gm3Scene *scene) {
+                     gm3Material *mat, gm3Scene *scene) {
 
   // 1. Clipping & Visibility Check
   for (size_t i = 0; i < 3; i++) {
-    // Basic Z-clipping against the scene's near/far planes
     if (vertices[i].z <= scene->near || vertices[i].z > scene->far) {
       return 0;
     }
   }
 
-  // 2. Lighting Calculation (Lambertian Diffuse)
+  // 2. Lighting Calculation
   gm3Pos face_center = gm3_pos_center3(vertices[0], vertices[1], vertices[2]);
+  out->color = gm3_calculate_lighting(norm, face_center, mat, scene);
 
-  // Vector from face to light position
-  gm3Pos l_vec = gm3_pos_minus(scene->light.position, face_center);
-  l_vec = gm3_pos_normalize(l_vec);
-
-  // Dot product: Normal · LightVector (cos of angle)
-  double dot = gm3_pos_dot(norm, l_vec);
-  if (dot < 0)
-    dot = 0;
-
-  // Combine Light Intensity and Angle
-  double final_intensity = scene->light.intensity * dot;
-
-  // Apply intensity to the light's color (ensure gm_scale_color is defined in
-  // color.h)
-  out->color = gm_scale_color(scene->light.color, final_intensity);
-
-  // 3. Perspective Projection (3D -> 2D)
+  // 3. Perspective Projection
   out->depth = 0;
   for (int i = 0; i < 3; i++) {
-    // Standard perspective: x' = (x/z) * focal_length + offset
     out->vertices[i].x =
         (float)((vertices[i].x / vertices[i].z) * scene->viewport.x +
                 (scene->viewport.x / 2.0));
@@ -66,14 +96,14 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
 struct {
   short unsigned ignore_backward_faces;
 } gm3Project = {
-    .ignore_backward_faces = 1,
+    .ignore_backward_faces = 0,
 };
 
 /**
  * Transforms an entire mesh and projects it into a gm3Image.
  */
-int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
-                gm3Image *output) {
+int gm3_project(gm3Mesh *mesh, gm3ObjFile *obj, gm3Transform *transform,
+                gm3Scene *scene, gm3Image *output) {
 
   size_t start_vertex = output->n_vertices;
   size_t start_triangle = output->n_triangles;
@@ -89,14 +119,13 @@ int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
                         (start_triangle + mesh->n_faces) * sizeof(double));
 
   if (!tmp_v || !tmp_t || !tmp_c || !tmp_d)
-    return -1; // Allocation failure
+    return -1;
 
   output->vertices = tmp_v;
   output->triangles = tmp_t;
   output->colors = tmp_c;
   output->depths = tmp_d;
 
-  // Important: We update n_vertices now so the offset logic works
   output->n_vertices += mesh->n_vertices;
 
   // 2. World Space Transformation
@@ -119,23 +148,32 @@ int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
     gm3Pos world_norm =
         gm3_pos_rotate(mesh->normals[face->normal], transform->rotation);
 
-    // Simple Backface Culling (Camera is at origin looking towards +Z)
-    // If dot(normal, vector_to_camera) > 0, cull.
-    // Simplified: if normal.z > 0, it faces away from camera.
     if (gm3Project.ignore_backward_faces && world_norm.z > 0)
       continue;
 
+    // Retrieve the material using the encoded index (file_idx << 16 | mat_idx)
+    gm3Material *mat = NULL;
+    size_t f_idx = face->material_idx >> 16;
+    size_t m_idx = face->material_idx & 0xFFFF;
+
+    if (obj && f_idx < obj->n_mtl_files &&
+        m_idx < obj->mtl_files[f_idx]->n_materials) {
+      mat = &obj->mtl_files[f_idx]->materials[m_idx];
+    } else {
+      // Fallback default material (Gray clay)
+      static gm3Material def = {
+          .diffuse = 0xAAAAAAFF, .alpha = 1.0, .shininess = 0};
+      mat = &def;
+    }
+
     gm3TriangleImage projected;
-    if (gm3_project_face(&projected, world_norm, tri_verts, scene)) {
+    if (gm3_project_face(&projected, world_norm, tri_verts, mat, scene)) {
       size_t t_idx = output->n_triangles;
 
-      // Copy projected 2D vertices into the global vertex buffer
       for (int j = 0; j < 3; j++) {
-        size_t local_v_idx = face->vertices[j];
-        size_t global_v_idx = local_v_idx + start_vertex;
-
+        size_t global_v_idx = face->vertices[j] + start_vertex;
         output->vertices[global_v_idx] = projected.vertices[j];
-        output->triangles[t_idx * 3 + j] = global_v_idx; // FIXED: Added offset
+        output->triangles[t_idx * 3 + j] = global_v_idx;
       }
 
       output->depths[t_idx] = projected.depth;

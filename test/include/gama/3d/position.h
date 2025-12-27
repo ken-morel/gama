@@ -48,6 +48,10 @@ static inline gm3Pos gm3_pos_minus(gm3Pos va, gm3Pos vb) {
   gm3Pos diff = {va.x - vb.x, va.y - vb.y, va.z - vb.z};
   return diff;
 }
+static inline gm3Pos gm3_pos_plus(gm3Pos va, gm3Pos vb) {
+  gm3Pos diff = {va.x + vb.x, va.y + vb.y, va.z + vb.z};
+  return diff;
+}
 
 static inline gm3Pos gm3_pos_normalize(gm3Pos v) {
   double m = gm3_pos_magnitude(v);
