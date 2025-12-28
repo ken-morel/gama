@@ -2,7 +2,6 @@
 
 #include <ctype.h>
 #include <float.h>
-#include <math.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -257,18 +256,8 @@ int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, gm3ObjContext *ctx,
         gm3Pos n = gm3_pos_cross(e1, e2);
         n = gm3_pos_normalize(n);
 
-        // Deduplication
-        size_t found_n = cf;
-        for (size_t j = 0; j < cf; j++) {
-          if (fabs(m->normals[j].x - n.x) < 0.001 &&
-              fabs(m->normals[j].y - n.y) < 0.001 &&
-              fabs(m->normals[j].z - n.z) < 0.001) {
-            found_n = j;
-            break;
-          }
-        }
-        m->normals[found_n] = n;
-        face->normal = found_n;
+        m->normals[cf] = n;
+        face->normal = cf;
         cf++;
       }
     }
