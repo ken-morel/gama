@@ -248,13 +248,13 @@ int gm3_obj_load_mesh(gm3Mesh *m, FILE *f, gm3ObjContext *ctx,
         face->material_idx = active_mat_idx; // Associate material
 
         // Calculate normal
-        gm3Pos e1, e2;
-        e1 = gm3_pos_minus(m->vertices[face->vertices[1]],
-                           m->vertices[face->vertices[0]]);
-        e2 = gm3_pos_minus(m->vertices[face->vertices[2]],
-                           m->vertices[face->vertices[0]]);
-        gm3Pos n = gm3_pos_cross(e1, e2);
-        n = gm3_pos_normalize(n);
+        gm3Pos e1 = m->vertices[face->vertices[1]];
+        gm3_pos_substract(&e1, &m->vertices[face->vertices[0]]);
+        gm3Pos e2 = m->vertices[face->vertices[2]];
+        gm3_pos_substract(&e2, &m->vertices[face->vertices[0]]);
+        gm3Pos n;
+        gm3_pos_cross(&n, &e1, &e2);
+        gm3_pos_normalize(&n);
 
         m->normals[cf] = n;
         face->normal = cf;
@@ -294,9 +294,7 @@ int gm3_center_obj_vertices(gm3ObjFile *obj) {
 
   for (size_t i = 0; i < obj->n_objects; i++)
     for (size_t v = 0; v < obj->objects[i].n_vertices; v++)
-      obj->objects[i].vertices[v] =
-          gm3_pos_minus(obj->objects[i].vertices[v], center);
-
+      gm3_pos_substract(&obj->objects[i].vertices[v], &center);
   return 0;
 }
 

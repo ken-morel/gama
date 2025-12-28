@@ -22,25 +22,29 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
                                              gm3Scene *scene) {
   // 1. Vector Setup
   // Light vector: from face to light
-  gm3Pos l_vec =
-      gm3_pos_normalize(gm3_pos_minus(scene->light.position, face_center));
+  gm3Pos l_vec = scene->light.position;
+  gm3_pos_substract(&l_vec, &face_center);
+  gm3_pos_normalize(&l_vec);
   // View vector: from face to camera (Camera is at origin)
-  gm3Pos v_vec =
-      gm3_pos_normalize(gm3_pos_minus((gm3Pos){0, 0, 0}, face_center));
+  gm3Pos v_vec = scene->camera_pos;
+  gm3_pos_substract(&v_vec, &face_center);
+  gm3_pos_normalize(&v_vec);
   // Halfway vector for Specular
-  gm3Pos h_vec = gm3_pos_normalize(gm3_pos_plus(l_vec, v_vec));
+  gm3Pos h_vec = l_vec;
+  gm3_pos_add(&l_vec, &v_vec);
+  gm3_pos_normalize(&h_vec);
 
   // 2. Diffuse Component (Lambert)
-  double dot_l = gm3_pos_dot(norm, l_vec);
+  double dot_l = gm3_pos_dot(&norm, &l_vec);
   double diffuse_factor = (dot_l < 0) ? 0 : dot_l;
 
   // 3. Specular Component (Shiny Highlight)
   double specular_factor = 0;
   if (diffuse_factor > 0 && (!mat || mat->shininess > 0)) {
-    double dot_h = gm3_pos_dot(norm, h_vec);
+    double dot_h = gm3_pos_dot(&norm, &h_vec);
     if (dot_h > 0) {
       if (mat)
-        specular_factor = pow(dot_h, mat->shininess);
+        specular_factor = exp(mat->shininess * (dot_h - 1.0));
       else
         specular_factor = dot_h;
     }
@@ -82,15 +86,17 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
 int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
                      gm3Material *mat, gm3Scene *scene) {
 
-  gm3Pos face_center = gm3_pos_centerN(vertices, 3);
+  gm3Pos face_center;
+  gm3_pos_centerN(&face_center, vertices, 3);
 
-  gm3Pos position_from_camera = gm3_pos_minus(face_center, scene->camera_pos);
-  double distance_from_camera = gm3_pos_magnitude(position_from_camera);
+  gm3Pos position_from_camera = face_center;
+  gm3_pos_substract(&position_from_camera, &scene->camera_pos);
+  double distance_from_camera = gm3_pos_magnitude(&position_from_camera);
 
   if (distance_from_camera <= scene->near || distance_from_camera >= scene->far)
     return 0;
 
-  double normal_dot_position = gm3_pos_dot(norm, position_from_camera);
+  double normal_dot_position = gm3_pos_dot(&norm, &position_from_camera);
   if (normal_dot_position >= 0)
     return 0; // < 0 -> face points backwards , ==0 -> face -|
 

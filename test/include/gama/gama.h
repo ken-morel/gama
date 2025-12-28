@@ -124,7 +124,7 @@ int __gm_show_fps = 0;
 void gm_show_fps(int show) { __gm_show_fps = show; }
 
 void _gm_fps() {
-  static const double alpha = 0.9;
+  static const double alpha = 2.0 / 3.0;
   static double _fps = 0;
   static double dt = 1;
   static double _display_fps = 0;
@@ -141,8 +141,7 @@ void _gm_fps() {
 
   if (__gm_show_fps) {
     char fps_text[20] = {0}; // ERROR: use fps
-    // snprintf(fps_text, sizeof(fps_text), "fps: %.2lf", _display_fps);
-    snprintf(fps_text, sizeof(fps_text), "fps: %d", (int)_display_fps);
+    snprintf(fps_text, sizeof(fps_text), "fps: %.2f", _display_fps);
     gmw_frame(0.9, -0.9, 0.4, 0.1);
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }

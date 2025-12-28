@@ -17,10 +17,11 @@ int main() {
   gm3ObjFile file; // create an obj file
 
   // cube, bgirl, Alien Animal, tree
-  int code = gm3_load_obj(&file, "assets/obj/cat.obj",
+  int code = gm3_load_obj(&file, "assets/obj/tree.obj",
                           "assets/obj"); // load the obj file
   if (code < 0) {
     printf("Object load failed: %d", code);
+    return code;
   } else if (code > 0) {
     printf("Object load notified: %d", code);
   }
@@ -44,29 +45,42 @@ int main() {
   // then draw
 
   gm3DrawImage.ignore_small_triangles = 0.000001;
+  double dirty = 1;
   do {
     double k = gm_dt();
-    if (gm_key('U'))
+    if (gm_key('U')) {
       transform.rotation.x -= k;
-    else if (gm_key('D'))
+      dirty = 1;
+    } else if (gm_key('D')) {
       transform.rotation.x += k;
+      dirty = 1;
+    }
 
-    if (gm_key('L'))
+    if (gm_key('L')) {
       transform.rotation.y -= k;
-    else if (gm_key('R'))
+      dirty = 1;
+    } else if (gm_key('R')) {
       transform.rotation.y += k;
+      dirty = 1;
+    }
 
-    if (gm_key('i'))
+    if (gm_key('i')) {
       transform.position.z -= k * 5;
-    else if (gm_key('o'))
+      dirty = 1;
+    } else if (gm_key('o')) {
       transform.position.z += k * 5;
+      dirty = 1;
+    }
 
-    gm3_image_clear(&img);
+    if (dirty) {
+      gm3_image_clear(&img);
 
-    for (size_t i = 0; i < file.n_objects;
-         i++) { // draw each of the objects in the file
-      gm3_project(&file.objects[i], &file, &transform, &scene,
-                  &img); // snap on the image
+      for (size_t i = 0; i < file.n_objects;
+           i++) { // draw each of the objects in the file
+        gm3_project(&file.objects[i], &file, &transform, &scene,
+                    &img); // snap on the image
+      }
+      dirty = 0;
     }
     gm3_draw_image(&img, -1, -1); // draw the image
   } while (gm_yield());
