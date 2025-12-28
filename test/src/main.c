@@ -17,7 +17,7 @@ int main() {
   gm3ObjFile file; // create an obj file
 
   // cube, bgirl, Alien Animal, tree
-  int code = gm3_load_obj(&file, "assets/obj/cat.obj",
+  int code = gm3_load_obj(&file, "assets/obj/cube.obj",
                           "assets/obj"); // load the obj file
   if (code < 0) {
     printf("Object load failed: %d", code);
@@ -67,8 +67,6 @@ int main() {
          i++) { // draw each of the objects in the file
       gm3_project(&file.objects[i], &file, &transform, &scene,
                   &img); // snap on the image
-      for (size_t i = 0; i < img.n_colors; i++)
-        img.colors[i] = gm_set_alpha(img.colors[i], 255);
     }
     gm3_draw_image(&img, -1, -1); // draw the image
   } while (gm_yield());

@@ -36,10 +36,13 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
 
   // 3. Specular Component (Shiny Highlight)
   double specular_factor = 0;
-  if (diffuse_factor > 0 && mat->shininess > 0) {
+  if (diffuse_factor > 0 && (!mat || mat->shininess > 0)) {
     double dot_h = gm3_pos_dot(norm, h_vec);
     if (dot_h > 0) {
-      specular_factor = pow(dot_h, mat->shininess);
+      if (mat)
+        specular_factor = pow(dot_h, mat->shininess);
+      else
+        specular_factor = dot_h;
     }
   }
 
@@ -50,15 +53,21 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
   // Blend Light Color + Material Diffuse + Material Specular
   // Final = MatDiffuse * (DiffuseFactor * LightInt + Ambient) + (MatSpecular *
   // SpecularFactor * LightInt)
-
-  int r = (int)((gm_red(mat->diffuse) * (diffuse_factor * intensity + amb)) +
-                (gm_red(mat->specular) * specular_factor * intensity));
-  int g = (int)((gm_green(mat->diffuse) * (diffuse_factor * intensity + amb)) +
-                (gm_green(mat->specular) * specular_factor * intensity));
-  int b = (int)((gm_blue(mat->diffuse) * (diffuse_factor * intensity + amb)) +
-                (gm_blue(mat->specular) * specular_factor * intensity));
-  int a = (int)(mat->alpha * 255);
-
+  int r, g, b, a;
+  if (mat) {
+    r = (int)((gm_red(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+              (gm_red(mat->specular) * specular_factor * intensity));
+    g = (int)((gm_green(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+              (gm_green(mat->specular) * specular_factor * intensity));
+    b = (int)((gm_blue(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+              (gm_blue(mat->specular) * specular_factor * intensity));
+    a = (int)(mat->alpha * 255);
+  } else {
+    r = (int)(gm_red(scene->light.color) * specular_factor * intensity);
+    g = (int)((gm_green(scene->light.color) * specular_factor * intensity));
+    b = (int)((gm_blue(scene->light.color) * specular_factor * intensity));
+    a = 255;
+  }
   return gm_rgba(r, g, b, a);
 }
 
@@ -157,13 +166,7 @@ int gm3_project(gm3Mesh *mesh, gm3ObjFile *obj, gm3Transform *transform,
     if (obj && f_idx < obj->n_mtl_files &&
         m_idx < obj->mtl_files[f_idx]->n_materials) {
       mat = &obj->mtl_files[f_idx]->materials[m_idx];
-    } else {
-      // Fallback default material (Gray clay)
-      static gm3Material def = {
-          .diffuse = 0xAAAAAAFF, .alpha = 1.0, .shininess = 0};
-      mat = &def;
-    }
-
+    } // no fallback material
     gm3TriangleImage projected;
     if (gm3_project_face(&projected, world_norm, tri_verts, mat, scene)) {
       size_t t_idx = output->n_triangles;
