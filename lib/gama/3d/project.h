@@ -67,9 +67,10 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
               (gm_blue(scene->light.color) / 255.0));
     a = (int)(mat->alpha * 255);
   } else {
-    r = (int)(gm_red(scene->light.color) * specular_factor * intensity);
-    g = (int)((gm_green(scene->light.color) * specular_factor * intensity));
-    b = (int)((gm_blue(scene->light.color) * specular_factor * intensity));
+    double k = (specular_factor + diffuse_factor) * intensity + amb;
+    r = (int)(gm_red(scene->light.color) * k);
+    g = (int)(gm_green(scene->light.color) * k);
+    b = (int)(gm_blue(scene->light.color) * k);
     a = 255;
   }
   return gm_rgba(r, g, b, a);
