@@ -55,11 +55,14 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
   // SpecularFactor * LightInt)
   int r, g, b, a;
   if (mat) {
-    r = (int)((gm_red(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+    r = (int)((gm_red(mat->diffuse) * (gm_red(scene->light.color) / 255.0) *
+               (diffuse_factor * intensity + amb)) +
               (gm_red(mat->specular) * specular_factor * intensity));
-    g = (int)((gm_green(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+    g = (int)((gm_green(mat->diffuse) * (gm_green(scene->light.color) / 255.0) *
+               (diffuse_factor * intensity + amb)) +
               (gm_green(mat->specular) * specular_factor * intensity));
-    b = (int)((gm_blue(mat->diffuse) * (diffuse_factor * intensity + amb)) +
+    b = (int)((gm_blue(mat->diffuse) * (gm_blue(scene->light.color) / 255.0) *
+               (diffuse_factor * intensity + amb)) +
               (gm_blue(mat->specular) * specular_factor * intensity));
     a = (int)(mat->alpha * 255);
   } else {
