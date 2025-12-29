@@ -153,9 +153,7 @@ int gm3_project(gm3Mesh *mesh, gm3ObjFile *obj, gm3Transform *transform,
   gm3Pos *world_verts = malloc(sizeof(gm3Pos) * mesh->n_vertices);
   for (size_t i = 0; i < mesh->n_vertices; i++) {
     gm3Pos p = mesh->vertices[i];
-    p = gm3_pos_scale(p, transform->scale);
-    p = gm3_pos_rotate(p, transform->rotation);
-    p = gm3_pos_translate(p, transform->position);
+    gm3_transform_pos(&p, transform);
     world_verts[i] = p;
   }
 
@@ -166,18 +164,19 @@ int gm3_project(gm3Mesh *mesh, gm3ObjFile *obj, gm3Transform *transform,
                            world_verts[face->vertices[1]],
                            world_verts[face->vertices[2]]};
 
-    gm3Pos world_norm =
-        gm3_pos_rotate(mesh->normals[face->normal], transform->rotation);
+    gm3Pos world_norm = face->normal;
+    gm3_pos_rotate(&world_norm, &transform->rotation);
 
     // Retrieve the material using the encoded index (file_idx << 16 | mat_idx)
     gm3Material *mat = NULL;
-    size_t f_idx = face->material_idx >> 16;
-    size_t m_idx = face->material_idx & 0xFFFF;
+    size_t f_idx = face->material_file;
+    size_t m_idx = face->material;
 
-    if (obj && f_idx < obj->n_mtl_files &&
-        m_idx < obj->mtl_files[f_idx]->n_materials) {
-      mat = &obj->mtl_files[f_idx]->materials[m_idx];
+    if (f_idx * m_idx != 0 && obj && f_idx <= obj->n_mtl_files &&
+        m_idx <= obj->mtl_files[f_idx - 1].n_materials) {
+      mat = &obj->mtl_files[f_idx - 1].materials[m_idx - 1];
     } // no fallback material
+
     gm3TriangleImage projected;
     if (gm3_project_face(&projected, world_norm, tri_verts, mat, scene)) {
       size_t t_idx = output->n_triangles;

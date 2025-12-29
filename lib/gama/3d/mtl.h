@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../color.h"
+#include "../utils.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,29 +18,23 @@ typedef struct {
 } gm3Material;
 
 typedef struct {
-  char path[256];
+  char name[256];
   gm3Material *materials;
   size_t n_materials;
 } gm3MtlFile;
 
-// Global/Context registry to prevent double-loading
-typedef struct {
-  gm3MtlFile *files;
-  size_t n_files;
-} gm3MtlLibrary;
-
 // Helper to skip whitespace
-static inline char *gm3_u_skip_spaces(char *s) {
+static inline char *gm3u_skip_spaces(char *s) {
   while (*s && (*s == ' ' || *s == '\t'))
     s++;
   return s;
 }
 
 /**
- * Loads a .mtl file and returns its pointer.
+ * Loads a .mtl file.
  */
 int gm3_mtl_load(gm3MtlFile *mtl_file, const char *path) {
-  mtl_file->path[0] = '\0';
+  mtl_file->name[0] = '\0';
   mtl_file->materials = NULL;
   mtl_file->n_materials = 0;
 
@@ -49,13 +44,12 @@ int gm3_mtl_load(gm3MtlFile *mtl_file, const char *path) {
     return -1;
   }
 
-  strncpy(mtl_file->path, path, sizeof(mtl_file->path) - 1);
-  mtl_file->path[sizeof(mtl_file->path) - 1] = '\0';
+  gmu_get_filename_stem(path, mtl_file->name, sizeof(mtl_file->name));
   char line[512];
   gm3Material *current = NULL;
 
   while (fgets(line, sizeof(line), f)) {
-    char *p = gm3_u_skip_spaces(line);
+    char *p = gm3u_skip_spaces(line);
     if (*p == '\0' || *p == '#')
       continue;
 
@@ -98,11 +92,15 @@ int gm3_mtl_load(gm3MtlFile *mtl_file, const char *path) {
 /**
  * Finds a material by name within a loaded MTL file.
  */
-gm3Material *gm3_mtl_find(gm3MtlFile *file, const char *name) {
+gm3Material *gm3_mtl_find(gm3MtlFile *file, const char *name, size_t *index) {
   if (!file)
     return NULL;
+  if (index)
+    *index = 0;
   for (size_t i = 0; i < file->n_materials; i++) {
     if (strcmp(file->materials[i].name, name) == 0) {
+      if (index)
+        *index = i + 1;
       return &file->materials[i];
     }
   }

@@ -17,7 +17,7 @@ int main() {
   gm3ObjFile file; // create an obj file
 
   // cube, bgirl, Alien Animal, tree
-  int code = gm3_load_obj(&file, "assets/obj/tree.obj",
+  int code = gm3_load_obj(&file, "assets/obj/cat.obj",
                           "assets/obj"); // load the obj file
   if (code < 0) {
     printf("Object load failed: %d", code);
