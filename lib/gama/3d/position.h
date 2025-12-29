@@ -94,3 +94,8 @@ void gm3_pos_mul(gm3Pos *res, gm3Pos *trans) {
   res->y *= trans->y;
   res->z *= trans->z;
 }
+void gm3_pos_mul_scalar(gm3Pos *res, double s) {
+  res->x *= s;
+  res->y *= s;
+  res->z *= s;
+}

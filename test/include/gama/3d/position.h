@@ -3,6 +3,7 @@
 #include "../_math.h"
 #include "../position.h"
 #include <stddef.h>
+#include <string.h>
 
 typedef struct {
   double x, y, z;
@@ -77,11 +78,7 @@ static inline void gm3_pos_cross(gm3Pos *res, const gm3Pos *a,
   res->z = a->x * b->y - a->y * b->x;
 }
 
-static inline void gm3_pos_reset(gm3Pos *p) {
-  p->x = 0;
-  p->y = 0;
-  p->z = 0;
-}
+static inline void gm3_pos_reset(gm3Pos *p) { memset(p, 0, sizeof(*p)); }
 
 static inline void gm3_pos_centerN(gm3Pos *res, const gm3Pos *arr, size_t n) {
   double dn = (double)n;
@@ -90,4 +87,15 @@ static inline void gm3_pos_centerN(gm3Pos *res, const gm3Pos *arr, size_t n) {
     res->y += arr[i].y / dn;
     res->z += arr[i].z / dn;
   }
+}
+
+void gm3_pos_mul(gm3Pos *res, gm3Pos *trans) {
+  res->x *= trans->x;
+  res->y *= trans->y;
+  res->z *= trans->z;
+}
+void gm3_pos_mul_scalar(gm3Pos *res, double s) {
+  res->x *= s;
+  res->y *= s;
+  res->z *= s;
 }

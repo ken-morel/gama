@@ -14,19 +14,26 @@ int main() {
   }
   gm_background(GM_DARKGREY);
 
-  gm3ObjFile file; // create an obj file
+  gm3Mesh mesh; // create an obj file
 
   // cube, bgirl, Alien Animal, tree
-  int code = gm3_load_obj(&file, "assets/obj/cat.obj",
+  printf("loading file...\n");
+  int code = gm3_obj_load(&mesh, "assets/obj/triangle.obj",
                           "assets/obj"); // load the obj file
+  printf("loaded mesh with code %d\n", code);
   if (code < 0) {
     printf("Object load failed: %d", code);
     return code;
   } else if (code > 0) {
     printf("Object load notified: %d", code);
   }
-
-  printf("obj file has %zu objects", file.n_objects);
+  printf(" - %zu\n", mesh.faces[0].vertices[0]);
+  printf(" - %zu\n", mesh.faces[0].vertices[1]);
+  printf(" - %zu\n", mesh.faces[0].vertices[2]);
+  printf("file loaded with %zu faces\n", mesh.n_faces);
+  printf("file loaded with %zu vertices\n", mesh.n_vertices);
+  printf("file loaded with %zu normals\n", mesh.n_normals);
+  printf("file has %zu textures\n", mesh.n_texs);
 
   gm3Scene scene = gm3_scene();
   scene.far = 20;
@@ -75,18 +82,16 @@ int main() {
     if (dirty) {
       gm3_image_clear(&img);
 
-      for (size_t i = 0; i < file.n_objects;
-           i++) { // draw each of the objects in the file
-        gm3_project(&file.objects[i], &file, &transform, &scene,
-                    &img); // snap on the image
-      }
+      gm3_project(&mesh, &transform, &scene,
+                  &img); // snap on the image
+      printf("Image has %zu triangles\n", img.n_triangles);
       dirty = 0;
     }
     gm3_draw_image(&img, -1, -1); // draw the image
   } while (gm_yield());
   // destroy shapes
 
-  gm3_free_obj(&file);
-  gm3_free_scene(&scene);
+  gm3_mesh_free(&mesh);
+  gm3_scene_free(&scene);
   return 0;
 }

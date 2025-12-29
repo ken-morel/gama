@@ -35,6 +35,11 @@ typedef unsigned int gmColor;
  */
 #define gm_alpha(col) (col & 0x000000FF)
 
+unsigned short _gm3_color_clamp(int c) {
+  c = abs(c);
+  return c < 0 ? 0 : c > 255 ? 255 : c;
+}
+
 /**
  * @brief Creates a color from RGBA components.
  * @param r Red component (0-255).
@@ -44,8 +49,8 @@ typedef unsigned int gmColor;
  * @return A gmColor value.
  */
 static inline gmColor gm_rgba(int r, int g, int b, int a) {
-  return (unsigned)(abs(r) % 256) << 24 | (unsigned)(abs(g) % 256) << 16 |
-         (unsigned)(abs(b) % 256) << 8 | (unsigned)(abs(a) % 256);
+  return _gm3_color_clamp(r) << 24 | _gm3_color_clamp(g) << 16 |
+         _gm3_color_clamp(b) << 8 | _gm3_color_clamp(a);
 }
 
 /**
@@ -56,8 +61,8 @@ static inline gmColor gm_rgba(int r, int g, int b, int a) {
  * @return A gmColor value.
  */
 static inline gmColor gm_rgb(int r, int g, int b) {
-  return (unsigned)(abs(r) % 256) << 24 | (unsigned)(abs(g) % 256) << 16 |
-         (unsigned)(abs(b) % 256) << 8 | 0xFF;
+  return _gm3_color_clamp(r) << 24 | _gm3_color_clamp(g) << 16 |
+         _gm3_color_clamp(b) << 8 | 0xFF;
 }
 /**
  * @brief Sets the red component of a color.

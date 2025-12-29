@@ -51,5 +51,6 @@ int gmu_read_file(const char *path, char **content, size_t *size) {
     return -5;
   fread(buffer, sizeof(char), *size, f);
   buffer[*size] = '\0';
+  *content = buffer;
   return 0;
 }

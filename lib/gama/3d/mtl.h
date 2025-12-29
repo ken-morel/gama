@@ -19,9 +19,10 @@ typedef struct {
 
 typedef struct {
   char name[256];
+
   gm3Material *materials;
   size_t n_materials;
-} gm3MtlFile;
+} gm3MtlLib;
 
 // Helper to skip whitespace
 static inline char *gm3u_skip_spaces(char *s) {
@@ -33,10 +34,10 @@ static inline char *gm3u_skip_spaces(char *s) {
 /**
  * Loads a .mtl file.
  */
-int gm3_mtl_load(gm3MtlFile *mtl_file, const char *path) {
-  mtl_file->name[0] = '\0';
-  mtl_file->materials = NULL;
-  mtl_file->n_materials = 0;
+int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path) {
+  mtl_lib->name[0] = '\0';
+  mtl_lib->materials = NULL;
+  mtl_lib->n_materials = 0;
 
   FILE *f = fopen(path, "r");
   if (!f) {
@@ -44,7 +45,7 @@ int gm3_mtl_load(gm3MtlFile *mtl_file, const char *path) {
     return -1;
   }
 
-  gmu_get_filename_stem(path, mtl_file->name, sizeof(mtl_file->name));
+  gmu_get_filename_stem(path, mtl_lib->name, sizeof(mtl_lib->name));
   char line[512];
   gm3Material *current = NULL;
 
@@ -54,10 +55,10 @@ int gm3_mtl_load(gm3MtlFile *mtl_file, const char *path) {
       continue;
 
     if (strncmp(p, "newmtl ", 7) == 0) {
-      mtl_file->n_materials++;
-      mtl_file->materials = realloc(
-          mtl_file->materials, sizeof(gm3Material) * mtl_file->n_materials);
-      current = &mtl_file->materials[mtl_file->n_materials - 1];
+      mtl_lib->n_materials++;
+      mtl_lib->materials = realloc(mtl_lib->materials,
+                                   sizeof(gm3Material) * mtl_lib->n_materials);
+      current = &mtl_lib->materials[mtl_lib->n_materials - 1];
 
       // Initialize defaults
       memset(current, 0, sizeof(gm3Material));
@@ -92,22 +93,26 @@ int gm3_mtl_load(gm3MtlFile *mtl_file, const char *path) {
 /**
  * Finds a material by name within a loaded MTL file.
  */
-gm3Material *gm3_mtl_find(gm3MtlFile *file, const char *name, size_t *index) {
-  if (!file)
+gm3Material *gm3_mtl_find_mat(gm3MtlLib *file, const char *name, int *index) {
+
+  if (!file) {
+    if (index)
+      *index = -1;
     return NULL;
+  }
   if (index)
-    *index = 0;
+    *index = -1;
   for (size_t i = 0; i < file->n_materials; i++) {
     if (strcmp(file->materials[i].name, name) == 0) {
       if (index)
-        *index = i + 1;
+        *index = i;
       return &file->materials[i];
     }
   }
   return NULL;
 }
 
-void gm3_mtl_free(gm3MtlFile *file) {
+void gm3_mtl_free(gm3MtlLib *file) {
   if (file) {
     if (file->materials)
       free(file->materials);
