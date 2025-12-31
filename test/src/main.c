@@ -1,6 +1,7 @@
 #include "gama/color.h"
 #include <gama.h>
 #include <gama/3d.h>
+char nt[100] = {0};
 
 int main() {
   gm_init(500, 500, "gama cube application");
@@ -18,7 +19,7 @@ int main() {
 
   // cube, bgirl, Alien Animal, tree
   printf("loading file...\n");
-  int code = gm3_obj_load(&mesh, "assets/obj/tree.obj",
+  int code = gm3_obj_load(&mesh, "assets/obj/cat.obj",
                           "assets/obj"); // load the obj file
   printf("loaded mesh with code %d\n", code);
   if (code < 0) {
@@ -44,8 +45,6 @@ int main() {
   gm3Image img =
       gm3_image(); // the image where we snap the 3d object into a 2d image and
   // then draw
-
-  gm3DrawImage.ignore_small_triangles = 0.000001;
   double dirty = 1;
   do {
     double k = gm_dt();
@@ -80,12 +79,10 @@ int main() {
                   &img); // snap on the image
       dirty = 0;
     }
-    char nt[100] = {0};
-    sprintf(nt, "triangles: %zu", img.n_triangles);
     gm3_draw_image(&img, 0, 0); // draw the image
-    gmw_frame(0.9, -0.9, 0.3, 0.1);
-    gm_draw_text(0.9, -0.9, nt, "", 0.07, GM_WHITE);
-
+    snprintf(nt, sizeof(nt), "triangles: %zu", img.n_triangles);
+    gmw_frame(0.9, -0.7, 0.4, 0.1);
+    gm_draw_text(0.9, -0.7, nt, "", 0.07, GM_WHITE);
   } while (gm_yield());
   // destroy shapes
 

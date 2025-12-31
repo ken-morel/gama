@@ -85,7 +85,7 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
                      gm3Material *mat, gm3Scene *scene) {
 
   for (size_t i = 0; i < 3; i++) {
-    if (vertices[i].z < 0)
+    if (vertices[i].z <= 0)
       return 0;
   }
   // 1. Calculate Face Center for Lighting and Culling
@@ -116,8 +116,6 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
     double x_cam = vertices[i].x;
     double y_cam = vertices[i].y;
     double z_cam = vertices[i].z;
-
-    // C. Near Plane Clipping
 
     // D. Perspective Projection (NDC)
     // Applying the focal length here as a scale factor
