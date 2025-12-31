@@ -9,6 +9,7 @@
 
 #pragma once
 // NOTE: The order is important, major, minor, patch
+
 #include "draw.h"
 #include "gapi.h"
 #include "stdio.h"
@@ -59,7 +60,11 @@ int main(void) {
 #endif
 
 #else
-int main(void);
+#ifdef GM_ARGC_MAIN
+int main(int, char *);
+#else
+int main();
+#endif
 
 int32_t
 #ifdef __ZIG_CC__
@@ -240,6 +245,7 @@ void gm_sleep(int m) {};
 #ifdef _WIN32
 #include <windows.h>
 void gm_sleep(int milliseconds) { Sleep(milliseconds); }
+#else
 #include <unistd.h>
 void gm_sleep(int milliseconds) { usleep(milliseconds * 1000); }
 #endif

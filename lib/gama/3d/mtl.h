@@ -122,9 +122,11 @@ void gm3_mtl_free(gm3MtlLib *file) {
 
 gmStr gmg_material(gm3Material mat) {
   gmStr str = gm_str();
-  char buffer[1024];
 
-  gm_str_append(&str, "(gm3Material){\n");
+  char buffer[1024] = {0};
+
+  sprintf(buffer, "(gm3Material){\n");
+  gm_str_append(&str, buffer);
 
   sprintf(buffer, "    .name = \"%s\",\n", mat.name);
   gm_str_append(&str, buffer);
@@ -134,7 +136,7 @@ gmStr gmg_material(gm3Material mat) {
   gmStr s_diff = gmg_color(mat.diffuse);
   gm_str_append(&str, s_diff.content);
   gm_str_append(&str, ",\n");
-  // (Optional: free(s_diff.content) if gmStr allocates)
+  gm_str_clear(&s_diff);
 
   // Specular
   gm_str_append(&str, "    .specular = ");
@@ -160,9 +162,10 @@ gmStr gmg_material(gm3Material mat) {
 
 gmStr gmg_mtllib(gm3MtlLib lib) {
   gmStr str = gm_str();
-  char buffer[1024];
+  char buffer[1024] = {0};
 
-  gm_str_append(&str, "(gm3MtlLib){\n");
+  sprintf(buffer, "(gm3MtlLib){\n");
+  gm_str_append(&str, buffer);
 
   sprintf(buffer, "  .name = \"%s\",\n", lib.name);
   gm_str_append(&str, buffer);

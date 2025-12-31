@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "gapi.h"
 #include <stdint.h>
 
@@ -7,9 +8,9 @@
  * @brief Structure representing an image with handle and dimensions.
  */
 typedef struct {
-  uint32_t handle;  /**< Internal handle for the image */
-  uint32_t width;   /**< Width of the image in pixels */
-  uint32_t height;  /**< Height of the image in pixels */
+  uint32_t handle; /**< Internal handle for the image */
+  uint32_t width;  /**< Width of the image in pixels */
+  uint32_t height; /**< Height of the image in pixels */
 } gmImage;
 
 /**
@@ -19,7 +20,7 @@ typedef struct {
  */
 gmImage gm_image_open(const char *path) {
   gmImage img;
-  img.handle = gapi_create_image(path, &img.width, &img.height);
+  // img.handle = gapi_create_image(path, &img.width, &img.height);
   return img;
 }
 
@@ -53,3 +54,4 @@ void gm_image_draw_part(gmImage i, int slice_x, int slice_y, int slice_width,
   gapi_draw_image_part(i.handle, slice_x, slice_y, slice_width, slice_height, x,
                        y, w, h);
 }
+

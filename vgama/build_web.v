@@ -21,6 +21,7 @@ pub fn (mut app RunWebApp) index(mut ctx Context) veb.Result {
 pub fn (p Project) build_web(inst Installation, reset bool) ! {
 	conf := p.get_conf()!
 
+	p.bake(inst) or { println(term.warn_message('Baking failed: ${err}')) }
 	build_dir := p.build_path('web')
 	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
 	p.copy_build_web_artifacts(inst, reset)!
@@ -35,10 +36,11 @@ pub fn (p Project) build_web(inst Installation, reset bool) ! {
 	}
 
 	include_path := os.join_path(p.path, 'include')
+	gen_path := p.build_path('gen')
 
 	output := os.join_path(build_dir, '${conf.name}.wasm')
 
-	res := os.execute('zig cc -target wasm32-wasi -g -mexec-model=reactor ${source_files.join(' ')} -I${include_path} -lc -lm -Wl,--export-all-symbols -Wl,--no-entry -o ${output} -DGM_WEB -D__ZIG_CC__')
+	res := os.execute('zig cc -target wasm32-wasi -g -mexec-model=reactor ${source_files.join(' ')} -I${include_path} -I${gen_path} -lc -lm -Wl,--export-all-symbols -Wl,--no-entry -o ${output} -DGM_WEB -D__ZIG_CC__')
 
 	if res.exit_code != 0 {
 		return error('Failed to build app: ${res.output}')

@@ -2,7 +2,9 @@
 CompileFlags:
   Add:
     - -I../include/
+    - -I../build/gen/
     - -Iinclude/
+    - -Ibuild/gen/
 ---
 If:
   PathMatch: .*\.h$

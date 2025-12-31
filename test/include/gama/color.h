@@ -1,11 +1,20 @@
 #pragma once
 
+#include "str.h"
 #include <stdlib.h>
 
 /**
  * @brief Type definition for color values in RGBA format.
  */
 typedef unsigned int gmColor;
+
+gmStr gmg_color(gmColor col) {
+  gmStr str = gm_str();
+  char buffer[32];
+  sprintf(buffer, "(gmColor)0x%X", col);
+  gm_str_append(&str, buffer);
+  return str;
+}
 
 /**
  * @brief Extracts the red component from a color.

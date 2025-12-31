@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../color.h"
-#include "../draw.h"
+#include "../position.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -66,6 +66,8 @@ int _gm3_depth_compare(const void *a, const void *b) {
 struct {
 } gm3DrawImage = {};
 
+#ifndef GM_NO_GAPI
+#include "../draw.h"
 int gm3_draw_image(gm3Image *m, double x, double y, double scale) {
   if (!m || m->n_triangles == 0)
     return 0;
@@ -100,3 +102,4 @@ int gm3_draw_image(gm3Image *m, double x, double y, double scale) {
   free(sort_buffer);
   return 1;
 }
+#endif
