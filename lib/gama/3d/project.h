@@ -17,8 +17,8 @@
  * Calculates the final color of a face using the Blinn-Phong model.
  */
 static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
-                                             gm3Material *mat,
-                                             gm3Scene *scene) {
+                                             const gm3Material *mat,
+                                             const gm3Scene *scene) {
   // 1. Vector Setup
   // Light vector: from face to light
   gm3Pos l_vec = scene->light.position;
@@ -81,8 +81,8 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
  * Projects a single face to Normalized Device Coordinates (NDC).
  * Returns 1 if visible, 0 if culled.
  */
-int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
-                     gm3Material *mat, gm3Scene *scene) {
+int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, const gm3Pos *vertices,
+                     const gm3Material *mat, const gm3Scene *scene) {
 
   for (size_t i = 0; i < 3; i++) {
     if (vertices[i].z <= 0)
@@ -128,8 +128,8 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
 /**
  * Transforms an entire mesh and projects it into a gm3Image.
  */
-int gm3_project(gm3Mesh *mesh, gm3Transform *transform, gm3Scene *scene,
-                gm3Image *output) {
+int gm3_project(gm3Image *output, const gm3Mesh *mesh,
+                const gm3Transform *transform, const gm3Scene *scene) {
 
   size_t start_vertex = output->n_vertices;
   size_t start_triangle = output->n_triangles;

@@ -3,6 +3,22 @@
 #include <gama/3d.h>
 char nt[100] = {0};
 
+const gm3Mesh triangle = {.n_vertices = 3,
+                          .vertices =
+                              (gm3Pos[]){{0, 1, 0}, {1, 0, 0}, {-1, 0, 0}},
+
+                          .n_faces = 1,
+                          .faces = (gm3MeshFace[]){{.vertices = {0, 1, 2},
+                                                    .texs = {-1, -1, -1},
+                                                    .material = -1,
+                                                    .material_file = -1,
+                                                    .normal = {0, 0, -1}}},
+
+                          .n_mtllibs = 0,
+                          .mtllibs = NULL,
+                          .n_texs = 0,
+                          .texs = NULL};
+
 int main() {
   gm_init(500, 500, "gama cube application");
   gm_show_fps(1);
@@ -30,12 +46,17 @@ int main() {
   }
 
   gmdn(mesh, mesh);
+  gmdn(mesh, triangle);
+
+  gmStr str = gmg(mesh, triangle);
+
+  printf("%s", str.content);
 
   gm3Scene scene = gm3_scene();
   scene.light.position = (gm3Pos){0, 1, 0};
   scene.light.color = GM_WHITE;
 
-  scene.camera.focal = 1.5;
+  scene.camera.focal = 10;
 
   scene.light.position = (gm3Pos){0, 0, 0};
 
@@ -75,11 +96,12 @@ int main() {
     if (dirty) {
       gm3_image_clear(&img);
 
-      gm3_project(&mesh, &transform, &scene,
-                  &img); // snap on the image
+      // gm3_project(&img, &mesh, &transform, &scene); // snap on the image
+      gm3_project(&img, &triangle, &transform, &scene);
       dirty = 0;
     }
-    gm3_draw_image(&img, 0, 0); // draw the image
+
+    gm3_draw_image(&img, 0, 0, 0.1); // draw the image
     snprintf(nt, sizeof(nt), "triangles: %zu", img.n_triangles);
     gmw_frame(0.9, -0.7, 0.4, 0.1);
     gm_draw_text(0.9, -0.7, nt, "", 0.07, GM_WHITE);

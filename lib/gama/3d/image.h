@@ -64,17 +64,9 @@ int _gm3_depth_compare(const void *a, const void *b) {
 }
 
 struct {
-  short unsigned ignore_colors;
-  gmColor ignored_colors[10];
-  double ignore_small_triangles;
+} gm3DrawImage = {};
 
-} gm3DrawImage = {
-    .ignore_colors = 0,
-    .ignored_colors = {0},
-    .ignore_small_triangles = 0,
-};
-
-int gm3_draw_image(gm3Image *m, double x, double y) {
+int gm3_draw_image(gm3Image *m, double x, double y, double scale) {
   if (!m || m->n_triangles == 0)
     return 0;
 
@@ -92,22 +84,16 @@ int gm3_draw_image(gm3Image *m, double x, double y) {
         _gm3_depth_compare);
 
   for (size_t i = 0; i < m->n_triangles; i++) {
-
     size_t tidx = sort_buffer[i].tri_idx;
 
     // Correctly reference the vertices using the triangle index buffer
     gmPos v1 = m->vertices[m->triangles[tidx * 3 + 0]];
     gmPos v2 = m->vertices[m->triangles[tidx * 3 + 1]];
     gmPos v3 = m->vertices[m->triangles[tidx * 3 + 2]];
-    for (size_t c = 0; c < gm3DrawImage.ignore_colors; c++)
-      if (gm3DrawImage.ignored_colors[c] == m->colors[tidx])
-        continue;
+    double x1 = scale * v1.x, y1 = scale * v1.y, x2 = scale * v2.x,
+           y2 = scale * v2.y, x3 = scale * v3.x, y3 = scale * v3.y;
 
-    if (gm3DrawImage.ignore_small_triangles > 0 &&
-        gm_triangle_area(v1, v2, v3) <= gm3DrawImage.ignore_small_triangles)
-      continue;
-
-    gm_draw_triangle(v1.x + x, v1.y + y, v2.x + x, v2.y + y, v3.x + x, v3.y + y,
+    gm_draw_triangle(x1 + x, y1 + y, x2 + x, y2 + y, x3 + x, y3 + y,
                      m->colors[tidx]);
   }
 

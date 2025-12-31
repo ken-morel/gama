@@ -28,11 +28,12 @@ void gm3_pos_rotate(gm3Pos *res, const gm3Pos *rot) {
   res->y = res->x * sin(rot->z) + res->y * cos(rot->z);
   res->x = temp;
 }
-void gm3_transform_pos(gm3Pos *p, gm3Transform *t) {
+void gm3_transform_pos(gm3Pos *p, const gm3Transform *t) {
   gm3_pos_mul(p, &t->scale);
   gm3_pos_rotate(p, &t->rotation);
   gm3_pos_add(p, &t->position);
 }
+
 gm3Transform gm3_transform() {
   gm3Transform t;
   gm3_pos_reset(&t.position);
