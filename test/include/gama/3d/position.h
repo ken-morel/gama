@@ -16,16 +16,14 @@ static inline void gm3_pos_set(gm3Pos *p, double x, double y, double z) {
   p->z = z;
 }
 
-static inline double gm3_pos_magnitude(const gm3Pos *p) {
-  return sqrt(p->x * p->x + p->y * p->y + p->z * p->z);
-}
-static inline double gm3_pos_distance(const gm3Pos *a, const gm3Pos *b) {
-  return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2) + pow(a->z - b->z, 2));
-}
+#define gm3_pos_magnitude(p) sqrt((p).x *(p).x + (p).y * (p).y + (p).z * (p).z)
 
-#define gm3_pos_from2(p, z) gm3pos(p.x, p.y, z)
+#define gm3_pos_distance(a, b)                                                 \
+  sqrt(pow((a).x - (b).x, 2) + pow((a).y - (b).y, 2) + pow((a).z - (b).z, 2))
 
-#define gm3_pos_project_simple(p) gmpos(p.x / p.z, p.y / p.z)
+#define gm3_pos_from2(p, z) gm3pos((p).x, (p).y, z)
+
+#define gm3_pos_project_simple(p) gmpos((p).x / (p).z, (p).y / (p).z)
 
 static inline void gm3_pos_center(gm3Pos *p, const gm3Pos *va,
                                   const gm3Pos *vb) {
@@ -53,17 +51,17 @@ static inline void gm3_pos_add(gm3Pos *va, const gm3Pos *vb) {
 }
 
 static inline void gm3_pos_normalize(gm3Pos *v) {
-  double m = fmax(fabs(v->x), fmax(fabs(v->y), fabs(v->z)));
+  double m = gm3_pos_magnitude(*v);
   v->x /= m;
   v->y /= m;
   v->z /= m;
 }
 
-#define gm3_pos_dot(a, b) (a.x * b.x + a.y * b.y + a.z * b.z)
+#define gm3_pos_dot(a, b) ((a).x * (b).x + (a).y * (b).y + (a).z * (b).z)
 
 #define gm3_pos_cross(a, b)                                                    \
-  ((gm3Pos){a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,                      \
-            a.x * b.y - a.y * b.x})
+  ((gm3Pos){(a).y * (b).z - (a).z * (b).y, (a).z * (b).x - (a).x * (b).z,      \
+            (a).x * (b).y - (a).y * (b).x})
 
 #define gm3_pos_reset(p) memset(p, 0, sizeof(*p))
 

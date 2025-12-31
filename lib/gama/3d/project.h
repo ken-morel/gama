@@ -91,7 +91,7 @@ int gm3_project_face(gm3TriangleImage *out, gm3Pos norm, gm3Pos *vertices,
   // 1. Calculate Face Center for Lighting and Culling
   gm3Pos face_center = gm3_pos_centerN(vertices, 3);
 
-  double distance = gm3_pos_magnitude(&face_center);
+  double distance = gm3_pos_magnitude(face_center);
   if (distance <= scene->camera.near || distance >= scene->camera.far)
     return 0;
 
