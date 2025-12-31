@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../color.h"
+#include "../str.h"
 #include "../utils.h"
 #include <ctype.h>
 #include <stdio.h>
@@ -117,4 +118,79 @@ void gm3_mtl_free(gm3MtlLib *file) {
       free(file->materials);
     free(file);
   }
+}
+
+gmStr gmg_material(gm3Material mat) {
+  gmStr str = gm_str();
+  char buffer[1024];
+
+  gm_str_append(&str, "(gm3Material){\n");
+
+  sprintf(buffer, "    .name = \"%s\",\n", mat.name);
+  gm_str_append(&str, buffer);
+
+  // Diffuse
+  gm_str_append(&str, "    .diffuse = ");
+  gmStr s_diff = gmg_color(mat.diffuse);
+  gm_str_append(&str, s_diff.content);
+  gm_str_append(&str, ",\n");
+  // (Optional: free(s_diff.content) if gmStr allocates)
+
+  // Specular
+  gm_str_append(&str, "    .specular = ");
+  gmStr s_spec = gmg_color(mat.specular);
+  gm_str_append(&str, s_spec.content);
+  gm_str_append(&str, ",\n");
+
+  // Emissive
+  gm_str_append(&str, "    .emissive = ");
+  gmStr s_emiss = gmg_color(mat.emissive);
+  gm_str_append(&str, s_emiss.content);
+  gm_str_append(&str, ",\n");
+
+  sprintf(buffer, "    .shininess = %.4f,\n", mat.shininess);
+  gm_str_append(&str, buffer);
+
+  sprintf(buffer, "    .alpha = %.4f\n", mat.alpha);
+  gm_str_append(&str, buffer);
+
+  gm_str_append(&str, "  }");
+  return str;
+}
+
+gmStr gmg_mtllib(gm3MtlLib lib) {
+  gmStr str = gm_str();
+  char buffer[1024];
+
+  gm_str_append(&str, "(gm3MtlLib){\n");
+
+  sprintf(buffer, "  .name = \"%s\",\n", lib.name);
+  gm_str_append(&str, buffer);
+
+  sprintf(buffer, "  .n_materials = %zu,\n", lib.n_materials);
+  gm_str_append(&str, buffer);
+
+  if (lib.n_materials > 0) {
+    gm_str_append(&str, "  .materials = (gm3Material[]){\n");
+
+    for (size_t i = 0; i < lib.n_materials; i++) {
+      gmStr s_mat = gmg_material(lib.materials[i]);
+
+      gm_str_append(&str, "    ");
+      gm_str_append(&str, s_mat.content);
+
+      if (i < lib.n_materials - 1) {
+        gm_str_append(&str, ",\n");
+      } else {
+        gm_str_append(&str, "\n");
+      }
+      gm_str_clear(&s_mat);
+    }
+    gm_str_append(&str, "  }\n");
+  } else {
+    gm_str_append(&str, "  .materials = NULL\n");
+  }
+
+  gm_str_append(&str, "}");
+  return str;
 }

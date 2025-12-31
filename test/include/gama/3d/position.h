@@ -76,7 +76,7 @@ static inline gm3Pos gm3_pos_centerN(const gm3Pos *arr, const size_t n) {
   return res;
 }
 
-void gm3_pos_mul(gm3Pos *res, gm3Pos *trans) {
+void gm3_pos_mul(gm3Pos *res, const gm3Pos *trans) {
   res->x *= trans->x;
   res->y *= trans->y;
   res->z *= trans->z;

@@ -14,3 +14,4 @@
 #include "gama/widgets.h"
 
 #include "gama/_malloc.h"
+#include "gama/gmg.h"

@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../debug.h"
 #include "mesh.h"
 #include "mtl.h"
 #include "position.h"
@@ -263,18 +262,6 @@ int gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
         gm3_pos_substract(&e2, &m->vertices[face->vertices[0]]);
         gm3Pos n = gm3_pos_cross(e1, e2);
         gm3_pos_normalize(&n);
-
-        // If file provided a normal, align our calculated normal with it
-
-        // if (ln->indices[0][2] >= 0) {
-        //   gm3Pos n2 = {0};
-        //   gm3_pos_center3(&n2, &m->normals[ln->indices[0][2]],
-        //                   &m->normals[ln->indices[j + 1][2]],
-        //                   &m->normals[ln->indices[j + 2][2]]);
-
-        //   if (gm3_pos_dot(n, n2) < 0)
-        //     gm3_pos_mul_scalar(&n, -1);
-        // }
 
         face->normal = n;
       }
