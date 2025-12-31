@@ -1,8 +1,8 @@
 #pragma once
 
-#include "3d/mesh.h"
 #include "3d/position.h"
 #include "color.h"
+#include "position.h"
 #include <stdio.h>
 
 #define gmdi(fn, obj) gmd(fn, obj, "")
@@ -26,6 +26,8 @@ int gmd_pos3(char *s, size_t n, gm3Pos p) {
 int gmd_pos2(char *s, size_t n, gmPos p) {
   return snprintf(s, n, "gmPos(x: %.lf, y: %.lf)", p.x, p.y);
 }
+
+#include "3d/mesh.h"
 
 int gmd_mesh(char *s, size_t n, gm3Mesh m) {
   return snprintf(

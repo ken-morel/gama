@@ -5,6 +5,29 @@
 #include <stdio.h>
 #include <string.h>
 
+void gmu_get_filename_base(const char *path, char *out_base, size_t out_size) {
+  // Find last path separator (works for both / and \)
+  const char *filename = path;
+  const char *p = path;
+  while (*p) {
+    if (*p == '/' || *p == '\\') {
+      filename = p + 1;
+    }
+    p++;
+  }
+
+  // Find extension
+  const char *ext = strrchr(filename, '.');
+
+  int len = strlen(filename);
+
+  if (len >= out_size)
+    len = out_size - 1;
+
+  strncpy(out_base, filename, len);
+  out_base[len] = '\0';
+}
+
 void gmu_get_filename_stem(const char *path, char *out_stem, size_t out_size) {
   // Find last path separator (works for both / and \)
   const char *filename = path;

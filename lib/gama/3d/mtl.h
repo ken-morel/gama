@@ -44,8 +44,7 @@ int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path) {
     printf("MTL: Could not open file %s\n", path);
     return -1;
   }
-
-  gmu_get_filename_stem(path, mtl_lib->name, sizeof(mtl_lib->name));
+  gmu_get_filename_base(path, mtl_lib->name, sizeof(mtl_lib->name));
   char line[512];
   gm3Material *current = NULL;
 

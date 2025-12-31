@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../_math.h"
-#include "../position.h"
 #include <stddef.h>
 #include <string.h>
 
@@ -9,10 +8,7 @@ typedef struct {
   double x, y, z;
 } gm3Pos;
 
-static inline gm3Pos gm3pos(double x, double y, double z) {
-  gm3Pos p = {x, y, z};
-  return p;
-}
+#define gm3pos(x, y, z) ((gm3Pos){x, y, z})
 
 static inline void gm3_pos_set(gm3Pos *p, double x, double y, double z) {
   p->x = x;
@@ -27,13 +23,9 @@ static inline double gm3_pos_distance(const gm3Pos *a, const gm3Pos *b) {
   return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2) + pow(a->z - b->z, 2));
 }
 
-static inline gm3Pos gm3_pos_from2(const gmPos *p, double z) {
-  return gm3pos(p->x, p->y, z);
-}
+#define gm3_pos_from2(p, z) gm3pos(p.x, p.y, z)
 
-static inline gmPos gm3_pos_project_simple(const gm3Pos *p) {
-  return gmpos(p->x / p->z, p->y / p->z);
-}
+#define gm3_pos_project_simple(p) gmpos(p.x / p.z, p.y / p.z)
 
 static inline void gm3_pos_center(gm3Pos *p, const gm3Pos *va,
                                   const gm3Pos *vb) {
@@ -61,32 +53,29 @@ static inline void gm3_pos_add(gm3Pos *va, const gm3Pos *vb) {
 }
 
 static inline void gm3_pos_normalize(gm3Pos *v) {
-  double m = gm3_pos_magnitude(v);
+  double m = fmax(fabs(v->x), fmax(fabs(v->y), fabs(v->z)));
   v->x /= m;
   v->y /= m;
   v->z /= m;
 }
 
-static inline double gm3_pos_dot(const gm3Pos *a, const gm3Pos *b) {
-  return a->x * b->x + a->y * b->y + a->z * b->z;
-}
+#define gm3_pos_dot(a, b) (a.x * b.x + a.y * b.y + a.z * b.z)
 
-static inline void gm3_pos_cross(gm3Pos *res, const gm3Pos *a,
-                                 const gm3Pos *b) {
-  res->x = a->y * b->z - a->z * b->y;
-  res->y = a->z * b->x - a->x * b->z;
-  res->z = a->x * b->y - a->y * b->x;
-}
+#define gm3_pos_cross(a, b)                                                    \
+  ((gm3Pos){a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,                      \
+            a.x * b.y - a.y * b.x})
 
-static inline void gm3_pos_reset(gm3Pos *p) { memset(p, 0, sizeof(*p)); }
+#define gm3_pos_reset(p) memset(p, 0, sizeof(*p))
 
-static inline void gm3_pos_centerN(gm3Pos *res, const gm3Pos *arr, size_t n) {
+static inline gm3Pos gm3_pos_centerN(const gm3Pos *arr, const size_t n) {
+  gm3Pos res = {0};
   double dn = (double)n;
   for (size_t i = 0; i < n; i++) {
-    res->x += arr[i].x / dn;
-    res->y += arr[i].y / dn;
-    res->z += arr[i].z / dn;
+    res.x += arr[i].x / dn;
+    res.y += arr[i].y / dn;
+    res.z += arr[i].z / dn;
   }
+  return res;
 }
 
 void gm3_pos_mul(gm3Pos *res, gm3Pos *trans) {

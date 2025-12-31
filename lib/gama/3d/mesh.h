@@ -56,8 +56,8 @@ int gm3_mesh_center(gm3Mesh *m) {
     min.y = fmin(p.y, min.y);
     max.y = fmax(p.y, max.y);
 
-    min.x = fmin(p.x, min.x);
-    max.x = fmax(p.x, max.x);
+    min.z = fmin(p.z, min.z);
+    max.z = fmax(p.z, max.z);
   }
 
   gm3Pos center;

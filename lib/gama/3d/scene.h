@@ -6,8 +6,7 @@
 
 typedef struct {
   gmPos viewport;
-  double near;
-  double far;
+
   gm3Light light;
   gm3Camera camera;
 } gm3Scene;
@@ -15,8 +14,7 @@ typedef struct {
 int gm3_scene_create(gm3Scene *s, double w, double h) {
   s->viewport.x = w;
   s->viewport.y = h;
-  s->near = 0.1;
-  s->far = 100;
+
   gm3_light_create(&s->light);
   gm3_camera_create(&s->camera);
   return 0;

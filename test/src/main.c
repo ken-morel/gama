@@ -12,13 +12,13 @@ int main() {
     gm_draw_text(0, -0.7, "Loading model...", "", 0.1, GM_WHITE);
     gm_yield();
   }
-  gm_background(GM_DARKGREY);
+  gm_background(GM_BLACK);
 
   gm3Mesh mesh; // create an obj file
 
   // cube, bgirl, Alien Animal, tree
   printf("loading file...\n");
-  int code = gm3_obj_load(&mesh, "assets/obj/triangle.obj",
+  int code = gm3_obj_load(&mesh, "assets/obj/tree.obj",
                           "assets/obj"); // load the obj file
   printf("loaded mesh with code %d\n", code);
   if (code < 0) {
@@ -27,25 +27,19 @@ int main() {
   } else if (code > 0) {
     printf("Object load notified: %d", code);
   }
-  printf(" - %zu\n", mesh.faces[0].vertices[0]);
-  printf(" - %zu\n", mesh.faces[0].vertices[1]);
-  printf(" - %zu\n", mesh.faces[0].vertices[2]);
-  printf("file loaded with %zu faces\n", mesh.n_faces);
-  printf("file loaded with %zu vertices\n", mesh.n_vertices);
-  printf("file loaded with %zu normals\n", mesh.n_normals);
-  printf("file has %zu textures\n", mesh.n_texs);
+
+  gmdn(mesh, mesh);
 
   gm3Scene scene = gm3_scene();
-  scene.far = 20;
-  scene.light.position.z = -10;
-  scene.light.color = GM_ORANGE;
+  scene.light.position = (gm3Pos){0, 1, 0};
+  scene.light.color = GM_WHITE;
+
+  scene.camera.focal = 1.5;
+
+  scene.light.position = (gm3Pos){0, 0, 0};
 
   gm3Transform transform = gm3_transform();
-  double scale = 0.5;
-  transform.scale.x = scale;
-  transform.scale.y = scale;
-  transform.scale.z = scale;
-  transform.position.z = 15;
+  transform.position.z = 10;
 
   gm3Image img =
       gm3_image(); // the image where we snap the 3d object into a 2d image and
@@ -84,10 +78,14 @@ int main() {
 
       gm3_project(&mesh, &transform, &scene,
                   &img); // snap on the image
-      printf("Image has %zu triangles\n", img.n_triangles);
       dirty = 0;
     }
-    gm3_draw_image(&img, -1, -1); // draw the image
+    char nt[100] = {0};
+    sprintf(nt, "triangles: %zu", img.n_triangles);
+    gm3_draw_image(&img, 0, 0); // draw the image
+    gmw_frame(0.9, -0.9, 0.3, 0.1);
+    gm_draw_text(0.9, -0.9, nt, "", 0.07, GM_WHITE);
+
   } while (gm_yield());
   // destroy shapes
 

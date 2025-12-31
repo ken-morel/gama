@@ -23,8 +23,8 @@ int gm3_light_create(gm3Light *l) {
 
   l->color = 0xCCCCCCFF;
 
-  l->intensity = 1;
+  l->intensity = 0.8;
 
-  l->ambient = 1;
+  l->ambient = 0.5;
   return 0;
 }
