@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "../str.h"
 typedef struct {
   double x, y, z;
 } gm3Pos;
@@ -85,4 +86,12 @@ void gm3_pos_mul_scalar(gm3Pos *res, double s) {
   res->x *= s;
   res->y *= s;
   res->z *= s;
+}
+
+gmStr gmg_pos3(gm3Pos pos) {
+  gmStr str = gm_str();
+  char buffer[128];
+  sprintf(buffer, "(gm3Pos){%.6g, %.6g, %.6g}", pos.x, pos.y, pos.z);
+  gm_str_append(&str, buffer);
+  return str;
 }

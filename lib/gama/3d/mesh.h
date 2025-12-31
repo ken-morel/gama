@@ -179,10 +179,9 @@ gmStr gmg_mesh(gm3Mesh m) {
   gm_str_append(&str, buffer);
 
   if (m.n_mtllibs > 0) {
-    gm_str_append(&str, "  .mtllibs = (gm3MtlFile[]){\n");
+    gm_str_append(&str, "  .mtllibs = (gm3MtlLib[]){\n");
     for (size_t i = 0; i < m.n_mtllibs; i++) {
       // Assuming gmg_mtllib exists and generates (gm3MtlLib){...}
-      // Note: check if your struct is named gm3MtlFile or gm3MtlLib
       gmStr s_lib = gmg_mtllib(m.mtllibs[i]);
 
       gm_str_append(&str, "    ");

@@ -7,9 +7,9 @@
  * @brief Structure representing an image with handle and dimensions.
  */
 typedef struct {
-  uint32_t handle;  /**< Internal handle for the image */
-  uint32_t width;   /**< Width of the image in pixels */
-  uint32_t height;  /**< Height of the image in pixels */
+  uint32_t handle; /**< Internal handle for the image */
+  uint32_t width;  /**< Width of the image in pixels */
+  uint32_t height; /**< Height of the image in pixels */
 } gmImage;
 
 /**
@@ -19,7 +19,7 @@ typedef struct {
  */
 gmImage gm_image_open(const char *path) {
   gmImage img;
-  img.handle = gapi_create_image(path, &img.width, &img.height);
+  // img.handle = gapi_create_image(path, &img.width, &img.height);
   return img;
 }
 
