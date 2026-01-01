@@ -1,15 +1,37 @@
 #pragma once
+#ifndef STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#endif
 
+#include "../stb/stb_image.h"
 #include "gapi.h"
 #include <stdint.h>
+#include <string.h>
+
+typedef struct {
+  int width, height;
+  unsigned char *data;
+} gmImageData;
+
+int gm_image_data_load(gmImageData *data, const char *path) {
+  memset(data, 0, sizeof(gmImageData));
+  data->data = stbi_load(path, &data->width, &data->height, NULL, 4);
+  return 0;
+}
+int gm_image_data_free(gmImageData *d) {
+  free(d->data);
+  d->width = 0;
+  d->height = 0;
+  return 0;
+}
 
 /**
  * @brief Structure representing an image with handle and dimensions.
  */
 typedef struct {
   uint32_t handle; /**< Internal handle for the image */
-  uint32_t width;  /**< Width of the image in pixels */
-  uint32_t height; /**< Height of the image in pixels */
+  int width;       /**< Width of the image in pixels */
+  int height;      /**< Height of the image in pixels */
 } gmImage;
 
 /**
@@ -17,9 +39,14 @@ typedef struct {
  * @param path The file path to the image.
  * @return A gmImage structure containing the loaded image and its properties.
  */
-gmImage gm_image_open(const char *path) {
+gmImage gm_image_create(const char *path) {
   gmImage img;
-  // img.handle = gapi_create_image(path, &img.width, &img.height);
+  gmImageData data;
+  gm_image_data_load(&data, path);
+  img.width = data.width;
+  img.height = data.width;
+  img.handle = gapi_create_image(data.data, img.width, img.height);
+  gm_image_data_free(&data);
   return img;
 }
 

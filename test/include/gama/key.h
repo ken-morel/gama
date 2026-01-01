@@ -1,16 +1,5 @@
 #pragma once
 
-#include "gapi.h"
-
-/**
- * @brief Checks if a key is currently pressed.
- * @param t The type of key event ('a' for arrow keys, 'm' for mouse events, 's'
- * for special keys, 'c' for character keys).
- * @param k The specific key character or identifier.
- * @return 1 if the key is pressed, 0 otherwise.
- */
-int gm_key_down(char t, char k) { return gapi_key_down(t, k); }
-
 /**
  * @brief Converts a character to lowercase if it's an uppercase letter.
  * @param k The character to convert.
@@ -94,6 +83,18 @@ char gm_encode_key_shortcut(char t, char k) {
   }
 }
 
+#ifndef GM_NO_GAPI
+#include "gapi.h"
+
+/**
+ * @brief Checks if a key is currently pressed.
+ * @param t The type of key event ('a' for arrow keys, 'm' for mouse events, 's'
+ * for special keys, 'c' for character keys).
+ * @param k The specific key character or identifier.
+ * @return 1 if the key is pressed, 0 otherwise.
+ */
+int gm_key_down(char t, char k) { return gapi_key_down(t, k); }
+
 /**
  * @brief Checks if a key is currently pressed using a shortcut key.
  * @param key The shortcut key to check.
@@ -104,3 +105,5 @@ int gm_key(char key) {
   gm_decode_key_shortcut(key, &t, &k);
   return gm_key_down(t, k);
 }
+
+#endif

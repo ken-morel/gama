@@ -1,5 +1,7 @@
 #pragma once
 
+#define STB_IMAGE_IMPLEMENTATION
+
 #define GAMA_VERSION_MAJOR 0
 #define GAMA_VERSION_MINOR 1
 #define GAMA_VERSION_PATCH 0

@@ -1,17 +1,19 @@
 #pragma once
 
+#define STB_IMAGE_IMPLEMENTATION
+
 #define GAMA_VERSION_MAJOR 0
 #define GAMA_VERSION_MINOR 1
 #define GAMA_VERSION_PATCH 0
 
+#ifndef GM_NO_GAPI
+#include "gama/gama.h"
+#include "gama/sprite.h"
+
+#endif
+
 #include "gama/animate.h"
 #include "gama/body.h"
-#include "gama/gama.h"
 #include "gama/key.h"
 #include "gama/physics.h"
-#include "gama/sprite.h"
 #include "gama/system.h"
-#include "gama/widgets.h"
-
-#include "gama/_malloc.h"
-#include "gama/gmg.h"

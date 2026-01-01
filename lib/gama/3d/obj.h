@@ -178,7 +178,6 @@ int32_t gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
       gm3MtlLib mf;
       memset(&mf, 0, sizeof(mf));
       int ret = gm3_mtl_load(&mf, mtl_path);
-      printf("material name: %s\n", mf.name);
       if (ret < 0)
         return ret;
       if (ret >= 0) {

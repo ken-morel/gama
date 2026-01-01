@@ -9,9 +9,10 @@
  * @brief Structure representing a sprite animation sequence.
  */
 typedef struct {
-  double interval;  /**< Time interval between animation frames */
-  int anim[GAMA_MAX_SPRITE_ANIM_LENGTH];  /**< Array of frame indices in the animation sequence */
-  size_t length;    /**< Number of frames in the animation */
+  double interval; /**< Time interval between animation frames */
+  int anim[GAMA_MAX_SPRITE_ANIM_LENGTH]; /**< Array of frame indices in the
+                                            animation sequence */
+  size_t length; /**< Number of frames in the animation */
 } gmSpriteAnim;
 
 /**
@@ -33,7 +34,8 @@ gmSpriteAnim gm_sprite_anim_browse(int n_sprites, double interval) {
 /**
  * @brief Creates a sprite animation based on a pattern string.
  * @param interval The time interval between frames.
- * @param pattern A string where each character represents a frame index (a=0, b=1, etc.).
+ * @param pattern A string where each character represents a frame index (a=0,
+ * b=1, etc.).
  * @return A new gmSpriteAnim instance.
  */
 gmSpriteAnim gm_sprite_anim_create(double interval, const char *pattern) {
@@ -52,15 +54,15 @@ gmSpriteAnim gm_sprite_anim_create(double interval, const char *pattern) {
  * @brief Structure representing a sprite with animation capabilities.
  */
 typedef struct {
-  double _backlog_t;       /**< Internal time accumulator for animation timing */
+  double _backlog_t; /**< Internal time accumulator for animation timing */
 
-  gmSpriteAnim animation;  /**< Animation sequence for the sprite */
+  gmSpriteAnim animation; /**< Animation sequence for the sprite */
 
-  size_t n_frames;         /**< Total number of frames in the sprite sheet */
-  size_t animation_frame;  /**< Current frame in the animation sequence */
-  size_t _frame;           /**< Current actual frame to display */
+  size_t n_frames;        /**< Total number of frames in the sprite sheet */
+  size_t animation_frame; /**< Current frame in the animation sequence */
+  size_t _frame;          /**< Current actual frame to display */
 
-  gmImage image;           /**< The image containing the sprite sheet */
+  gmImage image; /**< The image containing the sprite sheet */
 } gmSprite;
 
 /**
@@ -104,7 +106,8 @@ static inline void gm_sprite_update(gmSprite *sprite) {
 }
 
 /**
- * @brief Draws the current frame of a sprite at the specified position and size.
+ * @brief Draws the current frame of a sprite at the specified position and
+ * size.
  * @param sprite Pointer to the sprite to draw.
  * @param x The x-coordinate to draw at.
  * @param y The y-coordinate to draw at.
@@ -116,14 +119,4 @@ void gm_sprite_draw(gmSprite *sprite, double x, double y, double width,
   size_t im_w = sprite->image.width / sprite->n_frames;
   gm_image_draw_part(sprite->image, im_w * sprite->_frame, 0, im_w,
                      sprite->image.height, x, y, width, height);
-}
-
-/**
- * @brief Creates a new sprite by loading an image from a file.
- * @param path The file path to the sprite sheet image.
- * @param n_frames The number of frames in the sprite sheet.
- * @return A new gmSprite instance.
- */
-gmSprite gm_sprite_open(const char *path, int n_frames) {
-  return gm_sprite_create(gm_image_open(path), n_frames);
 }

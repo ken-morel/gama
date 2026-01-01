@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <float.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -153,7 +154,7 @@ int gm3_obj_parse(char *content, gm3ObjLine **result, size_t *n_lines) {
   return 0;
 }
 
-int gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
+int32_t gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
   char *content = NULL;
   size_t content_len;
   if (gmu_read_file(path, &content, &content_len) < 0)
@@ -177,7 +178,6 @@ int gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
       gm3MtlLib mf;
       memset(&mf, 0, sizeof(mf));
       int ret = gm3_mtl_load(&mf, mtl_path);
-      printf("material name: %s\n", mf.name);
       if (ret < 0)
         return ret;
       if (ret >= 0) {

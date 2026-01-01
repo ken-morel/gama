@@ -7,9 +7,9 @@ fn gapi_draw_rect(x f64, y f64, w f64, h f64, cr u8, cg u8, cb u8, ca u8) i32 {
 	gx, gy, gw, gh := c_redimension_rect(x, y, w, h)
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx, gy, gw, gh, c] () {
+	queue_fn(fn [gx, gy, gw, gh, c] () {
 		gapi_ctx__.draw_rect_filled(gx, gy, gw, gh, c)
-	}
+	})
 	return 0
 }
 
@@ -19,9 +19,9 @@ fn gapi_draw_rounded_rect(x f64, y f64, w f64, h f64, r f64, cr u8, cg u8, cb u8
 	gr := c_redimension_one(r)
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx, gy, gw, gh, gr, c] () {
+	queue_fn(fn [gx, gy, gw, gh, gr, c] () {
 		gapi_ctx__.draw_rounded_rect_filled(gx, gy, gw, gh, gr, c)
-	}
+	})
 	return 0
 }
 
@@ -31,9 +31,9 @@ fn gapi_draw_circle(x f64, y f64, r f64, cr u8, cg u8, cb u8, ca u8) i32 {
 	gr := c_redimension_one(r)
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx, gy, gr, c] () {
+	queue_fn(fn [gx, gy, gr, c] () {
 		gapi_ctx__.draw_circle_filled(gx, gy, gr, c)
-	}
+	})
 	return 0
 }
 
@@ -42,9 +42,9 @@ fn gapi_draw_ellipse(x f64, y f64, w f64, h f64, cr u8, cg u8, cb u8, ca u8) i32
 	gx, gy, gw, gh := c_redimension_rect(x, y, w, h)
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx, gy, gw, gh, c] () {
+	queue_fn(fn [gx, gy, gw, gh, c] () {
 		gapi_ctx__.draw_ellipse_filled(gx, gy, gw, gh, c)
-	}
+	})
 	return 0
 }
 
@@ -56,9 +56,9 @@ fn gapi_draw_triangle(x1 f64, y1 f64, x2 f64, y2 f64, x3 f64, y3 f64, cr u8, cg 
 
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx1, gy1, gx2, gy2, gx3, gy3, c] () {
+	queue_fn(fn [gx1, gy1, gx2, gy2, gx3, gy3, c] () {
 		gapi_ctx__.draw_triangle_filled(gx1, gy1, gx2, gy2, gx3, gy3, c)
-	}
+	})
 	return 0
 }
 
@@ -71,12 +71,12 @@ fn gapi_draw_line(x1 f64, y1 f64, x2 f64, y2 f64, t f64, cr u8, cg u8, cb u8, ca
 
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx1, gy1, gx2, gy2, gt, c] () {
+	queue_fn(fn [gx1, gy1, gx2, gy2, gt, c] () {
 		gapi_ctx__.draw_line_with_config(gx1, gy1, gx2, gy2, gg.PenConfig{
 			color:     c
 			thickness: gt
 		})
-	}
+	})
 	return 0
 }
 
@@ -101,7 +101,7 @@ fn gapi_draw_text(x f64, y f64,
 
 	c := c_color(cr, cg, cb, ca)
 
-	gapi_queue__ <- fn [gx, gy, size, vtext, vfont, italic, bold, mono, c] () {
+	queue_fn(fn [gx, gy, size, vtext, vfont, italic, bold, mono, c] () {
 		gapi_ctx__.draw_text(i32(gx), i32(gy), vtext, gg.TextCfg{
 			color:          c
 			size:           size
@@ -112,6 +112,6 @@ fn gapi_draw_text(x f64, y f64,
 			bold:           bold
 			family:         vfont
 		})
-	}
+	})
 	return 0
 }

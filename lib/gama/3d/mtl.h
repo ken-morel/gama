@@ -42,8 +42,7 @@ int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path) {
 
   FILE *f = fopen(path, "r");
   if (!f) {
-    printf("MTL: Could not open file %s\n", path);
-    return -1;
+    return -2;
   }
   gmu_get_filename_base(path, mtl_lib->name, sizeof(mtl_lib->name));
   char line[512];
@@ -120,80 +119,72 @@ void gm3_mtl_free(gm3MtlLib *file) {
   }
 }
 
-gmStr gmg_material(gm3Material mat) {
-  gmStr str = gm_str();
+int gmg_material(gmStr *str, gm3Material mat) {
 
   char buffer[1024] = {0};
 
   sprintf(buffer, "(gm3Material){\n");
-  gm_str_append(&str, buffer);
+  gm_str_append(str, buffer);
 
   sprintf(buffer, "    .name = \"%s\",\n", mat.name);
-  gm_str_append(&str, buffer);
+  gm_str_append(str, buffer);
 
   // Diffuse
-  gm_str_append(&str, "    .diffuse = ");
-  gmStr s_diff = gmg_color(mat.diffuse);
-  gm_str_append(&str, s_diff.content);
-  gm_str_append(&str, ",\n");
-  gm_str_clear(&s_diff);
+  gm_str_append(str, "    .diffuse = ");
+  gmg_color(str, mat.diffuse);
+  gm_str_append(str, ",\n");
 
   // Specular
-  gm_str_append(&str, "    .specular = ");
-  gmStr s_spec = gmg_color(mat.specular);
-  gm_str_append(&str, s_spec.content);
-  gm_str_append(&str, ",\n");
+  gm_str_append(str, "    .specular = ");
+  gmg_color(str, mat.specular);
+  gm_str_append(str, ",\n");
 
   // Emissive
-  gm_str_append(&str, "    .emissive = ");
-  gmStr s_emiss = gmg_color(mat.emissive);
-  gm_str_append(&str, s_emiss.content);
-  gm_str_append(&str, ",\n");
+  gm_str_append(str, "    .emissive = ");
+  gmg_color(str, mat.emissive);
+  gm_str_append(str, ",\n");
 
   sprintf(buffer, "    .shininess = %.4f,\n", mat.shininess);
-  gm_str_append(&str, buffer);
+  gm_str_append(str, buffer);
 
   sprintf(buffer, "    .alpha = %.4f\n", mat.alpha);
-  gm_str_append(&str, buffer);
+  gm_str_append(str, buffer);
 
-  gm_str_append(&str, "  }");
-  return str;
+  gm_str_append(str, "  }");
+  return 0;
 }
 
-gmStr gmg_mtllib(gm3MtlLib lib) {
-  gmStr str = gm_str();
+int gmg_mtllib(gmStr *str, gm3MtlLib lib) {
   char buffer[1024] = {0};
 
   sprintf(buffer, "(gm3MtlLib){\n");
-  gm_str_append(&str, buffer);
+  gm_str_append(str, buffer);
 
   sprintf(buffer, "  .name = \"%s\",\n", lib.name);
-  gm_str_append(&str, buffer);
+  gm_str_append(str, buffer);
 
   sprintf(buffer, "  .n_materials = %zu,\n", lib.n_materials);
-  gm_str_append(&str, buffer);
+  gm_str_append(str, buffer);
 
   if (lib.n_materials > 0) {
-    gm_str_append(&str, "  .materials = (gm3Material[]){\n");
+    gm_str_append(str, "  .materials = (gm3Material[]){\n");
 
     for (size_t i = 0; i < lib.n_materials; i++) {
-      gmStr s_mat = gmg_material(lib.materials[i]);
 
-      gm_str_append(&str, "    ");
-      gm_str_append(&str, s_mat.content);
+      gm_str_append(str, "    ");
+      gmg_material(str, lib.materials[i]);
 
       if (i < lib.n_materials - 1) {
-        gm_str_append(&str, ",\n");
+        gm_str_append(str, ",\n");
       } else {
-        gm_str_append(&str, "\n");
+        gm_str_append(str, "\n");
       }
-      gm_str_clear(&s_mat);
     }
-    gm_str_append(&str, "  }\n");
+    gm_str_append(str, "  }\n");
   } else {
-    gm_str_append(&str, "  .materials = NULL\n");
+    gm_str_append(str, "  .materials = NULL\n");
   }
 
-  gm_str_append(&str, "}");
-  return str;
+  gm_str_append(str, "}");
+  return 0;
 }

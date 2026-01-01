@@ -9,11 +9,11 @@
 #define gmdn(fn, obj) gmd(fn, obj, "\n")
 #define gmd(fn, obj, e)                                                        \
   do {                                                                         \
-    char __gmd_str[200] = {0};                                                 \
+    char __gmd_str[200];                                                       \
     /* Use sizeof the buffer, not sizeof the number 200 */                     \
     gmd_##fn(__gmd_str, sizeof(__gmd_str), obj);                               \
     printf("<%s>%s", __gmd_str, e);                                            \
-  } while (0) // Removed trailing semicolon to require one in code
+  } while (0)
 
 int gmd_color(char *s, size_t n, gmColor c) {
   return snprintf(s, n, "gmPos(0x%#08X|r: %d, g: %d, b: %d, a: %d)", c,

@@ -97,6 +97,7 @@ export default class GamaInstance {
   async setup(wasmPath) {
     this.worker = new Worker(workerUrl, { type: 'module' });
     this.worker.onerror = this.handleWorkerError;
+    this.images = {};
 
     const response = await fetch(wasmPath);
     const data = await response.arrayBuffer();
@@ -195,6 +196,7 @@ export default class GamaInstance {
         var { a, b, c, color } = d;
 
         this._fill(...color);
+        this._stroke(...color);
 
         ctx.beginPath();
         ctx.moveTo(...this._c_coord(...a));
@@ -202,6 +204,7 @@ export default class GamaInstance {
         ctx.lineTo(...this._c_coord(...c));
         ctx.closePath();
         ctx.fill();
+        ctx.stroke();
         break;
 
       case 'draw/circle':
@@ -228,6 +231,24 @@ export default class GamaInstance {
         //TODO: find the currently viewed bound canvas
         this.maximized = d.full == 1;
         if (d.full && this.initialized) this.maximize();
+        break;
+      case 'create/image':
+        var { id, data, width, height } = d;
+        var imdata = new ImageData(data, width, height);
+
+        var c = new OffscreenCanvas(width, height);
+        var cx = c.getContext('2d');
+        cx.putImageData(imdata, 0, 0);
+
+        this.images[id] = c;
+        break;
+      case 'draw/image':
+        var { id, rect } = d;
+        ctx.drawImage(this.images[id], ...this._c_rect(...rect));
+        break;
+      case 'draw/image-part':
+        var { id, slice, rect } = d;
+        ctx.drawImage(this.images[id], ...slice, ...this._c_rect(...rect));
         break;
     }
   }
@@ -307,8 +328,8 @@ export default class GamaInstance {
 
 const workerfn = () => {
   class GamaWASI {
-    constructor(p) {
-      this.p = p; // Reference to your state object (must contain p.instance)
+    constructor() {
+      this.p = null;
     }
 
     get importObject() {
@@ -413,10 +434,12 @@ const workerfn = () => {
       };
     }
   }
-  const wasi_snapshot_preview1 = new GamaWASI().importObject;
+  const wasi = new GamaWASI();
+  const wasi_snapshot_preview1 = wasi.importObject;
 
 
   let p = {
+    image_counter: 1,
     instance: undefined,
     module: undefined,
     canvas: undefined,
@@ -434,6 +457,7 @@ const workerfn = () => {
       down: [],
     },
   };
+  wasi.p = p;
   try {
     window.p = p;
   } catch (e) { } //DEBUG: remove this
@@ -541,7 +565,42 @@ const workerfn = () => {
     key_down: (t, k) => {
       return p.keyboard.down.includes(String.fromCodePoint(t, k)) ? 1 : 0;
     },
-    wait_queue: () => { }
+    wait_queue: () => { },
+    create_image: (data_ptr, width, height) => {
+      if (data_ptr * width * height == 0) return 1;
+
+      const buffer = p.instance.exports.memory.buffer;
+      const view = new Uint8Array(buffer);
+      const size = width * height * 4;
+      const bytes = view.slice(data_ptr, data_ptr + size);
+      const id = p.image_counter++;
+      const data = new Uint8ClampedArray(size);
+      for (const i = 0; i < size; i++)
+        data[i] = bytes[i];
+      p.queue.push({
+        type: 'create/image',
+        id: id,
+        data: data,
+        width: width,
+        height: height,
+      });
+      return id;
+    },
+    draw_image: (handle, x, y, width, height) => {
+      p.queue.push({
+        type: 'draw/image',
+        id: handle,
+        rect: [x, y, width, height],
+      });
+    },
+    draw_image_part: (handle, sx, sy, sw, sh, x, y, w, h) => {
+      p.queue.push({
+        type: 'draw/image-part',
+        id: handle,
+        slice: [sx, sy, sw, sh],
+        rect: [x, y, w, h],
+      });
+    }
   };
 
   const utf8Decoder = new TextDecoder("utf-8");
