@@ -117,7 +117,8 @@ extern uint32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("create_image")))
 #endif
-    gapi_create_image(const char *data, uint32_t width, uint32_t height);
+    gapi_create_image(const unsigned char *data, uint32_t width,
+                      uint32_t height);
 
 extern int32_t
 #ifdef __ZIG_CC__

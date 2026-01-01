@@ -17,9 +17,11 @@ struct C.gmStr {
 	content &char
 }
 
+pub fn C.gm_str() C.gmStr
+
 pub fn C.gm3_obj_load(mesh &C.gm3Mesh, path &char, mtl_dir &char) i32
 
-pub fn C.gmg_mesh(m C.gm3Mesh) C.gmStr
+pub fn C.gmg_mesh(str &C.gmStr, m C.gm3Mesh) i32
 
 @[unsafe]
 pub fn load_mesh(path string, mtldir string) !C.gm3Mesh {
@@ -32,7 +34,11 @@ pub fn load_mesh(path string, mtldir string) !C.gm3Mesh {
 }
 
 @[unsafe]
-pub fn generate_mesh(mesh C.gm3Mesh) string {
-	str := C.gmg_mesh(mesh)
+pub fn generate_mesh(mesh C.gm3Mesh) !string {
+	str := C.gm_str()
+	ret := C.gmg_mesh(&str, mesh)
+	if ret < 0 {
+		return error('Could not generate mesh  gmg_mesh exited with code ${ret}')
+	}
 	return str.content.vstring()
 }

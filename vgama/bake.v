@@ -8,7 +8,7 @@ import term
 pub fn bake_obj(path string, fname string) !string {
 	mesh := gama.load_mesh(path, os.dir(path))!
 
-	code := gama.generate_mesh(mesh)
+	code := gama.generate_mesh(mesh)!
 
 	return '
 #include <gama/3d/mesh.h>

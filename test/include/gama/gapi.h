@@ -11,6 +11,8 @@ double _gm_t = 0;
 static inline double gm_dt() { return _gm_dt; }
 static inline double gm_t() { return _gm_t; }
 
+#ifndef GM_NO_GAPI
+
 extern void
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("set_title")))
@@ -115,7 +117,8 @@ extern uint32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("create_image")))
 #endif
-    gapi_create_image(const char *data, uint32_t width, uint32_t height);
+    gapi_create_image(const unsigned char *data, uint32_t width,
+                      uint32_t height);
 
 extern int32_t
 #ifdef __ZIG_CC__
@@ -164,3 +167,5 @@ extern int32_t
     __attribute__((import_module("gapi"), import_name("mouse_get")))
 #endif
     gapi_mouse_get(double *x, double *y);
+
+#endif

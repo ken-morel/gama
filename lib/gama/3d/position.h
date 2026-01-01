@@ -88,10 +88,9 @@ void gm3_pos_mul_scalar(gm3Pos *res, double s) {
   res->z *= s;
 }
 
-gmStr gmg_pos3(gm3Pos pos) {
-  gmStr str = gm_str();
+int gmg_pos3(gmStr *str, gm3Pos pos) {
   char buffer[128];
   sprintf(buffer, "(gm3Pos){%.6g, %.6g, %.6g}", pos.x, pos.y, pos.z);
-  gm_str_append(&str, buffer);
-  return str;
+  gm_str_append(str, buffer);
+  return 0;
 }
