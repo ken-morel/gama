@@ -1,13 +1,14 @@
 #pragma once
 
 #include "str.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 /**
  * @brief Type definition for color values in RGBA format.
  */
-typedef unsigned gmColor;
+typedef uint32_t gmColor;
 
 int gmg_color(gmStr *str, gmColor col) {
   char buffer[32];
@@ -44,7 +45,7 @@ int gmg_color(gmStr *str, gmColor col) {
  */
 #define gm_alpha(col) (col & 0x000000FF)
 
-static inline unsigned int _gm3_color_clamp(int c) {
+static inline gmColor _gm3_color_clamp(int c) {
   c = abs(c);
   return c < 0 ? 0 : c > 255 ? 255 : c;
 }

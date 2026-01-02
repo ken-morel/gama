@@ -8,7 +8,7 @@
 
 typedef struct {
   size_t vertices[3];
-  long texs[3];
+  long uvs[3];
   int material;
   int material_file;
   gm3Pos normal;

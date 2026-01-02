@@ -98,6 +98,9 @@ fn gapi_wait_queue() {
 @[export: 'gapi_yield']
 @[unsafe]
 fn gapi_yield(dt &f64) i32 {
+	if !gapi_gama_runs__ {
+		return 0
+	}
 	gapi_wait_queue() // wait it processes other events before sending stop
 	gapi_end_frame__ <- true or { return 0 } // close the current frame
 
@@ -122,7 +125,7 @@ fn gapi_yield(dt &f64) i32 {
 	}
 	last_time = current_time
 
-	return 1
+	return if gapi_gama_runs__ { 1 } else { 0 }
 }
 
 fn run_gg_loop() {
@@ -158,6 +161,9 @@ fn run_gg_loop() {
 			gapi_mouse_x__ = i32(x)
 			gapi_mouse_y__ = i32(y)
 			gapi_mouse_down__ = false
+		}
+		cleanup_fn:   fn (data voidptr) {
+			gapi_gama_runs__ = false
 		}
 	)
 
@@ -216,7 +222,6 @@ fn gapi_quit() {
 	queue_fn(fn () {
 		gapi_ctx__.quit()
 	})
-	gapi_gama_runs__ = false
 }
 
 @[export: 'gapi_resize']
@@ -227,8 +232,8 @@ fn gapi_resize(w i32, h i32) {
 }
 
 @[export: 'gapi_set_bg_color']
-fn gapi_set_bg_color(r u8, g u8, b u8, a u8) {
-	c := c_color(r, g, b, a)
+fn gapi_set_bg_color(col GmColor) {
+	c := col.to_gg()
 	queue_fn(fn [c] () {
 		gapi_ctx__.set_bg_color(c)
 	})

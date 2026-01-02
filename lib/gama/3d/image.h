@@ -1,51 +1,136 @@
 #pragma once
 
 #include "../color.h"
+
+#include "../gapi.h"
 #include "../position.h"
+#include "./position.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+// --- Image Structure ---
 
 typedef struct {
+  // Public Data: Result of projection
   gmPos *vertices;
-  size_t n_vertices;
-
   gmColor *colors;
-  size_t n_colors; // Should correspond to n_triangles
-
   size_t *triangles;
+  double *depths;
+
+  // Active counts for the current frame
+  size_t n_vertices;
+  size_t n_colors;
   size_t n_triangles;
 
-  double *depths; // The average Z of each triangle
+  // Actual allocated memory size (Capacity)
+  size_t cap_vertices;
+  size_t cap_colors;
+  size_t cap_triangles;
+  size_t cap_depths;
+
+  // --- Optimization: Per-Image Scratch Buffers ---
+  // These allow us to reuse memory across frames for THIS specific image
+  // without using global variables that break when multiple images exist.
+  struct {
+    gm3Pos *world_verts; // Temp storage for 3D world coordinates
+    size_t cap_world;
+
+    void *sort_buf; // Temp storage for sorting triangles
+    size_t cap_sort;
+
+    double *tri;
+    gmColor *cols;
+    size_t cap_tri;
+
+  } _internal;
+
 } gm3Image;
 
 static inline gm3Image gm3_image() {
-  return (gm3Image){.n_colors = 0,
-                    .colors = NULL,
-                    .n_vertices = 0,
-                    .vertices = NULL,
-                    .n_triangles = 0,
-                    .triangles = NULL};
+  return (gm3Image){0}; // Zero-init guarantees NULL pointers
 }
 
-typedef struct {
-  gmPos vertices[3];
-  gmColor color;
-  double depth;
-} gm3TriangleImage;
+/**
+ * Call this at the start of a new frame.
+ * It resets the counters so you can overwrite data,
+ * but keeps the heavy memory allocations alive for speed.
+ */
+static inline void gm3_image_reset(gm3Image *i) {
+  i->n_vertices = 0;
+  i->n_triangles = 0;
+  i->n_colors = 0;
+  // We do NOT free the arrays here. That's the optimization.
+}
 
-static inline gm3Image gm3_image_init() { return (gm3Image){0}; }
-
-void gm3_image_clear(gm3Image *i) {
-  if (i->colors)
-    free(i->colors);
+/**
+ * Call this when you are completely done with the image object
+ * and want to release memory to the OS.
+ */
+void gm3_image_free(gm3Image *i) {
   if (i->vertices)
     free(i->vertices);
+  if (i->colors)
+    free(i->colors);
   if (i->triangles)
     free(i->triangles);
   if (i->depths)
     free(i->depths);
-  *i = (gm3Image){0};
+
+  // Free the scratch buffers too
+  if (i->_internal.world_verts)
+    free(i->_internal.world_verts);
+  if (i->_internal.sort_buf)
+    free(i->_internal.sort_buf);
+  if (i->_internal.tri)
+    free(i->_internal.tri);
+  if (i->_internal.cols)
+    free(i->_internal.cols);
+
+  memset(i, 0, sizeof(gm3Image));
 }
+
+// --- Internal Helper: Smart Resize ---
+static inline int gm3_image_ensure_cap(gm3Image *img, size_t new_v,
+                                       size_t new_t) {
+  // 1. Resize Vertex buffer if needed
+  if (new_v > img->cap_vertices) {
+    size_t new_cap = img->cap_vertices == 0 ? new_v : img->cap_vertices * 2;
+    if (new_cap < new_v)
+      new_cap = new_v + 128; // Padding
+
+    void *tmp = realloc(img->vertices, new_cap * sizeof(gmPos));
+    if (!tmp)
+      return 0;
+    img->vertices = tmp;
+    img->cap_vertices = new_cap;
+  }
+
+  // 2. Resize Triangle buffers (indices, colors, depths) if needed
+  if (new_t > img->cap_triangles) {
+    size_t new_cap = img->cap_triangles == 0 ? new_t : img->cap_triangles * 2;
+    if (new_cap < new_t)
+      new_cap = new_t + 128;
+
+    void *t_ptr = realloc(img->triangles, new_cap * 3 * sizeof(size_t));
+    void *c_ptr = realloc(img->colors, new_cap * sizeof(gmColor));
+    void *d_ptr = realloc(img->depths, new_cap * sizeof(double));
+
+    if (!t_ptr || !c_ptr || !d_ptr)
+      return 0;
+
+    img->triangles = t_ptr;
+    img->colors = c_ptr;
+    img->depths = d_ptr;
+    img->cap_triangles = new_cap;
+    img->cap_colors = new_cap;
+    img->cap_depths = new_cap;
+  }
+  return 1;
+}
+
+// --- Drawing Logic ---
 
 typedef struct {
   size_t tri_idx;
@@ -55,51 +140,79 @@ typedef struct {
 int _gm3_depth_compare(const void *a, const void *b) {
   _gmImageDepthEntry *ra = (_gmImageDepthEntry *)a;
   _gmImageDepthEntry *rb = (_gmImageDepthEntry *)b;
-  // Sort Back-to-Front (highest Z first)
+  // Sort Farthest Z to Nearest Z (Painters Algorithm)
   if (rb->z < ra->z)
     return -1;
-  if (rb->z > ra->z)
+  else if (rb->z > ra->z)
     return 1;
-  return 0;
+  else
+    return 0;
 }
 
-struct {
-} gm3DrawImage = {};
-
 #ifndef GM_NO_GAPI
-#include "../draw.h"
-int gm3_draw_image(gm3Image *m, double x, double y, double scale) {
-  if (!m || m->n_triangles == 0)
+int gm3_draw_image(gm3Image *img, double x, double y, double scale) {
+  if (!img || img->n_triangles == 0)
     return 0;
 
-  _gmImageDepthEntry *sort_buffer =
-      malloc(sizeof(_gmImageDepthEntry) * m->n_triangles);
-  if (!sort_buffer)
-    return -1;
-
-  for (size_t i = 0; i < m->n_triangles; i++) {
-    sort_buffer[i].tri_idx = i;
-    sort_buffer[i].z = m->depths[i];
+  // 1. Ensure Sort Buffer Capacity (stored in the image struct)
+  if (img->n_triangles > img->_internal.cap_sort) {
+    size_t new_cap = img->n_triangles + 512;
+    void *tmp =
+        realloc(img->_internal.sort_buf, new_cap * sizeof(_gmImageDepthEntry));
+    if (!tmp)
+      return -1;
+    img->_internal.sort_buf = tmp;
+    img->_internal.cap_sort = new_cap;
   }
 
-  qsort(sort_buffer, m->n_triangles, sizeof(_gmImageDepthEntry),
+  _gmImageDepthEntry *sort_arr = (_gmImageDepthEntry *)img->_internal.sort_buf;
+
+  // 2. Fill Sort Buffer
+  for (size_t i = 0; i < img->n_triangles; i++) {
+    sort_arr[i].tri_idx = i;
+    sort_arr[i].z = img->depths[i];
+  }
+
+  // 3. Sort
+  qsort(sort_arr, img->n_triangles, sizeof(_gmImageDepthEntry),
         _gm3_depth_compare);
 
-  for (size_t i = 0; i < m->n_triangles; i++) {
-    size_t tidx = sort_buffer[i].tri_idx;
+  // 4. Draw Loop
+  gmPos *verts = img->vertices;
+  gmColor *cols = img->colors;
+  size_t *indices = img->triangles;
 
-    // Correctly reference the vertices using the triangle index buffer
-    gmPos v1 = m->vertices[m->triangles[tidx * 3 + 0]];
-    gmPos v2 = m->vertices[m->triangles[tidx * 3 + 1]];
-    gmPos v3 = m->vertices[m->triangles[tidx * 3 + 2]];
-    double x1 = scale * v1.x, y1 = scale * v1.y, x2 = scale * v2.x,
-           y2 = scale * v2.y, x3 = scale * v3.x, y3 = scale * v3.y;
-
-    gm_draw_triangle(x1 + x, y1 + y, x2 + x, y2 + y, x3 + x, y3 + y,
-                     m->colors[tidx]);
+  if (img->_internal.cap_tri < img->n_triangles) {
+    if (img->_internal.tri) {
+      free(img->_internal.tri);
+      free(img->_internal.cols);
+    }
+    img->_internal.tri = malloc(img->n_triangles * 6 * sizeof(double));
+    img->_internal.cols = malloc(img->n_triangles * sizeof(gmColor));
+    img->_internal.cap_tri = img->n_triangles;
+    if (!img->_internal.tri || !img->_internal.cols) {
+      if (img->_internal.tri)
+        free(img->_internal.tri);
+      if (img->_internal.cols)
+        free(img->_internal.cols);
+      return -1;
+    }
   }
 
-  free(sort_buffer);
+  for (size_t i = 0; i < img->n_triangles; i++) {
+    size_t tidx = sort_arr[i].tri_idx;
+    size_t idx_base = tidx * 3;
+    img->_internal.cols[i] = img->colors[tidx];
+
+    for (size_t j = 0; j < 3; j++) {
+      img->_internal.tri[i * 6 + j * 2 + 0] =
+          verts[indices[idx_base + j]].x * scale + x;
+      img->_internal.tri[i * 6 + j * 2 + 1] =
+          verts[indices[idx_base + j]].y * scale + y;
+    }
+  }
+  gapi_draw_triangles(img->n_triangles, img->_internal.tri,
+                      img->_internal.cols);
   return 1;
 }
 #endif
