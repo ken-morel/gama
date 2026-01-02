@@ -30,6 +30,7 @@ int32_t
 
 int setup();
 int loop();
+char *bye();
 
 int32_t
 #ifdef __ZIG_CC__
@@ -37,8 +38,16 @@ int32_t
 #endif
     gama_setup() {
   return setup();
-  // ama
 }
+
+char *
+#ifdef __ZIG_CC__
+    __attribute__((export_name("gama_bye")))
+#endif
+    gama_bye() {
+  return bye();
+}
+
 int32_t
 #ifdef __ZIG_CC__
     __attribute__((export_name("gama_loop")))
@@ -63,11 +72,18 @@ int main(void) {
     return code;
   while (_gm_loop()) {
     code = loop();
-    _gm_fps();
-    if (code != 0)
-      return code;
+    if (code == 0)
+
+      _gm_fps();
+    else {
+      gapi_quit();
+
+      break;
+    }
   }
-  return 0;
+  char *msg = bye();
+  printf("[gama] %s\n", msg);
+  return code;
 }
 
 #endif

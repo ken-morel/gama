@@ -16,7 +16,7 @@ typedef struct {
 int gm_image_data_load(gmImageData *data, const char *path) {
   memset(data, 0, sizeof(gmImageData));
   data->data = stbi_load(path, &data->width, &data->height, NULL, 4);
-  return 0;
+  return data->data ? 0 : -1;
 }
 int gm_image_data_free(gmImageData *d) {
   free(d->data);

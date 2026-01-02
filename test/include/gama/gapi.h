@@ -1,9 +1,6 @@
 #pragma once
+#include "color.h"
 #include <stdint.h>
-
-#include "position.h"
-
-#include "mouse.h"
 
 double _gm_dt = 0;
 double _gm_t = 0;
@@ -75,44 +72,46 @@ extern int32_t
     __attribute__((import_module("gapi"), import_name("draw_line")))
 #endif
     gapi_draw_line(double x1, double y1, double x2, double y2, double thickness,
-                   uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+                   gmColor col);
 extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("draw_rect")))
 #endif
-    gapi_draw_rect(double x, double y, double w, double h, uint8_t cr,
-                   uint8_t cg, uint8_t cb, uint8_t ca);
+    gapi_draw_rect(double x, double y, double w, double h, gmColor col);
 
 extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("draw_rounded_rect")))
 #endif
     gapi_draw_rounded_rect(double x, double y, double w, double h, double r,
-                           uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca);
+                           gmColor col);
 
 extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("draw_circle")))
 #endif
     gapi_draw_circle(double center_x, double center_y, double radius,
-                     uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+                     gmColor col);
 
 extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("draw_ellipse")))
 #endif
-    gapi_draw_ellipse(double x, double y, double w, double h, uint8_t cr,
-                      uint8_t cg, uint8_t cb, uint8_t ca);
+    gapi_draw_ellipse(double x, double y, double w, double h, gmColor col);
 
 extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("draw_triangle")))
 #endif
     gapi_draw_triangle(double x1, double y1, double x2, double y2, double x3,
-                       double y3, uint8_t cr, uint8_t cg, uint8_t cb,
-                       uint8_t ca);
+                       double y3, gmColor col);
 
-// --- Image Functions ---
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_triangles")))
+#endif
+    gapi_draw_triangles(uint32_t n_triangles, double *points, gmColor *colors);
+
 extern uint32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("create_image")))
@@ -140,8 +139,7 @@ extern int32_t
     __attribute__((import_module("gapi"), import_name("draw_text")))
 #endif
     gapi_draw_text(double x, double y, double height, const char *txt,
-                   const char *font, uint8_t style, uint8_t cr, uint8_t cg,
-                   uint8_t cb, uint8_t ca);
+                   const char *font, uint8_t style, gmColor col);
 
 // --- Event Functions ---
 extern int32_t

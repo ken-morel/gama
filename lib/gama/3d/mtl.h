@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../color.h"
+#include "../image.h"
 #include "../str.h"
 #include "../utils.h"
 #include <ctype.h>
@@ -15,14 +16,26 @@ typedef struct {
   double shininess; // Ns (0 to 1000)
   double alpha;     // d or Tr (1.0 is opaque)
   gmColor emissive; // Ke
-                    // Add texture path here later if needed: char map_kd[256];
+
+  long tex_diffuse;
+  long tex_specular;
+  long tex_alpha;
+  long tex_emissive;
 } gm3Material;
+
+typedef struct {
+  gmImageData data;
+  char path[256];
+} gm3Texture;
 
 typedef struct {
   char name[256];
 
   gm3Material *materials;
   size_t n_materials;
+
+  gm3Texture *textures;
+  size_t n_textures;
 } gm3MtlLib;
 
 // Helper to skip whitespace
@@ -32,10 +45,30 @@ static inline char *gm3u_skip_spaces(char *s) {
   return s;
 }
 
+long gm3_mtl_add_texture(gm3MtlLib *mtllib, const char *path) {
+  for (size_t i = 0; i < mtllib->n_textures; i++)
+    if (0 == strcmp(path, mtllib->textures[i].path))
+      return i;
+  gm3Texture *tex =
+      realloc(mtllib->textures, sizeof(gm3Texture) * (mtllib->n_textures + 1));
+  if (!tex)
+    return -1;
+  mtllib->textures = tex;
+  tex = &mtllib->textures[mtllib->n_textures];
+  mtllib->n_textures++;
+
+  int ret = gm_image_data_load(&tex->data, path);
+  if (ret < 0)
+    return ret;
+  memset(tex->path, 0, sizeof(tex->path));
+  memcpy(tex->path, path, strlen(path));
+  return mtllib->n_textures - 1;
+}
+
 /**
  * Loads a .mtl file.
  */
-int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path) {
+int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path, const char *dir) {
   mtl_lib->name[0] = '\0';
   mtl_lib->materials = NULL;
   mtl_lib->n_materials = 0;
@@ -81,6 +114,16 @@ int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path) {
         current->alpha = atof(p + 2);
       } else if (strncmp(p, "Tr ", 3) == 0) {
         current->alpha = 1.0 - atof(p + 3); // Tr is transparency
+      } else if (0 == strncmp(p, "map_", 4)) {
+        while (!isspace(*p))
+          p++;
+        p++;
+        char buff[256] = {0};
+        gm3u_str_copy_eol(buff, p, sizeof(buff));
+        char path[256];
+        snprintf(path, sizeof(path), "%s/%s", dir, buff);
+        long ret = gm3_mtl_add_texture(mtl_lib, path);
+        printf("loading: %ld : %s\n", ret, path);
       }
     }
   }

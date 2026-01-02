@@ -22,22 +22,6 @@ typedef struct {
   size_t n_indices;
 } gm3ObjLine;
 
-static inline void _gm3_u_obj_copy_name(char *dest, const char *src,
-                                        size_t max_len) {
-  while (*src && isspace((unsigned char)*src))
-    src++;
-  size_t i = 0;
-  while (src[i] != '\0' && src[i] != '\n' && src[i] != '\r' &&
-         i < max_len - 1) {
-    dest[i] = src[i];
-    i++;
-  }
-  dest[i] = '\0';
-  while (i > 0 && isspace((unsigned char)dest[i - 1])) {
-    dest[--i] = '\0';
-  }
-}
-
 static inline char *gmu_skip_ws(char *s) {
   while (*s && *s == ' ')
     s++;
@@ -98,13 +82,13 @@ int gm3_obj_parse_next_line(char **end, gm3ObjLine *ln) {
     }
   } else if (strncmp(p, "mtllib", 6) == 0) {
     ln->type = 'L';
-    _gm3_u_obj_copy_name(ln->name, p + 6, sizeof(ln->name));
+    gm3u_str_copy_eol(ln->name, p + 6, sizeof(ln->name));
   } else if (strncmp(p, "usemtl", 6) == 0) {
     ln->type = 'U';
-    _gm3_u_obj_copy_name(ln->name, p + 6, sizeof(ln->name));
+    gm3u_str_copy_eol(ln->name, p + 6, sizeof(ln->name));
   } else if (p[0] == 'o' || p[0] == 'g') {
     ln->type = p[0];
-    _gm3_u_obj_copy_name(ln->name, p + 1, sizeof(ln->name));
+    gm3u_str_copy_eol(ln->name, p + 1, sizeof(ln->name));
   } else if (p[0] == '#') {
     ln->type = '#';
   }
@@ -177,7 +161,7 @@ int32_t gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
       snprintf(mtl_path, sizeof(mtl_path), "%s/%s", dir, parsed[i].name);
       gm3MtlLib mf;
       memset(&mf, 0, sizeof(mf));
-      int ret = gm3_mtl_load(&mf, mtl_path);
+      int ret = gm3_mtl_load(&mf, mtl_path, dir);
       if (ret < 0)
         return ret;
       if (ret >= 0) {
@@ -249,9 +233,9 @@ int32_t gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
         face->vertices[0] = (size_t)ln->indices[0][0];
         face->vertices[1] = (size_t)ln->indices[j + 1][0];
         face->vertices[2] = (size_t)ln->indices[j + 2][0];
-        face->texs[0] = (size_t)ln->indices[0][1];
-        face->texs[1] = (size_t)ln->indices[j + 1][1];
-        face->texs[2] = (size_t)ln->indices[j + 2][1];
+        face->uvs[0] = (size_t)ln->indices[0][1];
+        face->uvs[1] = (size_t)ln->indices[j + 1][1];
+        face->uvs[2] = (size_t)ln->indices[j + 2][1];
         face->material_file = active_mat_file;
         face->material = active_mat;
 

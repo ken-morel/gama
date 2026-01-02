@@ -2,6 +2,7 @@
 
 #include "_malloc.h"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -76,4 +77,20 @@ int gmu_read_file(const char *path, char **content, size_t *size) {
   buffer[*size] = '\0';
   *content = buffer;
   return 0;
+}
+
+static inline void gm3u_str_copy_eol(char *dest, const char *src,
+                                     size_t max_len) {
+  while (*src && isspace((unsigned char)*src))
+    src++;
+  size_t i = 0;
+  while (src[i] != '\0' && src[i] != '\n' && src[i] != '\r' &&
+         i < max_len - 1) {
+    dest[i] = src[i];
+    i++;
+  }
+  dest[i] = '\0';
+  while (i > 0 && isspace((unsigned char)dest[i - 1])) {
+    dest[--i] = '\0';
+  }
 }
