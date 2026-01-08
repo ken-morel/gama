@@ -1,7 +1,7 @@
 # Drawing shapes
 
-Gama is an imediate mode library, what does that mean? simply 
-that you draw the shapes directly, and you don't need to 
+Gama is an imediate mode library, what does that mean? simply
+that you draw the shapes directly, and you don't need to
 create `shape objects or shape structs`.
 
 
@@ -13,21 +13,20 @@ int main() {
 
   do {
     gm_draw_rectangle(0, 0, 1, 1, GM_BLUE);
-  }
+  } while(gm_yield());
 }
 ```
 
-you use `gm_draw` functions to draw to the canvas, 
-when you call a draw function, it may not automatically draw to the screen because
-the drawing api may not be ready to draw yet,
-in that case it will add your draw call to a list of draw calls and call them
-only when the window is ready to be drawed on.
+you use `gm_draw` functions to draw to the canvas, when you do, the draw
+instruction is appended to a list of instructions which will finally be drawn
+when the app is ready, making your app more repsonsive since you don't have to
+wait for the app to be ready to start drawing.
 
 ## The coordinate system
 
 To draw shapes you need obviously to indicate gama where to draw them, using specific
 coordinates, when you draw on gama you use a graph paper like coordinates where
-the x and y axae range from -1 to 1, but the x or y ranges may exceed that if your window 
+the x and y axae range from -1 to 1, but the x or y ranges may exceed that if your window
 is not completely square causing some parts to be hidden.
 
 ![Gridlines](/lineup-gridlines.png)

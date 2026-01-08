@@ -1,7 +1,8 @@
 # Using gama animation functions
 
-To help you add animations, gama provide a few functions
-you animate doubles over time.
+Gama provide a few set of functions which help you gradually modify
+a value as to animate it over time. It support few easing functions
+and methods of operations.
 
 You can view the <a href="/reference/animate_8h.html">animate.h reference</a>
 
