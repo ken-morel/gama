@@ -1,6 +1,5 @@
 module vgama
 
-import gg
 import time
 import term
 
@@ -34,10 +33,6 @@ fn c_redimension_rect(x f64, y f64, w f64, h f64) (f32, f32, f32, f32) {
 	gh := f32(h * 0.5 * gapi_game_h__)
 
 	return gx - gw / 2, gy - gh / 2, gw, gh
-}
-
-fn c_color(r u8, g u8, b u8, a u8) gg.Color {
-	return gg.rgba(r, g, b, a)
 }
 
 fn get_time() f64 {

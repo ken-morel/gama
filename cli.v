@@ -315,6 +315,20 @@ fn main() {
 				description: 'Package the current gama project into a setup'
 				execute:     package_project
 			},
+			cli.Command{
+				name:        'bake'
+				usage:       'bake'
+				description: 'Build project assets files'
+				execute:     fn (_ cli.Command) ! {
+					installation := get_installation()!
+					project := get_project()!
+					project.bake(installation) or {
+						println(term.fail_message('Error baking project assets: ${err}'))
+						return err
+					}
+					println(term.ok_message('baking complete'))
+				}
+			},
 		]
 	}
 

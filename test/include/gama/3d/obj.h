@@ -3,11 +3,11 @@
 #include <ctype.h>
 #include <float.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "../debug.h"
 #include "mesh.h"
 #include "mtl.h"
 #include "position.h"
@@ -21,22 +21,6 @@ typedef struct {
   long long indices[64][3]; // [v, vt, vn]
   size_t n_indices;
 } gm3ObjLine;
-
-static inline void _gm3_u_obj_copy_name(char *dest, const char *src,
-                                        size_t max_len) {
-  while (*src && isspace((unsigned char)*src))
-    src++;
-  size_t i = 0;
-  while (src[i] != '\0' && src[i] != '\n' && src[i] != '\r' &&
-         i < max_len - 1) {
-    dest[i] = src[i];
-    i++;
-  }
-  dest[i] = '\0';
-  while (i > 0 && isspace((unsigned char)dest[i - 1])) {
-    dest[--i] = '\0';
-  }
-}
 
 static inline char *gmu_skip_ws(char *s) {
   while (*s && *s == ' ')
@@ -98,13 +82,13 @@ int gm3_obj_parse_next_line(char **end, gm3ObjLine *ln) {
     }
   } else if (strncmp(p, "mtllib", 6) == 0) {
     ln->type = 'L';
-    _gm3_u_obj_copy_name(ln->name, p + 6, sizeof(ln->name));
+    gm3u_str_copy_eol(ln->name, p + 6, sizeof(ln->name));
   } else if (strncmp(p, "usemtl", 6) == 0) {
     ln->type = 'U';
-    _gm3_u_obj_copy_name(ln->name, p + 6, sizeof(ln->name));
+    gm3u_str_copy_eol(ln->name, p + 6, sizeof(ln->name));
   } else if (p[0] == 'o' || p[0] == 'g') {
     ln->type = p[0];
-    _gm3_u_obj_copy_name(ln->name, p + 1, sizeof(ln->name));
+    gm3u_str_copy_eol(ln->name, p + 1, sizeof(ln->name));
   } else if (p[0] == '#') {
     ln->type = '#';
   }
@@ -154,7 +138,7 @@ int gm3_obj_parse(char *content, gm3ObjLine **result, size_t *n_lines) {
   return 0;
 }
 
-int gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
+int32_t gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
   char *content = NULL;
   size_t content_len;
   if (gmu_read_file(path, &content, &content_len) < 0)
@@ -177,8 +161,7 @@ int gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
       snprintf(mtl_path, sizeof(mtl_path), "%s/%s", dir, parsed[i].name);
       gm3MtlLib mf;
       memset(&mf, 0, sizeof(mf));
-      int ret = gm3_mtl_load(&mf, mtl_path);
-      printf("material name: %s\n", mf.name);
+      int ret = gm3_mtl_load(&mf, mtl_path, dir);
       if (ret < 0)
         return ret;
       if (ret >= 0) {
@@ -250,9 +233,9 @@ int gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
         face->vertices[0] = (size_t)ln->indices[0][0];
         face->vertices[1] = (size_t)ln->indices[j + 1][0];
         face->vertices[2] = (size_t)ln->indices[j + 2][0];
-        face->texs[0] = (size_t)ln->indices[0][1];
-        face->texs[1] = (size_t)ln->indices[j + 1][1];
-        face->texs[2] = (size_t)ln->indices[j + 2][1];
+        face->uvs[0] = (size_t)ln->indices[0][1];
+        face->uvs[1] = (size_t)ln->indices[j + 1][1];
+        face->uvs[2] = (size_t)ln->indices[j + 2][1];
         face->material_file = active_mat_file;
         face->material = active_mat;
 
@@ -263,18 +246,6 @@ int gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
         gm3_pos_substract(&e2, &m->vertices[face->vertices[0]]);
         gm3Pos n = gm3_pos_cross(e1, e2);
         gm3_pos_normalize(&n);
-
-        // If file provided a normal, align our calculated normal with it
-
-        // if (ln->indices[0][2] >= 0) {
-        //   gm3Pos n2 = {0};
-        //   gm3_pos_center3(&n2, &m->normals[ln->indices[0][2]],
-        //                   &m->normals[ln->indices[j + 1][2]],
-        //                   &m->normals[ln->indices[j + 2][2]]);
-
-        //   if (gm3_pos_dot(n, n2) < 0)
-        //     gm3_pos_mul_scalar(&n, -1);
-        // }
 
         face->normal = n;
       }

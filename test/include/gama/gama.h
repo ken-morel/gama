@@ -9,12 +9,14 @@
 
 #pragma once
 // NOTE: The order is important, major, minor, patch
+
 #include "draw.h"
 #include "gapi.h"
 #include "stdio.h"
 #include "widgets/frame.h"
 
 int _gm_loop();
+void _gm_fps();
 
 #ifdef GM_SETUP
 
@@ -28,14 +30,34 @@ int32_t
 
 int setup();
 int loop();
+char *bye();
 
-__attribute__((export_name("gama_setup"))) int32_t gama_setup() {
+int32_t
+#ifdef __ZIG_CC__
+    __attribute__((export_name("gama_setup")))
+#endif
+    gama_setup() {
   return setup();
-  // ama
 }
-__attribute__((export_name("gama_loop"))) int32_t gama_loop() {
+
+char *
+#ifdef __ZIG_CC__
+    __attribute__((export_name("gama_bye")))
+#endif
+    gama_bye() {
+  return bye();
+}
+
+int32_t
+#ifdef __ZIG_CC__
+    __attribute__((export_name("gama_loop")))
+#endif
+    gama_loop() {
   if (_gm_loop()) {
-    return loop();
+    int ret = loop();
+    _gm_fps();
+    return ret;
+
   } else
     return 0;
 }
@@ -50,16 +72,28 @@ int main(void) {
     return code;
   while (_gm_loop()) {
     code = loop();
-    if (code != 0)
-      return code;
+    if (code == 0)
+
+      _gm_fps();
+    else {
+      gapi_quit();
+
+      break;
+    }
   }
-  return 0;
+  char *msg = bye();
+  printf("[gama] %s\n", msg);
+  return code;
 }
 
 #endif
 
 #else
-int main(void);
+#ifdef GM_ARGC_MAIN
+int main(int, char *);
+#else
+int main();
+#endif
 
 int32_t
 #ifdef __ZIG_CC__
@@ -163,11 +197,14 @@ void _gm_fps() {
  *   // Your game logic and rendering here
  * }
  */
-static inline int gm_yield() { return _gm_loop(); }
+static inline int gm_yield() {
+
+  _gm_fps();
+  return _gm_loop();
+}
 #endif
 
 int _gm_loop() {
-  _gm_fps();
   const int ret = gapi_yield(&_gm_dt);
   _gm_t += _gm_dt;
   gm_mouse.lastPosition = gm_mouse.position;
@@ -178,6 +215,7 @@ int _gm_loop() {
   static int last_mouse_down = 0;
   gm_mouse.clicked = !last_mouse_down && gm_mouse.down;
   last_mouse_down = gm_mouse.down;
+
   return ret;
 }
 
@@ -240,6 +278,7 @@ void gm_sleep(int m) {};
 #ifdef _WIN32
 #include <windows.h>
 void gm_sleep(int milliseconds) { Sleep(milliseconds); }
+#else
 #include <unistd.h>
 void gm_sleep(int milliseconds) { usleep(milliseconds * 1000); }
 #endif
