@@ -31,8 +31,7 @@
  */
 int32_t gm_draw_line(double x1, double y1, double x2, double y2,
                      double thickness, gmColor c) {
-  return gapi_draw_line(x1, y1, x2, y2, thickness, gm_red(c), gm_green(c),
-                        gm_blue(c), gm_alpha(c));
+  return gapi_draw_line(x1, y1, x2, y2, thickness, c);
 }
 
 /**
@@ -45,8 +44,7 @@ int32_t gm_draw_line(double x1, double y1, double x2, double y2,
  * @return An identifier for the drawing command.
  */
 int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c) {
-  return gapi_draw_rect(x, y, w, h, gm_red(c), gm_green(c), gm_blue(c),
-                        gm_alpha(c));
+  return gapi_draw_rect(x, y, w, h, c);
 }
 
 /**
@@ -61,8 +59,7 @@ int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c) {
  */
 int32_t gm_draw_rounded_rectangle(double x, double y, double w, double h,
                                   double r, gmColor c) {
-  return gapi_draw_rounded_rect(x, y, w, h, r, gm_red(c), gm_green(c),
-                                gm_blue(c), gm_alpha(c));
+  return gapi_draw_rounded_rect(x, y, w, h, r, c);
 }
 
 /**
@@ -75,8 +72,7 @@ int32_t gm_draw_rounded_rectangle(double x, double y, double w, double h,
  */
 int32_t gm_draw_circle(double center_x, double center_y, double radius,
                        gmColor c) {
-  return gapi_draw_circle(center_x, center_y, radius, gm_red(c), gm_green(c),
-                          gm_blue(c), gm_alpha(c));
+  return gapi_draw_circle(center_x, center_y, radius, c);
 }
 
 /**
@@ -89,8 +85,7 @@ int32_t gm_draw_circle(double center_x, double center_y, double radius,
  * @return An identifier for the drawing command.
  */
 int32_t gm_draw_ellipse(double x, double y, double w, double h, gmColor c) {
-  return gapi_draw_ellipse(x, y, w, h, gm_red(c), gm_green(c), gm_blue(c),
-                           gm_alpha(c));
+  return gapi_draw_ellipse(x, y, w, h, c);
 }
 
 /**
@@ -106,8 +101,7 @@ int32_t gm_draw_ellipse(double x, double y, double w, double h, gmColor c) {
  */
 int32_t gm_draw_triangle(double x1, double y1, double x2, double y2, double x3,
                          double y3, gmColor c) {
-  return gapi_draw_triangle(x1, y1, x2, y2, x3, y3, gm_red(c), gm_green(c),
-                            gm_blue(c), gm_alpha(c));
+  return gapi_draw_triangle(x1, y1, x2, y2, x3, y3, c);
 }
 
 /**
@@ -134,8 +128,7 @@ int32_t gm_draw_image(gmImage img, double x, double y, double w, double h) {
  */
 int32_t gm_draw_text(double x, double y, const char *text, const char *font,
                      double font_size, gmColor c) {
-  return gapi_draw_text(x, y, font_size, text, font, 0, gm_red(c), gm_green(c),
-                        gm_blue(c), gm_alpha(c));
+  return gapi_draw_text(x, y, font_size, text, font, 0, c);
 }
 
 // ---------------------------------------------------------------------------

@@ -8,6 +8,8 @@ CompileFlags:
   Add:
     - -I../include/
     - -Iinclude/
+    - -I../build/gen/
+    - -Ibuild/gen/
 ---
 If:
   PathMatch: .*\\.h\$
@@ -37,6 +39,7 @@ CompileFlags:
 		</Build>
 		<Compiler>
 			<Add directory="./include/" />
+			<Add directory="./build/gen/" />
 		</Compiler>
 		<Linker>
 			<Add option="-lm" />
@@ -49,6 +52,7 @@ CompileFlags:
 		<Extensions>
 			<code_completion>
 				<search_path add="./include" />
+				<search_path add="./build/gen" />
 			</code_completion>
 		</Extensions>
 	</Project>

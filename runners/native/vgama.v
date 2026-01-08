@@ -8,6 +8,8 @@ import term
 
 type GapiTask = fn ()
 
+const draw_instruction_count = 10000
+
 __global (
 	gapi_ctx__          &gg.Context
 	gapi_bg_color__     gg.Color
@@ -15,7 +17,8 @@ __global (
 	gapi_title__        string
 	gapi_width__        int
 	gapi_height__       int
-	gapi_queue__        chan GapiTask
+	gapi_queue__        chan []GapiTask
+	gapi_buff__         []GapiTask
 	gapi_end_frame__    chan bool
 	gapi_isfullscreen__ bool
 	gapi_images__       map[u32]gg.Image
@@ -52,17 +55,14 @@ fn frame(mut _ gg.Context) {
 	gapi_ctx__.end(how: .clear)
 
 	gapi_ctx__.begin()
-	mut count := u64(0)
 	for {
 		select {
-			func := <-gapi_queue__ {
-				if count > 30000 {
-					count = 0
-					gapi_ctx__.end(how: .passthru)
-					gapi_ctx__.begin()
+			funcs := <-gapi_queue__ {
+				gapi_ctx__.begin()
+				for func in funcs {
+					func()
 				}
-				func()
-				count++
+				gapi_ctx__.end(how: .passthru)
 			}
 			_ := <-gapi_end_frame__ {
 				break
@@ -72,17 +72,35 @@ fn frame(mut _ gg.Context) {
 	gapi_ctx__.end(how: .passthru)
 }
 
+fn queue_buff() {
+	if gapi_buff__.len > 0 {
+		gapi_queue__ <- gapi_buff__
+		gapi_buff__ = []GapiTask{cap: draw_instruction_count}
+	}
+}
+
+fn queue_fn(func GapiTask) {
+	gapi_buff__ << func
+	if gapi_buff__.len >= draw_instruction_count {
+		queue_buff()
+	}
+}
+
 @[export: 'gapi_wait_queue']
 fn gapi_wait_queue() {
-	gapi_queue__ <- fn () {
+	queue_fn(fn () {
 		gapi_queue_wait__.unlock()
-	} or { return }
+	})
+	queue_buff()
 	gapi_queue_wait__.lock() // wait all preceding events are processed
 }
 
 @[export: 'gapi_yield']
 @[unsafe]
 fn gapi_yield(dt &f64) i32 {
+	if !gapi_gama_runs__ {
+		return 0
+	}
 	gapi_wait_queue() // wait it processes other events before sending stop
 	gapi_end_frame__ <- true or { return 0 } // close the current frame
 
@@ -107,7 +125,7 @@ fn gapi_yield(dt &f64) i32 {
 	}
 	last_time = current_time
 
-	return 1
+	return if gapi_gama_runs__ { 1 } else { 0 }
 }
 
 fn run_gg_loop() {
@@ -144,6 +162,9 @@ fn run_gg_loop() {
 			gapi_mouse_y__ = i32(y)
 			gapi_mouse_down__ = false
 		}
+		cleanup_fn:   fn (data voidptr) {
+			gapi_gama_runs__ = false
+		}
 	)
 
 	gapi_ctx__.run()
@@ -169,7 +190,8 @@ fn gapi_init(width int, height int, title &char) i32 {
 
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
 
-	gapi_queue__ = chan GapiTask{cap: 50}
+	gapi_queue__ = chan []GapiTask{cap: 1000}
+	gapi_buff__ = []GapiTask{cap: draw_instruction_count}
 	gapi_end_frame__ = chan bool{cap: 0}
 	gapi_queue_wait__ = &sync.Mutex{}
 	gapi_queue_wait__.lock()
@@ -197,30 +219,29 @@ fn gapi_runs() i32 {
 
 @[export: 'gapi_quit']
 fn gapi_quit() {
-	gapi_queue__ <- fn () {
+	queue_fn(fn () {
 		gapi_ctx__.quit()
-	} or {}
-	gapi_gama_runs__ = false
+	})
 }
 
 @[export: 'gapi_resize']
 fn gapi_resize(w i32, h i32) {
-	gapi_queue__ <- fn [w, h] () {
+	queue_fn(fn [w, h] () {
 		gapi_ctx__.resize(w, h)
-	} or {}
+	})
 }
 
 @[export: 'gapi_set_bg_color']
-fn gapi_set_bg_color(r u8, g u8, b u8, a u8) {
-	c := c_color(r, g, b, a)
-	gapi_queue__ <- fn [c] () {
+fn gapi_set_bg_color(col GmColor) {
+	c := col.to_gg()
+	queue_fn(fn [c] () {
 		gapi_ctx__.set_bg_color(c)
-	} or {}
+	})
 }
 
 @[export: 'gapi_fullscreen']
 fn gapi_fullscreen(fc i32) {
-	gapi_queue__ <- fn [fc] () {
+	queue_fn(fn [fc] () {
 		if fc == 1 && !gapi_isfullscreen__ {
 			gg.toggle_fullscreen()
 			gapi_isfullscreen__ = true
@@ -228,5 +249,5 @@ fn gapi_fullscreen(fc i32) {
 			gg.toggle_fullscreen()
 			gapi_isfullscreen__ = false
 		}
-	} or {}
+	})
 }

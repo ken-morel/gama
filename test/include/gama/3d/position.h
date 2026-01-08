@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "../str.h"
 typedef struct {
   double x, y, z;
 } gm3Pos;
@@ -76,7 +77,7 @@ static inline gm3Pos gm3_pos_centerN(const gm3Pos *arr, const size_t n) {
   return res;
 }
 
-void gm3_pos_mul(gm3Pos *res, gm3Pos *trans) {
+void gm3_pos_mul(gm3Pos *res, const gm3Pos *trans) {
   res->x *= trans->x;
   res->y *= trans->y;
   res->z *= trans->z;
@@ -85,4 +86,11 @@ void gm3_pos_mul_scalar(gm3Pos *res, double s) {
   res->x *= s;
   res->y *= s;
   res->z *= s;
+}
+
+int gmg_pos3(gmStr *str, gm3Pos pos) {
+  char buffer[128];
+  sprintf(buffer, "(gm3Pos){%.6g, %.6g, %.6g}", pos.x, pos.y, pos.z);
+  gm_str_append(str, buffer);
+  return 0;
 }

@@ -1,6 +1,7 @@
 module vgama
 
 import os
+import term
 
 pub fn (p Project) copy_build_native_artifacts(inst Installation, reset bool) ! {
 	build_dir := p.build_path('native')
@@ -35,6 +36,7 @@ pub fn (p Project) get_src_c_files() []string {
 
 pub fn (p Project) build_native(inst Installation, use_cc string, reset bool) !string {
 	conf := p.get_conf()!
+	p.bake(inst) or { println(term.warn_message('Baking failed: ${err}')) }
 	compiler := if use_cc == '' { conf.gama.compiler } else { use_cc }
 	if conf.gama.compiler == '' {
 		return error('No compiler configured')
@@ -54,7 +56,8 @@ pub fn (p Project) build_native(inst Installation, use_cc string, reset bool) !s
 
 	println('Building with external compiler: ${conf.gama.compiler}')
 	include_path := os.join_path(p.path, 'include')
-	cmd := "${compiler} -o ${executable_path} ${source_files.join(' ')} -I${include_path} -L${build_dir} -Wl,-rpath,'\$ORIGIN' -DGM_NATIVE -lvgama -lm -v"
+	gen_path := p.build_path('gen')
+	cmd := "${compiler} -o ${executable_path} ${source_files.join(' ')} -I${include_path} -I${gen_path} -L${build_dir} -Wl,-rpath,'\$ORIGIN' -DGM_NATIVE -lvgama -lm -v"
 	println('Executing: ${cmd}')
 	res := os.execute(cmd)
 	if res.exit_code != 0 {
