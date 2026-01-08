@@ -1,5 +1,5 @@
 {
-  "name": "gama website",
+  "name": "gama-website",
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3002",
