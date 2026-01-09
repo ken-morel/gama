@@ -1,19 +1,19 @@
 export default class GamaWASI {
-  constructor() {
-    this.instance = null;
-  }
-  setInstance(inst) {
+  instance: WebAssembly.Instance | null = null;
+  constructor() { }
+
+  setInstance(inst: WebAssembly.Instance) {
     this.instance = inst;
   }
 
   get importObject() {
     const s = this;
-    const mem = () => this.instance.exports.memory.buffer;
+    const mem = () => (this.instance!.exports.memory as WebAssembly.Memory).buffer;
     const view = () => new DataView(mem());
 
     return {
       // --- Process & Environment ---
-      proc_exit: (code) => console.log(`Process exited: ${code}`),
+      proc_exit: (code: number) => console.log(`Process exited: ${code}`),
       sched_yield: () => 0,
       environ_sizes_get: (conf, bufsize) => {
         view().setUint32(conf, 0, true);

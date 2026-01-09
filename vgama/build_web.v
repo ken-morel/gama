@@ -61,7 +61,6 @@ pub fn (p Project) run_web_build(inst Installation) ! {
 
 	app.use(
 		handler: fn (mut ctx Context) bool {
-			println('adding headers')
 			ctx.res.header.add(.cross_origin_embedder_policy, 'require-corp')
 			ctx.res.header.add(.cross_origin_opener_policy, 'same-origin')
 			return true

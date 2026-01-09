@@ -1,6 +1,8 @@
 declare const WORKER_CODE: string;
 
 import { GmColor, gmcToCss } from "./color";
+import { getKeyCode } from "./keyboard";
+import { YieldResult } from "./sab";
 import type { WorkerSuccessMessage, WorkerInitMessage, WorkerInitResponse, WorkerStartMessage } from "./worker";
 
 const WORKER_URL = URL.createObjectURL(new Blob([WORKER_CODE], {
@@ -26,10 +28,27 @@ export default class Gama {
   window: {
     side: number;
     offset: Pos;
-  };
+  } = {
+      side: 500,
+      offset: { x: 0, y: 0 },
+    };
   buffer: SharedArrayBuffer;
   buffer32: Int32Array;
-  output: CanvasRenderingContext2D | null;
+  output: CanvasRenderingContext2D | null = null;
+
+  yielding: YieldResult = {
+    keyboard: {
+      down: []
+    },
+    mouse: {
+      down: false,
+      x: 0,
+      y: 0,
+    }
+  };
+
+  sizemode: "natural" | "fixed" = "natural";
+
   private constructor(w: Worker) {
     this.worker = w;
     this.canvas = {
@@ -40,20 +59,12 @@ export default class Gama {
       front: this.canvas.front.getContext('2d')!,
       back: this.canvas.back.getContext('2d')!
     };
-    this.window = {
-      side: 500,
-      offset: { x: 0, y: 0 },
-    };
     this.buffer = new SharedArrayBuffer(1024);
     this.buffer32 = new Int32Array(this.buffer);
-    console.log(this.worker);
-    this.worker.onerror = this.#workerError;
+    this.worker.onerror = this.workerError;
     this.worker.onmessage = null;
-    this.output = null;
   }
-  public attach(canv: HTMLCanvasElement) {
-    this.output = canv.getContext('2d');
-  }
+
   public static create(wasmPath: string): Promise<Gama> {
     return new Promise(async function(resolve, reject) {
       const fetchResponse = await fetch(wasmPath);
@@ -83,20 +94,27 @@ export default class Gama {
 
   }
   public async start() {
-    this.worker.onmessage = this.#handleWorkerMessage;
+    this.worker.onmessage = (e) => this.handleWorkerMessage(e);
     this.worker.postMessage({
       buffer: this.buffer,
     } as WorkerStartMessage);
   }
-  async #handleWorkerMessage(msg: MessageEvent) {
+  private async handleWorkerMessage(msg: MessageEvent) {
     switch (msg.data.type as string) {
       case "resize":
-        this.resize(msg.data.size[0] as number, msg.data.size[1] as number);
+        var [w, h] = msg.data.size;
+        if (w == 0 && h == 0) {
+          this.sizemode = "natural";
+          this.updateSize();
+        } else {
+          this.sizemode = "fixed";
+          this.resize(w, h);
+        }
         break;
       case 'set-title':
         this.setTitle(msg.data.title);
         break;
-      case 'set-background':
+      case 'set-background-color':
         this.setBackground(msg.data.color);
         break;
       case 'fullscreen':
@@ -118,7 +136,7 @@ export default class Gama {
         break;
     }
   }
-  #workerError(e: ErrorEvent) {
+  private workerError(e: ErrorEvent) {
     console.error("Error running gama web worker: ", e);
   }
 
@@ -134,7 +152,122 @@ export default class Gama {
       });
     });
   }
-  private drawCmd(cmd: []) { }
+  private drawCmd(_cmd: any[]) {
+    const [cmd, ...args] = _cmd;
+    const ctx = this.ctx.front;
+    switch (cmd) {
+      case 'line':
+        var [x1, y1, x2, y2, s, c] = args as number[];
+        ctx.beginPath();
+        ctx.moveTo(...this._c_coord(x1, y1));
+        ctx.lineTo(...this._c_coord(x2, y2));
+        ctx.closePath();
+        ctx.stroke();
+        break;
+      case 'rect':
+        var [x, y, w, h, c] = args as number[];
+        this._fill(c);
+        var [x, y] = this._c_coord(x, y);
+        var [w, h] = [this._c_one(w), this._c_one(h)];
+        ctx.fillRect(x - w / 2, y - h / 2, w, h);
+        break;
+      case 'roundrect':
+        var [x, y, w, h, r, c] = args as number[];
+        var [w, h] = [this._c_one(w), this._c_one(h)];
+        var [topX, topY] = this._c_coord(x, y);
+        topX -= w / 2; topY -= h / 2; // Center it
+        var r = this._c_one(r);
+        if (w < 2 * r) r = w / 2;
+        if (h < 2 * r) r = h / 2;
+        this._fill(c);
+        ctx.beginPath();
+        ctx.moveTo(topX + r, topY);
+        ctx.arcTo(topX + w, topY, topX + w, topY + h, r);
+        ctx.arcTo(topX + w, topY + h, topX, topY + h, r);
+        ctx.arcTo(topX, topY + h, topX, topY, r);
+        ctx.arcTo(topX, topY, topX + w, topY, r);
+        ctx.closePath();
+        ctx.fill();
+        break;
+      case 'triangle':
+        var [x1, y1, x2, y2, x3, y3, col] = args as number[];
+
+        this._fill(col);
+        this._stroke(col);
+
+        ctx.beginPath();
+        ctx.moveTo(...this._c_coord(x1, y1));
+        ctx.lineTo(...this._c_coord(x2, y2));
+        ctx.lineTo(...this._c_coord(x3, y3));
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        break;
+      case 'circle':
+        var [x, y, r, c] = args as [number, number, number, GmColor];
+        ctx.beginPath();
+        ctx.arc(...this._c_coord(x, y), this._c_one(r), 0, 2 * Math.PI);
+        this._fill(c);
+        ctx.fill();
+        break;
+      case 'draw/text':
+        var [x, y, s, txt, font, style, c] = args as [number, number, number, string, string, number, GmColor];
+
+        ctx.font = this._c_one(s).toFixed(0) + "px '" + font + "'";
+        this._fill(c);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(txt, ...this._c_coord(x, y));
+        break;
+
+    }
+  }
+
+  _stroke(col: GmColor) {
+    this.ctx.front.strokeStyle = gmcToCss(col);
+  }
+  _fill(col: GmColor) {
+    this.ctx.front.fillStyle = gmcToCss(col);
+  }
+
+
+  _c_coord(x: number, y: number): [number, number] {
+    let norm_x = (x + 1.0) * 0.5
+    let norm_y = (1.0 - y) * 0.5 // Invert Y-axis for screen coordinates
+
+    return [norm_x * this.window.side + this.window.offset.x, norm_y * this.window.side +
+      this.window.offset.y];
+  }
+  _js_offset(x: number, y: number): [number, number] {
+    return [x + this.window.offset.x, y + this.window.offset.y];
+  }
+  _js_unoffset(x: number, y: number): [number, number] {
+    return [x - this.window.offset.x, y - this.window.offset.y];
+  }
+
+  _js_coord(x: number, y: number): [number, number] {
+    let norm_x = (x - this.window.offset.x) / this.window.side
+    let norm_y = (y - this.window.offset.y) / this.window.side
+
+    return [(norm_x * 2) - 1.0, 1.0 - (norm_y * 2)]
+  }
+
+  _c_one(v: number): number {
+    return v * this.window.side * 0.5
+  }
+
+  private _js_one(v: number): number {
+    return (v * 2) / this.window.side;
+  }
+
+  private _c_rect(x: number, y: number, w: number, h: number): [number, number, number, number] {
+    let [gx, gy] = this._c_coord(x, y)
+
+    let gw = w * 0.5 * this.window.side
+    let gh = h * 0.5 * this.window.side
+
+    return [gx - gw / 2, gy - gh / 2, gw, gh];
+  }
   public setFullscreen(fs: boolean) {
     if (fs) {
       if (this.output)
@@ -145,9 +278,12 @@ export default class Gama {
     }
   }
   public setBackground(col: GmColor) {
-    if (this.output)
+    if (this.output) {
       this.output.canvas.style.backgroundColor = gmcToCss(col);
-
+      this.output.canvas.style.background = gmcToCss(col);
+      console.log(col, gmcToCss(col));
+    } else
+      console.error("Gama instance has no output");
   }
 
   public setTitle(msg: string) {
@@ -170,4 +306,88 @@ export default class Gama {
     this.window.offset.x = (width - this.window.side) / 2;
     this.window.offset.y = (height - this.window.side) / 2;
   }
+  public attach(canv: HTMLCanvasElement) {
+    this.output = canv.getContext('2d');
+
+    const cb = () => { if (this.sizemode == "natural") this.updateSize(); };
+
+    try {
+      window.addEventListener('resize', cb);
+    } catch (e) { }
+    canv.addEventListener('resize', cb);
+    this.bindKeyboard(canv);
+    this.bindMouse(canv);
+  }
+  public updateSize() {
+    if (this.output) {
+      const rect = this.output.canvas.getBoundingClientRect();
+      this.resize(rect.width, rect.height);
+    }
+  }
+
+
+  public bindKeyboard(elt: HTMLElement) {
+    elt.addEventListener('keydown', e => {
+      this.yielding.keyboard.down.push(getKeyCode(e.key));
+    });
+    elt.addEventListener('keyup', e => {
+      const code = getKeyCode(e.key);
+      this.yielding.keyboard.down = this.yielding.keyboard.down.filter(c => c != code)
+    });
+  }
+  public bindMouse(elt: HTMLElement) {
+    // Mouse optimization: Don't spread (...) arrays excessively in high-freq events
+    elt.addEventListener('mousemove', e => {
+      const r = elt.getBoundingClientRect();
+      const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
+      this.worker.postMessage({
+        type: 'event/mousemove',
+        position: coords
+      });
+    });
+    elt.addEventListener('mousedown', e => {
+      const r = elt.getBoundingClientRect();
+      const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
+      this.worker.postMessage({
+        type: 'event/mousedown',
+        position: coords
+      });
+    });
+    elt.addEventListener('mouseup', e => {
+      const r = elt.getBoundingClientRect();
+      const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
+      this.worker.postMessage({
+        type: 'event/mouseup',
+        position: coords
+      });
+    });
+
+    const touchpos = (e: TouchEvent) => {
+      const r = elt.getBoundingClientRect();
+      return this._js_coord(
+        e.touches[0].clientX - r.x,
+        e.touches[0].clientY - r.y
+      );
+    };
+
+    elt.addEventListener('touchmove', e => {
+      this.worker.postMessage({
+        type: 'event/mousemove',
+        position: touchpos(e)
+      });
+    });
+    elt.addEventListener('touchstart', e => {
+      this.worker.postMessage({
+        type: 'event/mousemove',
+        position: touchpos(e)
+      });
+      this.worker.postMessage({ type: 'event/mousedown' });
+    });
+    const handle = () => {
+      this.worker.postMessage({ type: 'event/mouseup' });
+    };
+    elt.addEventListener('touchcancel', handle);
+    elt.addEventListener('touchend', handle);
+  }
+
 }
