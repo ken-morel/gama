@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "esnext",
+    "lib": ["es2020", "dom", "dom.iterable", "webworker"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "declaration": true // Generate declaration files
+  },
+  "include": [
+    "src/**/*.ts"
+, "src/wasi.js"  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
