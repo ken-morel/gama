@@ -12,7 +12,7 @@ typedef uint32_t gmColor;
 
 int gmg_color(gmStr *str, gmColor col) {
   char buffer[32];
-  sprintf(buffer, "(gmColor)0x%X", (unsigned int)col);
+  snprintf(buffer, sizeof(buffer), "(gmColor)0x%X", (unsigned int)col);
   gm_str_append(str, buffer);
   return 0;
 }

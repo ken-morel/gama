@@ -1,10 +1,11 @@
 // src/color.ts
 function gmcDecode(col) {
+  col = col >>> 0;
   return {
     r: (col & 4278190080) >> 24,
     g: (col & 16711680) >> 16,
     b: (col & 65280) >> 8,
-    a: col & 255
+    a: (col & 255) >> 0
   };
 }
 function gmcToCss(c) {
@@ -128,6 +129,25 @@ var KEYS = {
   "F12": "fc"
 };
 
+// src/sab.ts
+function writeYieldResult(buf, offset, res) {
+  const view = new DataView(buf);
+  view.setFloat32(offset, res.mouse.x, true);
+  offset += 4;
+  view.setFloat32(offset, res.mouse.y, true);
+  offset += 4;
+  view.setUint8(offset, res.mouse.down ? 1 : 0);
+  offset += 1;
+  const keyCount = res.keyboard.down.length;
+  view.setUint8(offset, keyCount);
+  offset += 1;
+  for (const key of res.keyboard.down) {
+    view.setUint8(offset, key.charCodeAt(0));
+    view.setUint8(offset, key.charCodeAt(1));
+    offset += 2;
+  }
+}
+
 // src/index.ts
 var WORKER_URL = URL.createObjectURL(new Blob(['"use strict";\n(() => {\n  var __defProp = Object.defineProperty;\n  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;\n  var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);\n\n  // ../wasi.ts\n  var GamaWASI = class {\n    constructor() {\n      __publicField(this, "instance", null);\n    }\n    setInstance(inst) {\n      this.instance = inst;\n    }\n    get importObject() {\n      const s = this;\n      const mem = () => this.instance.exports.memory.buffer;\n      const view = () => new DataView(mem());\n      return {\n        // --- Process & Environment ---\n        proc_exit: (code) => console.log(`Process exited: ${code}`),\n        sched_yield: () => 0,\n        environ_sizes_get: (conf, bufsize) => {\n          view().setUint32(conf, 0, true);\n          view().setUint32(bufsize, 0, true);\n          return 0;\n        },\n        environ_get: (environ, environ_buf) => 0,\n        args_sizes_get: (argc, argv_buf_size) => {\n          view().setUint32(argc, 0, true);\n          view().setUint32(argv_buf_size, 0, true);\n          return 0;\n        },\n        args_get: (argv, argv_buf) => 0,\n        // --- Clock ---\n        clock_time_get: (id, precision, ptr) => {\n          const now = BigInt(Date.now()) * 1000000n;\n          view().setBigUint64(ptr, now, true);\n          return 0;\n        },\n        // --- Random ---\n        random_get: (buf, len) => {\n          crypto.getRandomValues(new Uint8Array(mem(), buf, len));\n          return 0;\n        },\n        // --- File Descriptors (The meat of the logic) ---\n        fd_write: (fd, iovs, iovs_len, nwritten) => {\n          let total = 0;\n          for (let i = 0; i < iovs_len; i++) {\n            const ptr = view().getUint32(iovs + i * 8, true);\n            const len = view().getUint32(iovs + i * 8 + 4, true);\n            const txt = new TextDecoder().decode(new Uint8Array(mem(), ptr, len));\n            fd === 1 ? console.log(txt) : console.warn(txt);\n            total += len;\n          }\n          view().setUint32(nwritten, total, true);\n          return 0;\n        },\n        fd_pwrite: (fd, iovs, iovs_len, offset, nwritten) => {\n          return this.importObject.fd_write(fd, iovs, iovs_len, nwritten);\n        },\n        fd_read: () => 0,\n        fd_pread: () => 0,\n        fd_close: () => 0,\n        fd_seek: () => 28,\n        // ENOTSUP\n        fd_tell: () => 28,\n        fd_sync: () => 0,\n        fd_datasync: () => 0,\n        fd_advise: () => 0,\n        fd_allocate: () => 28,\n        fd_fdstat_get: (fd, buf) => {\n          const v = view();\n          v.setUint8(buf, 1);\n          v.setUint16(buf + 2, 0, true);\n          v.setBigUint64(buf + 8, 0n, true);\n          v.setBigUint64(buf + 16, 0n, true);\n          return 0;\n        },\n        fd_fdstat_set_flags: () => 0,\n        fd_filestat_get: () => 28,\n        fd_filestat_set_size: () => 28,\n        fd_filestat_set_times: () => 28,\n        fd_prestat_get: () => 8,\n        // EBADF (No preopened dirs)\n        fd_prestat_dir_name: () => 8,\n        fd_readdir: () => 28,\n        fd_renumber: () => 28,\n        // --- Path Operations ---\n        path_open: () => 44,\n        // ENOENT\n        path_create_directory: () => 28,\n        path_filestat_get: () => 44,\n        path_filestat_set_times: () => 28,\n        path_link: () => 28,\n        path_readlink: () => 44,\n        path_remove_directory: () => 28,\n        path_rename: () => 28,\n        path_symlink: () => 28,\n        path_unlink_file: () => 28,\n        // --- Networking ---\n        poll_oneoff: () => 28,\n        sock_recv: () => 28,\n        sock_send: () => 28,\n        sock_shutdown: () => 28\n      };\n    }\n  };\n\n  // src/wasm-utils.ts\n  var utf8Decoder = new TextDecoder("utf-8");\n  function takeString(mem, ptr) {\n    if (!ptr || ptr === 0) return "";\n    const buffer = mem.buffer;\n    const view = new Uint8Array(buffer);\n    let end = ptr;\n    const maxSearch = 1024;\n    while (view[end] !== 0 && end - ptr < maxSearch && end < view.length) {\n      end++;\n    }\n    const bytes = view.slice(ptr, end);\n    return utf8Decoder.decode(bytes);\n  }\n  function setDoublePtr(mem, ptr, val) {\n    if (ptr % 8 === 0) {\n      new Float64Array(mem.buffer)[ptr / 8] = val;\n    } else {\n      new DataView(mem.buffer).setFloat64(ptr, val, true);\n    }\n  }\n\n  // src/keyboard.ts\n  var keyCode = (t, k) => String.fromCodePoint(t, k);\n\n  // src/sab.ts\n  function readYieldResult(buf, offset) {\n    const view = new DataView(buf);\n    const mouse = {\n      x: view.getFloat32(offset, true),\n      y: view.getFloat32(offset + 4, true),\n      down: view.getUint8(offset + 8) !== 0\n    };\n    offset += 9;\n    const keyCount = view.getUint8(offset);\n    offset += 1;\n    const end = offset + keyCount * 2;\n    const downKeys = [];\n    while (offset < end)\n      downKeys.push(keyCode(view.getUint8(offset++), view.getUint8(offset++)));\n    return {\n      mouse,\n      keyboard: { down: downKeys }\n    };\n  }\n\n  // src/worker.ts\n  var d = { mod: null, inst: null, buff: null, cmds: [], size: [500, 500], mem: null, running: true, mouse: { x: 0, y: 0, down: false }, last_t: 0, keyboard: { down: [] }, image_counter: 1, buff32: null };\n  var state = 1;\n  function runGama() {\n    console.info("Running gama.main");\n    const ret = d.inst.exports.gama_run();\n    if (ret == 0)\n      console.info("main function returned 0");\n    else\n      console.error(`main function returned ${ret}`);\n  }\n  self.onmessage = (msg) => {\n    if (state == 1) {\n      state = 0;\n      let data = msg.data;\n      const wasi = new GamaWASI();\n      const wasmImports = { wasi_snapshot_preview1: wasi.importObject, gapi };\n      WebAssembly.instantiate(data.wasmData, wasmImports).then(function({ module: mod, instance: inst }) {\n        d.mod = mod;\n        d.inst = inst;\n        d.mem = d.inst.exports.memory;\n        wasi.setInstance(inst);\n        state = 2;\n        self.postMessage({\n          ok: true,\n          error: null\n        });\n      });\n    } else if (state == 2) {\n      state = 3;\n      let data = msg.data;\n      d.buff = data.buffer;\n      d.buff32 = new Int32Array(d.buff);\n      setTimeout(runGama, 0);\n    }\n  };\n  var gapi = {\n    init: (width, height, title) => {\n      self.postMessage({\n        type: "resize",\n        size: [width, height]\n      });\n      const txt = takeString(d.mem, title);\n      self.postMessage({\n        type: "set-title",\n        title: txt\n      });\n      d.last_t = Date.now();\n      console.info(`gm_init called, with dimensions ${width}x${height} and title: \\`${txt}\\``);\n    },\n    log: function(txt) {\n      console.log(takeString(d.mem, txt));\n    },\n    quit: () => {\n      d.running = false;\n      console.info("gm_quit called");\n    },\n    draw_line: (x1, y1, x2, y2, size, c) => {\n      d.cmds.push(["line", x1, y1, x2, y2, size, c]);\n    },\n    draw_rect: (x, y, w, h, c) => {\n      d.cmds.push(["rect", x, y, w, h, c]);\n    },\n    draw_rounded_rect: (x, y, w, h, rad, col) => {\n      d.cmds.push([\n        "roundrect",\n        x,\n        y,\n        w,\n        h,\n        rad,\n        col\n      ]);\n    },\n    draw_circle: (x, y, rad, col) => {\n      d.cmds.push([\n        "draw/circle",\n        x,\n        y,\n        rad,\n        col\n      ]);\n    },\n    draw_triangle: (x1, y1, x2, y2, x3, y3, col) => {\n      d.cmds.push([\n        "draw/triangle",\n        x1,\n        y1,\n        x2,\n        y2,\n        x3,\n        y3,\n        col\n      ]);\n    },\n    draw_text: (x, y, size, txt, font, style, col) => {\n      d.cmds.push([\n        "draw/text",\n        x,\n        y,\n        size,\n        takeString(d.mem, txt),\n        takeString(d.mem, font),\n        style,\n        col\n      ]);\n    },\n    set_background_color: (col) => {\n      self.postMessage({\n        type: "set-background-color",\n        color: col\n      });\n    },\n    mouse_get: (x_ptr, y_ptr) => {\n      setDoublePtr(d.mem, x_ptr, d.mouse.x);\n      setDoublePtr(d.mem, y_ptr, d.mouse.y);\n      return 0;\n    },\n    mouse_down: () => d.mouse.down ? 1 : 0,\n    resize: (width, height) => {\n      self.postMessage({ type: "resize", size: [width, height] });\n    },\n    fullscreen: (full) => {\n      self.postMessage({ type: "fullscreen", fullscreen: full != 0 });\n    },\n    runs: () => d.running ? 1 : 0,\n    key_down: (t, k) => {\n      return d.keyboard.down.includes(String.fromCodePoint(t, k)) ? 1 : 0;\n    },\n    create_image: (data_ptr, width, height) => {\n      if (data_ptr * width * height == 0) return 1;\n      const buffer = d.inst.exports.memory.buffer;\n      const view = new Uint8Array(buffer);\n      const size = width * height * 4;\n      const bytes = view.slice(data_ptr, data_ptr + size);\n      const id = d.image_counter++;\n      const data = new Uint8ClampedArray(size);\n      for (let i = 0; i < size; i++)\n        data[i] = bytes[i];\n      self.postMessage({ type: "create-image", id, data, size: [width, height] });\n      return id;\n    },\n    draw_image: (handle, x, y, width, height) => {\n      d.cmds.push([\n        "image",\n        handle,\n        x,\n        y,\n        width,\n        height\n      ]);\n    },\n    draw_image_part: (handle, sx, sy, sw, sh, x, y, w, h) => {\n      d.cmds.push([\n        "image-part",\n        handle,\n        sx,\n        sy,\n        sw,\n        sh,\n        x,\n        y,\n        w,\n        h\n      ]);\n    },\n    yield: (dt_ptr) => {\n      self.postMessage({\n        type: "draw",\n        cmds: d.cmds\n      });\n      d.cmds = [];\n      Atomics.store(d.buff32, 0, 0);\n      self.postMessage({\n        type: "yield"\n      });\n      Atomics.wait(d.buff32, 0, 0);\n      const data = readYieldResult(d.buff, 1);\n      d.mouse = data.mouse;\n      d.keyboard = data.keyboard;\n      const now = Date.now();\n      const dt = (now - d.last_t) / 1e3;\n      setDoublePtr(d.mem, dt_ptr, dt);\n      d.last_t = now;\n      return d.running ? 1 : 0;\n    }\n  };\n})();\n'], {
   type: "application/javascript"
@@ -218,26 +238,31 @@ var Gama = class _Gama {
         }
         break;
       case "yield":
-        const promise = this.yield();
+        const gen = this.yield();
+        await gen.next();
         Atomics.store(this.buffer32, 0, 1);
         Atomics.notify(this.buffer32, 0);
-        await promise;
+        writeYieldResult(this.buffer, 1, this.yielding);
+        await gen.next();
         break;
     }
   }
   workerError(e) {
     console.error("Error running gama web worker: ", e);
   }
-  yield() {
+  async *yield() {
     this.ctx.back.clearRect(0, 0, this.canvas.back.width, this.canvas.back.height);
     this.ctx.back.drawImage(this.canvas.front, 0, 0);
     this.ctx.front.clearRect(0, 0, this.canvas.front.width, this.canvas.front.height);
-    return new Promise((resolve) => {
+    yield;
+    await new Promise((resolve) => {
       requestAnimationFrame(() => {
+        this.output?.clearRect(0, 0, this.output.canvas.width, this.output.canvas.height);
         this.output?.drawImage(this.canvas.back, 0, 0);
         resolve();
       });
     });
+    yield;
   }
   drawCmd(_cmd) {
     const [cmd, ...args] = _cmd;
@@ -409,26 +434,22 @@ var Gama = class _Gama {
     elt.addEventListener("mousemove", (e) => {
       const r = elt.getBoundingClientRect();
       const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
-      this.worker.postMessage({
-        type: "event/mousemove",
-        position: coords
-      });
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
     });
     elt.addEventListener("mousedown", (e) => {
       const r = elt.getBoundingClientRect();
       const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
-      this.worker.postMessage({
-        type: "event/mousedown",
-        position: coords
-      });
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
+      this.yielding.mouse.down = true;
     });
     elt.addEventListener("mouseup", (e) => {
       const r = elt.getBoundingClientRect();
       const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
-      this.worker.postMessage({
-        type: "event/mouseup",
-        position: coords
-      });
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
+      this.yielding.mouse.down = false;
     });
     const touchpos = (e) => {
       const r = elt.getBoundingClientRect();
@@ -438,20 +459,18 @@ var Gama = class _Gama {
       );
     };
     elt.addEventListener("touchmove", (e) => {
-      this.worker.postMessage({
-        type: "event/mousemove",
-        position: touchpos(e)
-      });
+      const coords = touchpos(e);
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
     });
     elt.addEventListener("touchstart", (e) => {
-      this.worker.postMessage({
-        type: "event/mousemove",
-        position: touchpos(e)
-      });
-      this.worker.postMessage({ type: "event/mousedown" });
+      const coords = touchpos(e);
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
+      this.yielding.mouse.down = true;
     });
     const handle = () => {
-      this.worker.postMessage({ type: "event/mouseup" });
+      this.yielding.mouse.down = false;
     };
     elt.addEventListener("touchcancel", handle);
     elt.addEventListener("touchend", handle);

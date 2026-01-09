@@ -1,11 +1,12 @@
 export type GmColor = number;
 
 export function gmcDecode(col: GmColor): { r: number, g: number, b: number, a: number } {
+  col = col >>> 0;
   return {
     r: (col & 0xFF000000) >> 24,
     g: (col & 0x00FF0000) >> 16,
     b: (col & 0x0000FF00) >> 8,
-    a: col & 0x000000FF,
+    a: (col & 0x000000FF) >> 0,
   };
 }
 

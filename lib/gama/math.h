@@ -22,7 +22,6 @@ struct special {
 double tan(double x);
 double cos(double x);
 double sin(double x);
-int abs(int x);
 double ceil(double x);
 double floor(double x);
 double atan(double x);
@@ -37,7 +36,7 @@ double fabs(double x);
 
 void translate(double x, struct special *_special);
 double atan_1_1(double x);
-double delete(double x);
+double delete (double x);
 double log_other(double x);
 double log_0_2(double x);
 
@@ -46,7 +45,7 @@ double cos(double x) {
   return sin(PI / 2 - x);
 }
 
-double delete(double x) {
+double delete (double x) {
   while (x > PI || x < -PI) {
     x += x > PI ? -2 * PI : 2 * PI;
   }
@@ -74,8 +73,6 @@ double tan(double x) {
   temp /= _special.pow;
   return (x != -PI / 2 && x != PI / 2) ? temp : NAN;
 }
-
-int abs(int x) { return x < 0 ? x *= -1 : x; }
 
 double ceil(double x) {
   int i;

@@ -2,7 +2,7 @@ declare const WORKER_CODE: string;
 
 import { GmColor, gmcToCss } from "./color";
 import { getKeyCode } from "./keyboard";
-import { YieldResult } from "./sab";
+import { writeYieldResult, YieldResult } from "./sab";
 import type { WorkerSuccessMessage, WorkerInitMessage, WorkerInitResponse, WorkerStartMessage } from "./worker";
 
 const WORKER_URL = URL.createObjectURL(new Blob([WORKER_CODE], {
@@ -126,13 +126,16 @@ export default class Gama {
         }
         break;
       case 'yield':
-        const promise = this.yield();
+        const gen = this.yield();
+        await gen.next();
         // the worker can start right away
         Atomics.store(this.buffer32, 0, 1);
         Atomics.notify(this.buffer32, 0);
+
+        writeYieldResult(this.buffer, 1, this.yielding);
         // and then wait till we finish drawing, and since two functions
         // dont run at the same time...
-        await promise;
+        await gen.next();
         break;
     }
   }
@@ -140,17 +143,22 @@ export default class Gama {
     console.error("Error running gama web worker: ", e);
   }
 
-  private yield(): Promise<void> {
+  private async* yield() {
     // do buffer options synchroniously and draw latter on animation frame
     this.ctx.back.clearRect(0, 0, this.canvas.back.width, this.canvas.back.height);
     this.ctx.back.drawImage(this.canvas.front, 0, 0);
     this.ctx.front.clearRect(0, 0, this.canvas.front.width, this.canvas.front.height);
-    return new Promise((resolve) => {
+    // await new Promise(resolve => setTimeout(resolve, 100));
+    yield;
+    await new Promise<void>((resolve) => {
       requestAnimationFrame(() => {
+        this.output?.clearRect(0, 0, this.output.canvas.width, this.output.canvas.height);
         this.output?.drawImage(this.canvas.back, 0, 0);
+
         resolve();
       });
     });
+    yield;
   }
   private drawCmd(_cmd: any[]) {
     const [cmd, ...args] = _cmd;
@@ -340,26 +348,22 @@ export default class Gama {
     elt.addEventListener('mousemove', e => {
       const r = elt.getBoundingClientRect();
       const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
-      this.worker.postMessage({
-        type: 'event/mousemove',
-        position: coords
-      });
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
     });
     elt.addEventListener('mousedown', e => {
       const r = elt.getBoundingClientRect();
       const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
-      this.worker.postMessage({
-        type: 'event/mousedown',
-        position: coords
-      });
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
+      this.yielding.mouse.down = true;
     });
     elt.addEventListener('mouseup', e => {
       const r = elt.getBoundingClientRect();
       const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
-      this.worker.postMessage({
-        type: 'event/mouseup',
-        position: coords
-      });
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
+      this.yielding.mouse.down = false;
     });
 
     const touchpos = (e: TouchEvent) => {
@@ -371,20 +375,19 @@ export default class Gama {
     };
 
     elt.addEventListener('touchmove', e => {
-      this.worker.postMessage({
-        type: 'event/mousemove',
-        position: touchpos(e)
-      });
+      const coords = touchpos(e);
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
     });
     elt.addEventListener('touchstart', e => {
-      this.worker.postMessage({
-        type: 'event/mousemove',
-        position: touchpos(e)
-      });
-      this.worker.postMessage({ type: 'event/mousedown' });
+      const coords = touchpos(e);
+      this.yielding.mouse.x = coords[0];
+      this.yielding.mouse.y = coords[1];
+      this.yielding.mouse.down = true;
+
     });
     const handle = () => {
-      this.worker.postMessage({ type: 'event/mouseup' });
+      this.yielding.mouse.down = false;
     };
     elt.addEventListener('touchcancel', handle);
     elt.addEventListener('touchend', handle);
