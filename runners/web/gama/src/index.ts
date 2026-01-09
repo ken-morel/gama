@@ -148,8 +148,8 @@ export default class Gama {
     this.ctx.back.clearRect(0, 0, this.canvas.back.width, this.canvas.back.height);
     this.ctx.back.drawImage(this.canvas.front, 0, 0);
     this.ctx.front.clearRect(0, 0, this.canvas.front.width, this.canvas.front.height);
-    // await new Promise(resolve => setTimeout(resolve, 100));
     yield;
+    await new Promise(resolve => setTimeout(resolve, 50));
     await new Promise<void>((resolve) => {
       requestAnimationFrame(() => {
         this.output?.clearRect(0, 0, this.output.canvas.width, this.output.canvas.height);

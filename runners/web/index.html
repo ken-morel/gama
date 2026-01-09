@@ -45,8 +45,9 @@
 
     const game = await Gama.create("./{{name}}.wasm");
     game.attach(canvas);
-    console.log(game);
+     game.bindKeyboard(window);
     game.start();
+    console.log(game);
   </script>
 </body>
 
