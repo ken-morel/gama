@@ -5,7 +5,7 @@ import path from 'path';
 
 const outDir = path.resolve(process.cwd(), 'dist');
 const workerTempFile = path.join(outDir, 'worker.tmp.js');
-const outputFile = path.join(outDir, 'bundle.js');
+const outputFile = path.join(outDir, 'gama.js');
 
 async function buildProject() {
   try {
@@ -31,7 +31,7 @@ async function buildProject() {
     const workerCode = await readFile(workerTempFile, 'utf-8');
 
     console.log('Building main library...');
-    // 3. Build the main library, defining '__WORKER_CODE__' as the worker's source code
+    // 3. Build the main library, defining 'WORKER_CODE' as the worker's source code
     await build({
       entryPoints: ['src/index.ts'],
       bundle: true,
@@ -42,7 +42,7 @@ async function buildProject() {
       format: 'esm', // Output as ES Module
       define: {
         // Need to JSON.stringify to make it a valid string literal in the code
-        '__WORKER_CODE__': JSON.stringify(workerCode),
+        'WORKER_CODE': JSON.stringify(workerCode),
       },
     });
 
