@@ -3,10 +3,10 @@ export type GmColor = number;
 export function gmcDecode(col: GmColor): { r: number, g: number, b: number, a: number } {
   col = col >>> 0;
   return {
-    r: (col & 0xFF000000) >> 24,
-    g: (col & 0x00FF0000) >> 16,
-    b: (col & 0x0000FF00) >> 8,
-    a: (col & 0x000000FF) >> 0,
+    r: (col >>> 24) & 0xFF,
+    g: (col >>> 16) & 0xFF,
+    b: (col >>> 8) & 0xFF,
+    a: col & 0xFF,
   };
 }
 
@@ -16,5 +16,6 @@ export function gmcEncode(r: number, g: number, b: number, a: number): GmColor {
 
 export function gmcToCss(c: GmColor): string {
   const { r, g, b, a } = gmcDecode(c);
-  return `rgba(${r}, ${g}, ${b}, ${a})`;
+  const normalizedAlpha = (a / 255).toFixed(2);
+  return `rgba(${r}, ${g}, ${b}, ${normalizedAlpha})`;
 }

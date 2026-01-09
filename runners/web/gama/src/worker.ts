@@ -130,7 +130,7 @@ const gapi = {
 
   draw_circle: (x: number, y: number, rad: number, col: GmColor) => {
     d.cmds.push([
-      'draw/circle',
+      'circle',
       x, y,
       rad,
       col,
@@ -138,7 +138,7 @@ const gapi = {
   },
   draw_triangle: (x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, col: GmColor) => {
     d.cmds.push([
-      'draw/triangle',
+      'triangle',
       x1, y1,
       x2, y2,
       x3, y3,
@@ -147,7 +147,7 @@ const gapi = {
   },
   draw_text: (x: number, y: number, size: number, txt: CharPtr, font: CharPtr, style: number, col: GmColor) => {
     d.cmds.push([
-      'draw/text',
+      'text',
       x, y,
       size,
       takeString(d.mem!, txt),
