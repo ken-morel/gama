@@ -77,23 +77,25 @@ pub fn (p Project) copy_build_web_artifacts(inst Installation, reset bool) ! {
 	build_dir := p.build_path('web')
 	runner_path := os.join_path(inst.runners, 'web')
 	os.mkdir_all(build_dir) or {}
-	for filename in os.ls(runner_path)! {
-		src := os.join_path(runner_path, filename)
-		dest := os.join_path(build_dir, filename)
-		if !os.exists(dest) || reset {
-			if filename.ends_with('.html') || filename.ends_with('.js') {
-				code := os.read_file(src) or {
-					println(term.warn_message('Error reading template from file ${src}: ${err}'))
-					continue
-				}
-				os.write_file(dest, conf.substitute(code)) or {
-					println(term.warn_message('Error writing to file ${dest}: ${err}'))
-				}
-			} else {
-				os.cp(src, dest) or {
-					println(term.warn_message('Error copying ${src} to ${dest}: ${err}'))
-				}
-			}
-		}
+
+	mut warn := false
+	dest_index := os.join_path(build_dir, 'index.html')
+	if !os.exists(dest_index) || reset {
+		os.write_file(dest_index, conf.substitute(os.read_file(os.join_path(runner_path,
+			'index.html')) or {
+			warn = true
+			''
+		})) or { warn = true }
+	}
+	dest_gama := os.join_path(build_dir, 'gama.js')
+	if !os.exists(dest_gama) || reset {
+		os.write_file(dest_gama, conf.substitute(os.read_file(os.join_path(runner_path,
+			'gama', 'dist', 'gama.js')) or {
+			warn = true
+			''
+		})) or { warn = true }
+	}
+	if warn {
+		println(term.warn_message('Error copying some files'))
 	}
 }
