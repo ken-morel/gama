@@ -32,10 +32,14 @@ export default class Gama {
   output: CanvasRenderingContext2D | null;
   private constructor(w: Worker) {
     this.worker = w;
-    this.canvas.front = new OffscreenCanvas(500, 500);
-    this.canvas.back = new OffscreenCanvas(500, 500);
-    this.ctx.front = this.canvas.front.getContext('2d')!;
-    this.ctx.back = this.canvas.back.getContext('2d')!;
+    this.canvas = {
+      front: new OffscreenCanvas(500, 500),
+      back: new OffscreenCanvas(500, 500)
+    };
+    this.ctx = {
+      front: this.canvas.front.getContext('2d')!,
+      back: this.canvas.back.getContext('2d')!
+    };
     this.window = {
       side: 500,
       offset: { x: 0, y: 0 },
@@ -120,9 +124,9 @@ export default class Gama {
     this.ctx.back.clearRect(0, 0, this.canvas.back.width, this.canvas.back.height);
     this.ctx.back.drawImage(this.canvas.front, 0, 0);
     this.ctx.front.clearRect(0, 0, this.canvas.front.width, this.canvas.front.height);
-    return new Promise(function(resolve) {
-      requestAnimationFrame(function() {
-        this.output?.drawImage(this.canvas, 0, 0);
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        this.output?.drawImage(this.canvas.back, 0, 0);
         resolve();
       });
     });
