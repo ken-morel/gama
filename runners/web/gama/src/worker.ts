@@ -1,6 +1,6 @@
 import { createDocumentRegistry } from "typescript";
 import { GmColor } from "./color";
-import GamaWASI from "./wasi.js";
+import GamaWASI from "../../wasi.js";
 
 import { CharPtr, DoublePtr, setDoublePtr, takeString } from "./wasm-utils";
 import { readYieldResult } from "./sab";
@@ -65,12 +65,13 @@ self.onmessage = (msg: MessageEvent<any>) => {
     state = 0; // deactivate
     let data = msg.data as WorkerInitMessage;
     const wasi = new GamaWASI();
-    const wasmImports = { wasi_snapshot_preview1: wasi.importObject };
+    const wasmImports = { wasi_snapshot_preview1: wasi.importObject, gapi: gapi };
 
     WebAssembly.instantiate(data.wasmData, wasmImports).then(function({ module: mod, instance: inst }) {
       d.mod = mod;
       d.inst = inst;
       d.mem = (d.inst.exports.memory as WebAssembly.Memory);
+      wasi.setInstance(inst);
 
       state = 2;
       self.postMessage({
@@ -96,11 +97,13 @@ const gapi = {
       type: 'resize',
       size: [width, height],
     });
+    const txt = takeString(d.mem!, title);
     self.postMessage({
       type: 'set-title',
-      title: takeString(d.mem!, title),
+      title: txt,
     });
     d.last_t = Date.now();
+    console.info(`gm_init called, with dimensions ${width}x${height} and title: \`${txt}\``)
   },
   log: function(txt: CharPtr) {
     console.log(takeString(d.mem!, txt));
@@ -153,9 +156,9 @@ const gapi = {
       col as GmColor,
     ]);
   },
-  set_bg_color: (col: GmColor) => {
+  set_background_color: (col: GmColor) => {
     self.postMessage({
-      type: 'set-background',
+      type: 'set-background-color',
       color: col,
     });
   },

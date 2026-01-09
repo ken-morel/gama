@@ -44,8 +44,8 @@
     import Gama from "./gama.js";
 
     const game = await Gama.create("./{{name}}.wasm");
-    console.log(game);
     game.attach(canvas);
+    console.log(game);
     game.start();
   </script>
 </body>

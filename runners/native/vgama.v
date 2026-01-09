@@ -231,7 +231,7 @@ fn gapi_resize(w i32, h i32) {
 	})
 }
 
-@[export: 'gapi_set_bg_color']
+@[export: 'gapi_set_background_color']
 fn gapi_set_bg_color(col GmColor) {
 	c := col.to_gg()
 	queue_fn(fn [c] () {
