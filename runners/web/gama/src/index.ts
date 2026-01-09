@@ -46,11 +46,12 @@ export default class Gama {
     };
     this.buffer = new SharedArrayBuffer(1024);
     this.buffer32 = new Int32Array(this.buffer);
-    w.onerror = this.#workerError;
-    w.onmessage = null;
+    console.log(this.worker);
+    this.worker.onerror = this.#workerError;
+    this.worker.onmessage = null;
     this.output = null;
   }
-  attach(canv: HTMLCanvasElement) {
+  public attach(canv: HTMLCanvasElement) {
     this.output = canv.getContext('2d');
   }
   public static create(wasmPath: string): Promise<Gama> {
@@ -59,6 +60,8 @@ export default class Gama {
       const wasmDataBuffer = await fetchResponse.arrayBuffer();
 
       const worker = new Worker(WORKER_URL, { type: 'module' });
+
+      console.log(worker);
 
 
       worker.onerror = (e) => {
@@ -119,7 +122,7 @@ export default class Gama {
     console.error("Error running gama web worker: ", e);
   }
 
-  yield(): Promise<void> {
+  private yield(): Promise<void> {
     // do buffer options synchroniously and draw latter on animation frame
     this.ctx.back.clearRect(0, 0, this.canvas.back.width, this.canvas.back.height);
     this.ctx.back.drawImage(this.canvas.front, 0, 0);
@@ -131,8 +134,8 @@ export default class Gama {
       });
     });
   }
-  drawCmd(cmd: []) { }
-  setFullscreen(fs: boolean) {
+  private drawCmd(cmd: []) { }
+  public setFullscreen(fs: boolean) {
     if (fs) {
       if (this.output)
         this.output.canvas.requestFullscreen();
@@ -141,19 +144,19 @@ export default class Gama {
         document.exitFullscreen();
     }
   }
-  setBackground(col: GmColor) {
+  public setBackground(col: GmColor) {
     if (this.output)
       this.output.canvas.style.backgroundColor = gmcToCss(col);
 
   }
 
-  setTitle(msg: string) {
+  public setTitle(msg: string) {
     try {
       document.querySelector('title')!.innerHTML = msg;
     } catch (e) { console.error(e); }
   }
 
-  resize(width: number, height: number) {
+  public resize(width: number, height: number) {
     this.canvas.front.width = width;
     this.canvas.front.height = height;
     this.canvas.back.width = width;

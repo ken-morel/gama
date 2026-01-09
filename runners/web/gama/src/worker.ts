@@ -1,6 +1,6 @@
 import { createDocumentRegistry } from "typescript";
 import { GmColor } from "./color";
-import GamaWASI from "./wasi";
+import GamaWASI from "./wasi.js";
 
 import { CharPtr, DoublePtr, setDoublePtr, takeString } from "./wasm-utils";
 import { readYieldResult } from "./sab";
@@ -52,7 +52,7 @@ let state: number = 1;
 
 function runGama() {
   console.info("Running gama.main");
-  const ret = (d.inst!.exports.main as () => number)();
+  const ret = (d.inst!.exports.gama_run as () => number)();
   if (ret == 0)
     console.info("main function returned 0");
   else

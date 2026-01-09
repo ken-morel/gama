@@ -106,6 +106,17 @@ fn vgama() {
 	}
 }
 
+fn gama_js() {
+	println('Building gama.js')
+	mut result := execute('cd runners/web/gama && bun run build')
+	if result.exit_code != 0 {
+		println(term.fail_message('vgama linux build failed : ${result.output}'))
+	} else {
+		println('vgama linux build failed : ${result.output}')
+	}
+	println('  done building gama.js')
+}
+
 // Get the command from arguments
 mut cmd := 'help'
 if os.args.len > 1 {
@@ -124,6 +135,8 @@ if cmd == 'docs' {
 	package()
 } else if cmd == 'vgama' {
 	vgama()
+} else if cmd == 'gama.js' {
+	gama_js()
 } else {
 	println(term.fail_message('Unknown command: ${cmd}'))
 	help()
