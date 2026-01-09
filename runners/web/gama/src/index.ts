@@ -167,6 +167,7 @@ export default class Gama {
       case 'line':
         var [x1, y1, x2, y2, s, c] = args as number[];
         ctx.beginPath();
+        this._stroke(c);
         ctx.moveTo(...this._c_coord(x1, y1));
         ctx.lineTo(...this._c_coord(x2, y2));
         ctx.closePath();
@@ -218,7 +219,7 @@ export default class Gama {
         this._fill(c);
         ctx.fill();
         break;
-      case 'draw/text':
+      case 'text':
         var [x, y, s, txt, font, style, c] = args as [number, number, number, string, string, number, GmColor];
 
         ctx.font = this._c_one(s).toFixed(0) + "px '" + font + "'";
