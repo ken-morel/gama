@@ -3,7 +3,7 @@ declare const WORKER_CODE: string;
 import { GmColor, gmcToCss } from "./color";
 import { getKeyCode } from "./keyboard";
 import { writeYieldResult, YieldResult } from "./sab";
-import type { WorkerSuccessMessage, WorkerInitMessage, WorkerInitResponse, WorkerStartMessage } from "./worker";
+import type { WorkerSuccessMessage, WorkerInitMessage, WorkerInitResponse, WorkerStartMessage, Triangle } from "./worker";
 
 const WORKER_URL = URL.createObjectURL(new Blob([WORKER_CODE], {
   type: "application/javascript",
@@ -212,6 +212,19 @@ export default class Gama {
         ctx.fill();
         ctx.stroke();
         break;
+      case 'triangles': {
+        var triangles = args[0];
+        for (const { a, b, c, col } of triangles as Triangle[]) {
+          ctx.beginPath();
+          ctx.moveTo(...this._c_coord(...a));
+          ctx.lineTo(...this._c_coord(...a));
+          ctx.lineTo(...this._c_coord(...a));
+          ctx.closePath();
+          this._fill(col);
+          ctx.fill();
+        }
+      };
+        break;
       case 'circle':
         var [x, y, r, c] = args as [number, number, number, GmColor];
         ctx.beginPath();
@@ -221,7 +234,6 @@ export default class Gama {
         break;
       case 'text':
         var [x, y, s, txt, font, style, c] = args as [number, number, number, string, string, number, GmColor];
-
         ctx.font = this._c_one(s).toFixed(0) + "px '" + font + "'";
         this._fill(c);
         ctx.textAlign = 'center';

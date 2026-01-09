@@ -18,7 +18,7 @@ async function buildProject() {
     await build({
       entryPoints: ['src/worker.ts'],
       bundle: true,
-      // minify: true,
+      minify: true,
       write: true, // Ensure it writes to disk
       outfile: workerTempFile,
       platform: 'browser',
@@ -35,7 +35,7 @@ async function buildProject() {
     await build({
       entryPoints: ['src/index.ts'],
       bundle: true,
-      // minify: true,
+      minify: true,
       outfile: outputFile,
       platform: 'browser',
       target: 'es2020',

@@ -2,7 +2,7 @@ import { createDocumentRegistry } from "typescript";
 import { GmColor } from "./color";
 import GamaWASI from "../../wasi.js";
 
-import { CharPtr, DoublePtr, setDoublePtr, takeString } from "./wasm-utils";
+import { CharPtr, DoublePtr, getDoublePtr, getGmColorPtr, Ptr, setDoublePtr, takeString } from "./wasm-utils";
 import { readYieldResult } from "./sab";
 
 
@@ -22,6 +22,13 @@ export type WorkerStartMessage = {
 export type WorkerMessage = {
   type: string;
   msg: any,
+};
+
+export type Triangle = {
+  a: [number, number],
+  b: [number, number],
+  c: [number, number],
+  col: GmColor,
 };
 
 
@@ -208,6 +215,24 @@ const gapi = {
       sx, sy, sw, sh,
       x, y, w, h,
     ]);
+  },
+  draw_triangles: (ntriangles: number, points_ptr: Ptr, colors_ptr: Ptr) => {
+    const triangles: Triangle[] = [];
+    for (let i = 0; i < ntriangles; i++) {
+      const p = getDoublePtr(d.mem!, points_ptr + (8 * 6) * i, 6);
+      const c = getGmColorPtr(d.mem!, colors_ptr + (4 * i), 1)[0] as GmColor;
+      triangles.push({
+        a: [p[0], p[1]],
+        b: [p[2], p[3]],
+        c: [p[4], p[5]],
+        col: c[0],
+      });
+    }
+    d.cmds.push([
+      'triangles',
+      triangles,
+    ]);
+
   },
   yield: (dt_ptr: CharPtr) => {
     self.postMessage({
