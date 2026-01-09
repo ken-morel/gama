@@ -255,7 +255,7 @@ const gapi = {
 
     const now = Date.now();
     const dt = (now - d.last_t) / 1000;
-    setDoublePtr(d.mem!, dt_ptr, dt);
+    setDoublePtr(d.mem!, dt_ptr, [dt]);
     d.last_t = now;
     return d.running ? 1 : 0 as number;
   },
