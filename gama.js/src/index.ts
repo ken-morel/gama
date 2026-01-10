@@ -374,7 +374,7 @@ export default class Gama {
   }
 
 
-  public bindKeyboard(elt: HTMLElement) {
+  public bindKeyboard(elt: EventTarget) {
     elt.addEventListener('keydown', e => {
       this.yielding.keyboard.down.add(getKeyCode(e.key));
     });
