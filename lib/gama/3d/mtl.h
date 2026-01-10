@@ -166,10 +166,10 @@ int gmg_material(gmStr *str, gm3Material mat) {
 
   char buffer[1024] = {0};
 
-  sprintf(buffer, "(gm3Material){\n");
+  snprintf(buffer, sizeof(buffer), "(gm3Material){\n");
   gm_str_append(str, buffer);
 
-  sprintf(buffer, "    .name = \"%s\",\n", mat.name);
+  snprintf(buffer, sizeof(buffer), "    .name = \"%s\",\n", mat.name);
   gm_str_append(str, buffer);
 
   // Diffuse
@@ -187,10 +187,10 @@ int gmg_material(gmStr *str, gm3Material mat) {
   gmg_color(str, mat.emissive);
   gm_str_append(str, ",\n");
 
-  sprintf(buffer, "    .shininess = %.4f,\n", mat.shininess);
+  snprintf(buffer, sizeof(buffer), "    .shininess = %.4f,\n", mat.shininess);
   gm_str_append(str, buffer);
 
-  sprintf(buffer, "    .alpha = %.4f\n", mat.alpha);
+  snprintf(buffer, sizeof(buffer), "    .alpha = %.4f\n", mat.alpha);
   gm_str_append(str, buffer);
 
   gm_str_append(str, "  }");
@@ -200,13 +200,13 @@ int gmg_material(gmStr *str, gm3Material mat) {
 int gmg_mtllib(gmStr *str, gm3MtlLib lib) {
   char buffer[1024] = {0};
 
-  sprintf(buffer, "(gm3MtlLib){\n");
+  snprintf(buffer, sizeof(buffer), "(gm3MtlLib){\n");
   gm_str_append(str, buffer);
 
-  sprintf(buffer, "  .name = \"%s\",\n", lib.name);
+  snprintf(buffer, sizeof(buffer), "  .name = \"%s\",\n", lib.name);
   gm_str_append(str, buffer);
 
-  sprintf(buffer, "  .n_materials = %zu,\n", lib.n_materials);
+  snprintf(buffer, sizeof(buffer), "  .n_materials = %zu,\n", lib.n_materials);
   gm_str_append(str, buffer);
 
   if (lib.n_materials > 0) {

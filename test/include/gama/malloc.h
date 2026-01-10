@@ -1,10 +1,10 @@
 #pragma once
 
+#include <stdlib.h>
 #ifndef GM_MALLOC
 #define GM_MALLOC
 #endif
 
-#include "gapi.h"
 #include <stddef.h>
 #ifndef MEMORY
 // default memory to 10MB
@@ -39,9 +39,9 @@ static void _remove_memory_spot(size_t index) {
 }
 static struct _memory_spot _add_memory_spot(size_t index, size_t size) {
   if (_memory_spot_size >= MEMORY_SPOTS) {
-    gapi_log("OOM: sorry kid, memory's finish, no _spots left, try "
-             "https://gama.rbs.cm/faq#oom");
-    gapi_quit();
+    // gapi_log("OOM: sorry kid, memory's finish, no _spots left, try "
+    // "https://gama.rbs.cm/faq#oom");
+    exit(100);
     return (struct _memory_spot){0, 0};
   }
   // Find new spot

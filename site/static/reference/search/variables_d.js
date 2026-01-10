@@ -1,5 +1,28 @@
 var searchData=
 [
-  ['mass_0',['mass',['../structgm_body.html#a9081c3fdd7cf1a1b4ce20a294f298cc1',1,'gmBody']]],
-  ['movement_1',['movement',['../struct__gm_mouse.html#a678355818640a7464c1d9f5f2180bdb8',1,'_gmMouse']]]
+  ['magnitude_0',['magnitude',['../struct_mapping_channel.html#afd6e4cb4de3874833192c5c67daaa272',1,'MappingChannel']]],
+  ['mantisa_1',['mantisa',['../structspecial.html#aff9708b8fd9af46d5d767da880950718',1,'special']]],
+  ['mapping_2',['mapping',['../struct_mode.html#a56d2ce10834c4f563f402359db99af9f',1,'Mode::mapping'],['../structstb__vorbis.html#accf685d27ba4ea9f3cab74df173871bc',1,'stb_vorbis::mapping']]],
+  ['mapping_5fcount_3',['mapping_count',['../structstb__vorbis.html#aed8cabfd2e35742f337e6ded1eb26951',1,'stb_vorbis']]],
+  ['marker_4',['marker',['../structjpeg.html#a9a5cd40790fd432795fb19477c921f8c',1,'jpeg']]],
+  ['mass_5',['mass',['../structgm_body.html#a9081c3fdd7cf1a1b4ce20a294f298cc1',1,'gmBody']]],
+  ['material_6',['material',['../structgm3_mesh_face.html#a4fa665d7b98a424baea90c424ef7118e',1,'gm3MeshFace']]],
+  ['material_5ffile_7',['material_file',['../structgm3_mesh_face.html#a6ce3bd47974fc539d80fce3d0adc80c0',1,'gm3MeshFace']]],
+  ['materials_8',['materials',['../structgm3_mtl_lib.html#a5b521bc553882d2f0c246f1419c67490',1,'gm3MtlLib']]],
+  ['max_5fframe_5fsize_9',['max_frame_size',['../structstb__vorbis__info.html#ad07f41541db438dcdac6ca223c5876e9',1,'stb_vorbis_info']]],
+  ['max_5fh_5ftiles_10',['max_h_tiles',['../structstbhw__tileset.html#ad4c8a93ab05c268c17b9fb6e07600983',1,'stbhw_tileset']]],
+  ['max_5fv_5ftiles_11',['max_v_tiles',['../structstbhw__tileset.html#ac75944ca10bee5eb4b4e29712f002886',1,'stbhw_tileset']]],
+  ['max_5fx_12',['max_x',['../structstbi__gif__struct.html#a02391438194b161d16bdf95878be6a66',1,'stbi_gif_struct']]],
+  ['max_5fy_13',['max_y',['../structstbi__gif__struct.html#aff3410e0fff097d4719e54096f6da69b',1,'stbi_gif_struct']]],
+  ['maxcode_14',['maxcode',['../structhuffman.html#aeb78aca6c7377faaad8123566d54fc98',1,'huffman::maxcode'],['../structzhuffman.html#ac7dd4a2bf01a6e27933dd1cf6b0cc762',1,'zhuffman::maxcode']]],
+  ['maxval_15',['maxval',['../structstb__search.html#a3f766e480f40bc9c8bb09c1807e0d16a',1,'stb_search']]],
+  ['minimum_5fvalue_16',['minimum_value',['../struct_codebook.html#a045762c79343b6153ec1978136f1feaa',1,'Codebook']]],
+  ['minval_17',['minval',['../structstb__search.html#a794d1ad2f6f9b7cf464388a4da64b47b',1,'stb_search']]],
+  ['mode_18',['mode',['../structstb__search.html#a656a037112af1428e9d760bb1aa76066',1,'stb_search::mode'],['../structstbds__string__arena.html#afafb53a85f37b648cb5b4e9c72f0ac91',1,'stbds_string_arena::mode']]],
+  ['mode_5fconfig_19',['mode_config',['../structstb__vorbis.html#adf9aaee5832e512b5efe0a0d99b02894',1,'stb_vorbis']]],
+  ['mode_5fcount_20',['mode_count',['../structstb__vorbis.html#af91c34d59c47301e40a83d9ee1017274',1,'stb_vorbis']]],
+  ['movement_21',['movement',['../struct__gm_mouse.html#a678355818640a7464c1d9f5f2180bdb8',1,'_gmMouse']]],
+  ['mtllibs_22',['mtllibs',['../structgm3_mesh.html#ac52e27a27bc1b8c41001fe73d7e9c0ef',1,'gm3Mesh']]],
+  ['multiplicands_23',['multiplicands',['../struct_codebook.html#a6d20dcddba93d3df6f6c9f3c1fbcf8fd',1,'Codebook']]],
+  ['mux_24',['mux',['../struct_mapping_channel.html#a293cfec33390fdd5cee99df910f2d694',1,'MappingChannel']]]
 ];

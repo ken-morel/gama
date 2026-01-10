@@ -1,8 +1,24 @@
 var searchData=
 [
-  ['acceleration_0',['acceleration',['../structgm_body.html#a13a8825c428ce54187d36c734d799f2c',1,'gmBody::acceleration'],['../structgm__system.html#a04e471339c635281e7fb81857fcd54de',1,'gm_system::acceleration']]],
-  ['active_1',['active',['../structgmw_button_theme.html#ac709a40e05c946c9ad65bb4480ef6b6a',1,'gmwButtonTheme::active'],['../structgmw_joystick_theme.html#a9fcb9f7b6be54ba9144cea423ba89d0f',1,'gmwJoystickTheme::active'],['../structgmw_scale_theme.html#a05cd2b4799e94c9d38d55f57062dbc8f',1,'gmwScaleTheme::active'],['../structgmw_switch_theme.html#ac49c0f1f256714afaa086529345ff598',1,'gmwSwitchTheme::active']]],
-  ['anim_2',['anim',['../structgm_sprite_anim.html#ad22ef8ab93dc6f86c4de6585e49e4f32',1,'gmSpriteAnim']]],
-  ['animation_3',['animation',['../structgm_sprite.html#aa6c6dc1254f2376401c8f2d5e5413900',1,'gmSprite']]],
-  ['animation_5fframe_4',['animation_frame',['../structgm_sprite.html#a44a82d76b15a00018ef06cdbc616b9c7',1,'gmSprite']]]
+  ['a_0',['A',['../structstb__vorbis.html#a1dbabeed4f6505a76789914f16772975',1,'stb_vorbis']]],
+  ['a_1',['a',['../structstbhw__tile.html#a85416cca3b85fa91215eed398f18917d',1,'stbhw_tile']]],
+  ['acc_2',['acc',['../structstb__vorbis.html#a54a0daf5db3dc593cdff97a6df20fc3b',1,'stb_vorbis']]],
+  ['acceleration_3',['acceleration',['../structgm_body.html#a13a8825c428ce54187d36c734d799f2c',1,'gmBody::acceleration'],['../structgm__system.html#a04e471339c635281e7fb81857fcd54de',1,'gm_system::acceleration']]],
+  ['active_4',['active',['../structgmw_button_theme.html#a182da7534ab8d556536ffc67e164103b',1,'gmwButtonTheme::active'],['../structgmw_joystick_theme.html#acda8730bc40e257e53bed4fead052409',1,'gmwJoystickTheme::active'],['../structgmw_scale_theme.html#af7b285ba17b6cf8f8c87a4fd69d6d941',1,'gmwScaleTheme::active'],['../structgmw_switch_theme.html#afce20eadd6e79e6e2f323ec47fb4fe5a',1,'gmwSwitchTheme::active']]],
+  ['active_5fhead_5',['active_head',['../structstbrp__context.html#a13277239636803aff28f00b0a0376120',1,'stbrp_context']]],
+  ['advance_6',['advance',['../structstbtt__kerningentry.html#a1924543c84b2abbdbac1a951f441d8aa',1,'stbtt_kerningentry']]],
+  ['align_7',['align',['../structstbrp__context.html#ae36053e2001a725aec2b5756dc990481',1,'stbrp_context']]],
+  ['alloc_8',['alloc',['../structstb__vorbis.html#a0ecaff11857085f1cc89d7ca6dd8193c',1,'stb_vorbis']]],
+  ['alloc_5fbuffer_9',['alloc_buffer',['../structstb__vorbis__alloc.html#a0bb516f56fb154f942d7c8641d33a26e',1,'stb_vorbis_alloc']]],
+  ['alloc_5fbuffer_5flength_5fin_5fbytes_10',['alloc_buffer_length_in_bytes',['../structstb__vorbis__alloc.html#a04baf605f33de80c7161b27fb2ec5d86',1,'stb_vorbis_alloc']]],
+  ['alpha_11',['alpha',['../structgm3_material.html#a214db142e80594130baf08c588a3b27a',1,'gm3Material']]],
+  ['ambient_12',['ambient',['../structgm3_light.html#ae819fbeb768867a4f18ab91e8236542e',1,'gm3Light']]],
+  ['amplitude_5fbits_13',['amplitude_bits',['../struct_floor0.html#a49a1999f7063382cf289e36f3f679281',1,'Floor0']]],
+  ['amplitude_5foffset_14',['amplitude_offset',['../struct_floor0.html#a2c57037c224748b8bb5586f668a66903',1,'Floor0']]],
+  ['angle_15',['angle',['../struct_mapping_channel.html#a78fa29206ca367159792f11c1f604510',1,'MappingChannel']]],
+  ['anim_16',['anim',['../structgm_sprite_anim.html#ad22ef8ab93dc6f86c4de6585e49e4f32',1,'gmSpriteAnim']]],
+  ['animation_17',['animation',['../structgm_sprite.html#aa6c6dc1254f2376401c8f2d5e5413900',1,'gmSprite']]],
+  ['animation_5fframe_18',['animation_frame',['../structgm_sprite.html#a44a82d76b15a00018ef06cdbc616b9c7',1,'gmSprite']]],
+  ['array_5flength_19',['array_length',['../structstbvox__uniform__info.html#a093aaf2d07ab612f0141de982090b9d4',1,'stbvox_uniform_info']]],
+  ['array_5fof_5funicode_5fcodepoints_20',['array_of_unicode_codepoints',['../structstbtt__pack__range.html#a1567aa5455e1251529a91b46261368cf',1,'stbtt_pack_range']]]
 ];

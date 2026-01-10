@@ -77,13 +77,13 @@ int32_t gmg_face(gmStr *str, gm3MeshFace f) {
   gm_str_append(str, "(gm3MeshFace){");
 
   // Vertices
-  sprintf(buffer, ".vertices = {%zu, %zu, %zu}, ", f.vertices[0], f.vertices[1],
-          f.vertices[2]);
+  snprintf(buffer, sizeof(buffer), ".vertices = {%zu, %zu, %zu}, ",
+           f.vertices[0], f.vertices[1], f.vertices[2]);
   gm_str_append(str, buffer);
 
   // Material Indices
-  sprintf(buffer, ".material = %d, .material_file = %d, ", f.material,
-          f.material_file);
+  snprintf(buffer, sizeof(buffer), ".material = %d, .material_file = %d, ",
+           f.material, f.material_file);
   gm_str_append(str, buffer);
 
   // Normal (uses gmg_pos3)
@@ -101,7 +101,7 @@ int32_t gmg_mesh(gmStr *str, gm3Mesh m) {
   gm_str_append(str, "(gm3Mesh){\n");
 
   // 2. Vertices
-  sprintf(buffer, "  .n_vertices = %zu,\n", m.n_vertices);
+  snprintf(buffer, sizeof(buffer), "  .n_vertices = %zu,\n", m.n_vertices);
   gm_str_append(str, buffer);
 
   if (m.n_vertices > 0) {
@@ -122,7 +122,7 @@ int32_t gmg_mesh(gmStr *str, gm3Mesh m) {
   }
 
   // 3. Faces
-  sprintf(buffer, "  .n_faces = %zu,\n", m.n_faces);
+  snprintf(buffer, sizeof(buffer), "  .n_faces = %zu,\n", m.n_faces);
   gm_str_append(str, buffer);
 
   if (m.n_faces > 0) {
@@ -143,7 +143,7 @@ int32_t gmg_mesh(gmStr *str, gm3Mesh m) {
   }
 
   // 4. Normals
-  sprintf(buffer, "  .n_normals = %zu,\n", m.n_normals);
+  snprintf(buffer, sizeof(buffer), "  .n_normals = %zu,\n", m.n_normals);
   gm_str_append(str, buffer);
 
   if (m.n_normals > 0) {
@@ -165,7 +165,7 @@ int32_t gmg_mesh(gmStr *str, gm3Mesh m) {
 
   // 5. Material Libraries (mtllibs)
   // This recursively generates the libraries contained in the mesh
-  sprintf(buffer, "  .n_mtllibs = %zu,\n", m.n_mtllibs);
+  snprintf(buffer, sizeof(buffer), "  .n_mtllibs = %zu,\n", m.n_mtllibs);
   gm_str_append(str, buffer);
 
   if (m.n_mtllibs > 0) {

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.15.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gama C Library: lib/gapi.h File Reference</title>
+<title>Gama C Library: lib/gama/gapi.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -92,52 +92,45 @@ $(function(){initNavTree('gapi_8h.html','',''); });
   <div class="headertitle"><div class="title">gapi.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="position_8h_source.html">position.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="color_8h_source.html">color.h</a>&quot;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
 </div>
 <p><a href="gapi_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr class="memitem:_5FgmMouse" id="r__5FgmMouse"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__gm_mouse.html">_gmMouse</a></td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a011056a6351d47641cf3c674124c022c" id="r_a011056a6351d47641cf3c674124c022c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a011056a6351d47641cf3c674124c022c">gapi_set_title</a> (const char *title)</td></tr>
 <tr class="memitem:a5807835814d6e9575b1c3bddff3fed5a" id="r_a5807835814d6e9575b1c3bddff3fed5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5807835814d6e9575b1c3bddff3fed5a">gapi_resize</a> (const int32_t width, const int32_t height)</td></tr>
-<tr class="memitem:a46f335e765ff6360235f4f591c1e3206" id="r_a46f335e765ff6360235f4f591c1e3206"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46f335e765ff6360235f4f591c1e3206">gapi_set_bg_color</a> (const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)</td></tr>
+<tr class="memitem:affb93473d7b3ccfb1c8e7019376e6350" id="r_affb93473d7b3ccfb1c8e7019376e6350"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affb93473d7b3ccfb1c8e7019376e6350">gapi_set_background_color</a> (const <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> background)</td></tr>
 <tr class="memitem:a33685759bfe738fd920e7f328d561ccc" id="r_a33685759bfe738fd920e7f328d561ccc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33685759bfe738fd920e7f328d561ccc">gapi_fullscreen</a> (const int32_t fullscreen)</td></tr>
 <tr class="memitem:a62e52648c681f51c0156e49f87e5f731" id="r_a62e52648c681f51c0156e49f87e5f731"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62e52648c681f51c0156e49f87e5f731">gapi_log</a> (const char *message)</td></tr>
 <tr class="memitem:a4ae4f9434b6179e6d7148c2b187dfa41" id="r_a4ae4f9434b6179e6d7148c2b187dfa41"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ae4f9434b6179e6d7148c2b187dfa41">gapi_init</a> (const int32_t width, const int32_t height, const char *title)</td></tr>
 <tr class="memitem:a7fda7996bff29edf614c0ca8ae54f0a0" id="r_a7fda7996bff29edf614c0ca8ae54f0a0"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fda7996bff29edf614c0ca8ae54f0a0">gapi_yield</a> (double *dt)</td></tr>
 <tr class="memitem:a75992a93a66aeea7d867a59e0911889f" id="r_a75992a93a66aeea7d867a59e0911889f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75992a93a66aeea7d867a59e0911889f">gapi_quit</a> ()</td></tr>
 <tr class="memitem:aba1dc1654054d397e6325d4c55cae27b" id="r_aba1dc1654054d397e6325d4c55cae27b"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba1dc1654054d397e6325d4c55cae27b">gapi_runs</a> ()</td></tr>
-<tr class="memitem:a86c32c723487907706efef3abd363dfd" id="r_a86c32c723487907706efef3abd363dfd"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86c32c723487907706efef3abd363dfd">gapi_draw_line</a> (double x1, double y1, double x2, double y2, double thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a)</td></tr>
-<tr class="memitem:a05026dafd54018603b3fdb2383f1b123" id="r_a05026dafd54018603b3fdb2383f1b123"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05026dafd54018603b3fdb2383f1b123">gapi_draw_rect</a> (double x, double y, double w, double h, uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca)</td></tr>
-<tr class="memitem:a59fd37df71d852ac7881b84a06057dde" id="r_a59fd37df71d852ac7881b84a06057dde"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59fd37df71d852ac7881b84a06057dde">gapi_draw_rounded_rect</a> (double x, double y, double w, double h, double r, uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca)</td></tr>
-<tr class="memitem:a9aa65ef30d543612cb9af8246ce78bc1" id="r_a9aa65ef30d543612cb9af8246ce78bc1"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9aa65ef30d543612cb9af8246ce78bc1">gapi_draw_circle</a> (double center_x, double center_y, double radius, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)</td></tr>
-<tr class="memitem:a15d6c0fdfb38489f9efb5fcb0e27ca3a" id="r_a15d6c0fdfb38489f9efb5fcb0e27ca3a"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15d6c0fdfb38489f9efb5fcb0e27ca3a">gapi_draw_ellipse</a> (double x, double y, double w, double h, uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca)</td></tr>
-<tr class="memitem:a273fdc05885e36974501f25eb99dd193" id="r_a273fdc05885e36974501f25eb99dd193"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a273fdc05885e36974501f25eb99dd193">gapi_draw_triangle</a> (double x1, double y1, double x2, double y2, double x3, double y3, uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca)</td></tr>
-<tr class="memitem:a441e9acd4222bec2f3617133ea98bc05" id="r_a441e9acd4222bec2f3617133ea98bc05"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a441e9acd4222bec2f3617133ea98bc05">gapi_create_image</a> (const char *path, uint32_t *width, uint32_t *height)</td></tr>
+<tr class="memitem:ae114249c27fc729dbaddeb28cddeb915" id="r_ae114249c27fc729dbaddeb28cddeb915"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae114249c27fc729dbaddeb28cddeb915">gapi_draw_line</a> (double x1, double y1, double x2, double y2, double thickness, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memitem:a23cc1111238f4d03f16c575990e521b6" id="r_a23cc1111238f4d03f16c575990e521b6"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23cc1111238f4d03f16c575990e521b6">gapi_draw_rect</a> (double x, double y, double w, double h, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memitem:a4259289ffd7cfbb8c13e1ca085feabe2" id="r_a4259289ffd7cfbb8c13e1ca085feabe2"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4259289ffd7cfbb8c13e1ca085feabe2">gapi_draw_rounded_rect</a> (double x, double y, double w, double h, double r, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memitem:abb3cf891ffa029878f1c3a2465958d1e" id="r_abb3cf891ffa029878f1c3a2465958d1e"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb3cf891ffa029878f1c3a2465958d1e">gapi_draw_circle</a> (double center_x, double center_y, double radius, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memitem:adc5f160e2f85e20dd2c1f6ad7771f5b4" id="r_adc5f160e2f85e20dd2c1f6ad7771f5b4"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc5f160e2f85e20dd2c1f6ad7771f5b4">gapi_draw_ellipse</a> (double x, double y, double w, double h, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memitem:a5efc35389c5b7823ee666e3b178fa430" id="r_a5efc35389c5b7823ee666e3b178fa430"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5efc35389c5b7823ee666e3b178fa430">gapi_draw_triangle</a> (double x1, double y1, double x2, double y2, double x3, double y3, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memitem:a2542ba5370ccc664cebe2773a64bd577" id="r_a2542ba5370ccc664cebe2773a64bd577"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2542ba5370ccc664cebe2773a64bd577">gapi_draw_triangles</a> (uint32_t n_triangles, double *points, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> *colors)</td></tr>
+<tr class="memitem:a63e6201085343907a67ba043ed7b2f72" id="r_a63e6201085343907a67ba043ed7b2f72"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63e6201085343907a67ba043ed7b2f72">gapi_create_image</a> (const unsigned char *data, uint32_t width, uint32_t height)</td></tr>
 <tr class="memitem:a4958768ff5d3519bcc96b3f56ef98eb1" id="r_a4958768ff5d3519bcc96b3f56ef98eb1"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4958768ff5d3519bcc96b3f56ef98eb1">gapi_draw_image</a> (uint32_t handle, double x, double y, double width, double height)</td></tr>
 <tr class="memitem:ad0a4d37645fa603d8c332c2fae3ef3b3" id="r_ad0a4d37645fa603d8c332c2fae3ef3b3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0a4d37645fa603d8c332c2fae3ef3b3">gapi_draw_image_part</a> (uint32_t handle, uint32_t slice_x, uint32_t slice_y, uint32_t slice_width, uint32_t slice_height, double x, double y, double width, double height)</td></tr>
-<tr class="memitem:afce9c818cd58922816875b1bdcdd210e" id="r_afce9c818cd58922816875b1bdcdd210e"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afce9c818cd58922816875b1bdcdd210e">gapi_draw_text</a> (double x, double y, double height, const char *txt, const char *font, uint8_t style, uint8_t cr, uint8_t cg, uint8_t cb, uint8_t ca)</td></tr>
-<tr class="memitem:a39b03b708fb123f274f6de0fbbb8ce7d" id="r_a39b03b708fb123f274f6de0fbbb8ce7d"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39b03b708fb123f274f6de0fbbb8ce7d">gapi_key_pressed</a> (char t, char k)</td></tr>
-<tr class="memitem:a525d0a7cdce45ac13f1a303ecfd3b35d" id="r_a525d0a7cdce45ac13f1a303ecfd3b35d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a525d0a7cdce45ac13f1a303ecfd3b35d">gapi_wait_queue</a> ()</td></tr>
-<tr class="memitem:a71815a94eadbae9e2309925abd0e8f2c" id="r_a71815a94eadbae9e2309925abd0e8f2c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71815a94eadbae9e2309925abd0e8f2c">gapi_get_mouse_move</a> (double *x, double *y)</td></tr>
+<tr class="memitem:a89b0ad831787ffa74a4c203149b74a97" id="r_a89b0ad831787ffa74a4c203149b74a97"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89b0ad831787ffa74a4c203149b74a97">gapi_draw_text</a> (double x, double y, double height, const char *txt, const char *font, uint8_t style, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memitem:a591eb37e63feff38ea5a43311b72b4a5" id="r_a591eb37e63feff38ea5a43311b72b4a5"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a591eb37e63feff38ea5a43311b72b4a5">gapi_key_down</a> (char t, char k)</td></tr>
 <tr class="memitem:a13c454d2ca7b47724dd5b085111a66e6" id="r_a13c454d2ca7b47724dd5b085111a66e6"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13c454d2ca7b47724dd5b085111a66e6">gapi_mouse_down</a> ()</td></tr>
-<tr class="memitem:a388096a314e98f8db8b43167b5af37e3" id="r_a388096a314e98f8db8b43167b5af37e3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a388096a314e98f8db8b43167b5af37e3">gapi_mouse_pressed</a> ()</td></tr>
 <tr class="memitem:af06e27344257a957a108c5830fdd20d2" id="r_af06e27344257a957a108c5830fdd20d2"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af06e27344257a957a108c5830fdd20d2">gapi_mouse_get</a> (double *x, double *y)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a15035e5990e81f9cbb5e450265679ed9" id="r_a15035e5990e81f9cbb5e450265679ed9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a> = 0</td></tr>
 <tr class="memitem:a47fd570f212b7717d9d2013930fbe5d0" id="r_a47fd570f212b7717d9d2013930fbe5d0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47fd570f212b7717d9d2013930fbe5d0">_gm_t</a> = 0</td></tr>
-<tr class="memitem:ae348e1e764210f492ce421ed6460db40" id="r_ae348e1e764210f492ce421ed6460db40"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="struct__gm_mouse.html">_gmMouse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae348e1e764210f492ce421ed6460db40">gm_mouse</a></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="a441e9acd4222bec2f3617133ea98bc05" name="a441e9acd4222bec2f3617133ea98bc05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a441e9acd4222bec2f3617133ea98bc05">&#9670;&#160;</a></span>gapi_create_image()</h2>
+<a id="a63e6201085343907a67ba043ed7b2f72" name="a63e6201085343907a67ba043ed7b2f72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63e6201085343907a67ba043ed7b2f72">&#9670;&#160;</a></span>gapi_create_image()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,17 +141,17 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">uint32_t gapi_create_image </td>
           <td>(</td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>path</em></span>, </td>
+          <td class="paramtype">const unsigned char *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t *</td>          <td class="paramname"><span class="paramname"><em>width</em></span>, </td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>width</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t *</td>          <td class="paramname"><span class="paramname"><em>height</em></span>&#160;)</td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>height</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -170,8 +163,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a9aa65ef30d543612cb9af8246ce78bc1" name="a9aa65ef30d543612cb9af8246ce78bc1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9aa65ef30d543612cb9af8246ce78bc1">&#9670;&#160;</a></span>gapi_draw_circle()</h2>
+<a id="abb3cf891ffa029878f1c3a2465958d1e" name="abb3cf891ffa029878f1c3a2465958d1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb3cf891ffa029878f1c3a2465958d1e">&#9670;&#160;</a></span>gapi_draw_circle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -197,22 +190,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>red</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>green</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>blue</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>alpha</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></td>          <td class="paramname"><span class="paramname"><em>col</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -224,8 +202,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a15d6c0fdfb38489f9efb5fcb0e27ca3a" name="a15d6c0fdfb38489f9efb5fcb0e27ca3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15d6c0fdfb38489f9efb5fcb0e27ca3a">&#9670;&#160;</a></span>gapi_draw_ellipse()</h2>
+<a id="adc5f160e2f85e20dd2c1f6ad7771f5b4" name="adc5f160e2f85e20dd2c1f6ad7771f5b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc5f160e2f85e20dd2c1f6ad7771f5b4">&#9670;&#160;</a></span>gapi_draw_ellipse()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -256,22 +234,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cr</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cg</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cb</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>ca</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></td>          <td class="paramname"><span class="paramname"><em>col</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -391,8 +354,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a86c32c723487907706efef3abd363dfd" name="a86c32c723487907706efef3abd363dfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86c32c723487907706efef3abd363dfd">&#9670;&#160;</a></span>gapi_draw_line()</h2>
+<a id="ae114249c27fc729dbaddeb28cddeb915" name="ae114249c27fc729dbaddeb28cddeb915"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae114249c27fc729dbaddeb28cddeb915">&#9670;&#160;</a></span>gapi_draw_line()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -428,22 +391,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>r</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>a</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></td>          <td class="paramname"><span class="paramname"><em>col</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -455,8 +403,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a05026dafd54018603b3fdb2383f1b123" name="a05026dafd54018603b3fdb2383f1b123"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05026dafd54018603b3fdb2383f1b123">&#9670;&#160;</a></span>gapi_draw_rect()</h2>
+<a id="a23cc1111238f4d03f16c575990e521b6" name="a23cc1111238f4d03f16c575990e521b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23cc1111238f4d03f16c575990e521b6">&#9670;&#160;</a></span>gapi_draw_rect()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -487,22 +435,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cr</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cg</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cb</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>ca</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></td>          <td class="paramname"><span class="paramname"><em>col</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -514,8 +447,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a59fd37df71d852ac7881b84a06057dde" name="a59fd37df71d852ac7881b84a06057dde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59fd37df71d852ac7881b84a06057dde">&#9670;&#160;</a></span>gapi_draw_rounded_rect()</h2>
+<a id="a4259289ffd7cfbb8c13e1ca085feabe2" name="a4259289ffd7cfbb8c13e1ca085feabe2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4259289ffd7cfbb8c13e1ca085feabe2">&#9670;&#160;</a></span>gapi_draw_rounded_rect()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -551,22 +484,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cr</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cg</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cb</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>ca</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></td>          <td class="paramname"><span class="paramname"><em>col</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -578,8 +496,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="afce9c818cd58922816875b1bdcdd210e" name="afce9c818cd58922816875b1bdcdd210e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afce9c818cd58922816875b1bdcdd210e">&#9670;&#160;</a></span>gapi_draw_text()</h2>
+<a id="a89b0ad831787ffa74a4c203149b74a97" name="a89b0ad831787ffa74a4c203149b74a97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89b0ad831787ffa74a4c203149b74a97">&#9670;&#160;</a></span>gapi_draw_text()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -620,22 +538,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cr</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cg</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cb</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>ca</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></td>          <td class="paramname"><span class="paramname"><em>col</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -647,8 +550,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a273fdc05885e36974501f25eb99dd193" name="a273fdc05885e36974501f25eb99dd193"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a273fdc05885e36974501f25eb99dd193">&#9670;&#160;</a></span>gapi_draw_triangle()</h2>
+<a id="a5efc35389c5b7823ee666e3b178fa430" name="a5efc35389c5b7823ee666e3b178fa430"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5efc35389c5b7823ee666e3b178fa430">&#9670;&#160;</a></span>gapi_draw_triangle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -689,22 +592,41 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cr</em></span>, </td>
+          <td class="paramtype"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></td>          <td class="paramname"><span class="paramname"><em>col</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel extern">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2542ba5370ccc664cebe2773a64bd577" name="a2542ba5370ccc664cebe2773a64bd577"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2542ba5370ccc664cebe2773a64bd577">&#9670;&#160;</a></span>gapi_draw_triangles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t gapi_draw_triangles </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>n_triangles</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cg</em></span>, </td>
+          <td class="paramtype">double *</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>cb</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>ca</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> *</td>          <td class="paramname"><span class="paramname"><em>colors</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -738,38 +660,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a1">/home/engon/gama/gama/lib/gama.h</a>.</dd>
-</dl>
-
-</div>
-</div>
-<a id="a71815a94eadbae9e2309925abd0e8f2c" name="a71815a94eadbae9e2309925abd0e8f2c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71815a94eadbae9e2309925abd0e8f2c">&#9670;&#160;</a></span>gapi_get_mouse_move()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void gapi_get_mouse_move </td>
-          <td>(</td>
-          <td class="paramtype">double *</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double *</td>          <td class="paramname"><span class="paramname"><em>y</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel extern">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a17">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a3">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -805,13 +696,13 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a35">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a29">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
 </div>
-<a id="a39b03b708fb123f274f6de0fbbb8ce7d" name="a39b03b708fb123f274f6de0fbbb8ce7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39b03b708fb123f274f6de0fbbb8ce7d">&#9670;&#160;</a></span>gapi_key_pressed()</h2>
+<a id="a591eb37e63feff38ea5a43311b72b4a5" name="a591eb37e63feff38ea5a43311b72b4a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a591eb37e63feff38ea5a43311b72b4a5">&#9670;&#160;</a></span>gapi_key_down()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -820,7 +711,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t gapi_key_pressed </td>
+          <td class="memname">int32_t gapi_key_down </td>
           <td>(</td>
           <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
         </tr>
@@ -861,7 +752,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a6">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a8">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -888,7 +779,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a20">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a21">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -919,34 +810,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a19">/home/engon/gama/gama/lib/gama.h</a>.</dd>
-</dl>
-
-</div>
-</div>
-<a id="a388096a314e98f8db8b43167b5af37e3" name="a388096a314e98f8db8b43167b5af37e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a388096a314e98f8db8b43167b5af37e3">&#9670;&#160;</a></span>gapi_mouse_pressed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int32_t gapi_mouse_pressed </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel extern">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a21">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a20">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -973,7 +837,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a22">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a22">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -1004,7 +868,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a33">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a27">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -1031,13 +895,13 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a7">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a9">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
 </div>
-<a id="a46f335e765ff6360235f4f591c1e3206" name="a46f335e765ff6360235f4f591c1e3206"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46f335e765ff6360235f4f591c1e3206">&#9670;&#160;</a></span>gapi_set_bg_color()</h2>
+<a id="affb93473d7b3ccfb1c8e7019376e6350" name="affb93473d7b3ccfb1c8e7019376e6350"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affb93473d7b3ccfb1c8e7019376e6350">&#9670;&#160;</a></span>gapi_set_background_color()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1046,24 +910,10 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void gapi_set_bg_color </td>
+          <td class="memname">void gapi_set_background_color </td>
           <td>(</td>
-          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>r</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></td>          <td class="paramname"><span class="paramname"><em>background</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>a</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -1072,7 +922,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a27">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a25">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -1102,33 +952,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a525d0a7cdce45ac13f1a303ecfd3b35d" name="a525d0a7cdce45ac13f1a303ecfd3b35d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a525d0a7cdce45ac13f1a303ecfd3b35d">&#9670;&#160;</a></span>gapi_wait_queue()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void gapi_wait_queue </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel extern">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a24">/home/engon/gama/gama/lib/gama.h</a>.</dd>
-</dl>
-
-</div>
-</div>
 <a id="a7fda7996bff29edf614c0ca8ae54f0a0" name="a7fda7996bff29edf614c0ca8ae54f0a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7fda7996bff29edf614c0ca8ae54f0a0">&#9670;&#160;</a></span>gapi_yield()</h2>
 
@@ -1151,7 +974,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#a14">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a16">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -1168,7 +991,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#_a15">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#_a17">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -1184,37 +1007,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#_a16">/home/engon/gama/gama/lib/gama.h</a>.</dd>
-</dl>
-
-</div>
-</div>
-<a id="ae348e1e764210f492ce421ed6460db40" name="ae348e1e764210f492ce421ed6460db40"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae348e1e764210f492ce421ed6460db40">&#9670;&#160;</a></span>gm_mouse</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct <a class="el" href="struct__gm_mouse.html">_gmMouse</a> gm_mouse</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">    .position =</div>
-<div class="line">        {</div>
-<div class="line">            .x = 0,</div>
-<div class="line">            .y = 0,</div>
-<div class="line">        },</div>
-<div class="line">    .movement =</div>
-<div class="line">        {</div>
-<div class="line">            .x = 0,</div>
-<div class="line">            .y = 0,</div>
-<div class="line">        },</div>
-<div class="line">    .pressed = 0,</div>
-<div class="line">    .down = 0,</div>
-<div class="line">}</div>
-</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_8h-example.html#_a18">/home/engon/gama/gama/lib/gama.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#_a18">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
 </div>
@@ -1232,7 +1025,7 @@ Variables</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="gapi_8h.html">gapi.h</a></li>
+    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="dir_c0efb1807f29eac66ba360987ee66b12.html">gama</a></li><li class="navelem"><a href="gapi_8h.html">gapi.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
   </ul>
 </div>

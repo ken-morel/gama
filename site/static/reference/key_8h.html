@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.15.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gama C Library: lib/key.h File Reference</title>
+<title>Gama C Library: lib/gama/key.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -98,8 +98,6 @@ $(function(){initNavTree('key_8h.html','',''); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac22c8db6a7ecbc64d1809fd045e11363" id="r_ac22c8db6a7ecbc64d1809fd045e11363"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac22c8db6a7ecbc64d1809fd045e11363">gm_key_pressed</a> (char t, char k)</td></tr>
-<tr class="memdesc:ac22c8db6a7ecbc64d1809fd045e11363"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a key is currently pressed.  <br /></td></tr>
 <tr class="memitem:ad06d4ae7c509b6e7e53025c36fda755c" id="r_ad06d4ae7c509b6e7e53025c36fda755c"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad06d4ae7c509b6e7e53025c36fda755c">gm_lower_case</a> (char k)</td></tr>
 <tr class="memdesc:ad06d4ae7c509b6e7e53025c36fda755c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a character to lowercase if it's an uppercase letter.  <br /></td></tr>
 <tr class="memitem:a0056e7f9917e085fc265555a470a9f2c" id="r_a0056e7f9917e085fc265555a470a9f2c"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0056e7f9917e085fc265555a470a9f2c">gm_upper_case</a> (char k)</td></tr>
@@ -108,6 +106,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:ac6e841ec57972c400025a67fb3662711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes a key shortcut into a type and key character.  <br /></td></tr>
 <tr class="memitem:ac9a64b69e25fe37e916cbf6a6d7cbf50" id="r_ac9a64b69e25fe37e916cbf6a6d7cbf50"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9a64b69e25fe37e916cbf6a6d7cbf50">gm_encode_key_shortcut</a> (char t, char k)</td></tr>
 <tr class="memdesc:ac9a64b69e25fe37e916cbf6a6d7cbf50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encodes a type and key character into a shortcut key.  <br /></td></tr>
+<tr class="memitem:ac7f86dec784c76782cbbf72acaad1bff" id="r_ac7f86dec784c76782cbbf72acaad1bff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7f86dec784c76782cbbf72acaad1bff">gm_key_down</a> (char t, char k)</td></tr>
+<tr class="memdesc:ac7f86dec784c76782cbbf72acaad1bff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a key is currently pressed.  <br /></td></tr>
 <tr class="memitem:aed7124055190a27c29c680c17c08df3b" id="r_aed7124055190a27c29c680c17c08df3b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed7124055190a27c29c680c17c08df3b">gm_key</a> (char key)</td></tr>
 <tr class="memdesc:aed7124055190a27c29c680c17c08df3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a key is currently pressed using a shortcut key.  <br /></td></tr>
 </table>
@@ -205,14 +205,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac22c8db6a7ecbc64d1809fd045e11363" name="ac22c8db6a7ecbc64d1809fd045e11363"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac22c8db6a7ecbc64d1809fd045e11363">&#9670;&#160;</a></span>gm_key_pressed()</h2>
+<a id="ac7f86dec784c76782cbbf72acaad1bff" name="ac7f86dec784c76782cbbf72acaad1bff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7f86dec784c76782cbbf72acaad1bff">&#9670;&#160;</a></span>gm_key_down()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int gm_key_pressed </td>
+          <td class="memname">int gm_key_down </td>
           <td>(</td>
           <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
         </tr>
@@ -301,7 +301,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="key_8h.html">key.h</a></li>
+    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="dir_c0efb1807f29eac66ba360987ee66b12.html">gama</a></li><li class="navelem"><a href="key_8h.html">key.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
   </ul>
 </div>
