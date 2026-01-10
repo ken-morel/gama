@@ -19,19 +19,16 @@ int main() {
 
   gm3Scene scene = gm3_scene();
 
+  fprintf(stderr, "Hello wfrom here");
+  fprintf(stdout, "Hello from gama world");
   printf("Hello from gama world");
 
-  fprintf(stdout, "Hello from gama world");
-
-  fprintf(stderr, "Hello wfrom here");
+  fflush(stdout);
+  fflush(stderr);
 
   char buff[1024];
   fscanf(stdin, "%s", buff);
-
-  FILE *f = fopen("test.txt", "r");
-  fprintf(f, "%s", "Hello world");
-
-  // fclose(f);
+  printf("%s", buff);
 
   do {
     if (gm_mouse.down) {

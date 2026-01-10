@@ -48,6 +48,7 @@ export default class GamaWASI {
         // A proper implementation should probably terminate the worker.
         // For now, just log it.
         console.warn(`WASM proc_exit called with code: ${code}. Execution will continue.`);
+        (self as unknown as Worker).terminate();
       },
       random_get: (buf: number, len: number) => {
         crypto.getRandomValues(new Uint8Array(this.mem(), buf, len));
@@ -62,9 +63,9 @@ export default class GamaWASI {
         const iovs = this.readIOVs(iovs_ptr, iovs_len);
         const text = iovs.map(iov => new TextDecoder().decode(iov.buffer)).join('');
 
-        if (fd === 1) console.log(`[stdout] ${text}`);
+        if (fd === 1) console.warn(`[stdout] ${text}`);
         if (fd === 2) console.error(`[stderr] ${text}`);
-        
+
         const nwritten = text.length; // Note: This is not byte-perfect but good enough for logging
         this.view().setUint32(nwritten_ptr, nwritten, true);
         return WASI_ESUCCESS;
@@ -75,18 +76,18 @@ export default class GamaWASI {
         const funnyMessages = ["hello from gama", "gama the game", "gamawin!!"];
         const input = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
         const encodedInput = new TextEncoder().encode(input + '\n');
-        
+
         const iovs = this.readIOVs(iovs_ptr, iovs_len);
         let bytesWritten = 0;
         for (const iov of iovs) {
-            const write_len = Math.min(iov.buffer.length, encodedInput.length - bytesWritten);
-            if (write_len === 0) break;
-            
-            const dest = new Uint8Array(this.mem(), iov.offset, iov.buffer.length);
-            dest.set(encodedInput.slice(bytesWritten, bytesWritten + write_len));
-            bytesWritten += write_len;
+          const write_len = Math.min(iov.buffer.length, encodedInput.length - bytesWritten);
+          if (write_len === 0) break;
+
+          const dest = new Uint8Array(this.mem(), iov.offset, iov.buffer.length);
+          dest.set(encodedInput.slice(bytesWritten, bytesWritten + write_len));
+          bytesWritten += write_len;
         }
-        
+
         this.view().setUint32(nread_ptr, bytesWritten, true);
         return WASI_ESUCCESS;
       },
@@ -100,7 +101,7 @@ export default class GamaWASI {
         this.view().setBigUint64(buf_ptr + 16, 0n, true);
         return WASI_ESUCCESS;
       },
-      
+
       // --- All other functions are stubbed to return ENOSYS (not implemented) ---
       fd_close: (fd: number) => (fd > 2 ? WASI_ENOSYS : WASI_ESUCCESS),
       fd_seek: () => WASI_ENOSYS,
@@ -115,7 +116,7 @@ export default class GamaWASI {
       path_open: () => WASI_ENOSYS,
       path_filestat_get: () => WASI_ENOSYS,
       path_unlink_file: () => WASI_ENOSYS,
-      
+
       // And the rest...
       fd_pwrite: () => WASI_ENOSYS,
       fd_pread: () => WASI_ENOSYS,
@@ -141,12 +142,12 @@ export default class GamaWASI {
   }
 
   private readIOVs(iovs_ptr: number, iovs_len: number) {
-      const iovs = [];
-      for (let i = 0; i < iovs_len; i++) {
-          const ptr = this.view().getUint32(iovs_ptr + i * 8, true);
-          const len = this.view().getUint32(iovs_ptr + i * 8 + 4, true);
-          iovs.push({ buffer: new Uint8Array(this.mem(), ptr, len), offset: ptr });
-      }
-      return iovs;
+    const iovs = [];
+    for (let i = 0; i < iovs_len; i++) {
+      const ptr = this.view().getUint32(iovs_ptr + i * 8, true);
+      const len = this.view().getUint32(iovs_ptr + i * 8 + 4, true);
+      iovs.push({ buffer: new Uint8Array(this.mem(), ptr, len), offset: ptr });
+    }
+    return iovs;
   }
 }
