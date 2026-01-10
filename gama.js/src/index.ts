@@ -246,7 +246,7 @@ export default class Gama {
           ctx.closePath();
           ctx.fill();
         }
-      };
+        }
         break;
       case 'circle':
         var [x, y, r, c] = args as [number, number, number, GmColor];
@@ -369,7 +369,7 @@ export default class Gama {
   }
 
 
-  public bindKeyboard(elt: HTMLElement) {
+  public bindKeyboard(elt: EventTarget) {
     elt.addEventListener('keydown', e => {
       this.yielding.keyboard.down.add(getKeyCode(e.key));
     });

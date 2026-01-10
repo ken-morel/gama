@@ -24,7 +24,7 @@ export function writeYieldResult(buf: SharedArrayBuffer, offset: number, res: Yi
 
   for (const key of res.keyboard.down) {
     view.setUint8(offset, key.charCodeAt(0));
-    view.setUint8(offset, key.charCodeAt(1));
+    view.setUint8(offset + 1, key.charCodeAt(1));
     offset += 2;
   }
 }
