@@ -15,8 +15,23 @@ int main() {
 
   gm3Transform tr = gm3_transform();
   tr.position.z = 30;
+  tr.rotation.y = -M_PI * 2;
 
   gm3Scene scene = gm3_scene();
+
+  printf("Hello from gama world");
+
+  fprintf(stdout, "Hello from gama world");
+
+  fprintf(stderr, "Hello wfrom here");
+
+  char buff[1024];
+  fscanf(stdin, "%s", buff);
+
+  FILE *f = fopen("test.txt", "r");
+  fprintf(f, "%s", "Hello world");
+
+  // fclose(f);
 
   do {
     if (gm_mouse.down) {
