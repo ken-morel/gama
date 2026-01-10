@@ -14,11 +14,51 @@ pub fn bake_obj(path string, fname string) !string {
 #include <gama/3d/mesh.h>
 #include <gama/3d/mtl.h>
 
+// Baked image data for ${os.file_name(path)}
+
+const gm3Mesh _${fname}_data;
+static inline gm3Mesh ${fname}();
+
+//////////
+
 const gm3Mesh _${fname}_data = ${code};
 
-static inline gm3Mesh ${fname}() {
+gm3Mesh ${fname}() {
 	return _${fname}_data;
 }'
+}
+
+pub fn bake_img(path string, fname string) !string {
+	bytes := os.read_bytes(path)!
+
+	mut byte_str := ''
+	for i, b in bytes {
+		byte_str += '0x${b.hex()}, '
+		if (i + 1) % 16 == 0 {
+			byte_str += '\n\t'
+		}
+	}
+
+	return '
+#include <gama/image.h>
+
+// Baked image data for ${os.file_name(path)}
+
+static const unsigned char _${fname}_data[];
+static const unsigned int _${fname}_len;
+static inline gmImage ${fname}();
+
+//////////
+
+
+static const unsigned int _${fname}_len = ${bytes.len};
+static const unsigned char _${fname}_data[] = {
+	${byte_str}
+};
+gmImage ${fname}() {
+	return gm_image_create_from_memory(_${fname}_data, _${fname}_len);
+}
+'
 }
 
 pub fn (p Project) bake(inst Installation) ! {
@@ -30,18 +70,30 @@ pub fn (p Project) bake(inst Installation) ! {
 			relpath := path[assets_dir.len + 1..]
 			fname := os.file_name(path)
 			dest_h := os.join_path(gen_dir, relpath + '.h')
+			// dest_c := os.join_path(gen_dir, relpath + '.c')
 			if !should_build_to(path, dest_h) {
 				return
 			}
 			mut content := ''
 			if relpath.ends_with('.obj') {
 				println(' - baking ${relpath}')
-				var := fname[0..fname.len - 4] + '_mesh'
+				var := fname[0..fname.len - 4].replace('.', '_') + '_mesh'
 				unsafe {
 					content = bake_obj(path, var) or {
 						println(term.fail_message('${err}'))
 						return
 					}
+				}
+			} else if relpath.ends_with('.png') || relpath.ends_with('.jpg')
+				|| relpath.ends_with('.jpeg') || relpath.ends_with('.bmp') {
+				println(' - baking ${relpath}')
+				// Generate a C-style variable name from the file name
+				ext_len := os.file_ext(relpath).len
+				base_name := fname[0..fname.len - ext_len]
+				var := base_name.replace('-', '_').replace('.', '_') + '_image'
+				content = bake_img(path, var) or {
+					println(term.fail_message('${err}'))
+					return
 				}
 			} else {
 				return
