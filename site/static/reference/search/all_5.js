@@ -1,4 +1,32 @@
 var searchData=
 [
-  ['enabled_0',['enabled',['../structgmw_button_theme.html#a7e7cfdc54b5b0e550ed17ad4c632e9be',1,'gmwButtonTheme::enabled'],['../structgmw_frame_theme.html#a3a956dd61caaeb091986a53e972a5da6',1,'gmwFrameTheme::enabled'],['../structgmw_joystick_theme.html#aee3b6d8fa8b69fb6a36e83d5689df41e',1,'gmwJoystickTheme::enabled'],['../structgmw_scale_theme.html#aaa2333af1c0492f70ce8885cff90a3c7',1,'gmwScaleTheme::enabled'],['../structgmw_switch_theme.html#a93c0012d1303d76d826ed018e19cdb6b',1,'gmwSwitchTheme::enabled']]]
+  ['d_0',['d',['../structstbhw__tile.html#a8911859edd7561523295673f0c16766e',1,'stbhw_tile']]],
+  ['damping_1',['damping',['../structgm__system.html#a40d52885fd4d36ca430e5359acd952ee',1,'gm_system']]],
+  ['data_2',['data',['../structgm3_texture.html#ac23648cedf2b18fb3b7b5853b9a30d9f',1,'gm3Texture::data'],['../structgm_image_data.html#ac90e3a39ac4beb43aeab27c88c0d48b5',1,'gmImageData::data'],['../structstb__arith__symstate.html#a0568e4c385330503f5a5573ac2fb006b',1,'stb_arith_symstate::data'],['../structjpeg.html#a4c402a722a3caaa387b23fe805909cc5',1,'jpeg::data'],['../structstbtt____buf.html#a376d8cdacbc8295a7e88567ad52a0ac4',1,'stbtt__buf::data'],['../structstbtt__fontinfo.html#af348db379cf0e0e71a68603d00501d41',1,'stbtt_fontinfo::data']]],
+  ['dc_5fpred_3',['dc_pred',['../structjpeg.html#ab09c873c011a6cf5f708973697a313a6',1,'jpeg']]],
+  ['debug_2eh_4',['debug.h',['../debug_8h.html',1,'']]],
+  ['decode_5',['DECODE',['../stb__vorbis_8c.html#ac9e9bac3b3e48646f9a430d0c7411ae5',1,'stb_vorbis.c']]],
+  ['decode_5fraw_6',['DECODE_RAW',['../stb__vorbis_8c.html#a0c23d1b38c11a185d8cf8a30010f5537',1,'stb_vorbis.c']]],
+  ['decode_5fvq_7',['DECODE_VQ',['../stb__vorbis_8c.html#ae8daba892ecc7da0dace8b1a1f7d2a18',1,'stb_vorbis.c']]],
+  ['default_5fmesh_8',['default_mesh',['../structstbvox__mesh__maker.html#a677ad25600006aa33dbbc94ef84c1374',1,'stbvox_mesh_maker']]],
+  ['default_5ftex_5fscale_9',['default_tex_scale',['../structstbvox__mesh__maker.html#a7e6ac5c4ff7b7523ce32f84c8cd991e4',1,'stbvox_mesh_maker']]],
+  ['default_5fvalue_10',['default_value',['../structstbvox__uniform__info.html#ae02f04f9ac3d7412ed5f078356e8d1da',1,'stbvox_uniform_info']]],
+  ['deg2rad_11',['deg2rad',['../stb_8h.html#a43b07eb9cc2e64f304184e1161f133d2',1,'stb.h']]],
+  ['delete_12',['delete',['../math_8h.html#ae0bfca7683a4e9277e5192aa8d1bfe1e',1,'math.h']]],
+  ['delete_5flength_13',['delete_length',['../struct_stb_undo_record.html#a39c1e6f00368b5120114256a17b859cd',1,'StbUndoRecord']]],
+  ['delta_14',['delta',['../structhuffman.html#a04255e3e1c6de74d36a08a1aa4e9537d',1,'huffman']]],
+  ['delta_5fvalue_15',['delta_value',['../struct_codebook.html#a5f68e4a9acd173f69425233d995c37ed',1,'Codebook']]],
+  ['depths_16',['depths',['../structgm3_image.html#a57459159939c4905a065cb74c7626b1e',1,'gm3Image']]],
+  ['dequant_17',['dequant',['../structjpeg.html#aa1b33b2eec4f95a61ae2bb12abc8923d',1,'jpeg']]],
+  ['diffuse_18',['diffuse',['../structgm3_material.html#a56f79cf217f5d2e90464e173d46ecd76',1,'gm3Material']]],
+  ['dimensions_19',['dimensions',['../struct_codebook.html#af2c97899a7fc32b58c0e05d2c357fbd4',1,'Codebook']]],
+  ['direction_20',['direction',['../structgm3_light.html#a785e8d5af073ad988b0195767978c16c',1,'gm3Light']]],
+  ['disabled_21',['disabled',['../structgmw_button_theme.html#a4359cbdba0e488e2ea7ff770900018eb',1,'gmwButtonTheme']]],
+  ['discard_5fsamples_5fdeferred_22',['discard_samples_deferred',['../structstb__vorbis.html#adbacf2120eaa0099f886770c51d633d2',1,'stb_vorbis']]],
+  ['div16_23',['div16',['../stb__image_8c.html#a7bca20397b32c16a40c69145763bb028',1,'stb_image.c']]],
+  ['div4_24',['div4',['../stb__image_8c.html#ad4d47775eeedafd3d0baf604e928926e',1,'stb_image.c']]],
+  ['dnl_25',['DNL',['../stb__image_8c.html#a5f0e72d88591aa28aa05cf900c6b2073',1,'stb_image.c']]],
+  ['down_26',['down',['../struct__gm_mouse.html#a197ec8bf5f40da47d9c94fe9b30c58a1',1,'_gmMouse']]],
+  ['draw_2eh_27',['draw.h',['../draw_8h.html',1,'']]],
+  ['dupes_28',['dupes',['../structstb__dupe.html#af5f211456f48da1134e89541c225dbe6',1,'stb_dupe']]]
 ];
