@@ -174,7 +174,7 @@ const gapi = {
     setDoublePtr(d.mem!, y_ptr, [d.mouse.y]);
     return 0;
   },
-  mouse_down: () => d.mouse.down ? 1 : 0 as number,
+  mouse_down: () => d.mouse.down ? 1 : 0,
 
   resize: (width: number, height: number) => {
     self.postMessage({ type: 'resize', size: [width, height] });
@@ -182,7 +182,7 @@ const gapi = {
   fullscreen: (full: number) => {
     self.postMessage({ type: 'fullscreen', fullscreen: full != 0 });
   },
-  runs: () => d.running ? 1 : 0 as number,
+  runs: () => d.running ? 1 : 0,
   key_down: (t: number, k: number) => {
     return d.keyboard.down.has(String.fromCodePoint(t, k)) ? 1 : 0;
   },
@@ -253,12 +253,11 @@ const gapi = {
     d.mouse = data.mouse;
     d.keyboard = data.keyboard;
 
-    console.log(d.keyboard.down);
 
     const now = Date.now();
     const dt = (now - d.last_t) / 1000;
     setDoublePtr(d.mem!, dt_ptr, [dt]);
     d.last_t = now;
-    return d.running ? 1 : 0 as number;
+    return d.running ? 1 : 0;
   },
 };
