@@ -47,7 +47,7 @@ export default class GamaWASI {
       proc_exit: (code: number) => {
         // A proper implementation should probably terminate the worker.
         // For now, just log it.
-        console.warn(`WASM proc_exit called with code: ${code}. Execution will continue.`);
+        console.warn(`WASM proc_exit called with code: ${code}. Terminating worker.`);
         (self as unknown as Worker).terminate();
       },
       random_get: (buf: number, len: number) => {
