@@ -1,6 +1,6 @@
 import { createDocumentRegistry } from "typescript";
 import { GmColor } from "./color";
-import GamaWASI from "../../wasi.js";
+import GamaWASI from "./wasi.js";
 
 import { CharPtr, DoublePtr, getDoublePtr, getGmColorPtr, Ptr, setDoublePtr, takeString } from "./wasm-utils";
 import { readYieldResult } from "./sab";
@@ -170,8 +170,8 @@ const gapi = {
     });
   },
   mouse_get: (x_ptr: DoublePtr, y_ptr: DoublePtr) => {
-    setDoublePtr(d.mem!, x_ptr, d.mouse.x);
-    setDoublePtr(d.mem!, y_ptr, d.mouse.y);
+    setDoublePtr(d.mem!, x_ptr, [d.mouse.x]);
+    setDoublePtr(d.mem!, y_ptr, [d.mouse.y]);
     return 0;
   },
   mouse_down: () => d.mouse.down ? 1 : 0 as number,
@@ -220,12 +220,12 @@ const gapi = {
     const triangles: Triangle[] = [];
     for (let i = 0; i < ntriangles; i++) {
       const p = getDoublePtr(d.mem!, points_ptr + (8 * 6) * i, 6);
-      const c = getGmColorPtr(d.mem!, colors_ptr + (4 * i), 1)[0] as GmColor;
+      const col = getGmColorPtr(d.mem!, colors_ptr + (4 * i), 1)[0];
       triangles.push({
         a: [p[0], p[1]],
         b: [p[2], p[3]],
         c: [p[4], p[5]],
-        col: c[0],
+        col: col,
       });
     }
     d.cmds.push([

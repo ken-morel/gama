@@ -106,15 +106,27 @@ fn vgama() {
 	}
 }
 
+fn native() {
+	vgama()
+}
+
 fn gama_js() {
 	println('Building gama.js')
-	mut result := execute('cd runners/web/gama && bun run build')
+	result := execute('cd gama.js && bun run build && cd ..')
 	if result.exit_code != 0 {
-		println(term.fail_message('vgama linux build failed : ${result.output}'))
+		println(term.fail_message('  gama.js build failed: ${result.output}'))
 	} else {
-		println('vgama linux build failed : ${result.output}')
+		println('  ${result.output}')
 	}
 	println('  done building gama.js')
+}
+
+fn web() {
+	gama_js()
+	println('Copying gama.js/dist/gama.js to runners/web')
+	os.cp('gama.js/dist/gama.js', 'runners/web/gama.js') or {
+		println(term.fail_message('Error compying gama.js: ${err}'))
+	}
 }
 
 // Get the command from arguments
@@ -137,6 +149,10 @@ if cmd == 'docs' {
 	vgama()
 } else if cmd == 'gama.js' {
 	gama_js()
+} else if cmd == 'web' {
+	web()
+} else if cmd == 'native' {
+	native()
 } else {
 	println(term.fail_message('Unknown command: ${cmd}'))
 	help()

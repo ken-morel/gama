@@ -89,12 +89,12 @@ pub fn (p Project) copy_build_web_artifacts(inst Installation, reset bool) ! {
 	dest_gama := os.join_path(build_dir, 'gama.js')
 	if !os.exists(dest_gama) || reset {
 		os.write_file(dest_gama, conf.substitute(os.read_file(os.join_path(runner_path,
-			'gama', 'dist', 'gama.js')) or {
+			'gama.js')) or {
 			warn = true
 			''
 		})) or { warn = true }
 	}
 	if warn {
-		println(term.warn_message('Error copying some files'))
+		println(term.fail_message('Error copying web build files'))
 	}
 }
