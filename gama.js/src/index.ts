@@ -41,7 +41,6 @@ export default class Gama {
   fpsTarget: number = 30;
   fps: number;
   #lastT: number;
-  #fpsDelay: number = 0;
 
   static FPS_ALPHA: number = 0.8;
 
@@ -79,7 +78,6 @@ export default class Gama {
     const fetchResponse = await fetch(wasmPath);
     const wasmDataBuffer = await fetchResponse.arrayBuffer();
     const worker = new Worker(WORKER_URL, { type: 'module' });
-    console.log(worker);
 
     return new Promise(function(resolve, reject) {
       worker.onerror = (e) => {
