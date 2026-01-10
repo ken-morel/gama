@@ -13,6 +13,7 @@ export type WorkerSuccessMessage = {
 
 export type WorkerInitMessage = {
   wasmData: ArrayBuffer,
+  instanceId: string,
 };
 export type WorkerInitResponse = WorkerSuccessMessage;
 export type WorkerStartMessage = {
@@ -71,7 +72,7 @@ self.onmessage = (msg: MessageEvent<any>) => {
   if (state == 1) {
     state = 0; // deactivate
     let data = msg.data as WorkerInitMessage;
-    const wasi = new GamaWASI();
+    const wasi = new GamaWASI(data.instanceId || "default");
     const wasmImports = { wasi_snapshot_preview1: wasi.importObject, gapi: gapi };
 
     WebAssembly.instantiate(data.wasmData, wasmImports).then(function({ module: mod, instance: inst }) {

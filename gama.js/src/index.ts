@@ -74,7 +74,7 @@ export default class Gama {
     this.#lastT = Date.now();
   }
 
-  public static async create(wasmPath: string): Promise<Gama> {
+  public static async create(wasmPath: string, uuid: string): Promise<Gama> {
     const fetchResponse = await fetch(wasmPath);
     const wasmDataBuffer = await fetchResponse.arrayBuffer();
     const worker = new Worker(WORKER_URL, { type: 'module' });
@@ -86,6 +86,7 @@ export default class Gama {
 
       worker.postMessage({
         wasmData: wasmDataBuffer,
+        instanceId: uuid,
       } as WorkerInitMessage, [wasmDataBuffer]);
 
       worker.onmessage = (msg: MessageEvent<WorkerInitResponse>) => {
@@ -246,7 +247,7 @@ export default class Gama {
           ctx.closePath();
           ctx.fill();
         }
-        }
+      }
         break;
       case 'circle':
         var [x, y, r, c] = args as [number, number, number, GmColor];

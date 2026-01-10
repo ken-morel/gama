@@ -1,110 +1,242 @@
+import { VirtualFileSystem } from './vfs';
+import { takeStringLen } from './wasm-utils';
+
+// WASI constants
+// https://github.com/WebAssembly/WASI/blob/main/phases/snapshot/docs.md
+const WASI_ESUCCESS = 0;
+const WASI_EBADF = 8;
+const WASI_EINVAL = 28;
+const WASI_ENOENT = 44;
+const WASI_ENOSYS = 52;
+const WASI_ENOTSUP = 58;
+
+const WASI_PREOPENTYPE_DIR = 0;
+
 export default class GamaWASI {
   instance: WebAssembly.Instance | null = null;
-  constructor() { }
+  vfs: VirtualFileSystem;
+  mem: () => ArrayBuffer = () => { throw new Error("WASI instance not set") };
+  view: () => DataView = () => { throw new Error("WASI instance not set") };
+
+  constructor(instanceId: string) {
+    this.vfs = new VirtualFileSystem(instanceId);
+  }
 
   setInstance(inst: WebAssembly.Instance) {
     this.instance = inst;
+    this.mem = () => (this.instance!.exports.memory as WebAssembly.Memory).buffer;
+    this.view = () => new DataView(this.mem());
   }
 
   get importObject() {
-    const s = this;
-    const mem = () => (this.instance!.exports.memory as WebAssembly.Memory).buffer;
-    const view = () => new DataView(mem());
-
     return {
       // --- Process & Environment ---
-      proc_exit: (code: number) => console.log(`Process exited: ${code}`),
-      sched_yield: () => 0,
-      environ_sizes_get: (conf, bufsize) => {
-        view().setUint32(conf, 0, true);
-        view().setUint32(bufsize, 0, true);
-        return 0;
+      proc_exit: (code: number) => {
+        console.log(`Process exited with code: ${code}`);
+        // In a real scenario, you might want to terminate the worker or notify the main thread.
       },
-      environ_get: (environ, environ_buf) => 0,
-      args_sizes_get: (argc, argv_buf_size) => {
-        view().setUint32(argc, 0, true);
-        view().setUint32(argv_buf_size, 0, true);
-        return 0;
+      sched_yield: () => WASI_ESUCCESS,
+      environ_sizes_get: (count_ptr: number, buf_size_ptr: number) => {
+        this.view().setUint32(count_ptr, 0, true);
+        this.view().setUint32(buf_size_ptr, 0, true);
+        return WASI_ESUCCESS;
       },
-      args_get: (argv, argv_buf) => 0,
+      environ_get: (environ_ptr: number, environ_buf_ptr: number) => WASI_ESUCCESS,
+      args_sizes_get: (argc_ptr: number, argv_buf_size_ptr: number) => {
+        this.view().setUint32(argc_ptr, 0, true);
+        this.view().setUint32(argv_buf_size_ptr, 0, true);
+        return WASI_ESUCCESS;
+      },
+      args_get: (argv_ptr: number, argv_buf_ptr: number) => WASI_ESUCCESS,
 
       // --- Clock ---
-      clock_time_get: (id, precision, ptr) => {
+      clock_time_get: (id: number, precision: bigint, time_ptr: number) => {
         const now = BigInt(Date.now()) * 1000000n;
-        view().setBigUint64(ptr, now, true);
-        return 0;
+        this.view().setBigUint64(time_ptr, now, true);
+        return WASI_ESUCCESS;
       },
 
       // --- Random ---
-      random_get: (buf, len) => {
-        crypto.getRandomValues(new Uint8Array(mem(), buf, len));
-        return 0;
+      random_get: (buf: number, len: number) => {
+        crypto.getRandomValues(new Uint8Array(this.mem(), buf, len));
+        return WASI_ESUCCESS;
       },
 
-      // --- File Descriptors (The meat of the logic) ---
-      fd_write: (fd, iovs, iovs_len, nwritten) => {
-        let total = 0;
-        for (let i = 0; i < iovs_len; i++) {
-          const ptr = view().getUint32(iovs + i * 8, true);
-          const len = view().getUint32(iovs + i * 8 + 4, true);
-          const txt = new TextDecoder().decode(new Uint8Array(mem(), ptr, len));
-          fd === 1 ? console.log(txt) : console.warn(txt);
-          total += len;
+      // --- File Descriptors ---
+      fd_write: (fd: number, iovs_ptr: number, iovs_len: number, nwritten_ptr: number) => {
+        let nwritten = 0;
+        const iovs = this.readIOVs(iovs_ptr, iovs_len);
+
+        if (fd === 1) { // stdout
+            const text = iovs.map(iov => new TextDecoder().decode(iov.buffer)).join('');
+            console.log(text);
+            nwritten = text.length;
+        } else if (fd === 2) { // stderr
+            const text = iovs.map(iov => new TextDecoder().decode(iov.buffer)).join('');
+            console.error(text);
+            nwritten = text.length;
+        } else {
+            const { nwritten: written, errno } = this.vfs.write(fd, iovs);
+            if (errno !== WASI_ESUCCESS) return errno;
+            nwritten = written;
         }
-        view().setUint32(nwritten, total, true);
-        return 0;
+
+        this.view().setUint32(nwritten_ptr, nwritten, true);
+        return WASI_ESUCCESS;
       },
 
-      fd_pwrite: (fd, iovs, iovs_len, offset, nwritten) => {
-        // Offset is ignored here as we are writing to console
-        return this.importObject.fd_write(fd, iovs, iovs_len, nwritten);
+      fd_read: (fd: number, iovs_ptr: number, iovs_len: number, nread_ptr: number) => {
+          if (fd === 0) { // stdin
+              const input = prompt("Enter input for stdin:");
+              if (input === null) {
+                  this.view().setUint32(nread_ptr, 0, true);
+                  return WASI_ESUCCESS;
+              }
+              const encodedInput = new TextEncoder().encode(input + '\n');
+              const iovs = this.readIOVs(iovs_ptr, iovs_len);
+              let bytesWritten = 0;
+              for (const iov of iovs) {
+                  const write_len = Math.min(iov.buffer.length, encodedInput.length - bytesWritten);
+                  if (write_len === 0) break;
+                  
+                  const dest = new Uint8Array(this.mem(), iov.offset, iov.buffer.length);
+                  dest.set(encodedInput.slice(bytesWritten, bytesWritten + write_len));
+                  bytesWritten += write_len;
+              }
+              
+              this.view().setUint32(nread_ptr, bytesWritten, true);
+              return WASI_ESUCCESS;
+          }
+
+          const iovs = this.readIOVs(iovs_ptr, iovs_len);
+          const { nread, errno } = this.vfs.read(fd, iovs);
+          if (errno !== WASI_ESUCCESS) return errno;
+          
+          this.view().setUint32(nread_ptr, nread, true);
+          return WASI_ESUCCESS;
       },
 
-      fd_read: () => 0,
-      fd_pread: () => 0,
-      fd_close: () => 0,
-      fd_seek: () => 28, // ENOTSUP
-      fd_tell: () => 28,
-      fd_sync: () => 0,
-      fd_datasync: () => 0,
-      fd_advise: () => 0,
-      fd_allocate: () => 28,
+      fd_pwrite: () => WASI_ENOSYS,
+      fd_pread: () => WASI_ENOSYS,
 
-      fd_fdstat_get: (fd, buf) => {
-        const v = view();
-        v.setUint8(buf, 1); // Filetype: Character Device
-        v.setUint16(buf + 2, 0, true); // Flags
-        v.setBigUint64(buf + 8, 0n, true); // Rights base
-        v.setBigUint64(buf + 16, 0n, true); // Rights inheriting
-        return 0;
+      fd_close: (fd: number) => this.vfs.close(fd),
+
+      fd_seek: (fd: number, offset: bigint, whence: number, new_offset_ptr: number) => {
+          const { new_offset, errno } = this.vfs.seek(fd, offset, whence);
+          if (errno !== WASI_ESUCCESS) return errno;
+          this.view().setBigUint64(new_offset_ptr, BigInt(new_offset), true);
+          return WASI_ESUCCESS;
       },
 
-      fd_fdstat_set_flags: () => 0,
-      fd_filestat_get: () => 28,
-      fd_filestat_set_size: () => 28,
-      fd_filestat_set_times: () => 28,
-      fd_prestat_get: () => 8, // EBADF (No preopened dirs)
-      fd_prestat_dir_name: () => 8,
-      fd_readdir: () => 28,
-      fd_renumber: () => 28,
+      fd_tell: (fd: number, offset_ptr: number) => {
+          const { offset, errno } = this.vfs.tell(fd);
+          if (errno !== WASI_ESUCCESS) return errno;
+          this.view().setBigUint64(offset_ptr, BigInt(offset), true);
+          return WASI_ESUCCESS;
+      },
+
+      fd_sync: () => WASI_ESUCCESS,
+      fd_datasync: () => WASI_ESUCCESS,
+      fd_advise: () => WASI_ENOSYS,
+      fd_allocate: () => WASI_ENOSYS,
+
+      fd_fdstat_get: (fd: number, buf_ptr: number) => {
+        const { stat, errno } = this.vfs.getFdStat(fd);
+        if (errno !== WASI_ESUCCESS) return errno;
+        this.view().setUint8(buf_ptr, stat.fs_filetype);
+        this.view().setUint16(buf_ptr + 2, stat.fs_flags, true);
+        this.view().setBigUint64(buf_ptr + 8, stat.fs_rights_base, true);
+        this.view().setBigUint64(buf_ptr + 16, stat.fs_rights_inheriting, true);
+        return WASI_ESUCCESS;
+      },
+
+      fd_fdstat_set_flags: () => WASI_ENOSYS,
+
+      fd_filestat_get: (fd: number, buf_ptr: number) => {
+          const { stat, errno } = this.vfs.fstat(fd);
+          if (errno !== WASI_ESUCCESS) return errno;
+          this.writeStat(buf_ptr, stat);
+          return WASI_ESUCCESS;
+      },
+      fd_filestat_set_size: () => WASI_ENOSYS,
+      fd_filestat_set_times: () => WASI_ENOSYS,
+
+      fd_prestat_get: (fd: number, buf_ptr: number) => {
+        // We don't have preopened directories, so we return EBADF for any fd.
+        if(fd === 3) {
+            this.view().setUint8(buf_ptr, WASI_PREOPENTYPE_DIR);
+            this.view().setUint32(buf_ptr + 4, 1, true); // length of "."
+            return WASI_ESUCCESS;
+        }
+        return WASI_EBADF;
+      },
+      fd_prestat_dir_name: (fd: number, path_ptr: number, path_len: number) => {
+        if (fd === 3) {
+            if (path_len > 0) {
+                new Uint8Array(this.mem(), path_ptr, 1)[0] = ".".charCodeAt(0);
+                return WASI_ESUCCESS;
+            }
+        }
+        return WASI_EINVAL;
+      },
+      fd_readdir: () => WASI_ENOSYS,
+      fd_renumber: () => WASI_ENOSYS,
 
       // --- Path Operations ---
-      path_open: () => 44, // ENOENT
-      path_create_directory: () => 28,
-      path_filestat_get: () => 44,
-      path_filestat_set_times: () => 28,
-      path_link: () => 28,
-      path_readlink: () => 44,
-      path_remove_directory: () => 28,
-      path_rename: () => 28,
-      path_symlink: () => 28,
-      path_unlink_file: () => 28,
+      path_open: (dirfd: number, dirflags: number, path_ptr: number, path_len: number, oflags: number, fs_rights_base: bigint, fs_rights_inheriting: bigint, fdflags: number, fd_ptr: number) => {
+        const path = takeStringLen(this.instance!.exports.memory as WebAssembly.Memory, path_ptr, path_len);
+        const newFd = this.vfs.open(path, oflags, fs_rights_base, fdflags);
+        if (newFd < 0) {
+            return -newFd;
+        }
+        this.view().setUint32(fd_ptr, newFd, true);
+        return WASI_ESUCCESS;
+      },
+      path_create_directory: () => WASI_ENOSYS,
+      path_filestat_get: (dirfd: number, flags: number, path_ptr: number, path_len: number, buf_ptr: number) => {
+          const path = takeStringLen(this.instance!.exports.memory as WebAssembly.Memory, path_ptr, path_len);
+          const { stat, errno } = this.vfs.stat(path);
+          if (errno !== WASI_ESUCCESS) return errno;
+          this.writeStat(buf_ptr, stat);
+          return WASI_ESUCCESS;
+      },
+      path_filestat_set_times: () => WASI_ENOSYS,
+      path_link: () => WASI_ENOSYS,
+      path_readlink: () => WASI_ENOSYS,
+      path_remove_directory: () => WASI_ENOSYS,
+      path_rename: () => WASI_ENOSYS,
+      path_symlink: () => WASI_ENOSYS,
+      path_unlink_file: (dirfd: number, path_ptr: number, path_len: number) => {
+          const path = takeStringLen(this.instance!.exports.memory as WebAssembly.Memory, path_ptr, path_len);
+          return this.vfs.unlink(path);
+      },
 
       // --- Networking ---
-      poll_oneoff: () => 28,
-      sock_recv: () => 28,
-      sock_send: () => 28,
-      sock_shutdown: () => 28,
+      poll_oneoff: () => WASI_ENOSYS,
+      sock_recv: () => WASI_ENOSYS,
+      sock_send: () => WASI_ENOSYS,
+      sock_shutdown: () => WASI_ENOSYS,
     };
+  }
+
+  private readIOVs(iovs_ptr: number, iovs_len: number) {
+      const iovs = [];
+      for (let i = 0; i < iovs_len; i++) {
+          const ptr = this.view().getUint32(iovs_ptr + i * 8, true);
+          const len = this.view().getUint32(iovs_ptr + i * 8 + 4, true);
+          iovs.push({ buffer: new Uint8Array(this.mem(), ptr, len), offset: ptr });
+      }
+      return iovs;
+  }
+
+  private writeStat(buf_ptr: number, stat: any) {
+      this.view().setBigUint64(buf_ptr, BigInt(stat.dev), true);
+      this.view().setBigUint64(buf_ptr + 8, BigInt(stat.ino), true);
+      this.view().setUint8(buf_ptr + 16, stat.filetype);
+      this.view().setUint8(buf_ptr + 24, stat.nlink);
+      this.view().setBigUint64(buf_ptr + 32, BigInt(stat.size), true);
+      this.view().setBigUint64(buf_ptr + 40, stat.atim, true);
+      this.view().setBigUint64(buf_ptr + 48, stat.mtim, true);
+      this.view().setBigUint64(buf_ptr + 56, stat.ctim, true);
   }
 }
