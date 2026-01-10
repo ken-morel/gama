@@ -72,7 +72,7 @@ self.onmessage = (msg: MessageEvent<any>) => {
   if (state == 1) {
     state = 0; // deactivate
     let data = msg.data as WorkerInitMessage;
-    const wasi = new GamaWASI(data.instanceId || "default");
+    const wasi = new GamaWASI();
     const wasmImports = { wasi_snapshot_preview1: wasi.importObject, gapi: gapi };
 
     WebAssembly.instantiate(data.wasmData, wasmImports).then(function({ module: mod, instance: inst }) {
