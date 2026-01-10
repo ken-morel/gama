@@ -251,7 +251,7 @@ export default class Gama {
           ctx.closePath();
           ctx.fill();
         }
-      };
+        }
         break;
       case 'circle':
         var [x, y, r, c] = args as [number, number, number, GmColor];
