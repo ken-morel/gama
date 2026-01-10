@@ -27,7 +27,7 @@ int main() {
   fflush(stderr);
 
   char buff[1024];
-  fscanf(stdin, "%s", buff);
+  fscanf(stdin, "%1023s", buff);
   printf("%s", buff);
 
   do {
