@@ -164,7 +164,7 @@ export default class Gama {
     const delay = targetFrameTime - elapsed;
     this.#delayT += (delay - this.#delayT) / 10;
 
-    if (this.#delayT)
+    if (this.#delayT > 1)
       await new Promise(resolve => setTimeout(resolve, this.#delayT));
 
 
