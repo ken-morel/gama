@@ -3,7 +3,7 @@ import { GmKeyCode, keyCode } from "./keyboard";
 
 export type YieldResult = {
   mouse: { x: number, y: number, down: boolean },
-  keyboard: { down: GmKeyCode[] }
+  keyboard: { down: Set<GmKeyCode> }
 };
 
 export function writeYieldResult(buf: SharedArrayBuffer, offset: number, res: YieldResult) {
@@ -18,7 +18,7 @@ export function writeYieldResult(buf: SharedArrayBuffer, offset: number, res: Yi
   offset += 1;
 
   // Write keyboard data (key count followed by key codes)
-  const keyCount = res.keyboard.down.length;
+  const keyCount = res.keyboard.down.size;
   view.setUint8(offset, keyCount);
   offset += 1;
 
@@ -46,9 +46,9 @@ export function readYieldResult(buf: SharedArrayBuffer, offset: number): YieldRe
 
   const end = offset + keyCount * 2;
 
-  const downKeys: GmKeyCode[] = [];
+  const downKeys = new Set<GmKeyCode>();
   while (offset < end)
-    downKeys.push(keyCode(view.getUint8(offset++), view.getUint8(offset++)));
+    downKeys.add(keyCode(view.getUint8(offset++), view.getUint8(offset++)));
 
   return {
     mouse,
