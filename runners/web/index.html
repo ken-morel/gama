@@ -43,9 +43,9 @@
   <script type="module">
     import Gama from "./gama.js";
 
-    const game = await Gama.create("./{{name}}.wasm");
+    const game = await Gama.create("./{{name}}.wasm", '{{uuid}}');
     game.attach(canvas);
-     game.bindKeyboard(window);
+    game.bindKeyboard(window);
     game.start();
     window.game = game;
     console.log(game);
