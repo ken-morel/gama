@@ -15,7 +15,9 @@ export function getCodeKey(code: string): string | null {
   return null;
 }
 
-export const KEYS = {
+export const KEYS: {
+  [key: string]: string,
+} = {
   // Direction keys -> 'a' class
   "ArrowUp": "au",
   "ArrowDown": "ad",

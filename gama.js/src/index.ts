@@ -1,7 +1,7 @@
 declare const WORKER_CODE: string;
 
 import { GmColor, gmcToCss } from "./color";
-import { getKeyCode } from "./keyboard";
+import { getKeyCode, GmKeyCode } from "./keyboard";
 import { writeYieldResult, YieldResult } from "./sab";
 import type { WorkerSuccessMessage, WorkerInitMessage, WorkerInitResponse, WorkerStartMessage, Triangle } from "./worker";
 
@@ -36,16 +36,7 @@ export default class Gama {
   buffer32: Int32Array;
   output: CanvasRenderingContext2D | null = null;
 
-  yielding: YieldResult = {
-    keyboard: {
-      down: []
-    },
-    mouse: {
-      down: false,
-      x: 0,
-      y: 0,
-    }
-  };
+  yielding: YieldResult;
   sizemode: "natural" | "fixed" = "natural";
   fpsTarget: number = 30;
   fps: number;
@@ -55,6 +46,16 @@ export default class Gama {
   static FPS_ALPHA: number = 0.8;
 
   private constructor(w: Worker) {
+    this.yielding = {
+      keyboard: {
+        down: new Set<GmKeyCode>()
+      },
+      mouse: {
+        down: false,
+        x: 0,
+        y: 0,
+      }
+    };
     this.worker = w;
     this.canvas = {
       front: new OffscreenCanvas(500, 500),
@@ -375,11 +376,11 @@ export default class Gama {
 
   public bindKeyboard(elt: HTMLElement) {
     elt.addEventListener('keydown', e => {
-      this.yielding.keyboard.down.push(getKeyCode(e.key));
+      this.yielding.keyboard.down.add(getKeyCode(e.key));
     });
     elt.addEventListener('keyup', e => {
       const code = getKeyCode(e.key);
-      this.yielding.keyboard.down = this.yielding.keyboard.down.filter(c => c != code)
+      this.yielding.keyboard.down.delete(code)
     });
   }
   public bindMouse(elt: HTMLElement) {

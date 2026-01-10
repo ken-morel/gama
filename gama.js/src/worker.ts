@@ -4,6 +4,7 @@ import GamaWASI from "./wasi.js";
 
 import { CharPtr, DoublePtr, getDoublePtr, getGmColorPtr, Ptr, setDoublePtr, takeString } from "./wasm-utils";
 import { readYieldResult } from "./sab";
+import { GmKeyCode } from "./keyboard";
 
 
 export type WorkerSuccessMessage = {
@@ -48,11 +49,11 @@ const d: {
     down: boolean;
   },
   keyboard: {
-    down: string[]
+    down: Set<GmKeyCode>
   }
   last_t: number,
   image_counter: number
-} = { mod: null, inst: null, buff: null, cmds: [], size: [500, 500], mem: null, running: true, mouse: { x: 0, y: 0, down: false }, last_t: 0, keyboard: { down: [] }, image_counter: 1, buff32: null };
+} = { mod: null, inst: null, buff: null, cmds: [], size: [500, 500], mem: null, running: true, mouse: { x: 0, y: 0, down: false }, last_t: 0, keyboard: { down: new Set<GmKeyCode> }, image_counter: 1, buff32: null };
 
 
 let state: number = 1;
@@ -184,7 +185,7 @@ const gapi = {
   },
   runs: () => d.running ? 1 : 0 as number,
   key_down: (t: number, k: number) => {
-    return d.keyboard.down.includes(String.fromCodePoint(t, k)) ? 1 : 0;
+    return d.keyboard.down.has(String.fromCodePoint(t, k)) ? 1 : 0;
   },
   create_image: (data_ptr: CharPtr, width: number, height: number) => {
     if (data_ptr * width * height == 0) return 1;
@@ -252,6 +253,8 @@ const gapi = {
     const data = readYieldResult(d.buff!, 1);
     d.mouse = data.mouse;
     d.keyboard = data.keyboard;
+
+    console.log(d.keyboard.down);
 
     const now = Date.now();
     const dt = (now - d.last_t) / 1000;
