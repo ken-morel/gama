@@ -50,8 +50,10 @@ pub fn (p Project) bake(inst Installation) ! {
 				println(term.fail_message('Failed to create parent dir for ${dest_h}'))
 				return
 			}
-			os.write_file(dest_h, content) or {
-				println(term.fail_message('Failed to write to ${dest_h}'))
+			if content != '' {
+				os.write_file(dest_h, content) or {
+					println(term.fail_message('Failed to write to ${dest_h}'))
+				}
 			}
 		}
 	})
