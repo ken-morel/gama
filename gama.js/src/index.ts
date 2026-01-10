@@ -46,8 +46,13 @@ export default class Gama {
       y: 0,
     }
   };
-
   sizemode: "natural" | "fixed" = "natural";
+  fpsTarget: number = 30;
+  fps: number;
+  #lastT: number;
+  #fpsDelay: number = 0;
+
+  static FPS_ALPHA: number = 0.8;
 
   private constructor(w: Worker) {
     this.worker = w;
@@ -62,7 +67,11 @@ export default class Gama {
     this.buffer = new SharedArrayBuffer(1024);
     this.buffer32 = new Int32Array(this.buffer);
     this.worker.onerror = this.workerError;
+
     this.worker.onmessage = null;
+
+    this.fps = this.fpsTarget;
+    this.#lastT = Date.now();
   }
 
   public static create(wasmPath: string): Promise<Gama> {
@@ -148,13 +157,30 @@ export default class Gama {
     this.ctx.back.clearRect(0, 0, this.canvas.back.width, this.canvas.back.height);
     this.ctx.back.drawImage(this.canvas.front, 0, 0);
     this.ctx.front.clearRect(0, 0, this.canvas.front.width, this.canvas.front.height);
+    const now = Date.now();
+    const elapsed = now - this.#lastT;
+
+    const targetFrameTime = 1000 / this.fpsTarget;
+    const delay = targetFrameTime - elapsed;
+
+    if (delay > 1)
+      await new Promise(resolve => setTimeout(resolve, delay));
+
+
+    const frameEndTime = Date.now();
+    const frameDuration = frameEndTime - this.#lastT;
+
+    if (frameDuration > 0) {
+      const cfps = 1000 / frameDuration;
+      this.fps = (Gama.FPS_ALPHA * this.fps) + ((1 - Gama.FPS_ALPHA) * cfps);
+    }
+    this.#lastT = frameEndTime;
+
     yield;
-    await new Promise(resolve => setTimeout(resolve, 50));
     await new Promise<void>((resolve) => {
       requestAnimationFrame(() => {
         this.output?.clearRect(0, 0, this.output.canvas.width, this.output.canvas.height);
         this.output?.drawImage(this.canvas.back, 0, 0);
-
         resolve();
       });
     });
@@ -202,7 +228,7 @@ export default class Gama {
         var [x1, y1, x2, y2, x3, y3, col] = args as number[];
 
         this._fill(col);
-        this._stroke(col);
+        this.ctx.front.lineWidth = 0;
 
         ctx.beginPath();
         ctx.moveTo(...this._c_coord(x1, y1));
@@ -216,11 +242,12 @@ export default class Gama {
         var triangles = args[0];
         for (const { a, b, c, col } of triangles as Triangle[]) {
           ctx.beginPath();
-          ctx.moveTo(...this._c_coord(...a));
-          ctx.lineTo(...this._c_coord(...a));
-          ctx.lineTo(...this._c_coord(...a));
-          ctx.closePath();
           this._fill(col);
+          this.ctx.front.lineWidth = 0;
+          ctx.moveTo(...this._c_coord(...a));
+          ctx.lineTo(...this._c_coord(...b));
+          ctx.lineTo(...this._c_coord(...c));
+          ctx.closePath();
           ctx.fill();
         }
       };
@@ -302,7 +329,6 @@ export default class Gama {
     if (this.output) {
       this.output.canvas.style.backgroundColor = gmcToCss(col);
       this.output.canvas.style.background = gmcToCss(col);
-      console.log(col, gmcToCss(col));
     } else
       console.error("Gama instance has no output");
   }
