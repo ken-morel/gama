@@ -1,110 +1,153 @@
+// A simplified WASI implementation that only handles stdio (stdin, stdout, stderr)
+// and stubs out all file system and network access.
+
+import { takeStringLen } from './wasm-utils';
+
+// WASI constants
+const WASI_ESUCCESS = 0;   // No error occurred. System call completed successfully.
+const WASI_EBADF = 8;      // Bad file descriptor.
+const WASI_EINVAL = 28;    // Invalid argument.
+const WASI_ENOSYS = 52;    // Function not implemented.
+
+const WASI_FILETYPE_CHARACTER_DEVICE = 2;
+const WASI_FDFLAG_APPEND = 1;
+
 export default class GamaWASI {
   instance: WebAssembly.Instance | null = null;
+  mem: () => ArrayBuffer = () => { throw new Error("WASI instance not set") };
+  view: () => DataView = () => { throw new Error("WASI instance not set") };
+
   constructor() { }
 
   setInstance(inst: WebAssembly.Instance) {
     this.instance = inst;
+    this.mem = () => (this.instance!.exports.memory as WebAssembly.Memory).buffer;
+    this.view = () => new DataView(this.mem());
   }
 
   get importObject() {
-    const s = this;
-    const mem = () => (this.instance!.exports.memory as WebAssembly.Memory).buffer;
-    const view = () => new DataView(mem());
-
     return {
-      // --- Process & Environment ---
-      proc_exit: (code: number) => console.log(`Process exited: ${code}`),
-      sched_yield: () => 0,
-      environ_sizes_get: (conf, bufsize) => {
-        view().setUint32(conf, 0, true);
-        view().setUint32(bufsize, 0, true);
-        return 0;
+      // --- Stubs for unused/unsupported functions ---
+      args_sizes_get: (argc_ptr: number, argv_buf_size_ptr: number) => {
+        this.view().setUint32(argc_ptr, 0, true);
+        this.view().setUint32(argv_buf_size_ptr, 0, true);
+        return WASI_ESUCCESS;
       },
-      environ_get: (environ, environ_buf) => 0,
-      args_sizes_get: (argc, argv_buf_size) => {
-        view().setUint32(argc, 0, true);
-        view().setUint32(argv_buf_size, 0, true);
-        return 0;
+      args_get: (argv: number, argv_buf: number) => WASI_ESUCCESS,
+      environ_sizes_get: (count_ptr: number, buf_size_ptr: number) => {
+        this.view().setUint32(count_ptr, 0, true);
+        this.view().setUint32(buf_size_ptr, 0, true);
+        return WASI_ESUCCESS;
       },
-      args_get: (argv, argv_buf) => 0,
+      environ_get: (environ: number, environ_buf: number) => WASI_ESUCCESS,
+      clock_time_get: (id: number, precision: bigint, time_ptr: number) => {
+        this.view().setBigUint64(time_ptr, BigInt(Date.now()) * 1000000n, true);
+        return WASI_ESUCCESS;
+      },
+      proc_exit: (code: number) => {
+        // A proper implementation should probably terminate the worker.
+        // For now, just log it.
+        console.warn(`WASM proc_exit called with code: ${code}. Terminating worker.`);
+        (self as unknown as Worker).terminate();
+      },
+      random_get: (buf: number, len: number) => {
+        crypto.getRandomValues(new Uint8Array(this.mem(), buf, len));
+        return WASI_ESUCCESS;
+      },
+      sched_yield: () => WASI_ESUCCESS,
 
-      // --- Clock ---
-      clock_time_get: (id, precision, ptr) => {
-        const now = BigInt(Date.now()) * 1000000n;
-        view().setBigUint64(ptr, now, true);
-        return 0;
-      },
+      // --- Stdio handling ---
+      fd_write: (fd: number, iovs_ptr: number, iovs_len: number, nwritten_ptr: number) => {
+        if (fd !== 1 && fd !== 2) return WASI_EBADF;
 
-      // --- Random ---
-      random_get: (buf, len) => {
-        crypto.getRandomValues(new Uint8Array(mem(), buf, len));
-        return 0;
-      },
+        const iovs = this.readIOVs(iovs_ptr, iovs_len);
+        const text = iovs.map(iov => new TextDecoder().decode(iov.buffer)).join('');
 
-      // --- File Descriptors (The meat of the logic) ---
-      fd_write: (fd, iovs, iovs_len, nwritten) => {
-        let total = 0;
-        for (let i = 0; i < iovs_len; i++) {
-          const ptr = view().getUint32(iovs + i * 8, true);
-          const len = view().getUint32(iovs + i * 8 + 4, true);
-          const txt = new TextDecoder().decode(new Uint8Array(mem(), ptr, len));
-          fd === 1 ? console.log(txt) : console.warn(txt);
-          total += len;
+        if (fd === 1) console.warn(`[stdout] ${text}`);
+        if (fd === 2) console.error(`[stderr] ${text}`);
+
+        const nwritten = iovs.reduce((sum, iov) => sum + iov.buffer.length, 0);
+        this.view().setUint32(nwritten_ptr, nwritten, true);
+        return WASI_ESUCCESS;
+      },
+      fd_read: (fd: number, iovs_ptr: number, iovs_len: number, nread_ptr: number) => {
+        if (fd !== 0) return WASI_EBADF;
+
+        const funnyMessages = ["hello from gama", "gama the game", "gamawin!!"];
+        const input = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+        const encodedInput = new TextEncoder().encode(input + '\n');
+
+        const iovs = this.readIOVs(iovs_ptr, iovs_len);
+        let bytesWritten = 0;
+        for (const iov of iovs) {
+          const write_len = Math.min(iov.buffer.length, encodedInput.length - bytesWritten);
+          if (write_len === 0) break;
+
+          const dest = new Uint8Array(this.mem(), iov.offset, iov.buffer.length);
+          dest.set(encodedInput.slice(bytesWritten, bytesWritten + write_len));
+          bytesWritten += write_len;
         }
-        view().setUint32(nwritten, total, true);
-        return 0;
+
+        this.view().setUint32(nread_ptr, bytesWritten, true);
+        return WASI_ESUCCESS;
+      },
+      fd_fdstat_get: (fd: number, buf_ptr: number) => {
+        if (fd > 2) return WASI_EBADF;
+
+        // All stdio handles are character devices
+        this.view().setUint8(buf_ptr, WASI_FILETYPE_CHARACTER_DEVICE);
+        this.view().setUint16(buf_ptr + 2, WASI_FDFLAG_APPEND, true);
+        this.view().setBigUint64(buf_ptr + 8, 0n, true);
+        this.view().setBigUint64(buf_ptr + 16, 0n, true);
+        return WASI_ESUCCESS;
       },
 
-      fd_pwrite: (fd, iovs, iovs_len, offset, nwritten) => {
-        // Offset is ignored here as we are writing to console
-        return this.importObject.fd_write(fd, iovs, iovs_len, nwritten);
-      },
+      // --- All other functions are stubbed to return ENOSYS (not implemented) ---
+      fd_close: (fd: number) => (fd > 2 ? WASI_ENOSYS : WASI_ESUCCESS),
+      fd_seek: () => WASI_ENOSYS,
+      fd_tell: () => WASI_ENOSYS,
+      fd_sync: () => WASI_ENOSYS,
+      fd_datasync: () => WASI_ENOSYS,
+      fd_filestat_get: () => WASI_ENOSYS,
+      fd_prestat_get: () => WASI_EBADF, // No preopened dirs
+      fd_prestat_dir_name: () => WASI_EINVAL,
 
-      fd_read: () => 0,
-      fd_pread: () => 0,
-      fd_close: () => 0,
-      fd_seek: () => 28, // ENOTSUP
-      fd_tell: () => 28,
-      fd_sync: () => 0,
-      fd_datasync: () => 0,
-      fd_advise: () => 0,
-      fd_allocate: () => 28,
+      // Path functions are not supported
+      path_open: () => WASI_ENOSYS,
+      path_filestat_get: () => WASI_ENOSYS,
+      path_unlink_file: () => WASI_ENOSYS,
 
-      fd_fdstat_get: (fd, buf) => {
-        const v = view();
-        v.setUint8(buf, 1); // Filetype: Character Device
-        v.setUint16(buf + 2, 0, true); // Flags
-        v.setBigUint64(buf + 8, 0n, true); // Rights base
-        v.setBigUint64(buf + 16, 0n, true); // Rights inheriting
-        return 0;
-      },
-
-      fd_fdstat_set_flags: () => 0,
-      fd_filestat_get: () => 28,
-      fd_filestat_set_size: () => 28,
-      fd_filestat_set_times: () => 28,
-      fd_prestat_get: () => 8, // EBADF (No preopened dirs)
-      fd_prestat_dir_name: () => 8,
-      fd_readdir: () => 28,
-      fd_renumber: () => 28,
-
-      // --- Path Operations ---
-      path_open: () => 44, // ENOENT
-      path_create_directory: () => 28,
-      path_filestat_get: () => 44,
-      path_filestat_set_times: () => 28,
-      path_link: () => 28,
-      path_readlink: () => 44,
-      path_remove_directory: () => 28,
-      path_rename: () => 28,
-      path_symlink: () => 28,
-      path_unlink_file: () => 28,
-
-      // --- Networking ---
-      poll_oneoff: () => 28,
-      sock_recv: () => 28,
-      sock_send: () => 28,
-      sock_shutdown: () => 28,
+      // And the rest...
+      fd_pwrite: () => WASI_ENOSYS,
+      fd_pread: () => WASI_ENOSYS,
+      fd_renumber: () => WASI_ENOSYS,
+      fd_allocate: () => WASI_ENOSYS,
+      fd_advise: () => WASI_ENOSYS,
+      fd_readdir: () => WASI_ENOSYS,
+      fd_filestat_set_size: () => WASI_ENOSYS,
+      fd_filestat_set_times: () => WASI_ENOSYS,
+      fd_fdstat_set_flags: () => WASI_ENOSYS,
+      path_create_directory: () => WASI_ENOSYS,
+      path_filestat_set_times: () => WASI_ENOSYS,
+      path_link: () => WASI_ENOSYS,
+      path_readlink: () => WASI_ENOSYS,
+      path_remove_directory: () => WASI_ENOSYS,
+      path_rename: () => WASI_ENOSYS,
+      path_symlink: () => WASI_ENOSYS,
+      poll_oneoff: () => WASI_ENOSYS,
+      sock_recv: () => WASI_ENOSYS,
+      sock_send: () => WASI_ENOSYS,
+      sock_shutdown: () => WASI_ENOSYS,
     };
+  }
+
+  private readIOVs(iovs_ptr: number, iovs_len: number) {
+    const iovs = [];
+    for (let i = 0; i < iovs_len; i++) {
+      const ptr = this.view().getUint32(iovs_ptr + i * 8, true);
+      const len = this.view().getUint32(iovs_ptr + i * 8 + 4, true);
+      iovs.push({ buffer: new Uint8Array(this.mem(), ptr, len), offset: ptr });
+    }
+    return iovs;
   }
 }
