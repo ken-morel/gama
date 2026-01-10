@@ -1,4 +1,3 @@
-import { createDocumentRegistry } from "typescript";
 import { GmColor } from "./color";
 import GamaWASI from "./wasi.js";
 
