@@ -107,7 +107,7 @@ export default class Gama {
   private async handleWorkerMessage(msg: MessageEvent) {
     switch (msg.data.type as string) {
       case "resize":
-        var [w, h] = msg.data.size;
+        const [w, h] = msg.data.size;
         if (w == 0 && h == 0) {
           this.sizemode = "natural";
           this.updateSize();
