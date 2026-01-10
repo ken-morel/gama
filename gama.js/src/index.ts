@@ -75,16 +75,13 @@ export default class Gama {
     this.#lastT = Date.now();
   }
 
-  public static create(wasmPath: string): Promise<Gama> {
-    return new Promise(async function(resolve, reject) {
-      const fetchResponse = await fetch(wasmPath);
-      const wasmDataBuffer = await fetchResponse.arrayBuffer();
+  public static async create(wasmPath: string): Promise<Gama> {
+    const fetchResponse = await fetch(wasmPath);
+    const wasmDataBuffer = await fetchResponse.arrayBuffer();
+    const worker = new Worker(WORKER_URL, { type: 'module' });
+    console.log(worker);
 
-      const worker = new Worker(WORKER_URL, { type: 'module' });
-
-      console.log(worker);
-
-
+    return new Promise(function(resolve, reject) {
       worker.onerror = (e) => {
         reject(e);
       };
