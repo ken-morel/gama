@@ -38,4 +38,4 @@ gmdi(pos2, p);
 // <gmPos(0, 0, 0)>
 ```
 
-Several other printing functions exist, and you can have them in the [debug.h reference](/reference/debug_8h.html).
+Several other printing functions exist, and you can have them in the <a href="/reference/debug_8h.html">debug.h reference</a>.

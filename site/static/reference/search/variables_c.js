@@ -1,4 +1,25 @@
 var searchData=
 [
-  ['length_0',['length',['../structgm_sprite_anim.html#a78cff7f6ef84454a0fe2c112b13683d5',1,'gmSpriteAnim']]]
+  ['last_5fdecoded_5fsample_0',['last_decoded_sample',['../struct_probed_page.html#ad0e2a35e768907ee5f1b7ef9fed20e81',1,'ProbedPage']]],
+  ['last_5fpage_1',['last_page',['../structstb__vorbis.html#a1d215573f8b91a85a9775fa38d81760c',1,'stb_vorbis']]],
+  ['last_5fseg_2',['last_seg',['../structstb__vorbis.html#a28cbcd18e6bd3f2749814b40505cab63',1,'stb_vorbis']]],
+  ['last_5fseg_5fwhich_3',['last_seg_which',['../structstb__vorbis.html#afe2aa2e9d9536a1f8eed69da2d59888d',1,'stb_vorbis']]],
+  ['lastposition_4',['lastPosition',['../struct__gm_mouse.html#accc5281df2f3dbc6355b57d62ebcd680',1,'_gmMouse']]],
+  ['len_5',['len',['../structstb____arr.html#acd941aed9dd5c1b35f808015f0fdabd6',1,'stb__arr']]],
+  ['length_6',['length',['../structgm_sprite_anim.html#a78cff7f6ef84454a0fe2c112b13683d5',1,'gmSpriteAnim::length'],['../structgm_str.html#af5a72439ffc10b8def62f47359c5b035',1,'gmStr::length'],['../structchunk.html#a6fe638eea7aa1551943264ba43487c8e',1,'chunk::length'],['../structstbds__array__header.html#a83d760c86029812fc2f973283062aefd',1,'stbds_array_header::length']]],
+  ['lflags_7',['lflags',['../structstbi__gif__struct.html#a01e6981357bbd283177f70f87050a49d',1,'stbi_gif_struct']]],
+  ['light_8',['light',['../structgm3_scene.html#a1e57557a9836f2ea433ec6ab70094644',1,'gm3Scene']]],
+  ['lighting_9',['lighting',['../structstbvox__input__description.html#a6b64e4cf0061bfe6dbae7981a002ab77',1,'stbvox_input_description']]],
+  ['lighting_5fat_5fvertices_10',['lighting_at_vertices',['../structstbvox__input__description.html#a7cf0e2be2bcfa65b42ad93b2f9d50cce',1,'stbvox_input_description']]],
+  ['limit_11',['limit',['../structstb____arr.html#a9c55b19519ed39eb476ddf62e0f9cd4c',1,'stb__arr']]],
+  ['line0_12',['line0',['../structstbi__resample.html#adf2ed356ae69e3652494a23c61cefd06',1,'stbi_resample']]],
+  ['line1_13',['line1',['../structstbi__resample.html#a44d0fe17e332a57fa877f66fc96eed33',1,'stbi_resample']]],
+  ['line_5fnumber_14',['line_number',['../structstb__lex__location.html#abb16a96f4418f8823a5a3aa63547e1e1',1,'stb_lex_location']]],
+  ['line_5foffset_15',['line_offset',['../structstb__lex__location.html#a868620c2d123928b8b77e2de57ce0c29',1,'stb_lex_location']]],
+  ['line_5fsize_16',['line_size',['../structstbi__gif__struct.html#a5b7d7625c253025ff5ee4169afbf06b7',1,'stbi_gif_struct']]],
+  ['linebuf_17',['linebuf',['../structjpeg.html#afebe864b6aca1a228d8e6b67b00dd67b',1,'jpeg']]],
+  ['loca_18',['loca',['../structstbtt__fontinfo.html#a15344195b181b50bde4f59ae7ca248c0',1,'stbtt_fontinfo']]],
+  ['lookup_5ftype_19',['lookup_type',['../struct_codebook.html#addaf4509eb971e141389d6fefe3509c4',1,'Codebook']]],
+  ['lookup_5fvalues_20',['lookup_values',['../struct_codebook.html#abf078c998edfa8432087a5df96810c24',1,'Codebook']]],
+  ['lpal_21',['lpal',['../structstbi__gif__struct.html#a3052a5e7b9c7a78349afaf100246cac6',1,'stbi_gif_struct']]]
 ];

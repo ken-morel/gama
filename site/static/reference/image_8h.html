@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.15.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gama C Library: lib/image.h File Reference</title>
+<title>Gama C Library: lib/gama/image.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -92,26 +92,114 @@ $(function(){initNavTree('image_8h.html','',''); });
   <div class="headertitle"><div class="title">image.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="gapi_8h_source.html">gapi.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="stb__image_8h_source.html">../stb/stb_image.h</a>&quot;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="gapi_8h_source.html">gapi.h</a>&quot;</code><br />
 </div>
 <p><a href="image_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
+<tr class="memitem:gmImageData" id="r_gmImageData"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm_image_data.html">gmImageData</a></td></tr>
 <tr class="memitem:gmImage" id="r_gmImage"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm_image.html">gmImage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing an image with handle and dimensions.  <a href="structgm_image.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a18372412ad2fc3ce1e3240b3cf0efe78" id="r_a18372412ad2fc3ce1e3240b3cf0efe78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18372412ad2fc3ce1e3240b3cf0efe78">STB_IMAGE_IMPLEMENTATION</a></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a46d598a9f3591a28a247599313157375" id="r_a46d598a9f3591a28a247599313157375"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_image.html">gmImage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46d598a9f3591a28a247599313157375">gm_image_open</a> (const char *path)</td></tr>
-<tr class="memdesc:a46d598a9f3591a28a247599313157375"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads an image from a file path.  <br /></td></tr>
+<tr class="memitem:ae81ba8e9b58d1e19aefda23af9edabad" id="r_ae81ba8e9b58d1e19aefda23af9edabad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae81ba8e9b58d1e19aefda23af9edabad">gm_image_data_load</a> (<a class="el" href="structgm_image_data.html">gmImageData</a> *data, const char *path)</td></tr>
+<tr class="memitem:a929039a6f909e06ce65826d6470b3e6b" id="r_a929039a6f909e06ce65826d6470b3e6b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a929039a6f909e06ce65826d6470b3e6b">gm_image_data_free</a> (<a class="el" href="structgm_image_data.html">gmImageData</a> *d)</td></tr>
+<tr class="memitem:aaab9b6ae97585d3c419ac533a4601f8e" id="r_aaab9b6ae97585d3c419ac533a4601f8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_image.html">gmImage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaab9b6ae97585d3c419ac533a4601f8e">gm_image_create</a> (const char *path)</td></tr>
+<tr class="memdesc:aaab9b6ae97585d3c419ac533a4601f8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads an image from a file path.  <br /></td></tr>
 <tr class="memitem:aec56e25f8f3aab9a80ac99ea14751cdb" id="r_aec56e25f8f3aab9a80ac99ea14751cdb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec56e25f8f3aab9a80ac99ea14751cdb">gm_image_draw</a> (<a class="el" href="structgm_image.html">gmImage</a> i, double x, double y, double w, double h)</td></tr>
 <tr class="memdesc:aec56e25f8f3aab9a80ac99ea14751cdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws an entire image at the specified position and size.  <br /></td></tr>
 <tr class="memitem:a93b48efa6484ce4d2b7e6bec2ab52949" id="r_a93b48efa6484ce4d2b7e6bec2ab52949"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93b48efa6484ce4d2b7e6bec2ab52949">gm_image_draw_part</a> (<a class="el" href="structgm_image.html">gmImage</a> i, int slice_x, int slice_y, int slice_width, int slice_height, double x, double y, double w, double h)</td></tr>
 <tr class="memdesc:a93b48efa6484ce4d2b7e6bec2ab52949"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a part of an image at the specified position and size.  <br /></td></tr>
 </table>
+<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a id="a18372412ad2fc3ce1e3240b3cf0efe78" name="a18372412ad2fc3ce1e3240b3cf0efe78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18372412ad2fc3ce1e3240b3cf0efe78">&#9670;&#160;</a></span>STB_IMAGE_IMPLEMENTATION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define STB_IMAGE_IMPLEMENTATION</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="aaab9b6ae97585d3c419ac533a4601f8e" name="aaab9b6ae97585d3c419ac533a4601f8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaab9b6ae97585d3c419ac533a4601f8e">&#9670;&#160;</a></span>gm_image_create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structgm_image.html">gmImage</a> gm_image_create </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>path</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads an image from a file path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The file path to the image. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="structgm_image.html" title="Structure representing an image with handle and dimensions.">gmImage</a> structure containing the loaded image and its properties. </dd></dl>
+
+</div>
+</div>
+<a id="a929039a6f909e06ce65826d6470b3e6b" name="a929039a6f909e06ce65826d6470b3e6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a929039a6f909e06ce65826d6470b3e6b">&#9670;&#160;</a></span>gm_image_data_free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int gm_image_data_free </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structgm_image_data.html">gmImageData</a> *</td>          <td class="paramname"><span class="paramname"><em>d</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae81ba8e9b58d1e19aefda23af9edabad" name="ae81ba8e9b58d1e19aefda23af9edabad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae81ba8e9b58d1e19aefda23af9edabad">&#9670;&#160;</a></span>gm_image_data_load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int gm_image_data_load </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structgm_image_data.html">gmImageData</a> *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>path</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aec56e25f8f3aab9a80ac99ea14751cdb" name="aec56e25f8f3aab9a80ac99ea14751cdb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aec56e25f8f3aab9a80ac99ea14751cdb">&#9670;&#160;</a></span>gm_image_draw()</h2>
 
@@ -232,32 +320,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a46d598a9f3591a28a247599313157375" name="a46d598a9f3591a28a247599313157375"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46d598a9f3591a28a247599313157375">&#9670;&#160;</a></span>gm_image_open()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structgm_image.html">gmImage</a> gm_image_open </td>
-          <td>(</td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>path</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Loads an image from a file path. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">path</td><td>The file path to the image. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="structgm_image.html" title="Structure representing an image with handle and dimensions.">gmImage</a> structure containing the loaded image and its properties. </dd></dl>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
@@ -271,7 +333,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="image_8h.html">image.h</a></li>
+    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="dir_c0efb1807f29eac66ba360987ee66b12.html">gama</a></li><li class="navelem"><a href="image_8h.html">image.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
   </ul>
 </div>
