@@ -66,7 +66,7 @@ export default class GamaWASI {
         if (fd === 1) console.warn(`[stdout] ${text}`);
         if (fd === 2) console.error(`[stderr] ${text}`);
 
-        const nwritten = text.length; // Note: This is not byte-perfect but good enough for logging
+        const nwritten = iovs.reduce((sum, iov) => sum + iov.buffer.length, 0);
         this.view().setUint32(nwritten_ptr, nwritten, true);
         return WASI_ESUCCESS;
       },
