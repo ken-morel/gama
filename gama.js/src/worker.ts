@@ -13,6 +13,7 @@ export type WorkerSuccessMessage = {
 
 export type WorkerInitMessage = {
   wasmData: ArrayBuffer,
+  instanceId: string,
 };
 export type WorkerInitResponse = WorkerSuccessMessage;
 export type WorkerStartMessage = {

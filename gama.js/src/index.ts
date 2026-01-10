@@ -3,7 +3,7 @@ declare const WORKER_CODE: string;
 import { GmColor, gmcToCss } from "./color";
 import { getKeyCode, GmKeyCode } from "./keyboard";
 import { writeYieldResult, YieldResult } from "./sab";
-import type { WorkerSuccessMessage, WorkerInitMessage, WorkerInitResponse, WorkerStartMessage, Triangle } from "./worker";
+import type { WorkerInitMessage, WorkerInitResponse, WorkerStartMessage, Triangle } from "./worker";
 
 const WORKER_URL = URL.createObjectURL(new Blob([WORKER_CODE], {
   type: "application/javascript",
@@ -16,7 +16,8 @@ type Pos = {
 
 
 export default class Gama {
-  worker: Worker;
+  #worker: Worker;
+  uuid: string;
   canvas: {
     front: OffscreenCanvas;
     back: OffscreenCanvas;
@@ -33,18 +34,20 @@ export default class Gama {
       offset: { x: 0, y: 0 },
     };
   buffer: SharedArrayBuffer;
-  buffer32: Int32Array;
+  #buffer32: Int32Array;
   output: CanvasRenderingContext2D | null = null;
 
-  yielding: YieldResult;
+  private yielding: YieldResult;
   sizemode: "natural" | "fixed" = "natural";
   fpsTarget: number = 30;
   fps: number;
   #lastT: number;
+  #delayT: number = 0;
 
   static FPS_ALPHA: number = 0.8;
 
-  private constructor(w: Worker) {
+  private constructor(w: Worker, uuid: string) {
+    this.uuid = uuid;
     this.yielding = {
       keyboard: {
         down: new Set<GmKeyCode>()
@@ -55,7 +58,7 @@ export default class Gama {
         y: 0,
       }
     };
-    this.worker = w;
+    this.#worker = w;
     this.canvas = {
       front: new OffscreenCanvas(500, 500),
       back: new OffscreenCanvas(500, 500)
@@ -65,16 +68,16 @@ export default class Gama {
       back: this.canvas.back.getContext('2d')!
     };
     this.buffer = new SharedArrayBuffer(1024);
-    this.buffer32 = new Int32Array(this.buffer);
-    this.worker.onerror = this.workerError;
+    this.#buffer32 = new Int32Array(this.buffer);
+    this.#worker.onerror = this.workerError;
 
-    this.worker.onmessage = null;
+    this.#worker.onmessage = null;
 
     this.fps = this.fpsTarget;
     this.#lastT = Date.now();
   }
 
-  public static async create(wasmPath: string): Promise<Gama> {
+  public static async create(wasmPath: string, uuid: string): Promise<Gama> {
     const fetchResponse = await fetch(wasmPath);
     const wasmDataBuffer = await fetchResponse.arrayBuffer();
     const worker = new Worker(WORKER_URL, { type: 'module' });
@@ -86,10 +89,11 @@ export default class Gama {
 
       worker.postMessage({
         wasmData: wasmDataBuffer,
+        instanceId: uuid,
       } as WorkerInitMessage, [wasmDataBuffer]);
 
       worker.onmessage = (msg: MessageEvent<WorkerInitResponse>) => {
-        const gama = new Gama(worker);
+        const gama = new Gama(worker, uuid);
         if (msg.data.ok)
           resolve(gama);
         else
@@ -99,8 +103,8 @@ export default class Gama {
 
   }
   public async start() {
-    this.worker.onmessage = (e) => this.handleWorkerMessage(e);
-    this.worker.postMessage({
+    this.#worker.onmessage = (e) => this.handleWorkerMessage(e);
+    this.#worker.postMessage({
       buffer: this.buffer,
     } as WorkerStartMessage);
   }
@@ -134,8 +138,8 @@ export default class Gama {
         const gen = this.yield();
         await gen.next();
         // the worker can start right away
-        Atomics.store(this.buffer32, 0, 1);
-        Atomics.notify(this.buffer32, 0);
+        Atomics.store(this.#buffer32, 0, 1);
+        Atomics.notify(this.#buffer32, 0);
 
         writeYieldResult(this.buffer, 1, this.yielding);
         // and then wait till we finish drawing, and since two functions
@@ -158,9 +162,10 @@ export default class Gama {
 
     const targetFrameTime = 1000 / this.fpsTarget;
     const delay = targetFrameTime - elapsed;
+    this.#delayT += (delay - this.#delayT) / 10;
 
-    if (delay > 1)
-      await new Promise(resolve => setTimeout(resolve, delay));
+    if (this.#delayT > 1)
+      await new Promise(resolve => setTimeout(resolve, this.#delayT));
 
 
     const frameEndTime = Date.now();
@@ -246,7 +251,7 @@ export default class Gama {
           ctx.closePath();
           ctx.fill();
         }
-        }
+      }
         break;
       case 'circle':
         var [x, y, r, c] = args as [number, number, number, GmColor];
@@ -371,10 +376,10 @@ export default class Gama {
 
   public bindKeyboard(elt: EventTarget) {
     elt.addEventListener('keydown', e => {
-      this.yielding.keyboard.down.add(getKeyCode(e.key));
+      this.yielding.keyboard.down.add(getKeyCode((e as KeyboardEvent).key));
     });
     elt.addEventListener('keyup', e => {
-      const code = getKeyCode(e.key);
+      const code = getKeyCode((e as KeyboardEvent).key);
       this.yielding.keyboard.down.delete(code)
     });
   }

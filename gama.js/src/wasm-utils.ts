@@ -21,6 +21,13 @@ export function takeString(mem: WebAssembly.Memory, ptr: CharPtr): string {
   return utf8Decoder.decode(bytes);
 }
 
+export function takeStringLen(mem: WebAssembly.Memory, ptr: CharPtr, len: number): string {
+  if (!ptr || ptr === 0 || len === 0) return "";
+  const buffer = mem.buffer;
+  const view = new Uint8Array(buffer, ptr, len);
+  return utf8Decoder.decode(view);
+}
+
 
 export function setDoublePtr(mem: WebAssembly.Memory, ptr: DoublePtr, data: Float64Array | number[]): void {
   // For aligned pointers, create a direct view and use the highly optimized .set() method.

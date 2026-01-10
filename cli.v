@@ -5,6 +5,7 @@ import os
 import vgama
 import term
 import time
+import rand
 
 struct Compiler {
 	name string
@@ -475,6 +476,7 @@ fn generator_assistant(cmd cli.Command) ! {
 	conf := vgama.ProjectConf{
 		name:        name
 		description: desc
+		uuid:        rand.uuid_v7()
 		gama:        vgama.ProjectGamaConf{
 			version:  installation.get_gama_version() or {
 				println(term.fail_message(err.str()))
