@@ -41,17 +41,14 @@
   <canvas id="canvas"></canvas>
 
   <script type="module">
-    import GamaInstance from "./gama.js";
+    import Gama from "./gama.js";
 
-    const instance = new GamaInstance();
-
-    instance.bind(canvas);
-    instance.bindKeyboard(document);
-
-    instance.setup("./{{name}}.wasm").then(() => {
-      console.info("starting gama instance");
-      instance.start();
-    });
+    const game = await Gama.create("./{{name}}.wasm");
+    game.attach(canvas);
+     game.bindKeyboard(window);
+    game.start();
+    window.game = game;
+    console.log(game);
   </script>
 </body>
 

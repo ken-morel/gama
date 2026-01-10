@@ -156,5 +156,6 @@ var color_8h =
     [ "GM_WHITESMOKE", "color_8h.html#abcec1e039dd913970bfd52cecb1abe0a", null ],
     [ "GM_YELLOW", "color_8h.html#a3ecac9a8d1d50fcda1bf1ddfee4e1467", null ],
     [ "GM_YELLOWGREEN", "color_8h.html#a59be4c062fa42f82e0b7e531796645ec", null ],
-    [ "gmColor", "color_8h.html#a509eb56a8a48cd54ba4ff0caf8b9147c", null ]
+    [ "gmColor", "color_8h.html#ad1e1d31842049cda71b54fb67f83036b", null ],
+    [ "gmg_color", "color_8h.html#a0c14ffe2bab36e58af6f58271b27bc52", null ]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_5fgm_5ffps_0',['_gm_fps',['../gama_8h.html#a84303615041512b2591abf6e3de9c9ca',1,'gama.h']]]
+  ['_5fgm3_5fdepth_5fcompare_0',['_gm3_depth_compare',['../3d_2image_8h.html#af8dfe8aae5fe2ee28846f3c5b05a44ec',1,'image.h']]]
 ];

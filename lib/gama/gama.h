@@ -8,116 +8,29 @@
  */
 
 #pragma once
-// NOTE: The order is important, major, minor, patch
 
 #include "draw.h"
 #include "gapi.h"
 #include "stdio.h"
 #include "widgets/frame.h"
 
-int _gm_loop();
-void _gm_fps();
-
-#ifdef GM_SETUP
-
-int32_t
-#ifdef __ZIG_CC__
-    __attribute__((export_name("gama_mode")))
-#endif
-    gama_mode() {
-  return 2;
-}
-
-int setup();
-int loop();
-char *bye();
-
-int32_t
-#ifdef __ZIG_CC__
-    __attribute__((export_name("gama_setup")))
-#endif
-    gama_setup() {
-  return setup();
-}
-
-char *
-#ifdef __ZIG_CC__
-    __attribute__((export_name("gama_bye")))
-#endif
-    gama_bye() {
-  return bye();
-}
-
-int32_t
-#ifdef __ZIG_CC__
-    __attribute__((export_name("gama_loop")))
-#endif
-    gama_loop() {
-  if (_gm_loop()) {
-    int ret = loop();
-    _gm_fps();
-    return ret;
-
-  } else
-    return 0;
-}
-
-#ifdef GM_NATIVE
-
-#include <stdio.h>
-
-int main(void) {
-  int code = setup();
-  if (code != 0)
-    return code;
-  while (_gm_loop()) {
-    code = loop();
-    if (code == 0)
-
-      _gm_fps();
-    else {
-      gapi_quit();
-
-      break;
-    }
-  }
-  char *msg = bye();
-  printf("[gama] %s\n", msg);
-  return code;
-}
-
-#endif
-
-#else
 #ifdef GM_ARGC_MAIN
-int main(int, char *);
+int main(int, char **);
 #else
 int main();
 #endif
 
 int32_t
 #ifdef __ZIG_CC__
-    __attribute__((export_name("gama_mode")))
-#endif
-    gama_mode() {
-  return 1;
-}
-
-int32_t
-#ifdef __ZIG_CC__
     __attribute__((export_name("gama_run")))
 #endif
     gama_run() {
+#ifdef GM_ARGC_MAIN
+  return main(0, NULL);
+#else
   return main();
+#endif
 }
-
-#ifdef GM_WEB
-
-#warning "To build for the web, your app must be in GM_SETUP mode"
-
-#endif
-
-#endif
 
 /**
  * @brief Puts the window in fullscreen.
@@ -157,7 +70,22 @@ static inline int gm_runs() { return gapi_runs(); }
 int __gm_show_fps = 0;
 void gm_show_fps(int show) { __gm_show_fps = show; }
 
-void _gm_fps() {
+/**
+ * @brief Processes events, updates input state, and prepares for the next
+ * frame.
+ *
+ * This function should be called at the end of the main game loop. It handles
+ * window events, polls for input, updates mouse and keyboard states, and
+ * swaps the graphics buffers.
+ *
+ * @return 1 if the game should continue to the next frame, 0 if the window has
+ * been closed.
+ * @example
+ * while (gm_yield()) {
+ *   // Your game logic and rendering here
+ * }
+ */
+static inline int gm_yield() {
   static const double alpha = 2.0 / 3.0;
   static double _fps = 0;
   static double dt = 1;
@@ -179,32 +107,7 @@ void _gm_fps() {
     gmw_frame(0.9, -0.9, 0.4, 0.1);
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }
-}
-#ifndef GM_SETUP
 
-/**
- * @brief Processes events, updates input state, and prepares for the next
- * frame.
- *
- * This function should be called at the end of the main game loop. It handles
- * window events, polls for input, updates mouse and keyboard states, and
- * swaps the graphics buffers.
- *
- * @return 1 if the game should continue to the next frame, 0 if the window has
- * been closed.
- * @example
- * while (gm_yield()) {
- *   // Your game logic and rendering here
- * }
- */
-static inline int gm_yield() {
-
-  _gm_fps();
-  return _gm_loop();
-}
-#endif
-
-int _gm_loop() {
   const int ret = gapi_yield(&_gm_dt);
   _gm_t += _gm_dt;
   gm_mouse.lastPosition = gm_mouse.position;
@@ -225,20 +128,10 @@ int _gm_loop() {
 static inline void gm_quit() { return gapi_quit(); }
 
 /**
- * @brief Waits for all pending graphics operations to complete.
- *
- * This can be used for synchronization purposes, but it is rarely needed as
- * gm_yield() handles buffer swapping automatically.
- */
-void gm_sync() { return gapi_wait_queue(); }
-
-/**
  * @brief Sets the background color of the window.
  * @param c The color to set as the background.
  */
-void gm_background(gmColor c) {
-  return gapi_set_bg_color(gm_red(c), gm_green(c), gm_blue(c), gm_alpha(c));
-}
+void gm_background(gmColor c) { return gapi_set_background_color(c); }
 
 void gm_resize(int width, int height) { return gapi_resize(width, height); }
 

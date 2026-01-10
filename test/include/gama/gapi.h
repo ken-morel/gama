@@ -1,4 +1,5 @@
 #pragma once
+
 #include "color.h"
 #include <stdint.h>
 
@@ -24,10 +25,10 @@ extern void
 
 extern void
 #ifdef __ZIG_CC__
-    __attribute__((import_module("gapi"), import_name("set_bg_color")))
+    __attribute__((import_module("gapi"), import_name("set_background_color")))
 #endif
-    gapi_set_bg_color(const uint8_t r, const uint8_t g, const uint8_t b,
-                      const uint8_t a);
+    gapi_set_background_color(const gmColor background);
+
 extern void
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("fullscreen")))
@@ -147,12 +148,6 @@ extern int32_t
     __attribute__((import_module("gapi"), import_name("key_down")))
 #endif
     gapi_key_down(char t, char k);
-
-extern void
-#ifdef __ZIG_CC__
-    __attribute__((import_module("gapi"), import_name("wait_queue")))
-#endif
-    gapi_wait_queue();
 
 extern int32_t
 #ifdef __ZIG_CC__

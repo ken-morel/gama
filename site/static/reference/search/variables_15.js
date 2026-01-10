@@ -1,4 +1,22 @@
 var searchData=
 [
-  ['width_0',['width',['../structgm_body.html#a082594202d2b419c6d8d9259fd35258d',1,'gmBody::width'],['../structgm_image.html#a5a9a00d87efebce5aca872e8aeacc93f',1,'gmImage::width']]]
+  ['v_0',['v',['../structjpeg.html#afd4d012a5d0ba3cd039a579e1c76b383',1,'jpeg']]],
+  ['v_5foversample_1',['v_oversample',['../structstbtt__pack__range.html#a6288f14006e257544db3d015c32b4113',1,'stbtt_pack_range::v_oversample'],['../structstbtt__pack__context.html#a4b55efa27ef36e7f258afe92921784c0',1,'stbtt_pack_context::v_oversample']]],
+  ['v_5ftiles_2',['v_tiles',['../structstbhw__tileset.html#a46098bf759f62463d86430557640d888',1,'stbhw_tileset']]],
+  ['valid_5fbits_3',['valid_bits',['../structstb__vorbis.html#a4aa9d73a234428a6194cd37b8c0be4e0',1,'stb_vorbis']]],
+  ['value_4',['value',['../structzhuffman.html#af7d9387d933358e942c6839d9a062060',1,'zhuffman']]],
+  ['value_5fbits_5',['value_bits',['../struct_codebook.html#a229d0699f42bd26a99b37845aaab75eb',1,'Codebook']]],
+  ['values_6',['values',['../structhuffman.html#a10889fd98b0226277cfa484330409b61',1,'huffman::values'],['../struct_floor1.html#a9a426cc6574076ad9e5d969a56af41f4',1,'Floor1::values']]],
+  ['various_7',['various',['../structstbfile.html#a55155e7ce5f3d4ac644f15efd9333e7a',1,'stbfile']]],
+  ['velocity_8',['velocity',['../structgm_body.html#a9ed0eeb9e98061d897fb7c5838f338ea',1,'gmBody::velocity'],['../structgm__system.html#a6f2d2acface6269c1ff8486cfae057e5',1,'gm_system::velocity']]],
+  ['vendor_9',['vendor',['../structstb__vorbis__comment.html#a2d39c24fbb2ff48034f2c7b0be2b3a0e',1,'stb_vorbis_comment::vendor'],['../structstb__vorbis.html#a34ef41a9d003edf14762835badef21d5',1,'stb_vorbis::vendor']]],
+  ['vertex_5fgather_5foffset_10',['vertex_gather_offset',['../structstbvox__mesh__maker.html#a4d9a88891bab79c72e8551fdcd399659',1,'stbvox_mesh_maker']]],
+  ['vertical_5fedge_11',['vertical_edge',['../struct_s_t_b_i_r___r_e_s_i_z_e.html#a061c7713d6d969c08b0698a328883f97',1,'STBIR_RESIZE']]],
+  ['vertical_5ffilter_12',['vertical_filter',['../struct_s_t_b_i_r___r_e_s_i_z_e.html#afbf5d6a34f1607d67b353dcfeafaf559',1,'STBIR_RESIZE']]],
+  ['vertical_5ffilter_5fkernel_13',['vertical_filter_kernel',['../struct_s_t_b_i_r___r_e_s_i_z_e.html#a599a0f54aac24ab9c0b5d5027ed287de',1,'STBIR_RESIZE']]],
+  ['vertical_5ffilter_5fsupport_14',['vertical_filter_support',['../struct_s_t_b_i_r___r_e_s_i_z_e.html#a042d98a6c10f8302ff37ae783bf0c943',1,'STBIR_RESIZE']]],
+  ['vertices_15',['vertices',['../structgm3_image.html#a92caa7f274acae9b400cf4216c3c9c58',1,'gm3Image::vertices'],['../structgm3_mesh_face.html#a8cc56c1d05a86d1fd9f28b8c336fb564',1,'gm3MeshFace::vertices'],['../structgm3_mesh.html#ab78e5fa12772feb5951db42e5ee7f370',1,'gm3Mesh::vertices']]],
+  ['vheight_16',['vheight',['../structstbvox__input__description.html#a02de8f98d512dc9cef6094ad7571be05',1,'stbvox_input_description']]],
+  ['viewport_17',['viewport',['../structgm3_scene.html#a13d4e8d94b9094806dc9ca7e93f62602',1,'gm3Scene']]],
+  ['vs_18',['vs',['../structstbi__resample.html#a331c717f53239339c0c678f92a7bf4d5',1,'stbi_resample']]]
 ];

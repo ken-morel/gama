@@ -4,7 +4,6 @@
 #endif
 
 #include "../stb/stb_image.h"
-#include "gapi.h"
 #include <stdint.h>
 #include <string.h>
 
@@ -33,6 +32,9 @@ typedef struct {
   int width;       /**< Width of the image in pixels */
   int height;      /**< Height of the image in pixels */
 } gmImage;
+
+#ifndef GM_NO_GAPI
+#include "gapi.h"
 
 /**
  * @brief Loads an image from a file path.
@@ -80,3 +82,4 @@ void gm_image_draw_part(gmImage i, int slice_x, int slice_y, int slice_width,
   gapi_draw_image_part(i.handle, slice_x, slice_y, slice_width, slice_height, x,
                        y, w, h);
 }
+#endif

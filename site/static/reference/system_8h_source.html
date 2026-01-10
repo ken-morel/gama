@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.15.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gama C Library: lib/system.h Source File</title>
+<title>Gama C Library: lib/gama/system.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -206,12 +206,12 @@ $(function(){initNavTree('system_8h_source.html','',''); });
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment"> * @param e Pointer to the fifth body to add.</span></div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> gm_system_push5(<a class="code hl_typedef" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys, <a class="code hl_struct" href="structgm_body.html">gmBody</a> *a, <a class="code hl_struct" href="structgm_body.html">gmBody</a> *b,</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                                   <a class="code hl_struct" href="structgm_body.html">gmBody</a> *c, <a class="code hl_struct" href="structgm_body.html">gmBody</a> *d, <a class="code hl_struct" href="structgm_body.html">gmBody</a> *e) {</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                                   <a class="code hl_struct" href="structgm_body.html">gmBody</a> *c, <a class="code hl_struct" href="structgm_body.html">gmBody</a> *d, <a class="code hl_struct" href="structgm_body.html">gmBody</a> *<a class="code hl_define" href="stb__image_8c.html#a43133ab631c96e9096c7f34895c05ccc">e</a>) {</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  gm_system_push(sys, a);</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  gm_system_push(sys, b);</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  gm_system_push(sys, c);</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  gm_system_push(sys, d);</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  gm_system_push(sys, e);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  gm_system_push(sys, <a class="code hl_define" href="stb__image_8c.html#a43133ab631c96e9096c7f34895c05ccc">e</a>);</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>}</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"></span> </div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">/**</span></div>
@@ -251,9 +251,9 @@ $(function(){initNavTree('system_8h_source.html','',''); });
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="system_8h.html#a625e32ce9bd9e7ce217ffd01b87990df">  150</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="system_8h.html#a625e32ce9bd9e7ce217ffd01b87990df">gm_system_destroy</a>(<a class="code hl_typedef" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys) {</div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <span class="keywordflow">if</span> (sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a> != NULL) {</div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>[i] != NULL; i++) {</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>      free(sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>[i]);</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>      <a class="code hl_define" href="stb__leakcheck_8h.html#a9d4b5df3530d1bc733070a4669ba6ebc">free</a>(sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>[i]);</div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    }</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    free(sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <a class="code hl_define" href="stb__leakcheck_8h.html#a9d4b5df3530d1bc733070a4669ba6ebc">free</a>(sys-&gt;<a class="code hl_variable" href="structgm__system.html#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a>);</div>
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>  }</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>}</div>
 </div>
@@ -261,6 +261,8 @@ $(function(){initNavTree('system_8h_source.html','',''); });
 <div class="ttc" id="abody__list_8h_html"><div class="ttname"><a href="body__list_8h.html">body_list.h</a></div><div class="ttdoc">Provides a dynamic, NULL-terminated pointer list implementation.</div></div>
 <div class="ttc" id="abody__list_8h_html_accee67073d78bddbdc0932f9940f22f5"><div class="ttname"><a href="body__list_8h.html#accee67073d78bddbdc0932f9940f22f5">gmBodies</a></div><div class="ttdeci">gmBody ** gmBodies</div><div class="ttdoc">A specialized pointer list for gmBody pointers.</div><div class="ttdef"><b>Definition</b> body_list.h:233</div></div>
 <div class="ttc" id="aposition_8h_html"><div class="ttname"><a href="position_8h.html">position.h</a></div></div>
+<div class="ttc" id="astb__image_8c_html_a43133ab631c96e9096c7f34895c05ccc"><div class="ttname"><a href="stb__image_8c.html#a43133ab631c96e9096c7f34895c05ccc">e</a></div><div class="ttdeci">#define e(x, y)</div><div class="ttdef"><b>Definition</b> stb_image.c:533</div></div>
+<div class="ttc" id="astb__leakcheck_8h_html_a9d4b5df3530d1bc733070a4669ba6ebc"><div class="ttname"><a href="stb__leakcheck_8h.html#a9d4b5df3530d1bc733070a4669ba6ebc">free</a></div><div class="ttdeci">#define free(p)</div><div class="ttdef"><b>Definition</b> stb_leakcheck.h:143</div></div>
 <div class="ttc" id="astructgm__system_html"><div class="ttname"><a href="structgm__system.html">gm_system</a></div><div class="ttdoc">Structure representing a physics system containing bodies and collision information.</div><div class="ttdef"><b>Definition</b> system.h:23</div></div>
 <div class="ttc" id="astructgm__system_html_a04e471339c635281e7fb81857fcd54de"><div class="ttname"><a href="structgm__system.html#a04e471339c635281e7fb81857fcd54de">gm_system::acceleration</a></div><div class="ttdeci">gmPos acceleration</div><div class="ttdef"><b>Definition</b> system.h:30</div></div>
 <div class="ttc" id="astructgm__system_html_a40d52885fd4d36ca430e5359acd952ee"><div class="ttname"><a href="structgm__system.html#a40d52885fd4d36ca430e5359acd952ee">gm_system::damping</a></div><div class="ttdeci">double damping</div><div class="ttdef"><b>Definition</b> system.h:32</div></div>
@@ -268,14 +270,14 @@ $(function(){initNavTree('system_8h_source.html','',''); });
 <div class="ttc" id="astructgm__system_html_a6f2d2acface6269c1ff8486cfae057e5"><div class="ttname"><a href="structgm__system.html#a6f2d2acface6269c1ff8486cfae057e5">gm_system::velocity</a></div><div class="ttdeci">gmPos velocity</div><div class="ttdef"><b>Definition</b> system.h:29</div></div>
 <div class="ttc" id="astructgm__system_html_ac4794f02d4f3353531ed139fde2b8a48"><div class="ttname"><a href="structgm__system.html#ac4794f02d4f3353531ed139fde2b8a48">gm_system::is_active</a></div><div class="ttdeci">int is_active</div><div class="ttdef"><b>Definition</b> system.h:24</div></div>
 <div class="ttc" id="astructgm__system_html_ad041cd983fb9906440932a02ede15037"><div class="ttname"><a href="structgm__system.html#ad041cd983fb9906440932a02ede15037">gm_system::bodies</a></div><div class="ttdeci">gmBodies bodies</div><div class="ttdef"><b>Definition</b> system.h:25</div></div>
-<div class="ttc" id="astructgm_body_html"><div class="ttname"><a href="structgm_body.html">gmBody</a></div><div class="ttdoc">Structure representing a physics body with properties for collision and movement.</div><div class="ttdef"><b>Definition</b> body.h:19</div></div>
+<div class="ttc" id="astructgm_body_html"><div class="ttname"><a href="structgm_body.html">gmBody</a></div><div class="ttdoc">Structure representing a physics body with properties for collision and movement.</div><div class="ttdef"><b>Definition</b> body.h:21</div></div>
 <div class="ttc" id="astructgm_collision_html"><div class="ttname"><a href="structgm_collision.html">gmCollision</a></div><div class="ttdoc">Structure representing a collision between two bodies.</div><div class="ttdef"><b>Definition</b> system.h:10</div></div>
 <div class="ttc" id="astructgm_collision_html_a0e3deda79401fa8649b25ed1941b3def"><div class="ttname"><a href="structgm_collision.html#a0e3deda79401fa8649b25ed1941b3def">gmCollision::normals</a></div><div class="ttdeci">gmPos normals</div><div class="ttdef"><b>Definition</b> system.h:16</div></div>
 <div class="ttc" id="astructgm_collision_html_a66f55e550ef604cb60565ea6897a1b3b"><div class="ttname"><a href="structgm_collision.html#a66f55e550ef604cb60565ea6897a1b3b">gmCollision::since</a></div><div class="ttdeci">double since</div><div class="ttdef"><b>Definition</b> system.h:15</div></div>
 <div class="ttc" id="astructgm_collision_html_ac4bdd34275f3acb2a2ebe4cc55afa9a6"><div class="ttname"><a href="structgm_collision.html#ac4bdd34275f3acb2a2ebe4cc55afa9a6">gmCollision::bodies</a></div><div class="ttdeci">gmBody * bodies[2]</div><div class="ttdef"><b>Definition</b> system.h:13</div></div>
 <div class="ttc" id="astructgm_collision_html_aca1ef6da633fd006f286a8503abc063b"><div class="ttname"><a href="structgm_collision.html#aca1ef6da633fd006f286a8503abc063b">gmCollision::penetration</a></div><div class="ttdeci">double penetration</div><div class="ttdef"><b>Definition</b> system.h:14</div></div>
 <div class="ttc" id="astructgm_collision_html_af18bac9d6b3db9a91ea6123807256017"><div class="ttname"><a href="structgm_collision.html#af18bac9d6b3db9a91ea6123807256017">gmCollision::sys</a></div><div class="ttdeci">struct gm_system * sys</div><div class="ttdef"><b>Definition</b> system.h:11</div></div>
-<div class="ttc" id="astructgm_pos_html"><div class="ttname"><a href="structgm_pos.html">gmPos</a></div><div class="ttdef"><b>Definition</b> position.h:4</div></div>
+<div class="ttc" id="astructgm_pos_html"><div class="ttname"><a href="structgm_pos.html">gmPos</a></div><div class="ttdef"><b>Definition</b> position.h:5</div></div>
 <div class="ttc" id="asystem_8h_html_a12674760bc8132b8a9c64afe03ac7106"><div class="ttname"><a href="system_8h.html#a12674760bc8132b8a9c64afe03ac7106">gm_system_create</a></div><div class="ttdeci">gmSystem gm_system_create()</div><div class="ttdoc">Creates a new physics system with default values.</div><div class="ttdef"><b>Definition</b> system.h:39</div></div>
 <div class="ttc" id="asystem_8h_html_a625e32ce9bd9e7ce217ffd01b87990df"><div class="ttname"><a href="system_8h.html#a625e32ce9bd9e7ce217ffd01b87990df">gm_system_destroy</a></div><div class="ttdeci">void gm_system_destroy(gmSystem *sys)</div><div class="ttdoc">Destroy the system and free memory.</div><div class="ttdef"><b>Definition</b> system.h:150</div></div>
 <div class="ttc" id="asystem_8h_html_a634d398c9f8e622e4bc9fc79eeb5f876"><div class="ttname"><a href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a></div><div class="ttdeci">struct gm_system gmSystem</div><div class="ttdoc">Structure representing a physics system containing bodies and collision information.</div></div>
@@ -285,7 +287,7 @@ $(function(){initNavTree('system_8h_source.html','',''); });
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="system_8h.html">system.h</a></li>
+    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="dir_c0efb1807f29eac66ba360987ee66b12.html">gama</a></li><li class="navelem"><a href="system_8h.html">system.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
   </ul>
 </div>
