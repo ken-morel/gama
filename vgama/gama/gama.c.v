@@ -19,8 +19,15 @@ pub fn C.gm_image_data_load(data &C.gmImageData, path &char) i32
 pub fn C.gm_image_data_free(data &C.gmImageData) i32
 
 pub fn load_image(path string) !C.gmImageData {
-	data := C.gmImageData{}
-	ret := C.gm_image_load(&data, &char(path.str))
+	data := C.gmImageData{
+		width:  0
+		height: 0
+		data:   unsafe { nil }
+	}
+	ret := C.gm_image_data_load(&data, &char(path.str))
+	if ret < 0 {
+		return error('Image load returned negative status ${ret}')
+	}
 	return data
 }
 
