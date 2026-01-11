@@ -281,7 +281,7 @@ export default class Gama {
         ctx.fillText(txt, ...this._c_coord(x, y));
         break;
       } case 'image': {
-        const [handle, x, y, w, h] = args;
+        const [handle, x, y, w, h] = args as [number, number, number, number, number];
         ctx.drawImage(this.images[handle], ...this._c_rect(x, y, w, h));
         break;
       } case 'image-part': {
