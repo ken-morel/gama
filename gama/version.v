@@ -1,4 +1,4 @@
-module vgama
+module gama
 
 pub struct Version {
 pub:

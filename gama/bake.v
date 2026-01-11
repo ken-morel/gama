@@ -1,14 +1,13 @@
-module vgama
+module gama
 
 import os
-import gama
 import term
 
 @[unsafe]
 pub fn bake_obj(path string, fname string) !string {
-	mesh := gama.load_mesh(path, os.dir(path))!
+	mesh := load_mesh(path, os.dir(path))!
 
-	code := gama.generate_mesh(mesh)!
+	code := generate_mesh(mesh)!
 
 	return '
 #pragma once

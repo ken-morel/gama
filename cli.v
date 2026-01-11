@@ -2,7 +2,7 @@ module main
 
 import cli
 import os
-import vgama
+import gama
 import term
 import time
 import rand
@@ -84,20 +84,20 @@ fn (mut w Watcher) poll() string {
 	return ''
 }
 
-fn get_project() !vgama.Project {
-	return vgama.Project.find_at(os.getwd()) or {
+fn get_project() !gama.Project {
+	return gama.Project.find_at(os.getwd()) or {
 		println(term.fail_message('Not in a gama project. (Could not find gama.toml)'))
 		return error('Not a gama project')
 	}
 }
 
-fn get_installation() !vgama.Installation {
+fn get_installation() !gama.Installation {
 	mut location := os.dir(os.executable())
 	if location.starts_with('/usr/bin') {
 		location = '/usr/share/gama'
 	}
 	println(location)
-	return vgama.Installation.folder(location)
+	return gama.Installation.folder(location)
 }
 
 fn main() {
@@ -416,7 +416,7 @@ fn generator_assistant(cmd cli.Command) ! {
 	println(' about?')
 	desc := os.input(term.blue('> '))
 	println('And what do you want to use as template for your application?')
-	mut template := &vgama.GamaTemplate(nil)
+	mut template := &gama.GamaTemplate(nil)
 	templateloop: for template == nil {
 		for index, tmpl in templates {
 			print(term.cyan(' ${index}) '))
@@ -483,24 +483,23 @@ fn generator_assistant(cmd cli.Command) ! {
 			}
 		}
 	}
-	conf := vgama.ProjectConf{
+	conf := gama.ProjectConf{
 		name:        name
 		description: desc
 		uuid:        rand.uuid_v7()
-		gama:        vgama.ProjectGamaConf{
+		gama:        gama.ProjectGamaConf{
 			version:  installation.get_gama_version() or {
 				println(term.fail_message(err.str()))
-				vgama.Version{}
+				gama.Version{}
 			}
 			compiler: if compiler != nil { compiler.path } else { '' }
 		}
 	}
 
-	vgama.Project.generate(installation, conf, template) or {
+	gama.Project.generate(installation, conf, template) or {
 		println(term.fail_message('Error generating the project: ${err}'))
 		return
 	}
 	println(term.ok_message('${name} generated successfuly!'))
 	return
 }
- 

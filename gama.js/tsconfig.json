@@ -14,7 +14,7 @@
   },
   "include": [
     "src/**/*.ts"
-, "../wasi.ts"  ],
+ ],
   "exclude": [
     "node_modules",
     "dist"

@@ -1,4 +1,4 @@
-module vgama
+module gama
 
 import veb
 import os
