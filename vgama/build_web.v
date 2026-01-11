@@ -21,7 +21,7 @@ pub fn (mut app RunWebApp) index(mut ctx Context) veb.Result {
 pub fn (p Project) build_web(inst Installation, reset bool) ! {
 	conf := p.get_conf()!
 
-	p.bake(inst) or { println(term.warn_message('Baking failed: ${err}')) }
+	p.bake(inst, false) or { println(term.warn_message('Baking failed: ${err}')) }
 	build_dir := p.build_path('web')
 	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
 	p.copy_build_web_artifacts(inst, reset)!
