@@ -252,7 +252,7 @@ export default class Gama {
         ctx.stroke();
         break;
       } case 'triangles': {
-        var triangles = args[0];
+        const triangles = args[0];
         for (const { a, b, c, col } of triangles as Triangle[]) {
           ctx.beginPath();
           this._fill(col);
