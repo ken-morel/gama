@@ -95,12 +95,12 @@ fn docs() {
 
 fn vgama() {
 	println('Building vgama for linux')
-	mut result := execute('v runners/native -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
+	mut result := execute('v libvgama/ -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
 	if result.exit_code != 0 {
 		println(term.fail_message('vgama linux build failed : ${result.output}'))
 	}
 	println('Building vgama for windows')
-	result = execute('v runners/native -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
+	result = execute('v libvgama -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
 	if result.exit_code != 0 {
 		println(term.fail_message('vgama windows build failed : ${result.output}'))
 	}
