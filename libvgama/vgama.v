@@ -171,13 +171,14 @@ fn run_gg_loop() {
 		}
 	)
 
+	println(term.cyan('[vgama] Starting app'))
 	gapi_ctx__.run()
-	println(term.ok_message('[vgama] App finished running'))
+	println(term.cyan('[vgama] App quited'))
 	gapi_gama_runs__ = false
 	gapi_queue__.close() // cancel remaining draw operaions
 	gapi_end_frame__.close()
 	gapi_queue_wait__.unlock()
-	println(term.ok_message('[vgama] bye'))
+	println(term.cyan('[vgama] bye'))
 }
 
 @[export: 'gapi_init']
@@ -191,8 +192,8 @@ fn gapi_init(width int, height int, title &char) i32 {
 	gapi_title__ = title.vstring()
 
 	gapi_dir__ = os.join_path(os.temp_dir(), rand.uuid_v7())
-	os.mkdir_all(gapi_dir__) or { term.warn_message('Could not create app temporaty directory') }
-	println(term.ok_message('\n[vgama] Using temporary directory: ${gapi_dir__}'))
+	os.mkdir_all(gapi_dir__) or { term.warn_message('Could not create app temporary directory') }
+	println(term.cyan('\n[vgama] Using temporary directory: ${gapi_dir__}'))
 
 	update_virtual_dimensions()
 
