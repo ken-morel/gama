@@ -156,16 +156,22 @@ int gm3_gltf_load(gm3Mesh *mesh, const char *path) {
 
       if (gmat->has_pbr_metallic_roughness) {
         cgltf_pbr_metallic_roughness *pbr = &gmat->pbr_metallic_roughness;
-        dmat->diffuse =
-            gm_rgb(pbr->base_color_factor[0] * 255,
-                   pbr->base_color_factor[1] * 255,
-                   pbr->base_color_factor[2] * 255);
         dmat->alpha = pbr->base_color_factor[3];
 
         if (pbr->base_color_texture.texture &&
             pbr->base_color_texture.texture->image) {
           dmat->tex_diffuse =
               pbr->base_color_texture.texture->image - data->images;
+          // New: Calculate average color from texture
+          gm3Texture *tex = &mtllib->textures[dmat->tex_diffuse];
+          dmat->diffuse = gm_image_data_average_color(&tex->data);
+
+        } else {
+          // Fallback to base color factor if no texture
+          dmat->diffuse =
+              gm_rgb(pbr->base_color_factor[0] * 255,
+                     pbr->base_color_factor[1] * 255,
+                     pbr->base_color_factor[2] * 255);
         }
       }
     }
