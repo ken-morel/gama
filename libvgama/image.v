@@ -2,29 +2,35 @@ module vgama
 
 import gg
 import term
+import stbi
+import os
 
 @[export: 'gapi_create_image']
 @[unsafe]
-fn gapi_create_image(path &char, width &u32, height &u32) u32 {
-	vpath := path.vstring()
+fn gapi_create_image(data &u8, width u32, height u32) u32 {
 	gapi_image_count__ += 1
 	idx := gapi_image_count__ - 1
-	img := gapi_ctx__.create_image(vpath) or {
-		println(term.fail_message('[vgama]: Error loading image ${vpath}: ${err}'))
+	path := os.join_path(gapi_dir__, 'image-${idx}.bmp')
+
+	stbi.stbi_write_bmp(path, int(width), int(height), 4, data) or {
+		println(term.warn_message('Failed to cache image(${idx}:${width}x${height}) data to file ${path}: ${err}'))
 		return 0
 	}
+
+	img := gapi_ctx__.create_image(path) or {
+		println(term.warn_message('Failed to create gg image from cached file: ${err}'))
+		return 0
+	}
+
 	gapi_images__[idx] = img
-	if width != nil {
-		*width = u32(img.width)
-	}
-	if height != nil {
-		*height = u32(img.height)
-	}
 	return idx
 }
 
 @[export: 'gapi_draw_image']
 fn gapi_draw_image(handle u32, x f64, y f64, w f64, h f64) {
+	if handle == 0 {
+		return
+	}
 	gx, gy, gw, gh := c_redimension_rect(x, y, w, h)
 	queue_fn(fn [gx, gy, gw, gh, handle] () {
 		if img := gapi_images__[handle] {
@@ -37,6 +43,9 @@ fn gapi_draw_image(handle u32, x f64, y f64, w f64, h f64) {
 
 @[export: 'gapi_draw_image_part']
 fn gapi_draw_image_part(handle u32, sx u32, sy u32, sw u32, sh u32, x f64, y f64, w f64, h f64) u32 {
+	if handle == 0 {
+		return 0
+	}
 	gx, gy, gw, gh := c_redimension_rect(x, y, w, h)
 	img_r := gg.Rect{
 		x:      gx
