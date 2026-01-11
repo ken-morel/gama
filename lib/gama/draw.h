@@ -19,7 +19,11 @@
 // ------------------------- Immediate-Mode Primitives -----------------------
 // ---------------------------------------------------------------------------
 
-int gm_cache(unsigned int id) { return 1; }
+int gm_cache(unsigned int id) {
+  static int on = 0;
+  on = !on;
+  return on;
+}
 
 /**
  * @brief Draws a line segment.
