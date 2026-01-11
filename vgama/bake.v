@@ -25,7 +25,7 @@ static inline gm3Mesh ${fname}();
 
 const gm3Mesh _${fname}_data = ${code};
 
-gm3Mesh ${fname}() {
+static inline gm3Mesh ${fname}() {
 	return _${fname}_data;
 }'
 }
@@ -57,7 +57,7 @@ static const unsigned int _${fname}_len = ${bytes.len};
 static const unsigned char _${fname}_data[] = {
 	${byte_str}
 };
-gmImage ${fname}() {
+static inline gmImage ${fname}() {
 	return gm_image_create_from_memory(_${fname}_data, _${fname}_len);
 }
 '

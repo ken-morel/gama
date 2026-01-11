@@ -188,7 +188,6 @@ const gapi = {
     return d.keyboard.down.has(String.fromCodePoint(t, k)) ? 1 : 0;
   },
   create_image: (data_ptr: CharPtr, width: number, height: number) => {
-    console.log("New image of size: ", width, height);
     if (data_ptr * width * height == 0) return 1;
 
     const buffer = (d.inst!.exports.memory as WebAssembly.Memory).buffer;
