@@ -12,8 +12,8 @@ module gama
 
 pub fn C.gm3_gltf_load(mesh &C.gm3Mesh, path &char) i32
 
-pub fn C.gm3_mesh_deserialize(mesh &C.gm3Mesh, data &&C.void, size u64) i32
-pub fn C.gm3_mesh_serialize(mesh &C.gm3Mesh, data &C.void, size &u64) i32
+pub fn C.gm3_mesh_deserialize(mesh &C.gm3Mesh, data &C.void, size u64) i32
+pub fn C.gm3_mesh_serialize(mesh &C.gm3Mesh, data &&C.void, size &u64) i32
 pub fn C.gm3_mesh_free(m &C.gm3Mesh)
 
 @[typedef]

@@ -4,12 +4,15 @@ typedef struct {
   double far;
 } gm3Camera;
 
+const gm3Camera gm3_default_camera = {
+    .far = 100,
+    .near = 0.01,
+    .focal = 1.3,
+};
+
 int gm3_camera_create(gm3Camera *c) {
   if (!c)
     return -1;
-
-  c->near = 0.01;
-  c->far = 100;
-  c->focal = 1.3;
+  *c = gm3_default_camera;
   return 0;
 }

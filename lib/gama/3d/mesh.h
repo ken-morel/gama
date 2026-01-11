@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../position.h"
-#include "../str.h"
 #include "mtl.h"
 #include "position.h"
 #include <float.h>
@@ -86,6 +84,7 @@ typedef struct {
   uint32_t magic;
   size_t n_vertices;
   size_t n_faces;
+  size_t n_normals;
   size_t n_texs;
   size_t n_mtllibs;
 } gm3BakedMeshHeader;
@@ -111,15 +110,16 @@ int gm3_mesh_serialize(const gm3Mesh *mesh, void **data, size_t *size) {
   // Calculate total size for all material libraries and their materials
   size_t mtllibs_size = 0;
   for (size_t i = 0; i < mesh->n_mtllibs; i++) {
+    mtllibs_size += 256;            // name
     mtllibs_size += sizeof(size_t); // n_materials
+    mtllibs_size += sizeof(size_t); // n_textures
     mtllibs_size += sizeof(gm3Material) * mesh->mtllibs[i].n_materials;
-    mtllibs_size += 256; // name
   }
 
-  *size = sizeof(gm3BakedMeshHeader) +
-          sizeof(gm3Pos) * mesh->n_vertices +
+  *size = sizeof(gm3BakedMeshHeader) + sizeof(gm3Pos) * mesh->n_vertices +
           sizeof(gm3MeshFace) * mesh->n_faces +
-          sizeof(gm3Tex) * mesh->n_texs + mtllibs_size + total_textures_size;
+          sizeof(gm3Pos) * mesh->n_normals + sizeof(gm3Tex) * mesh->n_texs +
+          mtllibs_size + total_textures_size;
 
   *data = malloc(*size);
   if (!*data)
@@ -132,6 +132,7 @@ int gm3_mesh_serialize(const gm3Mesh *mesh, void **data, size_t *size) {
       .magic = GM3_BAKED_MESH_MAGIC,
       .n_vertices = mesh->n_vertices,
       .n_faces = mesh->n_faces,
+      .n_normals = mesh->n_normals,
       .n_texs = mesh->n_texs,
       .n_mtllibs = mesh->n_mtllibs,
   };
@@ -146,6 +147,10 @@ int gm3_mesh_serialize(const gm3Mesh *mesh, void **data, size_t *size) {
   if (mesh->n_faces > 0) {
     memcpy(p, mesh->faces, sizeof(gm3MeshFace) * mesh->n_faces);
     p += sizeof(gm3MeshFace) * mesh->n_faces;
+  }
+  if (mesh->n_normals > 0) {
+    memcpy(p, mesh->normals, sizeof(gm3Pos) * mesh->n_normals);
+    p += sizeof(gm3Pos) * mesh->n_normals;
   }
   if (mesh->n_texs > 0) {
     memcpy(p, mesh->texs, sizeof(gm3Tex) * mesh->n_texs);
@@ -213,6 +218,13 @@ int gm3_mesh_deserialize(gm3Mesh *mesh, const void *data, size_t size) {
     mesh->faces = malloc(sizeof(gm3MeshFace) * mesh->n_faces);
     memcpy(mesh->faces, p, sizeof(gm3MeshFace) * mesh->n_faces);
     p += sizeof(gm3MeshFace) * mesh->n_faces;
+  }
+
+  mesh->n_normals = header->n_normals;
+  if (mesh->n_normals > 0) {
+    mesh->normals = malloc(sizeof(gm3Pos) * mesh->n_normals);
+    memcpy(mesh->normals, p, sizeof(gm3Pos) * mesh->n_normals);
+    p += sizeof(gm3Pos) * mesh->n_normals;
   }
 
   mesh->n_texs = header->n_texs;
