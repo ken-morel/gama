@@ -119,25 +119,45 @@ int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path, const char *dir) {
         gm3u_str_copy_eol(tex_path, gm3u_skip_spaces(p + 6), sizeof(tex_path));
         char full_path[512];
         snprintf(full_path, sizeof(full_path), "%s/%s", dir, tex_path);
-        current->tex_diffuse = gm3_mtl_add_texture(mtl_lib, full_path);
+        long ret = gm3_mtl_add_texture(mtl_lib, full_path);
+        if (ret < 0) {
+          fclose(f);
+          return (int)ret;
+        }
+        current->tex_diffuse = ret;
       } else if (strncmp(p, "map_Ks", 6) == 0) {
         char tex_path[256] = {0};
         gm3u_str_copy_eol(tex_path, gm3u_skip_spaces(p + 6), sizeof(tex_path));
         char full_path[512];
         snprintf(full_path, sizeof(full_path), "%s/%s", dir, tex_path);
-        current->tex_specular = gm3_mtl_add_texture(mtl_lib, full_path);
+        long ret = gm3_mtl_add_texture(mtl_lib, full_path);
+        if (ret < 0) {
+          fclose(f);
+          return (int)ret;
+        }
+        current->tex_specular = ret;
       } else if (strncmp(p, "map_Ke", 6) == 0) {
         char tex_path[256] = {0};
         gm3u_str_copy_eol(tex_path, gm3u_skip_spaces(p + 6), sizeof(tex_path));
         char full_path[512];
         snprintf(full_path, sizeof(full_path), "%s/%s", dir, tex_path);
-        current->tex_emissive = gm3_mtl_add_texture(mtl_lib, full_path);
+        long ret = gm3_mtl_add_texture(mtl_lib, full_path);
+        if (ret < 0) {
+          fclose(f);
+          return (int)ret;
+        }
+        current->tex_emissive = ret;
       } else if (strncmp(p, "map_d", 5) == 0) {
         char tex_path[256] = {0};
         gm3u_str_copy_eol(tex_path, gm3u_skip_spaces(p + 5), sizeof(tex_path));
         char full_path[512];
         snprintf(full_path, sizeof(full_path), "%s/%s", dir, tex_path);
-        current->tex_alpha = gm3_mtl_add_texture(mtl_lib, full_path);
+        long ret = gm3_mtl_add_texture(mtl_lib, full_path);
+        if (ret < 0) {
+          fclose(f);
+          return (int)ret;
+        }
+        current->tex_alpha = ret;
       }
     }
   }

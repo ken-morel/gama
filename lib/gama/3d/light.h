@@ -11,20 +11,19 @@ typedef struct {
   double ambient;
 } gm3Light;
 
+const gm3Light gm3_default_light = {
+    .position = {0, 1, 0},
+    .direction = {0, -1, 1},
+    .color = 0xCCCCCCFF,
+    .intensity = 0.5,
+    .ambient = 0.5,
+};
+
 int gm3_light_create(gm3Light *l) {
   if (!l)
     return -1;
+  *l = gm3_default_light;
   memset(l, 0, sizeof(gm3Light));
 
-  l->position.y = 1;
-
-  l->direction.z = 1;
-  l->direction.y = -1;
-
-  l->color = 0xCCCCCCFF;
-
-  l->intensity = 0.5;
-
-  l->ambient = 0.5;
   return 0;
 }

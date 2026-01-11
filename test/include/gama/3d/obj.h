@@ -219,7 +219,7 @@ int32_t gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
     } else if (ln->type == 'n') {
       m->normals[cn++] = (gm3Pos){ln->points[0], ln->points[1], ln->points[2]};
     } else if (ln->type == 't') {
-      m->texs[ct++] = (gmPos){ln->points[0], ln->points[1]};
+      m->texs[ct++] = (gm3Tex){ln->points[0], ln->points[1]};
     } else if (ln->type == 'f') {
       // Normalize all indices for this face
       for (size_t j = 0; j < ln->n_indices; j++) {

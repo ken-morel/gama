@@ -8,6 +8,9 @@ typedef struct {
   gm3Pos scale;
 } gm3Transform;
 
+const gm3Transform gm3_default_transform = {
+    .position = {0, 0, 20}, .rotation = {0}, .scale = {1, 1, 1}};
+
 void gm3_pos_rotate(gm3Pos *res, const gm3Pos *rot) {
   if (!res || !rot)
     return;
