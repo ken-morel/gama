@@ -1,4 +1,5 @@
 #include <assets/gltf/cube.glb.h>
+#include <assets/obj/triangle.obj.h>
 #include <gama.h>
 #include <gama/3d.h>
 #include <gama/3d/gltf.h>
@@ -11,7 +12,7 @@ int main() {
 
   gm_fullscreen(1);
 
-  gm3Mesh mesh = cube_mesh();
+  gm3Mesh mesh = triangle_mesh();
 
   gm3Transform trans = gm3_transform();
   trans.position.z = 5;

@@ -6,6 +6,7 @@
 #include "../stb/stb_image.h"
 #include <stdint.h>
 #include <string.h>
+#include "color.h"
 
 typedef struct {
   int32_t width, height;
@@ -39,6 +40,35 @@ int32_t gm_image_data_free(gmImageData *d) {
   d->height = 0;
   return 0;
 }
+
+/**
+ * @brief Calculates the average color of an image.
+ * @param data Pointer to the gmImageData structure.
+ * @return The average color as a gmColor.
+ */
+gmColor gm_image_data_average_color(const gmImageData *data) {
+    if (!data || !data->data || data->width <= 0 || data->height <= 0) {
+        return 0; // Return black for invalid data
+    }
+
+    long long total_r = 0;
+    long long total_g = 0;
+    long long total_b = 0;
+    size_t pixel_count = data->width * data->height;
+
+    for (size_t i = 0; i < pixel_count; ++i) {
+        total_r += data->data[i * 4 + 0];
+        total_g += data->data[i * 4 + 1];
+        total_b += data->data[i * 4 + 2];
+    }
+
+    unsigned char avg_r = (unsigned char)(total_r / pixel_count);
+    unsigned char avg_g = (unsigned char)(total_g / pixel_count);
+    unsigned char avg_b = (unsigned char)(total_b / pixel_count);
+
+    return gm_rgb(avg_r, avg_g, avg_b);
+}
+
 
 /**
  * @brief Structure representing an image with handle and dimensions.
