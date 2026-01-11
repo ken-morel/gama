@@ -318,12 +318,22 @@ fn main() {
 			},
 			cli.Command{
 				name:        'bake'
-				usage:       'bake'
+				usage:       'bake [-c]'
 				description: 'Build project assets files'
-				execute:     fn (_ cli.Command) ! {
+				flags:       [
+					cli.Flag{
+						name:        'clean'
+						abbrev:      'c'
+						description: 'Delete baked files and rebuild'
+						required:    false
+					},
+				]
+
+				execute: fn (cmd cli.Command) ! {
+					clean := cmd.flags.get_bool('clean') or { false }
 					installation := get_installation()!
 					project := get_project()!
-					project.bake(installation) or {
+					project.bake(installation, clean) or {
 						println(term.fail_message('Error baking project assets: ${err}'))
 						return err
 					}
@@ -493,3 +503,4 @@ fn generator_assistant(cmd cli.Command) ! {
 	println(term.ok_message('${name} generated successfuly!'))
 	return
 }
+ 

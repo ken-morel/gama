@@ -43,7 +43,7 @@ export default class Gama {
   fps: number;
   #lastT: number;
   #delayT: number = 0;
-
+  images: { [key: number]: OffscreenCanvas } = {};
   static FPS_ALPHA: number = 0.8;
 
   private constructor(w: Worker, uuid: string) {
@@ -146,6 +146,18 @@ export default class Gama {
         // dont run at the same time...
         await gen.next();
         break;
+      case 'create-image':
+        {
+          const { id, data, size: [width, height] } = msg.data;
+          const canv = new OffscreenCanvas(width, height);
+          const imdata = new ImageData(data, width, height);
+
+          const ctx = canv.getContext('2d')!;
+          ctx.putImageData(imdata, 0, 0);
+
+          this.images[id] = canv;
+        }
+        break;
     }
   }
   private workerError(e: ErrorEvent) {
@@ -191,8 +203,8 @@ export default class Gama {
     const [cmd, ...args] = _cmd;
     const ctx = this.ctx.front;
     switch (cmd) {
-      case 'line':
-        var [x1, y1, x2, y2, s, c] = args as number[];
+      case 'line': {
+        const [x1, y1, x2, y2, s, c] = args as number[];
         ctx.beginPath();
         this._stroke(c);
         ctx.moveTo(...this._c_coord(x1, y1));
@@ -200,19 +212,19 @@ export default class Gama {
         ctx.closePath();
         ctx.stroke();
         break;
-      case 'rect':
-        var [x, y, w, h, c] = args as number[];
+      } case 'rect': {
+        let [x, y, w, h, c] = args as number[];
         this._fill(c);
-        var [x, y] = this._c_coord(x, y);
-        var [w, h] = [this._c_one(w), this._c_one(h)];
+        [x, y] = this._c_coord(x, y);
+        [w, h] = [this._c_one(w), this._c_one(h)];
         ctx.fillRect(x - w / 2, y - h / 2, w, h);
         break;
-      case 'roundrect':
-        var [x, y, w, h, r, c] = args as number[];
-        var [w, h] = [this._c_one(w), this._c_one(h)];
-        var [topX, topY] = this._c_coord(x, y);
+      } case 'roundrect': {
+        let [x, y, w, h, r, c] = args as number[];
+        [w, h] = [this._c_one(w), this._c_one(h)];
+        let [topX, topY] = this._c_coord(x, y);
         topX -= w / 2; topY -= h / 2; // Center it
-        var r = this._c_one(r);
+        r = this._c_one(r);
         if (w < 2 * r) r = w / 2;
         if (h < 2 * r) r = h / 2;
         this._fill(c);
@@ -225,8 +237,8 @@ export default class Gama {
         ctx.closePath();
         ctx.fill();
         break;
-      case 'triangle':
-        var [x1, y1, x2, y2, x3, y3, col] = args as number[];
+      } case 'triangle': {
+        const [x1, y1, x2, y2, x3, y3, col] = args as number[];
 
         this._fill(col);
         this.ctx.front.lineWidth = 0;
@@ -239,8 +251,8 @@ export default class Gama {
         ctx.fill();
         ctx.stroke();
         break;
-      case 'triangles': {
-        var triangles = args[0];
+      } case 'triangles': {
+        const triangles = args[0];
         for (const { a, b, c, col } of triangles as Triangle[]) {
           ctx.beginPath();
           this._fill(col);
@@ -251,24 +263,32 @@ export default class Gama {
           ctx.closePath();
           ctx.fill();
         }
-      }
         break;
-      case 'circle':
-        var [x, y, r, c] = args as [number, number, number, GmColor];
+      } case 'circle': {
+        const [x, y, r, c] = args as [number, number, number, GmColor];
         ctx.beginPath();
         ctx.arc(...this._c_coord(x, y), this._c_one(r), 0, 2 * Math.PI);
         this._fill(c);
         ctx.fill();
         break;
-      case 'text':
-        var [x, y, s, txt, font, style, c] = args as [number, number, number, string, string, number, GmColor];
+      }
+      case 'text': {
+        const [x, y, s, txt, font, style, c] = args as [number, number, number, string, string, number, GmColor];
         ctx.font = this._c_one(s).toFixed(0) + "px '" + font + "'";
         this._fill(c);
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(txt, ...this._c_coord(x, y));
         break;
-
+      } case 'image': {
+        const [handle, x, y, w, h] = args as [number, number, number, number, number];
+        ctx.drawImage(this.images[handle], ...this._c_rect(x, y, w, h));
+        break;
+      } case 'image-part': {
+        const [handle, sx, sy, sw, sh, x, y, w, h] = args as [number, number, number, number, number, number, number, number, number, number];
+        ctx.drawImage(this.images[handle], sx, sy, sw, sh, ...this._c_rect(x, y, w, h));
+        break;
+      }
     }
   }
 

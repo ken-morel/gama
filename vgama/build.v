@@ -36,7 +36,7 @@ pub fn (p Project) get_src_c_files() []string {
 
 pub fn (p Project) build_native(inst Installation, use_cc string, reset bool) !string {
 	conf := p.get_conf()!
-	p.bake(inst) or { println(term.warn_message('Baking failed: ${err}')) }
+	p.bake(inst, false) or { println(term.warn_message('Baking failed: ${err}')) }
 	compiler := if use_cc == '' { conf.gama.compiler } else { use_cc }
 	if conf.gama.compiler == '' {
 		return error('No compiler configured')

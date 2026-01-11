@@ -123,7 +123,6 @@ int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path, const char *dir) {
         char path[256];
         snprintf(path, sizeof(path), "%s/%s", dir, buff);
         long ret = gm3_mtl_add_texture(mtl_lib, path);
-        printf("loading: %ld : %s\n", ret, path);
       }
     }
   }

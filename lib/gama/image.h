@@ -8,16 +8,32 @@
 #include <string.h>
 
 typedef struct {
-  int width, height;
+  int32_t width, height;
   unsigned char *data;
 } gmImageData;
 
-int gm_image_data_load(gmImageData *data, const char *path) {
+int32_t gm_image_data_load(gmImageData *data, const char *path) {
   memset(data, 0, sizeof(gmImageData));
   data->data = stbi_load(path, &data->width, &data->height, NULL, 4);
   return data->data ? 0 : -1;
 }
-int gm_image_data_free(gmImageData *d) {
+
+/**
+ * @brief Loads image data from an in-memory buffer.
+ * @param data Pointer to the gmImageData structure to fill.
+ * @param buffer Pointer to the buffer containing the raw image file data.
+ * @param len The length of the buffer in bytes.
+ * @return 0 on success, -1 on failure.
+ */
+int32_t gm_image_data_load_from_memory(gmImageData *data,
+                                       const unsigned char *buffer, int len) {
+  memset(data, 0, sizeof(gmImageData));
+  data->data =
+      stbi_load_from_memory(buffer, len, &data->width, &data->height, NULL, 4);
+  return data->data ? 0 : -1;
+}
+
+int32_t gm_image_data_free(gmImageData *d) {
   free(d->data);
   d->width = 0;
   d->height = 0;
@@ -46,7 +62,24 @@ gmImage gm_image_create(const char *path) {
   gmImageData data;
   gm_image_data_load(&data, path);
   img.width = data.width;
-  img.height = data.width;
+  img.height = data.height;
+  img.handle = gapi_create_image(data.data, img.width, img.height);
+  gm_image_data_free(&data);
+  return img;
+}
+
+/**
+ * @brief Creates an image from in-memory data.
+ * @param buffer Pointer to the buffer containing the raw image file data.
+ * @param len The length of the buffer in bytes.
+ * @return A gmImage structure containing the loaded image and its properties.
+ */
+gmImage gm_image_create_from_memory(const unsigned char *buffer, int len) {
+  gmImage img;
+  gmImageData data;
+  gm_image_data_load_from_memory(&data, buffer, len);
+  img.width = data.width;
+  img.height = data.height;
   img.handle = gapi_create_image(data.data, img.width, img.height);
   gm_image_data_free(&data);
   return img;
