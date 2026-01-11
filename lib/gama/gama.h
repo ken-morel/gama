@@ -90,8 +90,11 @@ static inline int gm_yield() {
   static double _fps = 0;
   static double dt = 1;
   static double _display_fps = 0;
-  dt += gm_dt();
-  double fps = 1 / gm_dt();
+  double current_dt = gm_dt();
+  dt += current_dt;
+  double fps = 1 / current_dt;
+  if (current_dt == 0)
+    fps = _fps;
   if (_fps == 0)
     _fps = 60;
   else
