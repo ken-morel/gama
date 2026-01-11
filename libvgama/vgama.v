@@ -2,6 +2,8 @@ module vgama
 
 import gg
 import term
+import os
+import rand
 
 // #flag -D_SGL_DEFAULT_MAX_COMMANDS=65536
 // #flag -D_SGL_DEFAULT_MAX_VERTICES=4194304
@@ -34,6 +36,8 @@ __global (
 	gapi_mouse_x__      i32
 	gapi_mouse_y__      i32
 	gapi_mouse_down__   bool
+	// files
+	gapi_dir__          string
 )
 
 fn update_virtual_dimensions() {
@@ -185,6 +189,10 @@ fn gapi_init(width int, height int, title &char) i32 {
 	gapi_height__ = height
 	gapi_width__ = width
 	gapi_title__ = title.vstring()
+
+	gapi_dir__ = os.join_path(os.temp_dir(), rand.uuid_v7())
+	os.mkdir_all(gapi_dir__) or { term.warn_message('Could not create app temporaty directory') }
+	println(term.ok_message('\n[vgama] Using temporary directory: ${gapi_dir__}'))
 
 	update_virtual_dimensions()
 
