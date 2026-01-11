@@ -114,15 +114,30 @@ int gm3_mtl_load(gm3MtlLib *mtl_lib, const char *path, const char *dir) {
         current->alpha = atof(p + 2);
       } else if (strncmp(p, "Tr ", 3) == 0) {
         current->alpha = 1.0 - atof(p + 3); // Tr is transparency
-      } else if (0 == strncmp(p, "map_", 4)) {
-        while (!isspace(*p))
-          p++;
-        p++;
-        char buff[256] = {0};
-        gm3u_str_copy_eol(buff, p, sizeof(buff));
-        char path[256];
-        snprintf(path, sizeof(path), "%s/%s", dir, buff);
-        long ret = gm3_mtl_add_texture(mtl_lib, path);
+      } else if (strncmp(p, "map_Kd", 6) == 0) {
+        char tex_path[256] = {0};
+        gm3u_str_copy_eol(tex_path, gm3u_skip_spaces(p + 6), sizeof(tex_path));
+        char full_path[512];
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir, tex_path);
+        current->tex_diffuse = gm3_mtl_add_texture(mtl_lib, full_path);
+      } else if (strncmp(p, "map_Ks", 6) == 0) {
+        char tex_path[256] = {0};
+        gm3u_str_copy_eol(tex_path, gm3u_skip_spaces(p + 6), sizeof(tex_path));
+        char full_path[512];
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir, tex_path);
+        current->tex_specular = gm3_mtl_add_texture(mtl_lib, full_path);
+      } else if (strncmp(p, "map_Ke", 6) == 0) {
+        char tex_path[256] = {0};
+        gm3u_str_copy_eol(tex_path, gm3u_skip_spaces(p + 6), sizeof(tex_path));
+        char full_path[512];
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir, tex_path);
+        current->tex_emissive = gm3_mtl_add_texture(mtl_lib, full_path);
+      } else if (strncmp(p, "map_d", 5) == 0) {
+        char tex_path[256] = {0};
+        gm3u_str_copy_eol(tex_path, gm3u_skip_spaces(p + 5), sizeof(tex_path));
+        char full_path[512];
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir, tex_path);
+        current->tex_alpha = gm3_mtl_add_texture(mtl_lib, full_path);
       }
     }
   }
@@ -159,74 +174,4 @@ void gm3_mtl_free(gm3MtlLib *file) {
       free(file->materials);
     free(file);
   }
-}
-
-int gmg_material(gmStr *str, gm3Material mat) {
-
-  char buffer[1024] = {0};
-
-  snprintf(buffer, sizeof(buffer), "(gm3Material){\n");
-  gm_str_append(str, buffer);
-
-  snprintf(buffer, sizeof(buffer), "    .name = \"%s\",\n", mat.name);
-  gm_str_append(str, buffer);
-
-  // Diffuse
-  gm_str_append(str, "    .diffuse = ");
-  gmg_color(str, mat.diffuse);
-  gm_str_append(str, ",\n");
-
-  // Specular
-  gm_str_append(str, "    .specular = ");
-  gmg_color(str, mat.specular);
-  gm_str_append(str, ",\n");
-
-  // Emissive
-  gm_str_append(str, "    .emissive = ");
-  gmg_color(str, mat.emissive);
-  gm_str_append(str, ",\n");
-
-  snprintf(buffer, sizeof(buffer), "    .shininess = %.4f,\n", mat.shininess);
-  gm_str_append(str, buffer);
-
-  snprintf(buffer, sizeof(buffer), "    .alpha = %.4f\n", mat.alpha);
-  gm_str_append(str, buffer);
-
-  gm_str_append(str, "  }");
-  return 0;
-}
-
-int gmg_mtllib(gmStr *str, gm3MtlLib lib) {
-  char buffer[1024] = {0};
-
-  snprintf(buffer, sizeof(buffer), "(gm3MtlLib){\n");
-  gm_str_append(str, buffer);
-
-  snprintf(buffer, sizeof(buffer), "  .name = \"%s\",\n", lib.name);
-  gm_str_append(str, buffer);
-
-  snprintf(buffer, sizeof(buffer), "  .n_materials = %zu,\n", lib.n_materials);
-  gm_str_append(str, buffer);
-
-  if (lib.n_materials > 0) {
-    gm_str_append(str, "  .materials = (gm3Material[]){\n");
-
-    for (size_t i = 0; i < lib.n_materials; i++) {
-
-      gm_str_append(str, "    ");
-      gmg_material(str, lib.materials[i]);
-
-      if (i < lib.n_materials - 1) {
-        gm_str_append(str, ",\n");
-      } else {
-        gm_str_append(str, "\n");
-      }
-    }
-    gm_str_append(str, "  }\n");
-  } else {
-    gm_str_append(str, "  .materials = NULL\n");
-  }
-
-  gm_str_append(str, "}");
-  return 0;
 }

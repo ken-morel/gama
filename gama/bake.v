@@ -4,54 +4,99 @@ import os
 import term
 
 @[unsafe]
-pub fn bake_obj(path string, fname string) !string {
-	mesh := load_mesh(path, os.dir(path))!
+fn bake_mesh_data(mesh C.gm3Mesh, path string, fname string) !string {
+	// 1. Serialize mesh in C
+	mut data_ptr := unsafe { nil }
+	mut data_size := u64(0)
+	if C.gm3_mesh_serialize(&mesh, &data_ptr, &data_size) != 0 {
+		return error('Failed to serialize mesh from: ${path}')
+	}
+	defer {
+		C.free(data_ptr)
+	}
 
-	code := generate_mesh(mesh)!
+	// 2. Convert C data to V slice
+	bytes := unsafe { &u8(data_ptr) }
 
+	// 3. Format bytes into C array string
+	mut byte_str := ''
+	for i in 0 .. data_size {
+		b := bytes[i]
+		byte_str += '0x${b.hex()}, '
+		if (i + 1) % 16 == 0 {
+			byte_str += '\n\t'
+		}
+	}
+
+	// 4. Return the generated code
 	return '
 #pragma once
+#include <gama/3d/mesh.h> // Contains the deserialization function
 
-#include <gama/3d/mesh.h>
-#include <gama/3d/mtl.h>
-
-// Baked mesh from ${os.file_name(path)}
-
-const gm3Mesh _${fname}_data;
+// Baked mesh data for ${os.file_name(path)}
+static const unsigned char _${fname}_data[];
+static const unsigned int _${fname}_len;
 static inline gm3Mesh ${fname}();
-
 //////////
-
-const gm3Mesh _${fname}_data = ${code};
-
+static const unsigned int _${fname}_len = ${data_size};
+static const unsigned char _${fname}_data[] = {
+	${byte_str}
+};
 static inline gm3Mesh ${fname}() {
-	return _${fname}_data;
-}'
+	gm3Mesh mesh;
+	gm3_mesh_deserialize(&mesh, _${fname}_data, _${fname}_len);
+	return mesh;
+}
+'
+}
+
+@[unsafe]
+pub fn bake_obj(path string, fname string) !string {
+	mut mesh := C.gm3Mesh{}
+	if C.gm3_obj_load(&mesh, path.str, os.dir(path).str) != 0 {
+		return error('Failed to load OBJ file: ${path}')
+	}
+	defer {
+		C.gm3_mesh_free(&mesh)
+	}
+	return bake_mesh_data(mesh, path, fname)
+}
+
+@[unsafe]
+pub fn bake_gltf(path string, fname string) !string {
+	mut mesh := C.gm3Mesh{}
+	if C.gm3_gltf_load(&mesh, path.str) != 0 {
+		return error('Failed to load GLTF file: ${path}')
+	}
+	defer {
+		C.gm3_mesh_free(&mesh)
+	}
+	return bake_mesh_data(mesh, path, fname)
 }
 
 pub fn bake_img(path string, fname string) !string {
 	bytes := os.read_bytes(path)!
 
 	mut byte_str := ''
-	for i, b in bytes {
+	mut i := 0
+	for bytes[i] != 0 {
+		b := bytes[i]
 		byte_str += '0x${b.hex()}, '
 		if (i + 1) % 16 == 0 {
 			byte_str += '\n\t'
 		}
+		i += 1
 	}
+
 	return '
 #pragma once
 #include <gama/image.h>
 
 // Baked image data for ${os.file_name(path)}
-
 static const unsigned char _${fname}_data[];
 static const unsigned int _${fname}_len;
 static inline gmImage ${fname}();
-
 //////////
-
-
 static const unsigned int _${fname}_len = ${bytes.len};
 static const unsigned char _${fname}_data[] = {
 	${byte_str}
@@ -69,14 +114,14 @@ fn format_size(bytes i64) string {
 	}
 	mut val := f64(bytes) / 1024.0
 	if val < 1024 {
-		return '${val} KB'
+		return val.str() + ' KB'
 	}
 	val /= 1024.0
 	if val < 1024 {
-		return '${val} MB'
+		return val.str() + ' MB'
 	}
 	val /= 1024.0
-	return '${val} GB'
+	return val.str() + ' GB'
 }
 
 pub fn (p Project) bake(inst Installation, clean bool) ! {
@@ -116,6 +161,16 @@ pub fn (p Project) bake(inst Installation, clean bool) ! {
 				content = bake_img(path, var) or {
 					println(term.fail_message('${err}'))
 					return
+				}
+			} else if relpath.ends_with('.gltf') || relpath.ends_with('.glb') {
+				ext_len := os.file_ext(relpath).len
+				base_name := fname[0..fname.len - ext_len]
+				var := base_name.replace('-', '_').replace('.', '_') + '_mesh'
+				unsafe { // bake_gltf is unsafe because it deals with C memory
+					content = bake_gltf(path, var) or {
+						println(term.fail_message('${err}'))
+						return
+					}
 				}
 			} else {
 				// If no handler, skip the file.
