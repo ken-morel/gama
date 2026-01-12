@@ -20,6 +20,7 @@
 // ---------------------------------------------------------------------------
 
 int gm_cache(unsigned int id) {
+  (void)id; // Parameter is unused for now.
   static int on = 0;
   on = !on;
   return on;
