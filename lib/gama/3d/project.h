@@ -139,6 +139,10 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
 
 int gm3_project(gm3Image *output, const gm3Mesh *mesh,
                 const gm3Transform *transform, const gm3Scene *scene) {
+  if (transform == NULL)
+    transform = &gm3_default_transform;
+  if (scene == NULL)
+    scene = &gm3_default_scene;
 
   if (!mesh || mesh->n_vertices == 0)
     return 0;

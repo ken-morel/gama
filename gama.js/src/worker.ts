@@ -219,21 +219,22 @@ const gapi = {
   },
   draw_triangles: (ntriangles: number, points_ptr: Ptr, colors_ptr: Ptr) => {
     const triangles: Triangle[] = [];
+    const points = getDoublePtr(d.mem!, points_ptr, ntriangles * 6);
+    const colors = getGmColorPtr(d.mem!, colors_ptr, ntriangles);
+
     for (let i = 0; i < ntriangles; i++) {
-      const p = getDoublePtr(d.mem!, points_ptr + (8 * 6) * i, 6);
-      const col = getGmColorPtr(d.mem!, colors_ptr + (4 * i), 1)[0];
+      const p_off = i * 6;
       triangles.push({
-        a: [p[0], p[1]],
-        b: [p[2], p[3]],
-        c: [p[4], p[5]],
-        col: col,
+        a: [points[p_off + 0], points[p_off + 1]],
+        b: [points[p_off + 2], points[p_off + 3]],
+        c: [points[p_off + 4], points[p_off + 5]],
+        col: colors[i],
       });
     }
     d.cmds.push([
       'triangles',
       triangles,
     ]);
-
   },
   yield: (dt_ptr: CharPtr) => {
     self.postMessage({
