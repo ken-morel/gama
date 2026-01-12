@@ -46,34 +46,6 @@ static void gmd_gltf_print_node(cgltf_node *node, int level) {
   }
 }
 
-int gmd_gltf_print(const char *path) {
-  cgltf_options options = {0};
-  cgltf_data *data = NULL;
-  cgltf_result result = cgltf_parse_file(&options, path, &data);
-  if (result != cgltf_result_success) {
-    printf("gmd_gltf_print: Failed to parse GLTF file: %s\n", path);
-    return -1;
-  }
-
-  printf("--- GLTF Inspector: %s ---\n", path);
-  printf("Scenes: %zu\n", data->scenes_count);
-  if (data->scene) {
-    printf("Default Scene: '%s' (%zu root nodes)\n",
-           data->scene->name ? data->scene->name : "unnamed",
-           data->scene->nodes_count);
-    for (size_t i = 0; i < data->scene->nodes_count; ++i) {
-      gmd_gltf_print_node(data->scene->nodes[i], 1);
-    }
-  }
-  printf("Meshes: %zu\n", data->meshes_count);
-  printf("Materials: %zu\n", data->materials_count);
-  printf("Textures: %zu\n", data->textures_count);
-  printf("Images: %zu\n", data->images_count);
-  printf("---------------------------------\n");
-
-  cgltf_free(data);
-  return 0;
-}
 
 static void transform_pos(gm3Pos *dst, const gm3Pos *src,
                           const cgltf_float *m) {
