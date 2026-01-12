@@ -1,7 +1,5 @@
 # Gama
 
-![Gama logo](./gama.svg)
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G4XYJU6)
 
 **Website:** https://gama.rbs.cm
 **Documentation:** https://gama.rbs.cm/docs
@@ -114,3 +112,6 @@ To contribute to the documentation or the site:
 - Documentation is generated automatically with Doxygen and the `mng docs` command
 - Add new tutorials/pages in `site/src/routes/docs/`
 - The build system automatically serves Doxygen documentation at `/reference/`
+
+![Gama logo](./gama.svg)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G4XYJU6)
