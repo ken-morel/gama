@@ -19,6 +19,13 @@
 // ------------------------- Immediate-Mode Primitives -----------------------
 // ---------------------------------------------------------------------------
 
+int gm_cache(unsigned int id) {
+  (void)id; // Parameter is unused for now.
+  static int on = 0;
+  on = !on;
+  return on;
+}
+
 /**
  * @brief Draws a line segment.
  * @param x1 The x-coordinate of the starting point.

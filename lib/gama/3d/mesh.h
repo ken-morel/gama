@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../position.h"
-#include "../str.h"
 #include "mtl.h"
 #include "position.h"
 #include <float.h>
@@ -15,6 +13,10 @@ typedef struct {
 } gm3MeshFace;
 
 typedef struct {
+  double u, v;
+} gm3Tex;
+
+typedef struct {
   gm3Pos *vertices;
   size_t n_vertices;
 
@@ -24,7 +26,7 @@ typedef struct {
   gm3Pos *normals;
   size_t n_normals;
 
-  gmPos *texs;
+  gm3Tex *texs;
   size_t n_texs;
 
   gm3MtlLib *mtllibs;
@@ -71,122 +73,211 @@ int gm3_mesh_center(gm3Mesh *m) {
   return 0;
 }
 
-int32_t gmg_face(gmStr *str, gm3MeshFace f) {
-  char buffer[256];
+int gm3_mesh_serialize(const gm3Mesh *mesh, void **data, size_t *size);
+int gm3_mesh_deserialize(gm3Mesh *mesh, const void *data, size_t size);
 
-  gm_str_append(str, "(gm3MeshFace){");
+// --- Serialization ---
+// A simple binary format for baking:
+// Header | vertices | faces | tex coords | mtllibs (and their materials) |
+// textures
+typedef struct {
+  uint32_t magic;
+  size_t n_vertices;
+  size_t n_faces;
+  size_t n_normals;
+  size_t n_texs;
+  size_t n_mtllibs;
+} gm3BakedMeshHeader;
+#define GM3_BAKED_MESH_MAGIC 0x474D334D // "GM3M"
 
-  // Vertices
-  snprintf(buffer, sizeof(buffer), ".vertices = {%zu, %zu, %zu}, ",
-           f.vertices[0], f.vertices[1], f.vertices[2]);
-  gm_str_append(str, buffer);
+int gm3_mesh_serialize(const gm3Mesh *mesh, void **data, size_t *size) {
+  // Calculate total size for all textures and their metadata
+  size_t total_textures_size = 0;
+  for (size_t i = 0; i < mesh->n_mtllibs; i++) {
+    gm3MtlLib *lib = &mesh->mtllibs[i];
+    total_textures_size += sizeof(size_t); // n_textures
+    for (size_t j = 0; j < lib->n_textures; j++) {
+      gm3Texture *tex = &lib->textures[j];
+      size_t data_size = tex->data.width * tex->data.height * 4;
+      total_textures_size += sizeof(int32_t) * 2; // width, height
+      total_textures_size += sizeof(size_t); // size of pixel data
+      total_textures_size += data_size;      // pixel data itself
+      total_textures_size += 256;            // path
+    }
+  }
 
-  // Material Indices
-  snprintf(buffer, sizeof(buffer), ".material = %d, .material_file = %d, ",
-           f.material, f.material_file);
-  gm_str_append(str, buffer);
+  // Calculate total size for all material libraries and their materials
+  size_t mtllibs_size = 0;
+  for (size_t i = 0; i < mesh->n_mtllibs; i++) {
+    mtllibs_size += 256;            // name
+    mtllibs_size += sizeof(size_t); // n_materials
+    mtllibs_size += sizeof(size_t); // n_textures
+    mtllibs_size += sizeof(gm3Material) * mesh->mtllibs[i].n_materials;
+  }
 
-  // Normal (uses gmg_pos3)
-  gm_str_append(str, ".normal = ");
-  gmg_pos3(str, f.normal);
+  *size = sizeof(gm3BakedMeshHeader) + sizeof(gm3Pos) * mesh->n_vertices +
+          sizeof(gm3MeshFace) * mesh->n_faces +
+          sizeof(gm3Pos) * mesh->n_normals + sizeof(gm3Tex) * mesh->n_texs +
+          mtllibs_size + total_textures_size;
 
-  gm_str_append(str, "}");
+  *data = malloc(*size);
+  if (!*data)
+    return -1;
+
+  char *p = (char *)*data;
+
+  // Header
+  gm3BakedMeshHeader header = {
+      .magic = GM3_BAKED_MESH_MAGIC,
+      .n_vertices = mesh->n_vertices,
+      .n_faces = mesh->n_faces,
+      .n_normals = mesh->n_normals,
+      .n_texs = mesh->n_texs,
+      .n_mtllibs = mesh->n_mtllibs,
+  };
+  memcpy(p, &header, sizeof(header));
+  p += sizeof(header);
+
+  // Main data blocks
+  if (mesh->n_vertices > 0) {
+    memcpy(p, mesh->vertices, sizeof(gm3Pos) * mesh->n_vertices);
+    p += sizeof(gm3Pos) * mesh->n_vertices;
+  }
+  if (mesh->n_faces > 0) {
+    memcpy(p, mesh->faces, sizeof(gm3MeshFace) * mesh->n_faces);
+    p += sizeof(gm3MeshFace) * mesh->n_faces;
+  }
+  if (mesh->n_normals > 0) {
+    memcpy(p, mesh->normals, sizeof(gm3Pos) * mesh->n_normals);
+    p += sizeof(gm3Pos) * mesh->n_normals;
+  }
+  if (mesh->n_texs > 0) {
+    memcpy(p, mesh->texs, sizeof(gm3Tex) * mesh->n_texs);
+    p += sizeof(gm3Tex) * mesh->n_texs;
+  }
+
+  // Material Libs and Textures
+  for (size_t i = 0; i < mesh->n_mtllibs; i++) {
+    gm3MtlLib *lib = &mesh->mtllibs[i];
+    // Lib metadata
+    memcpy(p, lib->name, 256);
+    p += 256;
+    memcpy(p, &lib->n_materials, sizeof(size_t));
+    p += sizeof(size_t);
+    memcpy(p, &lib->n_textures, sizeof(size_t));
+    p += sizeof(size_t);
+
+    // Materials
+    if (lib->n_materials > 0) {
+      memcpy(p, lib->materials, sizeof(gm3Material) * lib->n_materials);
+      p += sizeof(gm3Material) * lib->n_materials;
+    }
+
+    // Textures
+    for (size_t j = 0; j < lib->n_textures; j++) {
+      gm3Texture *tex = &lib->textures[j];
+      size_t data_size = tex->data.width * tex->data.height * 4;
+      memcpy(p, tex->path, 256);
+      p += 256;
+      memcpy(p, &tex->data.width, sizeof(int32_t));
+      p += sizeof(int32_t);
+      memcpy(p, &tex->data.height, sizeof(int32_t));
+      p += sizeof(int32_t);
+      memcpy(p, &data_size, sizeof(size_t));
+      p += sizeof(size_t);
+      memcpy(p, tex->data.data, data_size);
+      p += data_size;
+    }
+  }
+
   return 0;
 }
 
-int32_t gmg_mesh(gmStr *str, gm3Mesh m) {
-  char buffer[1024];
+int gm3_mesh_deserialize(gm3Mesh *mesh, const void *data, size_t size) {
+  memset(mesh, 0, sizeof(gm3Mesh));
+  const char *p = (const char *)data;
 
-  // 1. Open Struct R-Value
-  gm_str_append(str, "(gm3Mesh){\n");
+  if (size < sizeof(gm3BakedMeshHeader))
+    return -1;
+  const gm3BakedMeshHeader *header = (const gm3BakedMeshHeader *)p;
+  if (header->magic != GM3_BAKED_MESH_MAGIC)
+    return -1;
+  p += sizeof(gm3BakedMeshHeader);
 
-  // 2. Vertices
-  snprintf(buffer, sizeof(buffer), "  .n_vertices = %zu,\n", m.n_vertices);
-  gm_str_append(str, buffer);
-
-  if (m.n_vertices > 0) {
-    gm_str_append(str, "  .vertices = (gm3Pos[]){\n");
-    for (size_t i = 0; i < m.n_vertices; i++) {
-
-      gm_str_append(str, "    ");
-      gmg_pos3(str, m.vertices[i]);
-
-      if (i < m.n_vertices - 1)
-        gm_str_append(str, ",\n");
-      else
-        gm_str_append(str, "\n");
-    }
-    gm_str_append(str, "  },\n");
-  } else {
-    gm_str_append(str, "  .vertices = NULL,\n");
+  // Allocate and copy main data blocks
+  mesh->n_vertices = header->n_vertices;
+  if (mesh->n_vertices > 0) {
+    mesh->vertices = malloc(sizeof(gm3Pos) * mesh->n_vertices);
+    memcpy(mesh->vertices, p, sizeof(gm3Pos) * mesh->n_vertices);
+    p += sizeof(gm3Pos) * mesh->n_vertices;
   }
 
-  // 3. Faces
-  snprintf(buffer, sizeof(buffer), "  .n_faces = %zu,\n", m.n_faces);
-  gm_str_append(str, buffer);
-
-  if (m.n_faces > 0) {
-    gm_str_append(str, "  .faces = (gm3MeshFace[]){\n");
-    for (size_t i = 0; i < m.n_faces; i++) {
-
-      gm_str_append(str, "    ");
-      gmg_face(str, m.faces[i]);
-
-      if (i < m.n_faces - 1)
-        gm_str_append(str, ",\n");
-      else
-        gm_str_append(str, "\n");
-    }
-    gm_str_append(str, "  },\n");
-  } else {
-    gm_str_append(str, "  .faces = NULL,\n");
+  mesh->n_faces = header->n_faces;
+  if (mesh->n_faces > 0) {
+    mesh->faces = malloc(sizeof(gm3MeshFace) * mesh->n_faces);
+    memcpy(mesh->faces, p, sizeof(gm3MeshFace) * mesh->n_faces);
+    p += sizeof(gm3MeshFace) * mesh->n_faces;
   }
 
-  // 4. Normals
-  snprintf(buffer, sizeof(buffer), "  .n_normals = %zu,\n", m.n_normals);
-  gm_str_append(str, buffer);
-
-  if (m.n_normals > 0) {
-    gm_str_append(str, "  .normals = (gm3Pos[]){\n");
-    for (size_t i = 0; i < m.n_normals; i++) {
-
-      gm_str_append(str, "    ");
-      gmg_pos3(str, m.normals[i]);
-
-      if (i < m.n_normals - 1)
-        gm_str_append(str, ",\n");
-      else
-        gm_str_append(str, "\n");
-    }
-    gm_str_append(str, "  },\n");
-  } else {
-    gm_str_append(str, "  .normals = NULL,\n");
+  mesh->n_normals = header->n_normals;
+  if (mesh->n_normals > 0) {
+    mesh->normals = malloc(sizeof(gm3Pos) * mesh->n_normals);
+    memcpy(mesh->normals, p, sizeof(gm3Pos) * mesh->n_normals);
+    p += sizeof(gm3Pos) * mesh->n_normals;
   }
 
-  // 5. Material Libraries (mtllibs)
-  // This recursively generates the libraries contained in the mesh
-  snprintf(buffer, sizeof(buffer), "  .n_mtllibs = %zu,\n", m.n_mtllibs);
-  gm_str_append(str, buffer);
-
-  if (m.n_mtllibs > 0) {
-    gm_str_append(str, "  .mtllibs = (gm3MtlLib[]){\n");
-    for (size_t i = 0; i < m.n_mtllibs; i++) {
-      // Assuming gmg_mtllib exists and generates (gm3MtlLib){...}
-
-      gm_str_append(str, "    ");
-      gmg_mtllib(str, m.mtllibs[i]);
-
-      if (i < m.n_mtllibs - 1)
-        gm_str_append(str, ",\n");
-      else
-        gm_str_append(str, "\n");
-    }
-    gm_str_append(str, "  }\n");
-  } else {
-    gm_str_append(str, "  .mtllibs = NULL\n");
+  mesh->n_texs = header->n_texs;
+  if (mesh->n_texs > 0) {
+    mesh->texs = malloc(sizeof(gm3Tex) * mesh->n_texs);
+    memcpy(mesh->texs, p, sizeof(gm3Tex) * mesh->n_texs);
+    p += sizeof(gm3Tex) * mesh->n_texs;
   }
 
-  // 6. Close Struct
-  gm_str_append(str, "}");
+  // Allocate and copy material libs and textures
+  mesh->n_mtllibs = header->n_mtllibs;
+  if (mesh->n_mtllibs > 0) {
+    mesh->mtllibs = calloc(mesh->n_mtllibs, sizeof(gm3MtlLib));
+    for (size_t i = 0; i < mesh->n_mtllibs; i++) {
+      gm3MtlLib *lib = &mesh->mtllibs[i];
+      memcpy(lib->name, p, 256);
+      p += 256;
+      memcpy(&lib->n_materials, p, sizeof(size_t));
+      p += sizeof(size_t);
+      memcpy(&lib->n_textures, p, sizeof(size_t));
+      p += sizeof(size_t);
+
+      if (lib->n_materials > 0) {
+        lib->materials = malloc(sizeof(gm3Material) * lib->n_materials);
+        memcpy(lib->materials, p, sizeof(gm3Material) * lib->n_materials);
+        p += sizeof(gm3Material) * lib->n_materials;
+      }
+
+      if (lib->n_textures > 0) {
+        lib->textures = calloc(lib->n_textures, sizeof(gm3Texture));
+        for (size_t j = 0; j < lib->n_textures; j++) {
+          gm3Texture *tex = &lib->textures[j];
+          size_t data_size = 0;
+          memcpy(tex->path, p, 256);
+          p += 256;
+          memcpy(&tex->data.width, p, sizeof(int32_t));
+          p += sizeof(int32_t);
+          memcpy(&tex->data.height, p, sizeof(int32_t));
+          p += sizeof(int32_t);
+          memcpy(&data_size, p, sizeof(size_t));
+          p += sizeof(size_t);
+          tex->data.data = malloc(data_size);
+          memcpy(tex->data.data, p, data_size);
+          p += data_size;
+        }
+      }
+    }
+  }
+
+  // Check bounds
+  if ((size_t)(p - (const char *)data) > size) {
+    gm3_mesh_free(mesh);
+    return -1; // Data corruption / size mismatch
+  }
+
   return 0;
 }
