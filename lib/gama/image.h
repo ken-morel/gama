@@ -8,11 +8,24 @@
 #include <string.h>
 #include "color.h"
 
+/**
+ * @brief A container for raw, CPU-side image pixel data.
+ *
+ * This struct holds raw pixel data decoded from an image file. It is typically
+ * used as an intermediate step before creating a `gmImage`, which manages the
+ * texture on the GPU.
+ */
 typedef struct {
-  int32_t width, height;
-  unsigned char *data;
+  int32_t width, height; /**< Dimensions of the image in pixels. */
+  unsigned char *data;  /**< Pointer to the raw RGBA pixel data. */
 } gmImageData;
 
+/**
+ * @brief Loads image file from disk into a gmImageData struct.
+ * @param data A pointer to the gmImageData struct to be filled.
+ * @param path The file path of the image to load.
+ * @return 0 on success, -1 on failure.
+ */
 int32_t gm_image_data_load(gmImageData *data, const char *path) {
   memset(data, 0, sizeof(gmImageData));
   data->data = stbi_load(path, &data->width, &data->height, NULL, 4);
@@ -34,6 +47,11 @@ int32_t gm_image_data_load_from_memory(gmImageData *data,
   return data->data ? 0 : -1;
 }
 
+/**
+ * @brief Frees the pixel data buffer of a gmImageData struct.
+ * @param d A pointer to the gmImageData struct to free.
+ * @return 0 on success.
+ */
 int32_t gm_image_data_free(gmImageData *d) {
   free(d->data);
   d->width = 0;
@@ -42,7 +60,7 @@ int32_t gm_image_data_free(gmImageData *d) {
 }
 
 /**
- * @brief Calculates the average color of an image.
+ * @brief Calculates the average color of an image's raw pixel data.
  * @param data Pointer to the gmImageData structure.
  * @return The average color as a gmColor.
  */
@@ -71,7 +89,10 @@ gmColor gm_image_data_average_color(const gmImageData *data) {
 
 
 /**
- * @brief Structure representing an image with handle and dimensions.
+ * @brief A handle to a GPU-managed image or texture.
+ *
+ * This struct represents an image that has been uploaded to the graphics
+ * hardware for efficient rendering.
  */
 typedef struct {
   uint32_t handle; /**< Internal handle for the image */
@@ -83,9 +104,13 @@ typedef struct {
 #include "gapi.h"
 
 /**
- * @brief Loads an image from a file path.
+ * @brief Creates a GPU-managed image from a file path.
+ *
+ * This function loads an image file from disk, uploads its data to the GPU,
+ * and then discards the CPU-side copy.
+ *
  * @param path The file path to the image.
- * @return A gmImage structure containing the loaded image and its properties.
+ * @return A `gmImage` handle.
  */
 gmImage gm_image_create(const char *path) {
   gmImage img;
@@ -99,10 +124,14 @@ gmImage gm_image_create(const char *path) {
 }
 
 /**
- * @brief Creates an image from in-memory data.
+ * @brief Creates a GPU-managed image from in-memory data.
+ *
+ * This function decodes an image from a memory buffer, uploads its data to the
+ * GPU, and then discards the CPU-side copy.
+ *
  * @param buffer Pointer to the buffer containing the raw image file data.
  * @param len The length of the buffer in bytes.
- * @return A gmImage structure containing the loaded image and its properties.
+ * @return A `gmImage` handle.
  */
 gmImage gm_image_create_from_memory(const unsigned char *buffer, int len) {
   gmImage img;
@@ -116,10 +145,10 @@ gmImage gm_image_create_from_memory(const unsigned char *buffer, int len) {
 }
 
 /**
- * @brief Draws an entire image at the specified position and size.
+ * @brief Draws an entire image, centered at the specified position.
  * @param i The image to draw.
- * @param x The x-coordinate to draw at.
- * @param y The y-coordinate to draw at.
+ * @param x The x-coordinate of the center of the image.
+ * @param y The y-coordinate of the center of the image.
  * @param w The width to draw the image.
  * @param h The height to draw the image.
  */
@@ -128,16 +157,16 @@ void gm_image_draw(gmImage i, double x, double y, double w, double h) {
 }
 
 /**
- * @brief Draws a part of an image at the specified position and size.
- * @param i The image to draw from.
- * @param slice_x The x-coordinate of the slice to draw from the image.
- * @param slice_y The y-coordinate of the slice to draw from the image.
- * @param slice_width The width of the slice to draw from the image.
- * @param slice_height The height of the slice to draw from the image.
- * @param x The x-coordinate to draw at.
- * @param y The y-coordinate to draw at.
- * @param w The width to draw the slice.
- * @param h The height to draw the slice.
+ * @brief Draws a rectangular sub-region of an image.
+ * @param i The source image to draw from.
+ * @param slice_x The x-coordinate of the top-left corner of the sub-region.
+ * @param slice_y The y-coordinate of the top-left corner of the sub-region.
+ * @param slice_width The width of the sub-region.
+ * @param slice_height The height of the sub-region.
+ * @param x The x-coordinate of the center of the destination rectangle.
+ * @param y The y-coordinate of the center of the destination rectangle.
+ * @param w The width to draw the sub-region.
+ * @param h The height to draw the sub-region.
  */
 void gm_image_draw_part(gmImage i, int slice_x, int slice_y, int slice_width,
                         int slice_height, double x, double y, double w,
@@ -146,3 +175,4 @@ void gm_image_draw_part(gmImage i, int slice_x, int slice_y, int slice_width,
                        y, w, h);
 }
 #endif
+
