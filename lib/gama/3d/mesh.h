@@ -99,8 +99,7 @@ int gm3_mesh_serialize(const gm3Mesh *mesh, void **data, size_t *size) {
     for (size_t j = 0; j < lib->n_textures; j++) {
       gm3Texture *tex = &lib->textures[j];
       size_t data_size = tex->data.width * tex->data.height * 4;
-      total_textures_size +=
-          sizeof(gmImageData); // width, height (data pointer is not saved)
+      total_textures_size += sizeof(int32_t) * 2; // width, height
       total_textures_size += sizeof(size_t); // size of pixel data
       total_textures_size += data_size;      // pixel data itself
       total_textures_size += 256;            // path
