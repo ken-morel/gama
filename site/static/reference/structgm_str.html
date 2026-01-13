@@ -93,6 +93,9 @@ $(function(){initNavTree('structgm_str.html','',''); });
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a dynamic, heap-allocated string.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="str_8h_source.html">str.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -100,7 +103,10 @@ Data Fields</h2></td></tr>
 <tr class="memitem:af5a72439ffc10b8def62f47359c5b035" id="r_af5a72439ffc10b8def62f47359c5b035"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5a72439ffc10b8def62f47359c5b035">length</a></td></tr>
 <tr class="memitem:a355c435ce2c8ae098ef2da6759e2f03a" id="r_a355c435ce2c8ae098ef2da6759e2f03a"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a355c435ce2c8ae098ef2da6759e2f03a">content</a></td></tr>
 </table>
-<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a dynamic, heap-allocated string. </p>
+<p>This structure stores both the current length of the string and a pointer to its content, allowing for efficient string manipulation and growth. </p>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
 <a id="a355c435ce2c8ae098ef2da6759e2f03a" name="a355c435ce2c8ae098ef2da6759e2f03a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a355c435ce2c8ae098ef2da6759e2f03a">&#9670;&#160;</a></span>content</h2>
 
@@ -112,6 +118,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pointer to the heap-allocated string content (null-terminated). </p>
 
 </div>
 </div>
@@ -126,6 +133,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The current length of the string (excluding null terminator). </p>
 
 </div>
 </div>

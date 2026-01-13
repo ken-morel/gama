@@ -103,16 +103,16 @@ $(function(){initNavTree('body__list_8h.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a30f5b13872a3318f73192a39894b697d" id="r_a30f5b13872a3318f73192a39894b697d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30f5b13872a3318f73192a39894b697d">gm_ptr_list_for_each</a>(item,  list)</td></tr>
-<tr class="memdesc:a30f5b13872a3318f73192a39894b697d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro for iterating over a <a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic pointers.">gmPtrList</a>.  <br /></td></tr>
+<tr class="memdesc:a30f5b13872a3318f73192a39894b697d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro for iterating over a <span class="tt"><a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic void* pointers.">gmPtrList</a></span>.  <br /></td></tr>
 <tr class="memitem:ab298fc0de9eb09b64e5bbce8523f06f3" id="r_ab298fc0de9eb09b64e5bbce8523f06f3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab298fc0de9eb09b64e5bbce8523f06f3">gm_bodies_for_each</a>(item,  list)</td></tr>
-<tr class="memdesc:ab298fc0de9eb09b64e5bbce8523f06f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro for iterating over a <a class="el" href="#accee67073d78bddbdc0932f9940f22f5" title="A specialized pointer list for gmBody pointers.">gmBodies</a> list.  <br /></td></tr>
+<tr class="memdesc:ab298fc0de9eb09b64e5bbce8523f06f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro for iterating over a <span class="tt"><a class="el" href="#accee67073d78bddbdc0932f9940f22f5" title="A specialized dynamic, NULL-terminated list for gmBody pointers.">gmBodies</a></span> list.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a7b2f53c316ac2748b5b9fed7beb84221" id="r_a7b2f53c316ac2748b5b9fed7beb84221"><td class="memItemLeft" align="right" valign="top">typedef void **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221">gmPtrList</a></td></tr>
-<tr class="memdesc:a7b2f53c316ac2748b5b9fed7beb84221"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dynamic, NULL-terminated array of generic pointers.  <br /></td></tr>
+<tr class="memdesc:a7b2f53c316ac2748b5b9fed7beb84221"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dynamic, NULL-terminated array of generic <span class="tt">void*</span> pointers.  <br /></td></tr>
 <tr class="memitem:accee67073d78bddbdc0932f9940f22f5" id="r_accee67073d78bddbdc0932f9940f22f5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structgm_body.html">gmBody</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#accee67073d78bddbdc0932f9940f22f5">gmBodies</a></td></tr>
-<tr class="memdesc:accee67073d78bddbdc0932f9940f22f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">A specialized pointer list for <span class="tt"><a class="el" href="structgm_body.html" title="Structure representing a physics body with properties for collision and movement.">gmBody</a></span> pointers.  <br /></td></tr>
+<tr class="memdesc:accee67073d78bddbdc0932f9940f22f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">A specialized dynamic, NULL-terminated list for <span class="tt"><a class="el" href="structgm_body.html" title="Structure representing a physics body with properties for collision and movement.">gmBody</a></span> pointers.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -143,8 +143,8 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides a dynamic, NULL-terminated pointer list implementation. </p>
-<p>This file contains a generic pointer list (<span class="tt"><a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic pointers.">gmPtrList</a></span>) and a specialized version for physics bodies (<span class="tt"><a class="el" href="#accee67073d78bddbdc0932f9940f22f5" title="A specialized pointer list for gmBody pointers.">gmBodies</a></span>). The lists automatically resize and are always NULL-terminated, making them easy to iterate.</p>
-<dl class="section note"><dt>Note</dt><dd>The functions in this file that return a new list (e.g., push, pop) allocate new memory. It is the caller's responsibility to free the original list pointer to prevent memory leaks. </dd></dl>
+<p>This file contains a generic pointer list (<span class="tt"><a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic void* pointers.">gmPtrList</a></span>) and a specialized version for physics bodies (<span class="tt"><a class="el" href="#accee67073d78bddbdc0932f9940f22f5" title="A specialized dynamic, NULL-terminated list for gmBody pointers.">gmBodies</a></span>). The lists automatically resize and are always NULL-terminated, making them easy to iterate.</p>
+<dl class="section note"><dt>Note</dt><dd>The functions in this file that return a new list (e.g., push, pop) allocate new memory. It is the caller's responsibility to free the original list pointer to prevent memory leaks. Specifically, <span class="tt"><a class="el" href="#a140f77db3685803d483854a00c9167bd" title="Removes an element at a specific index.">gm_ptr_list_pop_at</a></span> uses <span class="tt"><a class="el" href="stb__leakcheck_8h.html#ac71ce303a4b993665ae00f1e1293ba8b">malloc</a></span> internally to create a new list. </dd></dl>
 </div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
 <a id="ab298fc0de9eb09b64e5bbce8523f06f3" name="ab298fc0de9eb09b64e5bbce8523f06f3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab298fc0de9eb09b64e5bbce8523f06f3">&#9670;&#160;</a></span>gm_bodies_for_each</h2>
@@ -166,11 +166,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; (list != NULL) &amp;&amp; (item = list[i]) != NULL; i++)</div>
 </div><!-- fragment -->
-<p>A macro for iterating over a <a class="el" href="#accee67073d78bddbdc0932f9940f22f5" title="A specialized pointer list for gmBody pointers.">gmBodies</a> list. </p>
+<p>A macro for iterating over a <span class="tt"><a class="el" href="#accee67073d78bddbdc0932f9940f22f5" title="A specialized dynamic, NULL-terminated list for gmBody pointers.">gmBodies</a></span> list. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">item</td><td>A <span class="tt">gmBody*</span> variable to hold the current item. </td></tr>
-    <tr><td class="paramname">list</td><td>The <a class="el" href="#accee67073d78bddbdc0932f9940f22f5" title="A specialized pointer list for gmBody pointers.">gmBodies</a> list to iterate over. </td></tr>
+    <tr><td class="paramname">list</td><td>The <span class="tt"><a class="el" href="#accee67073d78bddbdc0932f9940f22f5" title="A specialized dynamic, NULL-terminated list for gmBody pointers.">gmBodies</a></span> list to iterate over. </td></tr>
   </table>
   </dd>
 </dl>
@@ -197,11 +197,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; (list != NULL) &amp;&amp; (item = list[i]) != NULL; i++)</div>
 </div><!-- fragment -->
-<p>A macro for iterating over a <a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic pointers.">gmPtrList</a>. </p>
+<p>A macro for iterating over a <span class="tt"><a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic void* pointers.">gmPtrList</a></span>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">item</td><td>The variable to hold the current item (e.g., <span class="tt">gmBody* item</span>). </td></tr>
-    <tr><td class="paramname">list</td><td>The <a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic pointers.">gmPtrList</a> to iterate over. </td></tr>
+    <tr><td class="paramname">list</td><td>The <span class="tt"><a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic void* pointers.">gmPtrList</a></span> to iterate over. </td></tr>
   </table>
   </dd>
 </dl>
@@ -221,7 +221,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>A specialized pointer list for <span class="tt"><a class="el" href="structgm_body.html" title="Structure representing a physics body with properties for collision and movement.">gmBody</a></span> pointers. </p>
+<p>A specialized dynamic, NULL-terminated list for <span class="tt"><a class="el" href="structgm_body.html" title="Structure representing a physics body with properties for collision and movement.">gmBody</a></span> pointers. </p>
+<p>This type is <span class="tt">gmBody**</span> and provides convenience wrappers around <span class="tt"><a class="el" href="#a7b2f53c316ac2748b5b9fed7beb84221" title="A dynamic, NULL-terminated array of generic void* pointers.">gmPtrList</a></span> for type safety with physics bodies. </p>
 
 </div>
 </div>
@@ -237,7 +238,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>A dynamic, NULL-terminated array of generic pointers. </p>
+<p>A dynamic, NULL-terminated array of generic <span class="tt">void*</span> pointers. </p>
+<p>This type is a <span class="tt">void**</span> and represents a resizable array that is always terminated by a <span class="tt">NULL</span> pointer. </p>
 
 </div>
 </div>
@@ -393,7 +395,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. The original list should be freed. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. <b>The original list pointer is freed internally and replaced by the returned pointer.</b> </dd></dl>
 
 </div>
 </div>
@@ -497,7 +499,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. The original list should be freed. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. <b>The original list pointer is reallocated and should be replaced by the returned pointer.</b> </dd></dl>
 
 </div>
 </div>
@@ -528,7 +530,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. The original list should be freed. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. <b>The original list pointer is freed internally and replaced by the returned pointer.</b> </dd></dl>
 
 </div>
 </div>
@@ -559,7 +561,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. The original list should be freed. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. <b>The original list pointer is reallocated and should be replaced by the returned pointer.</b> </dd></dl>
 
 </div>
 </div>
@@ -590,7 +592,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. The original list should be freed. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A new pointer to the resized list. <b>The original list pointer is freed internally and replaced by the returned pointer.</b> </dd></dl>
 
 </div>
 </div>

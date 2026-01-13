@@ -92,16 +92,18 @@ $(function(){initNavTree('system_8h.html','',''); });
   <div class="headertitle"><div class="title">system.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Manages physics bodies, their interactions, and collision detection within a simulation.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="body_8h_source.html">body.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="body__list_8h_source.html">body_list.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="position_8h_source.html">position.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="collision_8h_source.html">collision.h</a>&quot;</code><br />
 </div>
 <p><a href="system_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:gmCollision" id="r_gmCollision"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm_collision.html">gmCollision</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a collision between two bodies.  <a href="structgm_collision.html#details">More...</a><br /></td></tr>
 <tr class="memitem:gm_5Fsystem" id="r_gm_5Fsystem"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm__system.html">gm_system</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a physics system containing bodies and collision information.  <a href="structgm__system.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
@@ -115,9 +117,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a12674760bc8132b8a9c64afe03ac7106" id="r_a12674760bc8132b8a9c64afe03ac7106"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12674760bc8132b8a9c64afe03ac7106">gm_system_create</a> ()</td></tr>
 <tr class="memdesc:a12674760bc8132b8a9c64afe03ac7106"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new physics system with default values.  <br /></td></tr>
 <tr class="memitem:a625e32ce9bd9e7ce217ffd01b87990df" id="r_a625e32ce9bd9e7ce217ffd01b87990df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a625e32ce9bd9e7ce217ffd01b87990df">gm_system_destroy</a> (<a class="el" href="#a634d398c9f8e622e4bc9fc79eeb5f876">gmSystem</a> *sys)</td></tr>
-<tr class="memdesc:a625e32ce9bd9e7ce217ffd01b87990df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the system and free memory.  <br /></td></tr>
+<tr class="memdesc:a625e32ce9bd9e7ce217ffd01b87990df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the physics system and frees its internal memory.  <br /></td></tr>
 </table>
-<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Manages physics bodies, their interactions, and collision detection within a simulation. </p>
+<p>This file defines the <span class="tt"><a class="el" href="#a634d398c9f8e622e4bc9fc79eeb5f876" title="Structure representing a physics system containing bodies and collision information.">gmSystem</a></span> structure and functions for creating, populating, and destroying a physics simulation environment. </p>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
 <a id="a634d398c9f8e622e4bc9fc79eeb5f876" name="a634d398c9f8e622e4bc9fc79eeb5f876"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a634d398c9f8e622e4bc9fc79eeb5f876">&#9670;&#160;</a></span>gmSystem</h2>
 
@@ -151,7 +156,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a new physics system with default values. </p>
-<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="#a634d398c9f8e622e4bc9fc79eeb5f876" title="Structure representing a physics system containing bodies and collision information.">gmSystem</a> instance. </dd></dl>
+<p>Initializes a <span class="tt"><a class="el" href="#a634d398c9f8e622e4bc9fc79eeb5f876" title="Structure representing a physics system containing bodies and collision information.">gmSystem</a></span> with no bodies, zero global velocity/acceleration, and a damping factor of 0.</p>
+<dl class="section return"><dt>Returns</dt><dd>A new <span class="tt"><a class="el" href="#a634d398c9f8e622e4bc9fc79eeb5f876" title="Structure representing a physics system containing bodies and collision information.">gmSystem</a></span> instance. </dd></dl>
 
 </div>
 </div>
@@ -170,7 +176,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Destroy the system and free memory. </p>
+<p>Destroys the physics system and frees its internal memory. </p>
+<p>This function frees the memory allocated for the system's internal collision list and the list of body pointers. It does NOT free the <span class="tt"><a class="el" href="structgm_body.html" title="Structure representing a physics body with properties for collision and movement.">gmBody</a></span> instances themselves, which must be managed by the caller.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sys</td><td>Pointer to the system to destroy. </td></tr>

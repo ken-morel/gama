@@ -92,6 +92,9 @@ $(function(){initNavTree('frame_8h.html','',''); });
   <div class="headertitle"><div class="title">frame.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines the theme and functionality for a frame widget.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="collision_8h_source.html">../collision.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="draw_8h_source.html">../draw.h</a>&quot;</code><br />
 </div>
@@ -112,7 +115,10 @@ Variables</h2></td></tr>
 <tr class="memitem:a61411a5509f707059e7d1852b6964e40" id="r_a61411a5509f707059e7d1852b6964e40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgmw_frame_theme.html">gmwFrameTheme</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61411a5509f707059e7d1852b6964e40">gmwFrame</a></td></tr>
 <tr class="memdesc:a61411a5509f707059e7d1852b6964e40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global frame theme instance with default values.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines the theme and functionality for a frame widget. </p>
+<p>This file provides structures for customizing the appearance of frames (panels) and a function to render them. Frames are typically used as containers for other UI elements or for displaying information. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="ac7eb9487dca540d1bfd9adce50dc636c" name="ac7eb9487dca540d1bfd9adce50dc636c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7eb9487dca540d1bfd9adce50dc636c">&#9670;&#160;</a></span>gmw_frame()</h2>
 
@@ -143,6 +149,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates and renders a frame widget (a bordered panel). </p>
+<p>This function draws a rectangular frame at the specified coordinates, applying styling based on the global <span class="tt"><a class="el" href="#a61411a5509f707059e7d1852b6964e40" title="Global frame theme instance with default values.">gmwFrame</a></span> theme and its state (hovered/focused or normal).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x-coordinate of the frame's center. </td></tr>
@@ -152,7 +159,7 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 if the frame is currently hovered, 0 otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the frame is currently hovered over, 0 otherwise. </dd></dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a13">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 

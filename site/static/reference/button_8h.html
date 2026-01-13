@@ -92,6 +92,9 @@ $(function(){initNavTree('button_8h.html','',''); });
   <div class="headertitle"><div class="title">button.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines the theme and functionality for a button widget.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="collision_8h_source.html">../collision.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="draw_8h_source.html">../draw.h</a>&quot;</code><br />
 </div>
@@ -112,7 +115,10 @@ Variables</h2></td></tr>
 <tr class="memitem:a3d77950205c783f13e352f3fe3995c88" id="r_a3d77950205c783f13e352f3fe3995c88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgmw_button_theme.html">gmwButtonTheme</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d77950205c783f13e352f3fe3995c88">gmwButton</a></td></tr>
 <tr class="memdesc:a3d77950205c783f13e352f3fe3995c88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global button theme instance with default values.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines the theme and functionality for a button widget. </p>
+<p>This file provides structures for customizing the appearance of buttons and a function to render an interactive button that responds to mouse input. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a0526f242e6862847894392ece14a424f" name="a0526f242e6862847894392ece14a424f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0526f242e6862847894392ece14a424f">&#9670;&#160;</a></span>gmw_button()</h2>
 
@@ -153,6 +159,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates and renders an interactive button widget. </p>
+<p>This function draws a button at the specified coordinates and handles its interactive states (normal, hovered, active, disabled) based on mouse input and the global <span class="tt"><a class="el" href="#a3d77950205c783f13e352f3fe3995c88" title="Global button theme instance with default values.">gmwButton</a></span> theme.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x-coordinate of the button's center. </td></tr>
@@ -164,7 +171,7 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 if the button is currently hovered, 0 otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the button is currently hovered over, 0 otherwise. </dd></dl>
 
 </div>
 </div>

@@ -106,6 +106,7 @@ Data Structures</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:ab1e41670b6d26fcd4b078f103d0f3df3" id="r_ab1e41670b6d26fcd4b078f103d0f3df3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1e41670b6d26fcd4b078f103d0f3df3">gnothing</a>&#160;&#160;&#160;NULL</td></tr>
+<tr class="memdesc:ab1e41670b6d26fcd4b078f103d0f3df3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro representing a NULL pointer, for use where a generic null is needed.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -126,13 +127,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a571b4fd622112b2048f416f3f47b8e3d" id="r_a571b4fd622112b2048f416f3f47b8e3d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a571b4fd622112b2048f416f3f47b8e3d">gm_min_speed</a> (<a class="el" href="structgm_body.html">gmBody</a> *body, double min_speed)</td></tr>
 <tr class="memdesc:a571b4fd622112b2048f416f3f47b8e3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the minimum speed of a body.  <br /></td></tr>
 <tr class="memitem:a34697776393d36219888120423a464d6" id="r_a34697776393d36219888120423a464d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34697776393d36219888120423a464d6">gm_speed</a> (<a class="el" href="structgm_body.html">gmBody</a> *body, double speed)</td></tr>
-<tr class="memdesc:a34697776393d36219888120423a464d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the speed of a body while preserving its direction.  <br /></td></tr>
+<tr class="memdesc:a34697776393d36219888120423a464d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the speed of a body while preserving its current direction.  <br /></td></tr>
 <tr class="memitem:ae2b285e1f111f2b78c8e20a7e651f475" id="r_ae2b285e1f111f2b78c8e20a7e651f475"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2b285e1f111f2b78c8e20a7e651f475">gm_max_speed_anim</a> (<a class="el" href="structgm_body.html">gmBody</a> *body, double max_speed, void animator(double *value, double target, double dt, double t), double dt, double t)</td></tr>
 <tr class="memdesc:ae2b285e1f111f2b78c8e20a7e651f475"><td class="mdescLeft">&#160;</td><td class="mdescRight">Limits the maximum speed of a body using an animation function.  <br /></td></tr>
 <tr class="memitem:ae08bd1063702eb908fd81905b6a4ca97" id="r_ae08bd1063702eb908fd81905b6a4ca97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae08bd1063702eb908fd81905b6a4ca97">gm_min_speed_anim</a> (<a class="el" href="structgm_body.html">gmBody</a> *body, double min_speed, void animator(double *value, double target, double dt, double t), double dt, double t)</td></tr>
 <tr class="memdesc:ae08bd1063702eb908fd81905b6a4ca97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the minimum speed of a body using an animation function.  <br /></td></tr>
 <tr class="memitem:a0660e16d965ab17c1aa0432b4e9b2813" id="r_a0660e16d965ab17c1aa0432b4e9b2813"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0660e16d965ab17c1aa0432b4e9b2813">gm_speed_anim</a> (<a class="el" href="structgm_body.html">gmBody</a> *body, double speed, void animator(double *value, double target, double dt, double t), double dt, double t)</td></tr>
-<tr class="memdesc:a0660e16d965ab17c1aa0432b4e9b2813"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the speed of a body using an animation function.  <br /></td></tr>
+<tr class="memdesc:a0660e16d965ab17c1aa0432b4e9b2813"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the speed of a body using an animation function, preserving its direction.  <br /></td></tr>
 <tr class="memitem:a1cabf192f8e65f00161d2a9344884505" id="r_a1cabf192f8e65f00161d2a9344884505"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_body.html">gmBody</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cabf192f8e65f00161d2a9344884505">gm_rectangle_body</a> (double m, double x, double y, double w, double h)</td></tr>
 <tr class="memdesc:a1cabf192f8e65f00161d2a9344884505"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a rectangular physics body.  <br /></td></tr>
 <tr class="memitem:aa4fb765e44193dec7646c814ebd526c2" id="r_aa4fb765e44193dec7646c814ebd526c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_body.html">gmBody</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4fb765e44193dec7646c814ebd526c2">gm_circle_body</a> (double m, double x, double y, double r)</td></tr>
@@ -152,6 +153,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Macro representing a NULL pointer, for use where a generic null is needed. </p>
 
 </div>
 </div>
@@ -212,7 +215,18 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 if the point is inside the body, 0 otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the point is inside the body, 0 otherwise.</dd></dl>
+<p>Checks if a point is contained within a body's collider.</p>
+<p>This function performs a point-in-rectangle test for <span class="tt"><a class="el" href="#a6e6cedf4d8c815d43650ed10e722bf9ca358d98a7beff33b4cd314528712728ae">GM_COLLIDER_RECT</a></span> and a point-in-circle test for <span class="tt"><a class="el" href="#a6e6cedf4d8c815d43650ed10e722bf9cadcf410aec9bca3d59300b737fd1c540f">GM_COLLIDER_CIRCLE</a></span>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">body</td><td>Pointer to the body to check. </td></tr>
+    <tr><td class="paramname">x</td><td>The x-coordinate of the point. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the point. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the point is inside the body's collider, 0 otherwise. </dd></dl>
 
 </div>
 </div>
@@ -256,18 +270,19 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a new physics body with specified properties. </p>
+<p>The <span class="tt">radius</span> for circular colliders is automatically set based on <span class="tt">w</span> (or <span class="tt">h</span> if smaller). For rectangular colliders, <span class="tt">radius</span> is set to <span class="tt">w &lt; h ? w : h</span>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mass</td><td>The mass of the body. </td></tr>
-    <tr><td class="paramname">x</td><td>The x-coordinate of the body's position. </td></tr>
-    <tr><td class="paramname">y</td><td>The y-coordinate of the body's position. </td></tr>
-    <tr><td class="paramname">w</td><td>The width of the body. </td></tr>
-    <tr><td class="paramname">h</td><td>The height of the body. </td></tr>
-    <tr><td class="paramname">c</td><td>The type of collider for the body. </td></tr>
+    <tr><td class="paramname">mass</td><td>The mass of the body. Set to 0 for infinite mass. </td></tr>
+    <tr><td class="paramname">x</td><td>The x-coordinate of the body's initial position. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the body's initial position. </td></tr>
+    <tr><td class="paramname">w</td><td>The width of the body (or diameter for circles). </td></tr>
+    <tr><td class="paramname">h</td><td>The height of the body (or diameter for circles). </td></tr>
+    <tr><td class="paramname">c</td><td>The type of collider for the body (<span class="tt"><a class="el" href="#a6e6cedf4d8c815d43650ed10e722bf9ca358d98a7beff33b4cd314528712728ae">GM_COLLIDER_RECT</a></span> or <span class="tt"><a class="el" href="#a6e6cedf4d8c815d43650ed10e722bf9cadcf410aec9bca3d59300b737fd1c540f">GM_COLLIDER_CIRCLE</a></span>). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="structgm_body.html" title="Structure representing a physics body with properties for collision and movement.">gmBody</a> instance. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <span class="tt"><a class="el" href="structgm_body.html" title="Structure representing a physics body with properties for collision and movement.">gmBody</a></span> instance initialized with default active/non-static properties. </dd></dl>
 
 </div>
 </div>
@@ -334,6 +349,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Limits the maximum speed of a body. </p>
+<p>If the body's current speed exceeds <span class="tt">max_speed</span>, its velocity is scaled down to match <span class="tt">max_speed</span> while preserving its direction.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">body</td><td>Pointer to the body to modify. </td></tr>
@@ -379,6 +395,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Limits the maximum speed of a body using an animation function. </p>
+<p>This function applies a smooth animation to the body's velocity components if its speed exceeds <span class="tt">max_speed</span>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">body</td><td>Pointer to the body to modify. </td></tr>
@@ -412,6 +429,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the minimum speed of a body. </p>
+<p>If the body's current speed falls below <span class="tt">min_speed</span> (and is not zero), its velocity is scaled up to match <span class="tt">min_speed</span> while preserving its direction. If the body is stationary (speed is 0), its velocity remains 0.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">body</td><td>Pointer to the body to modify. </td></tr>
@@ -457,6 +475,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the minimum speed of a body using an animation function. </p>
+<p>This function applies a smooth animation to the body's velocity components if its speed falls below <span class="tt">min_speed</span> (and is not zero).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">body</td><td>Pointer to the body to modify. </td></tr>
@@ -538,11 +557,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets the speed of a body while preserving its direction. </p>
+<p>Sets the speed of a body while preserving its current direction. </p>
+<p>If the body is stationary, it starts moving along the X-axis with the specified <span class="tt">speed</span>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">body</td><td>Pointer to the body to modify. </td></tr>
-    <tr><td class="paramname">speed</td><td>The speed to set. </td></tr>
+    <tr><td class="paramname">speed</td><td>The target speed to set. </td></tr>
   </table>
   </dd>
 </dl>
@@ -583,11 +603,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets the speed of a body using an animation function. </p>
+<p>Sets the speed of a body using an animation function, preserving its direction. </p>
+<p>This function applies a smooth animation to the body's velocity components to reach the <span class="tt">speed</span>. If the body is stationary, it starts moving along the X-axis.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">body</td><td>Pointer to the body to modify. </td></tr>
-    <tr><td class="paramname">speed</td><td>The speed to set. </td></tr>
+    <tr><td class="paramname">speed</td><td>The target speed to set. </td></tr>
     <tr><td class="paramname">animator</td><td>Function pointer to animate the velocity change. </td></tr>
     <tr><td class="paramname">dt</td><td>Delta time for animation. </td></tr>
     <tr><td class="paramname">t</td><td>Time parameter for animation. </td></tr>

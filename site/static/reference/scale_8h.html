@@ -92,6 +92,9 @@ $(function(){initNavTree('scale_8h.html','',''); });
   <div class="headertitle"><div class="title">scale.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines the theme and functionality for a scale (slider) widget.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="animate_8h_source.html">../animate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="collision_8h_source.html">../collision.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="draw_8h_source.html">../draw.h</a>&quot;</code><br />
@@ -113,7 +116,10 @@ Variables</h2></td></tr>
 <tr class="memitem:aa05ce64adbff0673804ce9c60862233a" id="r_aa05ce64adbff0673804ce9c60862233a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgmw_scale_theme.html">gmwScaleTheme</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa05ce64adbff0673804ce9c60862233a">gmwScale</a></td></tr>
 <tr class="memdesc:aa05ce64adbff0673804ce9c60862233a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global scale theme instance with default values.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines the theme and functionality for a scale (slider) widget. </p>
+<p>This file provides structures for customizing the appearance of a slider control and a function to render an interactive slider that allows users to select a value within a range. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a6e11a61188aef49b7e1705da260b748c" name="a6e11a61188aef49b7e1705da260b748c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6e11a61188aef49b7e1705da260b748c">&#9670;&#160;</a></span>gmw_scale_anim()</h2>
 
@@ -154,18 +160,19 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates and renders an animated scale (slider) widget that can be manipulated with the mouse. </p>
+<p>This function draws a slider, tracks mouse interaction to update its value, and animates the knob's position.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x-coordinate of the scale's center. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the scale's center. </td></tr>
     <tr><td class="paramname">width</td><td>The width of the scale track. </td></tr>
     <tr><td class="paramname">height</td><td>The height of the scale track. </td></tr>
-    <tr><td class="paramname">value</td><td>Pointer to a double to store the current scale value (0.0 to 1.0). </td></tr>
-    <tr><td class="paramname">anim</td><td>Pointer to a double for animated visual position (can be NULL to use value). </td></tr>
+    <tr><td class="paramname">value</td><td>Pointer to a double to store the current scale value (0.0 to 1.0). This value is updated by user interaction. </td></tr>
+    <tr><td class="paramname">anim</td><td>Pointer to a double for the animated visual position of the knob. If NULL, <span class="tt">value</span> is used for the knob's position (non-animated). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 if the scale is currently being actively manipulated (mouse down), 0 otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the scale is currently being actively manipulated (mouse button down and hovering), 0 otherwise. </dd></dl>
 
 </div>
 </div>

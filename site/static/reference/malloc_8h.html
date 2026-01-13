@@ -92,6 +92,9 @@ $(function(){initNavTree('malloc_8h.html','',''); });
   <div class="headertitle"><div class="title">malloc.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Custom memory allocation functions (<span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span>, <span class="tt"><a class="el" href="#afbedc913aa4651b3c3b4b3aecd9b4711" title="Custom implementation of free for memory allocated by malloc (this custom version).">free</a></span>, <span class="tt"><a class="el" href="#ad65564be3c3e7ff6f7586303aebf9949" title="Custom implementation of calloc using a static memory pool.">calloc</a></span>, <span class="tt"><a class="el" href="#ad28fed1039f35d754710633141b4edf0" title="Custom implementation of realloc for memory allocated by malloc (this custom version).">realloc</a></span>) using a fixed-size static memory pool.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;stddef.h&gt;</code><br />
 </div>
@@ -113,11 +116,19 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a9c36d0fe3ec4675cbffdc9b52f5fb399" id="r_a9c36d0fe3ec4675cbffdc9b52f5fb399"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399">malloc</a> (size_t size)</td></tr>
+<tr class="memdesc:a9c36d0fe3ec4675cbffdc9b52f5fb399"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom implementation of <span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span> using a static memory pool.  <br /></td></tr>
 <tr class="memitem:afbedc913aa4651b3c3b4b3aecd9b4711" id="r_afbedc913aa4651b3c3b4b3aecd9b4711"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbedc913aa4651b3c3b4b3aecd9b4711">free</a> (void *ptr)</td></tr>
+<tr class="memdesc:afbedc913aa4651b3c3b4b3aecd9b4711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom implementation of <span class="tt"><a class="el" href="#afbedc913aa4651b3c3b4b3aecd9b4711" title="Custom implementation of free for memory allocated by malloc (this custom version).">free</a></span> for memory allocated by <span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span> (this custom version).  <br /></td></tr>
 <tr class="memitem:ad65564be3c3e7ff6f7586303aebf9949" id="r_ad65564be3c3e7ff6f7586303aebf9949"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad65564be3c3e7ff6f7586303aebf9949">calloc</a> (size_t count, size_t size)</td></tr>
+<tr class="memdesc:ad65564be3c3e7ff6f7586303aebf9949"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom implementation of <span class="tt"><a class="el" href="#ad65564be3c3e7ff6f7586303aebf9949" title="Custom implementation of calloc using a static memory pool.">calloc</a></span> using a static memory pool.  <br /></td></tr>
 <tr class="memitem:ad28fed1039f35d754710633141b4edf0" id="r_ad28fed1039f35d754710633141b4edf0"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad28fed1039f35d754710633141b4edf0">realloc</a> (void *ptr, size_t size)</td></tr>
+<tr class="memdesc:ad28fed1039f35d754710633141b4edf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom implementation of <span class="tt"><a class="el" href="#ad28fed1039f35d754710633141b4edf0" title="Custom implementation of realloc for memory allocated by malloc (this custom version).">realloc</a></span> for memory allocated by <span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span> (this custom version).  <br /></td></tr>
 </table>
-<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Custom memory allocation functions (<span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span>, <span class="tt"><a class="el" href="#afbedc913aa4651b3c3b4b3aecd9b4711" title="Custom implementation of free for memory allocated by malloc (this custom version).">free</a></span>, <span class="tt"><a class="el" href="#ad65564be3c3e7ff6f7586303aebf9949" title="Custom implementation of calloc using a static memory pool.">calloc</a></span>, <span class="tt"><a class="el" href="#ad28fed1039f35d754710633141b4edf0" title="Custom implementation of realloc for memory allocated by malloc (this custom version).">realloc</a></span>) using a fixed-size static memory pool. </p>
+<p>This file provides an alternative memory management system for Gama, primarily for environments where dynamic system <span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span> might be unavailable or undesirable (e.g., embedded systems, WebAssembly with specific memory requirements). It pre-allocates a large static buffer and manages memory chunks within it.</p>
+<dl class="section warning"><dt>Warning</dt><dd>This implementation redefines standard C library functions (<span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span>, <span class="tt"><a class="el" href="#afbedc913aa4651b3c3b4b3aecd9b4711" title="Custom implementation of free for memory allocated by malloc (this custom version).">free</a></span>, <span class="tt"><a class="el" href="#ad65564be3c3e7ff6f7586303aebf9949" title="Custom implementation of calloc using a static memory pool.">calloc</a></span>, <span class="tt"><a class="el" href="#ad28fed1039f35d754710633141b4edf0" title="Custom implementation of realloc for memory allocated by malloc (this custom version).">realloc</a></span>). Care must be taken to ensure this does not conflict with system-level memory allocation or other libraries that expect standard <span class="tt">libc</span> behavior. This file is typically included conditionally. </dd></dl>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
 <a id="a5ef42d8834eb476c193fc2ad486f4e8e" name="a5ef42d8834eb476c193fc2ad486f4e8e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5ef42d8834eb476c193fc2ad486f4e8e">&#9670;&#160;</a></span>_MALLOC_H</h2>
 
@@ -222,6 +233,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Custom implementation of <span class="tt"><a class="el" href="#ad65564be3c3e7ff6f7586303aebf9949" title="Custom implementation of calloc using a static memory pool.">calloc</a></span> using a static memory pool. </p>
+<p>Allocates a block of memory for an array of <span class="tt">count</span> elements, each of <span class="tt">size</span> bytes, and initializes all bytes in the allocated block to zero.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">count</td><td>The number of elements to allocate. </td></tr>
+    <tr><td class="paramname">size</td><td>The size of each element in bytes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the allocated and zero-initialized memory, or <span class="tt">NULL</span> if allocation fails. </dd></dl>
+
 </div>
 </div>
 <a id="afbedc913aa4651b3c3b4b3aecd9b4711" name="afbedc913aa4651b3c3b4b3aecd9b4711"></a>
@@ -239,6 +261,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Custom implementation of <span class="tt"><a class="el" href="#afbedc913aa4651b3c3b4b3aecd9b4711" title="Custom implementation of free for memory allocated by malloc (this custom version).">free</a></span> for memory allocated by <span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span> (this custom version). </p>
+<p>Frees a previously allocated memory block, making it available for future allocations.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>A pointer to the memory block to free. If <span class="tt">ptr</span> is <span class="tt">NULL</span>, no operation is performed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a9c36d0fe3ec4675cbffdc9b52f5fb399" name="a9c36d0fe3ec4675cbffdc9b52f5fb399"></a>
@@ -255,6 +286,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Custom implementation of <span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span> using a static memory pool. </p>
+<p>Allocates a block of <span class="tt">size</span> bytes from the predefined static memory pool.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>The number of bytes to allocate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the allocated memory block, or <span class="tt">NULL</span> if allocation fails (e.g., out of memory or no suitable spot). </dd></dl>
 
 </div>
 </div>
@@ -276,6 +317,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Custom implementation of <span class="tt"><a class="el" href="#ad28fed1039f35d754710633141b4edf0" title="Custom implementation of realloc for memory allocated by malloc (this custom version).">realloc</a></span> for memory allocated by <span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span> (this custom version). </p>
+<p>Resizes a previously allocated memory block.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>A pointer to the memory block to reallocate. If <span class="tt">ptr</span> is <span class="tt">NULL</span>, behaves like <span class="tt"><a class="el" href="#a9c36d0fe3ec4675cbffdc9b52f5fb399" title="Custom implementation of malloc using a static memory pool.">malloc</a></span>. </td></tr>
+    <tr><td class="paramname">size</td><td>The new size for the memory block. If <span class="tt">size</span> is <span class="tt">0</span>, behaves like <span class="tt"><a class="el" href="#afbedc913aa4651b3c3b4b3aecd9b4711" title="Custom implementation of free for memory allocated by malloc (this custom version).">free</a></span>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the reallocated memory block, or <span class="tt">NULL</span> if reallocation fails. </dd></dl>
 
 </div>
 </div>

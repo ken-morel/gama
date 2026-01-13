@@ -92,6 +92,9 @@ $(function(){initNavTree('transform_8h.html','',''); });
   <div class="headertitle"><div class="title">transform.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines structures and functions for 3D transformations (position, rotation, scale).  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="3d_2position_8h_source.html">position.h</a>&quot;</code><br />
 </div>
 <p><a href="transform_8h_source.html">Go to the source code of this file.</a></p>
@@ -99,14 +102,26 @@ $(function(){initNavTree('transform_8h.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:gm3Transform" id="r_gm3Transform"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm3_transform.html">gm3Transform</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a 3D transformation, including position, rotation, and scale.  <a href="structgm3_transform.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a8c7a39bbf3e12bf38df77cb96147c97d" id="r_a8c7a39bbf3e12bf38df77cb96147c97d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c7a39bbf3e12bf38df77cb96147c97d">gm3_pos_rotate</a> (<a class="el" href="structgm3_pos.html">gm3Pos</a> *res, const <a class="el" href="structgm3_pos.html">gm3Pos</a> *rot)</td></tr>
+<tr class="memdesc:a8c7a39bbf3e12bf38df77cb96147c97d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates a <span class="tt"><a class="el" href="structgm3_pos.html" title="Represents a 3D position or vector.">gm3Pos</a></span> vector by the given Euler angles (X, Y, Z).  <br /></td></tr>
 <tr class="memitem:ad5513a58c1830a6e86c30bdb664de1b7" id="r_ad5513a58c1830a6e86c30bdb664de1b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5513a58c1830a6e86c30bdb664de1b7">gm3_transform_pos</a> (<a class="el" href="structgm3_pos.html">gm3Pos</a> *p, const <a class="el" href="structgm3_transform.html">gm3Transform</a> *t)</td></tr>
+<tr class="memdesc:ad5513a58c1830a6e86c30bdb664de1b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> to a <span class="tt"><a class="el" href="structgm3_pos.html" title="Represents a 3D position or vector.">gm3Pos</a></span> vector.  <br /></td></tr>
 <tr class="memitem:ae761f3a78646331ba32c1a4608546010" id="r_ae761f3a78646331ba32c1a4608546010"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm3_transform.html">gm3Transform</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae761f3a78646331ba32c1a4608546010">gm3_transform</a> ()</td></tr>
+<tr class="memdesc:ae761f3a78646331ba32c1a4608546010"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> struct initialized to identity.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a18cc6f4e50381ebac169af7c8b83f40d" id="r_a18cc6f4e50381ebac169af7c8b83f40d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structgm3_transform.html">gm3Transform</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18cc6f4e50381ebac169af7c8b83f40d">gm3_default_transform</a></td></tr>
+<tr class="memdesc:a18cc6f4e50381ebac169af7c8b83f40d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A default <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> instance.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines structures and functions for 3D transformations (position, rotation, scale). </p>
+<p>This file provides the <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> structure to encapsulate the translation, rotation, and scaling of 3D objects, along with helper functions to apply these transformations to 3D points and vectors. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a8c7a39bbf3e12bf38df77cb96147c97d" name="a8c7a39bbf3e12bf38df77cb96147c97d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8c7a39bbf3e12bf38df77cb96147c97d">&#9670;&#160;</a></span>gm3_pos_rotate()</h2>
 
@@ -126,6 +141,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Rotates a <span class="tt"><a class="el" href="structgm3_pos.html" title="Represents a 3D position or vector.">gm3Pos</a></span> vector by the given Euler angles (X, Y, Z). </p>
+<p>The rotation is applied sequentially around the X, then Y, then Z axes.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">res</td><td>A pointer to the <span class="tt"><a class="el" href="structgm3_pos.html" title="Represents a 3D position or vector.">gm3Pos</a></span> vector to rotate (modified in place). </td></tr>
+    <tr><td class="paramname">rot</td><td>A pointer to a <span class="tt"><a class="el" href="structgm3_pos.html" title="Represents a 3D position or vector.">gm3Pos</a></span> containing the Euler angles (radians) for rotation around X, Y, and Z axes. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ae761f3a78646331ba32c1a4608546010" name="ae761f3a78646331ba32c1a4608546010"></a>
@@ -142,6 +167,10 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Creates a new <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> struct initialized to identity. </p>
+<p>The position and rotation are set to zero, and scale is set to one.</p>
+<dl class="section return"><dt>Returns</dt><dd>A new identity <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> instance. </dd></dl>
 
 </div>
 </div>
@@ -163,6 +192,36 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Applies a <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> to a <span class="tt"><a class="el" href="structgm3_pos.html" title="Represents a 3D position or vector.">gm3Pos</a></span> vector. </p>
+<p>The transformation is applied in the order: scale, then rotate, then translate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>A pointer to the <span class="tt"><a class="el" href="structgm3_pos.html" title="Represents a 3D position or vector.">gm3Pos</a></span> vector to transform (modified in place). </td></tr>
+    <tr><td class="paramname">t</td><td>A pointer to the <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> to apply. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="a18cc6f4e50381ebac169af7c8b83f40d" name="a18cc6f4e50381ebac169af7c8b83f40d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18cc6f4e50381ebac169af7c8b83f40d">&#9670;&#160;</a></span>gm3_default_transform</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structgm3_transform.html">gm3Transform</a> gm3_default_transform</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    .position = {0, 0, 20}, .rotation = {0}, .scale = {1, 1, 1}}</div>
+</div><!-- fragment -->
+<p>A default <span class="tt"><a class="el" href="structgm3_transform.html" title="Represents a 3D transformation, including position, rotation, and scale.">gm3Transform</a></span> instance. </p>
+<p>Initializes a transform with default position <span class="tt">{0, 0, 20}</span>, no rotation, and uniform scale <span class="tt">{1, 1, 1}</span>. </p>
 
 </div>
 </div>

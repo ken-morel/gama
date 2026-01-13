@@ -117,7 +117,12 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line"><span class="preprocessor">#else</span></div>
 <div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="gama_2gama_8h.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>();</div>
 <div class="line"><span class="preprocessor">#endif</span></div>
-<div class="line"> </div>
+<div class="line"><span class="comment"></span> </div>
+<div class="line"><span class="comment">/**</span></div>
+<div class="line"><span class="comment"> * @internal</span></div>
+<div class="line"><span class="comment"> * @brief Main entry point for the Gama application, called by the platform runner.</span></div>
+<div class="line"><span class="comment"> * This function calls the user-defined main().</span></div>
+<div class="line"><span class="comment"> */</span></div>
 <div class="line">int32_t</div>
 <div class="line"><span class="preprocessor">#ifdef __ZIG_CC__</span></div>
 <div class="line">    __attribute__((export_name(<span class="stringliteral">&quot;gama_run&quot;</span>)))</div>
@@ -133,16 +138,16 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line"><span class="comment">/**</span></div>
 <div class="line"><span class="comment"> * @brief Puts the window in fullscreen.</span></div>
 <div class="line"><span class="comment"> *</span></div>
-<div class="line"><span class="comment"> * @param fullscreen Enable or disable fullscreen.</span></div>
+<div class="line"><span class="comment"> * @param fullscreen Boolean flag to enable (1) or disable (0) fullscreen.</span></div>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keywordtype">void</span> <a id="a2" name="a2"></a><a class="code hl_function" href="gama_2gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gm_fullscreen</a>(<span class="keywordtype">int</span> fullscreen) { <span class="keywordflow">return</span> <a id="a3" name="a3"></a><a class="code hl_function" href="gapi_8h.html#a33685759bfe738fd920e7f328d561ccc">gapi_fullscreen</a>(fullscreen); }</div>
 <div class="line"><span class="comment"></span> </div>
 <div class="line"><span class="comment">/**</span></div>
-<div class="line"><span class="comment"> * @brief Draws gama logo.</span></div>
+<div class="line"><span class="comment"> * @brief Draws the Gama logo.</span></div>
 <div class="line"><span class="comment"> *</span></div>
-<div class="line"><span class="comment"> * @param x The x position to draw the logo.</span></div>
-<div class="line"><span class="comment"> * @param y The y position to draw the logo.</span></div>
-<div class="line"><span class="comment"> * @param s The logo size.</span></div>
+<div class="line"><span class="comment"> * @param x The center x position to draw the logo.</span></div>
+<div class="line"><span class="comment"> * @param y The center y position to draw the logo.</span></div>
+<div class="line"><span class="comment"> * @param s The size (side length) of the logo.</span></div>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keywordtype">void</span> <a id="a4" name="a4"></a><a class="code hl_function" href="gama_2gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> s) {</div>
 <div class="line">  <span class="keywordtype">double</span> top_thickness = 0.15 * s;</div>
@@ -155,6 +160,11 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line">                    y, left_thickness, s, <a class="code hl_define" href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a>);</div>
 <div class="line">}</div>
 <div class="line"> </div>
+<div class="line"><span class="comment"></span> </div>
+<div class="line"><span class="comment">/**</span></div>
+<div class="line"><span class="comment"> * @brief Logs a message to the platform&#39;s console.</span></div>
+<div class="line"><span class="comment"> * @param txt The text message to log.</span></div>
+<div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keywordtype">void</span> <a id="a7" name="a7"></a><a class="code hl_function" href="gama_2gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">gm_log</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *txt) { <span class="keywordflow">return</span> <a id="a8" name="a8"></a><a class="code hl_function" href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731">gapi_log</a>(txt); }</div>
 <div class="line"><span class="comment"></span> </div>
 <div class="line"><span class="comment">/**</span></div>
@@ -164,7 +174,11 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line"><span class="comment"> * instead.</span></div>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">int</span> gm_runs() { <span class="keywordflow">return</span> <a id="a9" name="a9"></a><a class="code hl_function" href="gapi_8h.html#aba1dc1654054d397e6325d4c55cae27b">gapi_runs</a>(); }</div>
-<div class="line"> </div>
+<div class="line"><span class="comment"></span> </div>
+<div class="line"><span class="comment">/**</span></div>
+<div class="line"><span class="comment"> * @brief Enables or disables the built-in FPS counter display.</span></div>
+<div class="line"><span class="comment"> * @param show Boolean flag to show (1) or hide (0) the FPS counter.</span></div>
+<div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keywordtype">int</span> <a id="_a10" name="_a10"></a><a class="code hl_variable" href="gama_2gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a> = 0;</div>
 <div class="line"><span class="keywordtype">void</span> <a id="a11" name="a11"></a><a class="code hl_function" href="gama_2gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">gm_show_fps</a>(<span class="keywordtype">int</span> show) { <a class="code hl_variable" href="gama_2gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a> = show; }</div>
 <div class="line"><span class="comment"></span> </div>
@@ -188,8 +202,11 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line">  <span class="keyword">static</span> <span class="keywordtype">double</span> _fps = 0;</div>
 <div class="line">  <span class="keyword">static</span> <span class="keywordtype">double</span> dt = 1;</div>
 <div class="line">  <span class="keyword">static</span> <span class="keywordtype">double</span> _display_fps = 0;</div>
-<div class="line">  dt += gm_dt();</div>
-<div class="line">  <span class="keywordtype">double</span> fps = 1 / gm_dt();</div>
+<div class="line">  <span class="keywordtype">double</span> current_dt = gm_dt();</div>
+<div class="line">  dt += current_dt;</div>
+<div class="line">  <span class="keywordtype">double</span> fps = 1 / current_dt;</div>
+<div class="line">  <span class="keywordflow">if</span> (current_dt == 0)</div>
+<div class="line">    fps = _fps;</div>
 <div class="line">  <span class="keywordflow">if</span> (_fps == 0)</div>
 <div class="line">    _fps = 60;</div>
 <div class="line">  <span class="keywordflow">else</span></div>
@@ -231,6 +248,12 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keywordtype">void</span> <a id="a23" name="a23"></a><a class="code hl_function" href="gama_2gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a>(<a id="_a24" name="_a24"></a><a class="code hl_typedef" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> c) { <span class="keywordflow">return</span> <a id="a25" name="a25"></a><a class="code hl_function" href="gapi_8h.html#affb93473d7b3ccfb1c8e7019376e6350">gapi_set_background_color</a>(c); }</div>
 <div class="line"> </div>
+<div class="line"><span class="comment"></span> </div>
+<div class="line"><span class="comment">/**</span></div>
+<div class="line"><span class="comment"> * @brief Resizes the application window.</span></div>
+<div class="line"><span class="comment"> * @param width The new width of the window in pixels.</span></div>
+<div class="line"><span class="comment"> * @param height The new height of the window in pixels.</span></div>
+<div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keywordtype">void</span> <a id="a26" name="a26"></a><a class="code hl_function" href="gama_2gama_8h.html#aa65985ca5b8454ee69087f2243276e77">gm_resize</a>(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) { <span class="keywordflow">return</span> <a id="a27" name="a27"></a><a class="code hl_function" href="gapi_8h.html#a5807835814d6e9575b1c3bddff3fed5a">gapi_resize</a>(width, height); }</div>
 <div class="line"><span class="comment"></span> </div>
 <div class="line"><span class="comment">/**</span></div>
@@ -239,8 +262,8 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line"><span class="comment"> * This must be the first Gama function called. It sets up the graphics context</span></div>
 <div class="line"><span class="comment"> * and creates a window with the specified dimensions and title.</span></div>
 <div class="line"><span class="comment"> *</span></div>
-<div class="line"><span class="comment"> * @param width The width of the window in pixels.</span></div>
-<div class="line"><span class="comment"> * @param height The height of the window in pixels.</span></div>
+<div class="line"><span class="comment"> * @param width The width of the window in pixels. Use 0 for automatic sizing.</span></div>
+<div class="line"><span class="comment"> * @param height The height of the window in pixels. Use 0 for automatic sizing.</span></div>
 <div class="line"><span class="comment"> * @param title The title of the window.</span></div>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keywordtype">void</span> <a id="a28" name="a28"></a><a class="code hl_function" href="gama_2gama_8h.html#afe888881882c032aeecb0e3e4e6de460">gm_init</a>(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keyword">const</span> <span class="keywordtype">char</span> *title) {</div>
@@ -257,9 +280,12 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line">}</div>
 <div class="line"><span class="comment"></span> </div>
 <div class="line"><span class="comment">/**</span></div>
-<div class="line"><span class="comment"> * @brief Sleep(wait) for aproximately the specified number of milliseconds</span></div>
+<div class="line"><span class="comment"> * @brief Pauses execution for a specified duration.</span></div>
 <div class="line"><span class="comment"> *</span></div>
-<div class="line"><span class="comment"> * @param miliseconds the number of milliseconds to sleep</span></div>
+<div class="line"><span class="comment"> * This function blocks the calling thread for approximately the given number</span></div>
+<div class="line"><span class="comment"> * of milliseconds.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * @param milliseconds The number of milliseconds to sleep.</span></div>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="keywordtype">void</span> <a id="a31" name="a31"></a><a class="code hl_function" href="gama_2gama_8h.html#ab7997f4879229850843f681e9eb36c59">gm_sleep</a>(<span class="keywordtype">int</span> milliseconds);</div>
 <div class="line"> </div>
@@ -274,40 +300,40 @@ $(function(){initNavTree('_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.
 <div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="gama_2gama_8h.html#ab7997f4879229850843f681e9eb36c59">gm_sleep</a>(<span class="keywordtype">int</span> milliseconds) { usleep(milliseconds * 1000); }</div>
 <div class="line"><span class="preprocessor">#endif</span></div>
 <div class="line"><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="acolor_8h_html_a85816fef50d777b609f81cd0f1f52c04"><div class="ttname"><a href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a></div><div class="ttdeci">#define GM_GAMA</div><div class="ttdoc">The official Gama brand color.</div><div class="ttdef"><b>Definition</b> color.h:152</div></div>
-<div class="ttc" id="acolor_8h_html_a8f79450a8d64d2ed9d5a7165939cc9c2"><div class="ttname"><a href="color_8h.html#a8f79450a8d64d2ed9d5a7165939cc9c2">GM_BLACK</a></div><div class="ttdeci">#define GM_BLACK</div><div class="ttdoc">Black color.</div><div class="ttdef"><b>Definition</b> color.h:192</div></div>
-<div class="ttc" id="acolor_8h_html_ac9ccb21a482aae91b3d0658fa8f8ef27"><div class="ttname"><a href="color_8h.html#ac9ccb21a482aae91b3d0658fa8f8ef27">GM_WHITE</a></div><div class="ttdeci">#define GM_WHITE</div><div class="ttdoc">White color.</div><div class="ttdef"><b>Definition</b> color.h:877</div></div>
-<div class="ttc" id="acolor_8h_html_ad1e1d31842049cda71b54fb67f83036b"><div class="ttname"><a href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></div><div class="ttdeci">uint32_t gmColor</div><div class="ttdoc">Type definition for color values in RGBA format.</div><div class="ttdef"><b>Definition</b> color.h:11</div></div>
+<div class="ttc" id="acolor_8h_html_a85816fef50d777b609f81cd0f1f52c04"><div class="ttname"><a href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04">GM_GAMA</a></div><div class="ttdeci">#define GM_GAMA</div><div class="ttdoc">The official Gama brand color.</div><div class="ttdef"><b>Definition</b> color.h:167</div></div>
+<div class="ttc" id="acolor_8h_html_a8f79450a8d64d2ed9d5a7165939cc9c2"><div class="ttname"><a href="color_8h.html#a8f79450a8d64d2ed9d5a7165939cc9c2">GM_BLACK</a></div><div class="ttdeci">#define GM_BLACK</div><div class="ttdoc">Black color.</div><div class="ttdef"><b>Definition</b> color.h:207</div></div>
+<div class="ttc" id="acolor_8h_html_ac9ccb21a482aae91b3d0658fa8f8ef27"><div class="ttname"><a href="color_8h.html#ac9ccb21a482aae91b3d0658fa8f8ef27">GM_WHITE</a></div><div class="ttdeci">#define GM_WHITE</div><div class="ttdoc">White color.</div><div class="ttdef"><b>Definition</b> color.h:892</div></div>
+<div class="ttc" id="acolor_8h_html_ad1e1d31842049cda71b54fb67f83036b"><div class="ttname"><a href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a></div><div class="ttdeci">uint32_t gmColor</div><div class="ttdoc">Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...</div><div class="ttdef"><b>Definition</b> color.h:13</div></div>
 <div class="ttc" id="adraw_8h_html"><div class="ttname"><a href="draw_8h.html">draw.h</a></div><div class="ttdoc">Functions for drawing shapes, text, and images.</div></div>
-<div class="ttc" id="adraw_8h_html_a0afcc18a7c8c63fcab848d8848ca2176"><div class="ttname"><a href="draw_8h.html#a0afcc18a7c8c63fcab848d8848ca2176">gm_draw_text</a></div><div class="ttdeci">int32_t gm_draw_text(double x, double y, const char *text, const char *font, double font_size, gmColor c)</div><div class="ttdoc">Draws text.</div><div class="ttdef"><b>Definition</b> draw.h:129</div></div>
-<div class="ttc" id="adraw_8h_html_a2a7a927b01836ad2067e35f12b9c26ea"><div class="ttname"><a href="draw_8h.html#a2a7a927b01836ad2067e35f12b9c26ea">gm_draw_rectangle</a></div><div class="ttdeci">int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c)</div><div class="ttdoc">Draws a rectangle.</div><div class="ttdef"><b>Definition</b> draw.h:46</div></div>
-<div class="ttc" id="aframe_8h_html"><div class="ttname"><a href="frame_8h.html">frame.h</a></div></div>
-<div class="ttc" id="aframe_8h_html_ac7eb9487dca540d1bfd9adce50dc636c"><div class="ttname"><a href="frame_8h.html#ac7eb9487dca540d1bfd9adce50dc636c">gmw_frame</a></div><div class="ttdeci">int gmw_frame(double x, double y, double width, double height)</div><div class="ttdoc">Creates and renders a frame widget (a bordered panel).</div><div class="ttdef"><b>Definition</b> frame.h:67</div></div>
-<div class="ttc" id="agama_2gama_8h_html_a0c22ed781536b72d723dc3d3a0245b53"><div class="ttname"><a href="gama_2gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">gm_log</a></div><div class="ttdeci">void gm_log(const char *txt)</div><div class="ttdef"><b>Definition</b> gama.h:60</div></div>
-<div class="ttc" id="agama_2gama_8h_html_a11b841ac66eacd657c78efaea6c07b01"><div class="ttname"><a href="gama_2gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">gm_show_fps</a></div><div class="ttdeci">void gm_show_fps(int show)</div><div class="ttdef"><b>Definition</b> gama.h:71</div></div>
-<div class="ttc" id="agama_2gama_8h_html_a75099652e829ac61185b5e12deb06040"><div class="ttname"><a href="gama_2gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a></div><div class="ttdeci">int __gm_show_fps</div><div class="ttdef"><b>Definition</b> gama.h:70</div></div>
-<div class="ttc" id="agama_2gama_8h_html_aa65985ca5b8454ee69087f2243276e77"><div class="ttname"><a href="gama_2gama_8h.html#aa65985ca5b8454ee69087f2243276e77">gm_resize</a></div><div class="ttdeci">void gm_resize(int width, int height)</div><div class="ttdef"><b>Definition</b> gama.h:136</div></div>
-<div class="ttc" id="agama_2gama_8h_html_aae83aab0cf87d11fba0fc0b5779ad6a0"><div class="ttname"><a href="gama_2gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a></div><div class="ttdeci">void gm_logo(double x, double y, double s)</div><div class="ttdoc">Draws gama logo.</div><div class="ttdef"><b>Definition</b> gama.h:49</div></div>
-<div class="ttc" id="agama_2gama_8h_html_ab7997f4879229850843f681e9eb36c59"><div class="ttname"><a href="gama_2gama_8h.html#ab7997f4879229850843f681e9eb36c59">gm_sleep</a></div><div class="ttdeci">void gm_sleep(int milliseconds)</div><div class="ttdoc">Sleep(wait) for aproximately the specified number of milliseconds.</div><div class="ttdef"><b>Definition</b> gama.h:176</div></div>
-<div class="ttc" id="agama_2gama_8h_html_ac1855c15ae19bfb11c9876b5261b9f75"><div class="ttname"><a href="gama_2gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gm_fullscreen</a></div><div class="ttdeci">void gm_fullscreen(int fullscreen)</div><div class="ttdoc">Puts the window in fullscreen.</div><div class="ttdef"><b>Definition</b> gama.h:40</div></div>
-<div class="ttc" id="agama_2gama_8h_html_acf62b5795b66bce9b310277356575c66"><div class="ttname"><a href="gama_2gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a></div><div class="ttdeci">void gm_background(gmColor c)</div><div class="ttdoc">Sets the background color of the window.</div><div class="ttdef"><b>Definition</b> gama.h:134</div></div>
+<div class="ttc" id="adraw_8h_html_a0afcc18a7c8c63fcab848d8848ca2176"><div class="ttname"><a href="draw_8h.html#a0afcc18a7c8c63fcab848d8848ca2176">gm_draw_text</a></div><div class="ttdeci">int32_t gm_draw_text(double x, double y, const char *text, const char *font, double font_size, gmColor c)</div><div class="ttdoc">Draws text centered at a point.</div><div class="ttdef"><b>Definition</b> draw.h:140</div></div>
+<div class="ttc" id="adraw_8h_html_a2a7a927b01836ad2067e35f12b9c26ea"><div class="ttname"><a href="draw_8h.html#a2a7a927b01836ad2067e35f12b9c26ea">gm_draw_rectangle</a></div><div class="ttdeci">int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c)</div><div class="ttdoc">Draws a rectangle centered at a point.</div><div class="ttdef"><b>Definition</b> draw.h:57</div></div>
+<div class="ttc" id="aframe_8h_html"><div class="ttname"><a href="frame_8h.html">frame.h</a></div><div class="ttdoc">Defines the theme and functionality for a frame widget.</div></div>
+<div class="ttc" id="aframe_8h_html_ac7eb9487dca540d1bfd9adce50dc636c"><div class="ttname"><a href="frame_8h.html#ac7eb9487dca540d1bfd9adce50dc636c">gmw_frame</a></div><div class="ttdeci">int gmw_frame(double x, double y, double width, double height)</div><div class="ttdoc">Creates and renders a frame widget (a bordered panel).</div><div class="ttdef"><b>Definition</b> frame.h:80</div></div>
+<div class="ttc" id="agama_2gama_8h_html_a0c22ed781536b72d723dc3d3a0245b53"><div class="ttname"><a href="gama_2gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53">gm_log</a></div><div class="ttdeci">void gm_log(const char *txt)</div><div class="ttdoc">Logs a message to the platform&#39;s console.</div><div class="ttdef"><b>Definition</b> gama.h:70</div></div>
+<div class="ttc" id="agama_2gama_8h_html_a11b841ac66eacd657c78efaea6c07b01"><div class="ttname"><a href="gama_2gama_8h.html#a11b841ac66eacd657c78efaea6c07b01">gm_show_fps</a></div><div class="ttdeci">void gm_show_fps(int show)</div><div class="ttdef"><b>Definition</b> gama.h:85</div></div>
+<div class="ttc" id="agama_2gama_8h_html_a75099652e829ac61185b5e12deb06040"><div class="ttname"><a href="gama_2gama_8h.html#a75099652e829ac61185b5e12deb06040">__gm_show_fps</a></div><div class="ttdeci">int __gm_show_fps</div><div class="ttdoc">Enables or disables the built-in FPS counter display.</div><div class="ttdef"><b>Definition</b> gama.h:84</div></div>
+<div class="ttc" id="agama_2gama_8h_html_aa65985ca5b8454ee69087f2243276e77"><div class="ttname"><a href="gama_2gama_8h.html#aa65985ca5b8454ee69087f2243276e77">gm_resize</a></div><div class="ttdeci">void gm_resize(int width, int height)</div><div class="ttdoc">Resizes the application window.</div><div class="ttdef"><b>Definition</b> gama.h:159</div></div>
+<div class="ttc" id="agama_2gama_8h_html_aae83aab0cf87d11fba0fc0b5779ad6a0"><div class="ttname"><a href="gama_2gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0">gm_logo</a></div><div class="ttdeci">void gm_logo(double x, double y, double s)</div><div class="ttdoc">Draws the Gama logo.</div><div class="ttdef"><b>Definition</b> gama.h:54</div></div>
+<div class="ttc" id="agama_2gama_8h_html_ab7997f4879229850843f681e9eb36c59"><div class="ttname"><a href="gama_2gama_8h.html#ab7997f4879229850843f681e9eb36c59">gm_sleep</a></div><div class="ttdeci">void gm_sleep(int milliseconds)</div><div class="ttdoc">Pauses execution for a specified duration.</div><div class="ttdef"><b>Definition</b> gama.h:202</div></div>
+<div class="ttc" id="agama_2gama_8h_html_ac1855c15ae19bfb11c9876b5261b9f75"><div class="ttname"><a href="gama_2gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gm_fullscreen</a></div><div class="ttdeci">void gm_fullscreen(int fullscreen)</div><div class="ttdoc">Puts the window in fullscreen.</div><div class="ttdef"><b>Definition</b> gama.h:45</div></div>
+<div class="ttc" id="agama_2gama_8h_html_acf62b5795b66bce9b310277356575c66"><div class="ttname"><a href="gama_2gama_8h.html#acf62b5795b66bce9b310277356575c66">gm_background</a></div><div class="ttdeci">void gm_background(gmColor c)</div><div class="ttdoc">Sets the background color of the window.</div><div class="ttdef"><b>Definition</b> gama.h:151</div></div>
 <div class="ttc" id="agama_2gama_8h_html_ae66f6b31b5ad750f1fe042a706a4e3d4"><div class="ttname"><a href="gama_2gama_8h.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a></div><div class="ttdeci">int main()</div></div>
-<div class="ttc" id="agama_2gama_8h_html_af2233e1d1ff834c39373255b305e1e9f"><div class="ttname"><a href="gama_2gama_8h.html#af2233e1d1ff834c39373255b305e1e9f">gama_run</a></div><div class="ttdeci">int32_t gama_run()</div><div class="ttdef"><b>Definition</b> gama.h:27</div></div>
-<div class="ttc" id="agama_2gama_8h_html_afe888881882c032aeecb0e3e4e6de460"><div class="ttname"><a href="gama_2gama_8h.html#afe888881882c032aeecb0e3e4e6de460">gm_init</a></div><div class="ttdeci">void gm_init(int width, int height, const char *title)</div><div class="ttdoc">Initializes the Gama engine and opens a window.</div><div class="ttdef"><b>Definition</b> gama.h:148</div></div>
-<div class="ttc" id="agapi_8h_html"><div class="ttname"><a href="gapi_8h.html">gapi.h</a></div></div>
-<div class="ttc" id="agapi_8h_html_a13c454d2ca7b47724dd5b085111a66e6"><div class="ttname"><a href="gapi_8h.html#a13c454d2ca7b47724dd5b085111a66e6">gapi_mouse_down</a></div><div class="ttdeci">int32_t gapi_mouse_down()</div></div>
-<div class="ttc" id="agapi_8h_html_a15035e5990e81f9cbb5e450265679ed9"><div class="ttname"><a href="gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a></div><div class="ttdeci">double _gm_dt</div><div class="ttdef"><b>Definition</b> gapi.h:6</div></div>
-<div class="ttc" id="agapi_8h_html_a33685759bfe738fd920e7f328d561ccc"><div class="ttname"><a href="gapi_8h.html#a33685759bfe738fd920e7f328d561ccc">gapi_fullscreen</a></div><div class="ttdeci">void gapi_fullscreen(const int32_t fullscreen)</div></div>
-<div class="ttc" id="agapi_8h_html_a47fd570f212b7717d9d2013930fbe5d0"><div class="ttname"><a href="gapi_8h.html#a47fd570f212b7717d9d2013930fbe5d0">_gm_t</a></div><div class="ttdeci">double _gm_t</div><div class="ttdef"><b>Definition</b> gapi.h:7</div></div>
-<div class="ttc" id="agapi_8h_html_a4ae4f9434b6179e6d7148c2b187dfa41"><div class="ttname"><a href="gapi_8h.html#a4ae4f9434b6179e6d7148c2b187dfa41">gapi_init</a></div><div class="ttdeci">int32_t gapi_init(const int32_t width, const int32_t height, const char *title)</div></div>
-<div class="ttc" id="agapi_8h_html_a5807835814d6e9575b1c3bddff3fed5a"><div class="ttname"><a href="gapi_8h.html#a5807835814d6e9575b1c3bddff3fed5a">gapi_resize</a></div><div class="ttdeci">void gapi_resize(const int32_t width, const int32_t height)</div></div>
-<div class="ttc" id="agapi_8h_html_a62e52648c681f51c0156e49f87e5f731"><div class="ttname"><a href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731">gapi_log</a></div><div class="ttdeci">void gapi_log(const char *message)</div></div>
-<div class="ttc" id="agapi_8h_html_a75992a93a66aeea7d867a59e0911889f"><div class="ttname"><a href="gapi_8h.html#a75992a93a66aeea7d867a59e0911889f">gapi_quit</a></div><div class="ttdeci">void gapi_quit()</div></div>
-<div class="ttc" id="agapi_8h_html_a7fda7996bff29edf614c0ca8ae54f0a0"><div class="ttname"><a href="gapi_8h.html#a7fda7996bff29edf614c0ca8ae54f0a0">gapi_yield</a></div><div class="ttdeci">int32_t gapi_yield(double *dt)</div></div>
-<div class="ttc" id="agapi_8h_html_aba1dc1654054d397e6325d4c55cae27b"><div class="ttname"><a href="gapi_8h.html#aba1dc1654054d397e6325d4c55cae27b">gapi_runs</a></div><div class="ttdeci">int32_t gapi_runs()</div></div>
-<div class="ttc" id="agapi_8h_html_af06e27344257a957a108c5830fdd20d2"><div class="ttname"><a href="gapi_8h.html#af06e27344257a957a108c5830fdd20d2">gapi_mouse_get</a></div><div class="ttdeci">int32_t gapi_mouse_get(double *x, double *y)</div></div>
-<div class="ttc" id="agapi_8h_html_affb93473d7b3ccfb1c8e7019376e6350"><div class="ttname"><a href="gapi_8h.html#affb93473d7b3ccfb1c8e7019376e6350">gapi_set_background_color</a></div><div class="ttdeci">void gapi_set_background_color(const gmColor background)</div></div>
-<div class="ttc" id="amouse_8h_html_ae348e1e764210f492ce421ed6460db40"><div class="ttname"><a href="mouse_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a></div><div class="ttdeci">struct _gmMouse gm_mouse</div><div class="ttdef"><b>Definition</b> mouse.h:15</div></div>
+<div class="ttc" id="agama_2gama_8h_html_af2233e1d1ff834c39373255b305e1e9f"><div class="ttname"><a href="gama_2gama_8h.html#af2233e1d1ff834c39373255b305e1e9f">gama_run</a></div><div class="ttdeci">int32_t gama_run()</div><div class="ttdef"><b>Definition</b> gama.h:32</div></div>
+<div class="ttc" id="agama_2gama_8h_html_afe888881882c032aeecb0e3e4e6de460"><div class="ttname"><a href="gama_2gama_8h.html#afe888881882c032aeecb0e3e4e6de460">gm_init</a></div><div class="ttdeci">void gm_init(int width, int height, const char *title)</div><div class="ttdoc">Initializes the Gama engine and opens a window.</div><div class="ttdef"><b>Definition</b> gama.h:171</div></div>
+<div class="ttc" id="agapi_8h_html"><div class="ttname"><a href="gapi_8h.html">gapi.h</a></div><div class="ttdoc">Graphics API (GAPI) abstraction layer for Gama.</div></div>
+<div class="ttc" id="agapi_8h_html_a13c454d2ca7b47724dd5b085111a66e6"><div class="ttname"><a href="gapi_8h.html#a13c454d2ca7b47724dd5b085111a66e6">gapi_mouse_down</a></div><div class="ttdeci">int32_t gapi_mouse_down()</div><div class="ttdoc">Checks if the mouse button is currently pressed.</div></div>
+<div class="ttc" id="agapi_8h_html_a15035e5990e81f9cbb5e450265679ed9"><div class="ttname"><a href="gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a></div><div class="ttdeci">double _gm_dt</div><div class="ttdef"><b>Definition</b> gapi.h:20</div></div>
+<div class="ttc" id="agapi_8h_html_a33685759bfe738fd920e7f328d561ccc"><div class="ttname"><a href="gapi_8h.html#a33685759bfe738fd920e7f328d561ccc">gapi_fullscreen</a></div><div class="ttdeci">void gapi_fullscreen(const int32_t fullscreen)</div><div class="ttdoc">Toggles fullscreen mode for the application window.</div></div>
+<div class="ttc" id="agapi_8h_html_a47fd570f212b7717d9d2013930fbe5d0"><div class="ttname"><a href="gapi_8h.html#a47fd570f212b7717d9d2013930fbe5d0">_gm_t</a></div><div class="ttdeci">double _gm_t</div><div class="ttdef"><b>Definition</b> gapi.h:26</div></div>
+<div class="ttc" id="agapi_8h_html_a4ae4f9434b6179e6d7148c2b187dfa41"><div class="ttname"><a href="gapi_8h.html#a4ae4f9434b6179e6d7148c2b187dfa41">gapi_init</a></div><div class="ttdeci">int32_t gapi_init(const int32_t width, const int32_t height, const char *title)</div><div class="ttdoc">Initializes the Graphics API and the application window.</div></div>
+<div class="ttc" id="agapi_8h_html_a5807835814d6e9575b1c3bddff3fed5a"><div class="ttname"><a href="gapi_8h.html#a5807835814d6e9575b1c3bddff3fed5a">gapi_resize</a></div><div class="ttdeci">void gapi_resize(const int32_t width, const int32_t height)</div><div class="ttdoc">Resizes the application window.</div></div>
+<div class="ttc" id="agapi_8h_html_a62e52648c681f51c0156e49f87e5f731"><div class="ttname"><a href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731">gapi_log</a></div><div class="ttdeci">void gapi_log(const char *message)</div><div class="ttdoc">Logs a message to the platform&#39;s console.</div></div>
+<div class="ttc" id="agapi_8h_html_a75992a93a66aeea7d867a59e0911889f"><div class="ttname"><a href="gapi_8h.html#a75992a93a66aeea7d867a59e0911889f">gapi_quit</a></div><div class="ttdeci">void gapi_quit()</div><div class="ttdoc">Requests the application to quit.</div></div>
+<div class="ttc" id="agapi_8h_html_a7fda7996bff29edf614c0ca8ae54f0a0"><div class="ttname"><a href="gapi_8h.html#a7fda7996bff29edf614c0ca8ae54f0a0">gapi_yield</a></div><div class="ttdeci">int32_t gapi_yield(double *dt)</div><div class="ttdoc">Yields control to the platform, processes events, and updates timing.</div></div>
+<div class="ttc" id="agapi_8h_html_aba1dc1654054d397e6325d4c55cae27b"><div class="ttname"><a href="gapi_8h.html#aba1dc1654054d397e6325d4c55cae27b">gapi_runs</a></div><div class="ttdeci">int32_t gapi_runs()</div><div class="ttdoc">Checks if the application is still running.</div></div>
+<div class="ttc" id="agapi_8h_html_af06e27344257a957a108c5830fdd20d2"><div class="ttname"><a href="gapi_8h.html#af06e27344257a957a108c5830fdd20d2">gapi_mouse_get</a></div><div class="ttdeci">int32_t gapi_mouse_get(double *x, double *y)</div><div class="ttdoc">Retrieves the current mouse cursor position.</div></div>
+<div class="ttc" id="agapi_8h_html_affb93473d7b3ccfb1c8e7019376e6350"><div class="ttname"><a href="gapi_8h.html#affb93473d7b3ccfb1c8e7019376e6350">gapi_set_background_color</a></div><div class="ttdeci">void gapi_set_background_color(const gmColor background)</div><div class="ttdoc">Sets the background color of the application window.</div></div>
+<div class="ttc" id="amouse_8h_html_ae348e1e764210f492ce421ed6460db40"><div class="ttname"><a href="mouse_8h.html#ae348e1e764210f492ce421ed6460db40">gm_mouse</a></div><div class="ttdeci">struct _gmMouse gm_mouse</div><div class="ttdef"><b>Definition</b> mouse.h:32</div></div>
 <div class="ttc" id="arrsprintf_8h_html_a720607e557535d7c2b36add5776d5361"><div class="ttname"><a href="rrsprintf_8h.html#a720607e557535d7c2b36add5776d5361">snprintf</a></div><div class="ttdeci">RRPUBLIC_DEF int RR_SPRINTF_DECORATE snprintf(char *buf, int count, char const *fmt,...)</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->

@@ -103,13 +103,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a0056e7f9917e085fc265555a470a9f2c" id="r_a0056e7f9917e085fc265555a470a9f2c"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0056e7f9917e085fc265555a470a9f2c">gm_upper_case</a> (char k)</td></tr>
 <tr class="memdesc:a0056e7f9917e085fc265555a470a9f2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a character to uppercase if it's a lowercase letter.  <br /></td></tr>
 <tr class="memitem:ac6e841ec57972c400025a67fb3662711" id="r_ac6e841ec57972c400025a67fb3662711"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6e841ec57972c400025a67fb3662711">gm_decode_key_shortcut</a> (char key, char *t, char *k)</td></tr>
-<tr class="memdesc:ac6e841ec57972c400025a67fb3662711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes a key shortcut into a type and key character.  <br /></td></tr>
+<tr class="memdesc:ac6e841ec57972c400025a67fb3662711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes a single character shortcut into a key type and key code.  <br /></td></tr>
 <tr class="memitem:ac9a64b69e25fe37e916cbf6a6d7cbf50" id="r_ac9a64b69e25fe37e916cbf6a6d7cbf50"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9a64b69e25fe37e916cbf6a6d7cbf50">gm_encode_key_shortcut</a> (char t, char k)</td></tr>
-<tr class="memdesc:ac9a64b69e25fe37e916cbf6a6d7cbf50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encodes a type and key character into a shortcut key.  <br /></td></tr>
+<tr class="memdesc:ac9a64b69e25fe37e916cbf6a6d7cbf50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encodes a key type and code into a single character shortcut. This is the reverse of <span class="tt"><a class="el" href="#ac6e841ec57972c400025a67fb3662711" title="Decodes a single character shortcut into a key type and key code.">gm_decode_key_shortcut</a></span>.  <br /></td></tr>
 <tr class="memitem:ac7f86dec784c76782cbbf72acaad1bff" id="r_ac7f86dec784c76782cbbf72acaad1bff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7f86dec784c76782cbbf72acaad1bff">gm_key_down</a> (char t, char k)</td></tr>
 <tr class="memdesc:ac7f86dec784c76782cbbf72acaad1bff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a key is currently pressed.  <br /></td></tr>
 <tr class="memitem:aed7124055190a27c29c680c17c08df3b" id="r_aed7124055190a27c29c680c17c08df3b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed7124055190a27c29c680c17c08df3b">gm_key</a> (char key)</td></tr>
-<tr class="memdesc:aed7124055190a27c29c680c17c08df3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a key is currently pressed using a shortcut key.  <br /></td></tr>
+<tr class="memdesc:aed7124055190a27c29c680c17c08df3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a key is currently pressed using a single character shortcut.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="ac6e841ec57972c400025a67fb3662711" name="ac6e841ec57972c400025a67fb3662711"></a>
@@ -136,12 +136,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Decodes a key shortcut into a type and key character. </p>
+<p>Decodes a single character shortcut into a key type and key code. </p>
+<p>This function translates a compact shortcut character into its corresponding event type and key, used by <span class="tt"><a class="el" href="#ac7f86dec784c76782cbbf72acaad1bff" title="Checks if a key is currently pressed.">gm_key_down</a></span>.</p><ul>
+<li>'U', 'D', 'L', 'R' -&gt; type 'a' (arrow)</li>
+<li>'E' -&gt; type 's' (special), key 'x'</li>
+<li>'S', 'C', 'A' -&gt; type 'm' (modifier: Shift, Ctrl, Alt)</li>
+<li>Other characters -&gt; type 'c' (character)</li>
+</ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">key</td><td>The shortcut key to decode. </td></tr>
+    <tr><td class="paramname">key</td><td>The single character shortcut (e.g., 'U' for Up Arrow). </td></tr>
     <tr><td class="paramname">t</td><td>Pointer to store the decoded key type. </td></tr>
-    <tr><td class="paramname">k</td><td>Pointer to store the decoded key character. </td></tr>
+    <tr><td class="paramname">k</td><td>Pointer to store the decoded key code. </td></tr>
   </table>
   </dd>
 </dl>
@@ -167,15 +173,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Encodes a type and key character into a shortcut key. </p>
+<p>Encodes a key type and code into a single character shortcut. This is the reverse of <span class="tt"><a class="el" href="#ac6e841ec57972c400025a67fb3662711" title="Decodes a single character shortcut into a key type and key code.">gm_decode_key_shortcut</a></span>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">t</td><td>The key type ('a' for arrow keys, 'm' for mouse events, 's' for special keys, 'c' for character keys). </td></tr>
-    <tr><td class="paramname">k</td><td>The key character. </td></tr>
+    <tr><td class="paramname">t</td><td>The key type ('a' for arrow, 'm' for modifier, 's' for special, 'c' for character). </td></tr>
+    <tr><td class="paramname">k</td><td>The key code. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The encoded shortcut key. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The encoded single character shortcut. </dd></dl>
 
 </div>
 </div>
@@ -194,14 +200,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Checks if a key is currently pressed using a shortcut key. </p>
+<p>Checks if a key is currently pressed using a single character shortcut. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">key</td><td>The shortcut key to check. </td></tr>
+    <tr><td class="paramname">key</td><td>The shortcut character to check (e.g., 'w', 'U' for up). </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if the key is pressed, 0 otherwise. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#ac6e841ec57972c400025a67fb3662711" title="Decodes a single character shortcut into a key type and key code.">gm_decode_key_shortcut</a> </dd>
+<dd>
+<a class="el" href="#ac7f86dec784c76782cbbf72acaad1bff" title="Checks if a key is currently pressed.">gm_key_down</a> </dd></dl>
 
 </div>
 </div>
@@ -225,10 +234,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Checks if a key is currently pressed. </p>
+<p>This is the low-level input checking function.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">t</td><td>The type of key event ('a' for arrow keys, 'm' for mouse events, 's' for special keys, 'c' for character keys). </td></tr>
-    <tr><td class="paramname">k</td><td>The specific key character or identifier. </td></tr>
+    <tr><td class="paramname">t</td><td>The type of key: 'c' for character, 'a' for arrow, 's' for special. </td></tr>
+    <tr><td class="paramname">k</td><td>The key code to check (e.g., 'w', 'u' for up arrow). </td></tr>
   </table>
   </dd>
 </dl>

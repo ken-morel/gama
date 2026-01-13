@@ -101,24 +101,24 @@ $(function(){initNavTree('structgm_sprite_anim.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a63a10b2face721fa93d452af79d1fe72" id="r_a63a10b2face721fa93d452af79d1fe72"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63a10b2face721fa93d452af79d1fe72">interval</a></td></tr>
-<tr class="memitem:ad22ef8ab93dc6f86c4de6585e49e4f32" id="r_ad22ef8ab93dc6f86c4de6585e49e4f32"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad22ef8ab93dc6f86c4de6585e49e4f32">anim</a> [<a class="el" href="sprite_8h.html#abb0282485a5932f74a3a988601212af1">GAMA_MAX_SPRITE_ANIM_LENGTH</a>]</td></tr>
+<tr class="memitem:a4078ccf7e32cbec569ac50ee68685f21" id="r_a4078ccf7e32cbec569ac50ee68685f21"><td class="memItemLeft" align="right" valign="top">int8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4078ccf7e32cbec569ac50ee68685f21">anim</a> [<a class="el" href="sprite_8h.html#abb0282485a5932f74a3a988601212af1">GAMA_MAX_SPRITE_ANIM_LENGTH</a>]</td></tr>
 <tr class="memitem:a78cff7f6ef84454a0fe2c112b13683d5" id="r_a78cff7f6ef84454a0fe2c112b13683d5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78cff7f6ef84454a0fe2c112b13683d5">length</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure representing a sprite animation sequence. </p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
-<a id="ad22ef8ab93dc6f86c4de6585e49e4f32" name="ad22ef8ab93dc6f86c4de6585e49e4f32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad22ef8ab93dc6f86c4de6585e49e4f32">&#9670;&#160;</a></span>anim</h2>
+<a id="a4078ccf7e32cbec569ac50ee68685f21" name="a4078ccf7e32cbec569ac50ee68685f21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4078ccf7e32cbec569ac50ee68685f21">&#9670;&#160;</a></span>anim</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int gmSpriteAnim::anim[<a class="el" href="sprite_8h.html#abb0282485a5932f74a3a988601212af1">GAMA_MAX_SPRITE_ANIM_LENGTH</a>]</td>
+          <td class="memname">int8_t gmSpriteAnim::anim[<a class="el" href="sprite_8h.html#abb0282485a5932f74a3a988601212af1">GAMA_MAX_SPRITE_ANIM_LENGTH</a>]</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Array of frame indices in the animation sequence </p>
+<p>Array of frame indices in the animation sequence. These are indices into the sprite sheet's total frames. </p>
 
 </div>
 </div>
@@ -133,7 +133,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Time interval between animation frames </p>
+<p>Time interval in seconds between animation frames. </p>
 
 </div>
 </div>
@@ -148,7 +148,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Number of frames in the animation </p>
+<p>Number of frames in the animation sequence. </p>
 
 </div>
 </div>

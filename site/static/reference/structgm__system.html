@@ -102,7 +102,7 @@ $(function(){initNavTree('structgm__system.html','',''); });
 Data Fields</h2></td></tr>
 <tr class="memitem:ac4794f02d4f3353531ed139fde2b8a48" id="r_ac4794f02d4f3353531ed139fde2b8a48"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4794f02d4f3353531ed139fde2b8a48">is_active</a></td></tr>
 <tr class="memitem:ad041cd983fb9906440932a02ede15037" id="r_ad041cd983fb9906440932a02ede15037"><td class="memItemLeft" align="right" valign="top"><a class="el" href="body__list_8h.html#accee67073d78bddbdc0932f9940f22f5">gmBodies</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad041cd983fb9906440932a02ede15037">bodies</a></td></tr>
-<tr class="memitem:a4ad09cffed0e7e17facba06f18eeb3e4" id="r_a4ad09cffed0e7e17facba06f18eeb3e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_collision.html">gmCollision</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ad09cffed0e7e17facba06f18eeb3e4">collisions</a></td></tr>
+<tr class="memitem:a8a1f46ebbc67c60f6de12eaaac38478f" id="r_a8a1f46ebbc67c60f6de12eaaac38478f"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structgm__collision.html">gm_collision</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a1f46ebbc67c60f6de12eaaac38478f">collisions</a></td></tr>
 <tr class="memitem:a6f2d2acface6269c1ff8486cfae057e5" id="r_a6f2d2acface6269c1ff8486cfae057e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_pos.html">gmPos</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f2d2acface6269c1ff8486cfae057e5">velocity</a></td></tr>
 <tr class="memitem:a04e471339c635281e7fb81857fcd54de" id="r_a04e471339c635281e7fb81857fcd54de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_pos.html">gmPos</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04e471339c635281e7fb81857fcd54de">acceleration</a></td></tr>
 <tr class="memitem:a40d52885fd4d36ca430e5359acd952ee" id="r_a40d52885fd4d36ca430e5359acd952ee"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40d52885fd4d36ca430e5359acd952ee">damping</a></td></tr>
@@ -121,7 +121,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Acceleration applied to all bodies in the system </p>
+<p>Global acceleration applied to all bodies (e.g., gravity). </p>
 
 </div>
 </div>
@@ -136,22 +136,22 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>List of bodies in the system </p>
+<p>List of pointers to bodies currently managed by this system. </p>
 
 </div>
 </div>
-<a id="a4ad09cffed0e7e17facba06f18eeb3e4" name="a4ad09cffed0e7e17facba06f18eeb3e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ad09cffed0e7e17facba06f18eeb3e4">&#9670;&#160;</a></span>collisions</h2>
+<a id="a8a1f46ebbc67c60f6de12eaaac38478f" name="a8a1f46ebbc67c60f6de12eaaac38478f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a1f46ebbc67c60f6de12eaaac38478f">&#9670;&#160;</a></span>collisions</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structgm_collision.html">gmCollision</a>** gm_system::collisions</td>
+          <td class="memname">struct <a class="el" href="structgm__collision.html">gm_collision</a>** gm_system::collisions</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Array of collision information </p>
+<p>Array of active collision information objects. </p>
 
 </div>
 </div>
@@ -166,7 +166,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Damping factor applied to all bodies in the system </p>
+<p>Global damping factor applied to all bodies (reduces velocity over time). </p>
 
 </div>
 </div>
@@ -181,7 +181,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Whether the system is active </p>
+<p>Whether the system is active and should be updated. </p>
 
 </div>
 </div>
@@ -196,7 +196,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Velocity applied to all bodies in the system </p>
+<p>Global velocity applied to all bodies in the system (e.g., wind). </p>
 
 </div>
 </div>

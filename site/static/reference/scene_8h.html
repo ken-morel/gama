@@ -92,6 +92,9 @@ $(function(){initNavTree('scene_8h.html','',''); });
   <div class="headertitle"><div class="title">scene.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines the 3D scene structure, encompassing lights, cameras, and viewport settings.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="position_8h_source.html">../position.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="camera_8h_source.html">camera.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="light_8h_source.html">light.h</a>&quot;</code><br />
@@ -101,14 +104,26 @@ $(function(){initNavTree('scene_8h.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:gm3Scene" id="r_gm3Scene"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm3_scene.html">gm3Scene</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a complete 3D scene, including its camera, lights, and viewport.  <a href="structgm3_scene.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ac29ad7029afe5b0113684a0fc2a523e5" id="r_ac29ad7029afe5b0113684a0fc2a523e5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac29ad7029afe5b0113684a0fc2a523e5">gm3_scene_create</a> (<a class="el" href="structgm3_scene.html">gm3Scene</a> *s, double w, double h)</td></tr>
+<tr class="memdesc:ac29ad7029afe5b0113684a0fc2a523e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> struct with default values and a specified viewport.  <br /></td></tr>
 <tr class="memitem:ac5c8570fb63a7244803d9976d073c506" id="r_ac5c8570fb63a7244803d9976d073c506"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm3_scene.html">gm3Scene</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5c8570fb63a7244803d9976d073c506">gm3_scene</a> ()</td></tr>
+<tr class="memdesc:ac5c8570fb63a7244803d9976d073c506"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a new <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> struct initialized with default values.  <br /></td></tr>
 <tr class="memitem:ad8d219e5f1ddca506358f49e3c076720" id="r_ad8d219e5f1ddca506358f49e3c076720"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8d219e5f1ddca506358f49e3c076720">gm3_scene_free</a> (<a class="el" href="structgm3_scene.html">gm3Scene</a> *s)</td></tr>
+<tr class="memdesc:ad8d219e5f1ddca506358f49e3c076720"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees any dynamically allocated memory associated with a <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span>.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ad37fd7fb5342b41a5e1e9ed6e2dc77ad" id="r_ad37fd7fb5342b41a5e1e9ed6e2dc77ad"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structgm3_scene.html">gm3Scene</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad37fd7fb5342b41a5e1e9ed6e2dc77ad">gm3_default_scene</a></td></tr>
+<tr class="memdesc:ad37fd7fb5342b41a5e1e9ed6e2dc77ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">A default <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> instance.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines the 3D scene structure, encompassing lights, cameras, and viewport settings. </p>
+<p>This file provides the <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> structure to manage global properties of a 3D rendering environment, making it easier to pass scene context to projection and rendering functions. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="ac5c8570fb63a7244803d9976d073c506" name="ac5c8570fb63a7244803d9976d073c506"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac5c8570fb63a7244803d9976d073c506">&#9670;&#160;</a></span>gm3_scene()</h2>
 
@@ -123,6 +138,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Creates and returns a new <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> struct initialized with default values. </p>
+<dl class="section return"><dt>Returns</dt><dd>A new <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> instance. </dd></dl>
 
 </div>
 </div>
@@ -150,6 +168,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initializes a <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> struct with default values and a specified viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>A pointer to the <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> struct to initialize. </td></tr>
+    <tr><td class="paramname">w</td><td>The width of the viewport. </td></tr>
+    <tr><td class="paramname">h</td><td>The height of the viewport. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if <span class="tt">s</span> is NULL. </dd></dl>
+
 </div>
 </div>
 <a id="ad8d219e5f1ddca506358f49e3c076720" name="ad8d219e5f1ddca506358f49e3c076720"></a>
@@ -166,6 +195,41 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Frees any dynamically allocated memory associated with a <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span>. </p>
+<p>Currently, the <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> struct does not directly manage any dynamically allocated pointers that require explicit freeing, so this function is a placeholder.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>A pointer to the <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> to free. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="ad37fd7fb5342b41a5e1e9ed6e2dc77ad" name="ad37fd7fb5342b41a5e1e9ed6e2dc77ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad37fd7fb5342b41a5e1e9ed6e2dc77ad">&#9670;&#160;</a></span>gm3_default_scene</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structgm3_scene.html">gm3Scene</a> gm3_default_scene</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    .viewport = {2, 2},</div>
+<div class="line">    .light = <a class="code hl_variable" href="light_8h.html#adf22b7b3e33b824d390f5bd1c043c97c">gm3_default_light</a>,</div>
+<div class="line">    .camera = <a class="code hl_variable" href="camera_8h.html#a018b03145d798a3bc3cc6ea10309f5c9">gm3_default_camera</a>,</div>
+<div class="line">}</div>
+<div class="ttc" id="acamera_8h_html_a018b03145d798a3bc3cc6ea10309f5c9"><div class="ttname"><a href="camera_8h.html#a018b03145d798a3bc3cc6ea10309f5c9">gm3_default_camera</a></div><div class="ttdeci">const gm3Camera gm3_default_camera</div><div class="ttdoc">A default gm3Camera instance.</div><div class="ttdef"><b>Definition</b> camera.h:21</div></div>
+<div class="ttc" id="alight_8h_html_adf22b7b3e33b824d390f5bd1c043c97c"><div class="ttname"><a href="light_8h.html#adf22b7b3e33b824d390f5bd1c043c97c">gm3_default_light</a></div><div class="ttdeci">const gm3Light gm3_default_light</div><div class="ttdoc">A default gm3Light instance.</div><div class="ttdef"><b>Definition</b> light.h:27</div></div>
+</div><!-- fragment -->
+<p>A default <span class="tt"><a class="el" href="structgm3_scene.html" title="Represents a complete 3D scene, including its camera, lights, and viewport.">gm3Scene</a></span> instance. </p>
+<p>Initializes a scene with a default viewport (2,2), a default light, and a default camera. </p>
 
 </div>
 </div>

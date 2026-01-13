@@ -92,6 +92,9 @@ $(function(){initNavTree('gapi_8h.html','',''); });
   <div class="headertitle"><div class="title">gapi.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Graphics API (GAPI) abstraction layer for Gama.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="color_8h_source.html">color.h</a>&quot;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
 </div>
@@ -100,35 +103,61 @@ $(function(){initNavTree('gapi_8h.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a011056a6351d47641cf3c674124c022c" id="r_a011056a6351d47641cf3c674124c022c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a011056a6351d47641cf3c674124c022c">gapi_set_title</a> (const char *title)</td></tr>
+<tr class="memdesc:a011056a6351d47641cf3c674124c022c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the title of the application window.  <br /></td></tr>
 <tr class="memitem:a5807835814d6e9575b1c3bddff3fed5a" id="r_a5807835814d6e9575b1c3bddff3fed5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5807835814d6e9575b1c3bddff3fed5a">gapi_resize</a> (const int32_t width, const int32_t height)</td></tr>
+<tr class="memdesc:a5807835814d6e9575b1c3bddff3fed5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes the application window.  <br /></td></tr>
 <tr class="memitem:affb93473d7b3ccfb1c8e7019376e6350" id="r_affb93473d7b3ccfb1c8e7019376e6350"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affb93473d7b3ccfb1c8e7019376e6350">gapi_set_background_color</a> (const <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> background)</td></tr>
+<tr class="memdesc:affb93473d7b3ccfb1c8e7019376e6350"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the background color of the application window.  <br /></td></tr>
 <tr class="memitem:a33685759bfe738fd920e7f328d561ccc" id="r_a33685759bfe738fd920e7f328d561ccc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33685759bfe738fd920e7f328d561ccc">gapi_fullscreen</a> (const int32_t fullscreen)</td></tr>
+<tr class="memdesc:a33685759bfe738fd920e7f328d561ccc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles fullscreen mode for the application window.  <br /></td></tr>
 <tr class="memitem:a62e52648c681f51c0156e49f87e5f731" id="r_a62e52648c681f51c0156e49f87e5f731"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62e52648c681f51c0156e49f87e5f731">gapi_log</a> (const char *message)</td></tr>
+<tr class="memdesc:a62e52648c681f51c0156e49f87e5f731"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs a message to the platform's console.  <br /></td></tr>
 <tr class="memitem:a4ae4f9434b6179e6d7148c2b187dfa41" id="r_a4ae4f9434b6179e6d7148c2b187dfa41"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ae4f9434b6179e6d7148c2b187dfa41">gapi_init</a> (const int32_t width, const int32_t height, const char *title)</td></tr>
+<tr class="memdesc:a4ae4f9434b6179e6d7148c2b187dfa41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Graphics API and the application window.  <br /></td></tr>
 <tr class="memitem:a7fda7996bff29edf614c0ca8ae54f0a0" id="r_a7fda7996bff29edf614c0ca8ae54f0a0"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fda7996bff29edf614c0ca8ae54f0a0">gapi_yield</a> (double *dt)</td></tr>
+<tr class="memdesc:a7fda7996bff29edf614c0ca8ae54f0a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Yields control to the platform, processes events, and updates timing.  <br /></td></tr>
 <tr class="memitem:a75992a93a66aeea7d867a59e0911889f" id="r_a75992a93a66aeea7d867a59e0911889f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75992a93a66aeea7d867a59e0911889f">gapi_quit</a> ()</td></tr>
+<tr class="memdesc:a75992a93a66aeea7d867a59e0911889f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests the application to quit.  <br /></td></tr>
 <tr class="memitem:aba1dc1654054d397e6325d4c55cae27b" id="r_aba1dc1654054d397e6325d4c55cae27b"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba1dc1654054d397e6325d4c55cae27b">gapi_runs</a> ()</td></tr>
+<tr class="memdesc:aba1dc1654054d397e6325d4c55cae27b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the application is still running.  <br /></td></tr>
 <tr class="memitem:ae114249c27fc729dbaddeb28cddeb915" id="r_ae114249c27fc729dbaddeb28cddeb915"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae114249c27fc729dbaddeb28cddeb915">gapi_draw_line</a> (double x1, double y1, double x2, double y2, double thickness, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memdesc:ae114249c27fc729dbaddeb28cddeb915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line segment on the screen.  <br /></td></tr>
 <tr class="memitem:a23cc1111238f4d03f16c575990e521b6" id="r_a23cc1111238f4d03f16c575990e521b6"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23cc1111238f4d03f16c575990e521b6">gapi_draw_rect</a> (double x, double y, double w, double h, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memdesc:a23cc1111238f4d03f16c575990e521b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a filled rectangle on the screen.  <br /></td></tr>
 <tr class="memitem:a4259289ffd7cfbb8c13e1ca085feabe2" id="r_a4259289ffd7cfbb8c13e1ca085feabe2"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4259289ffd7cfbb8c13e1ca085feabe2">gapi_draw_rounded_rect</a> (double x, double y, double w, double h, double r, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memdesc:a4259289ffd7cfbb8c13e1ca085feabe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a filled rectangle with rounded corners on the screen.  <br /></td></tr>
 <tr class="memitem:abb3cf891ffa029878f1c3a2465958d1e" id="r_abb3cf891ffa029878f1c3a2465958d1e"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb3cf891ffa029878f1c3a2465958d1e">gapi_draw_circle</a> (double center_x, double center_y, double radius, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memdesc:abb3cf891ffa029878f1c3a2465958d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a filled circle on the screen.  <br /></td></tr>
 <tr class="memitem:adc5f160e2f85e20dd2c1f6ad7771f5b4" id="r_adc5f160e2f85e20dd2c1f6ad7771f5b4"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc5f160e2f85e20dd2c1f6ad7771f5b4">gapi_draw_ellipse</a> (double x, double y, double w, double h, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memdesc:adc5f160e2f85e20dd2c1f6ad7771f5b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a filled ellipse on the screen.  <br /></td></tr>
 <tr class="memitem:a5efc35389c5b7823ee666e3b178fa430" id="r_a5efc35389c5b7823ee666e3b178fa430"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5efc35389c5b7823ee666e3b178fa430">gapi_draw_triangle</a> (double x1, double y1, double x2, double y2, double x3, double y3, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memdesc:a5efc35389c5b7823ee666e3b178fa430"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a filled triangle on the screen.  <br /></td></tr>
 <tr class="memitem:a2542ba5370ccc664cebe2773a64bd577" id="r_a2542ba5370ccc664cebe2773a64bd577"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2542ba5370ccc664cebe2773a64bd577">gapi_draw_triangles</a> (uint32_t n_triangles, double *points, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> *colors)</td></tr>
+<tr class="memdesc:a2542ba5370ccc664cebe2773a64bd577"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a batch of triangles on the screen.  <br /></td></tr>
 <tr class="memitem:a63e6201085343907a67ba043ed7b2f72" id="r_a63e6201085343907a67ba043ed7b2f72"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63e6201085343907a67ba043ed7b2f72">gapi_create_image</a> (const unsigned char *data, uint32_t width, uint32_t height)</td></tr>
+<tr class="memdesc:a63e6201085343907a67ba043ed7b2f72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a platform-specific image handle from raw pixel data.  <br /></td></tr>
 <tr class="memitem:a4958768ff5d3519bcc96b3f56ef98eb1" id="r_a4958768ff5d3519bcc96b3f56ef98eb1"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4958768ff5d3519bcc96b3f56ef98eb1">gapi_draw_image</a> (uint32_t handle, double x, double y, double width, double height)</td></tr>
+<tr class="memdesc:a4958768ff5d3519bcc96b3f56ef98eb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws an image referenced by its handle on the screen.  <br /></td></tr>
 <tr class="memitem:ad0a4d37645fa603d8c332c2fae3ef3b3" id="r_ad0a4d37645fa603d8c332c2fae3ef3b3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0a4d37645fa603d8c332c2fae3ef3b3">gapi_draw_image_part</a> (uint32_t handle, uint32_t slice_x, uint32_t slice_y, uint32_t slice_width, uint32_t slice_height, double x, double y, double width, double height)</td></tr>
+<tr class="memdesc:ad0a4d37645fa603d8c332c2fae3ef3b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a part of an image referenced by its handle on the screen.  <br /></td></tr>
 <tr class="memitem:a89b0ad831787ffa74a4c203149b74a97" id="r_a89b0ad831787ffa74a4c203149b74a97"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89b0ad831787ffa74a4c203149b74a97">gapi_draw_text</a> (double x, double y, double height, const char *txt, const char *font, uint8_t style, <a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b">gmColor</a> col)</td></tr>
+<tr class="memdesc:a89b0ad831787ffa74a4c203149b74a97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws text on the screen.  <br /></td></tr>
 <tr class="memitem:a591eb37e63feff38ea5a43311b72b4a5" id="r_a591eb37e63feff38ea5a43311b72b4a5"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a591eb37e63feff38ea5a43311b72b4a5">gapi_key_down</a> (char t, char k)</td></tr>
+<tr class="memdesc:a591eb37e63feff38ea5a43311b72b4a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a specific key is currently pressed.  <br /></td></tr>
 <tr class="memitem:a13c454d2ca7b47724dd5b085111a66e6" id="r_a13c454d2ca7b47724dd5b085111a66e6"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13c454d2ca7b47724dd5b085111a66e6">gapi_mouse_down</a> ()</td></tr>
+<tr class="memdesc:a13c454d2ca7b47724dd5b085111a66e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the mouse button is currently pressed.  <br /></td></tr>
 <tr class="memitem:af06e27344257a957a108c5830fdd20d2" id="r_af06e27344257a957a108c5830fdd20d2"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af06e27344257a957a108c5830fdd20d2">gapi_mouse_get</a> (double *x, double *y)</td></tr>
+<tr class="memdesc:af06e27344257a957a108c5830fdd20d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the current mouse cursor position.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a15035e5990e81f9cbb5e450265679ed9" id="r_a15035e5990e81f9cbb5e450265679ed9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a> = 0</td></tr>
 <tr class="memitem:a47fd570f212b7717d9d2013930fbe5d0" id="r_a47fd570f212b7717d9d2013930fbe5d0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47fd570f212b7717d9d2013930fbe5d0">_gm_t</a> = 0</td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Graphics API (GAPI) abstraction layer for Gama. </p>
+<p>This file declares the interface for platform-specific graphics operations. It provides a set of <span class="tt">gapi_</span> prefixed functions that are implemented differently for each target platform (e.g., native desktop, WebAssembly). This abstraction allows the core Gama engine code to remain platform-agnostic. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a63e6201085343907a67ba043ed7b2f72" name="a63e6201085343907a67ba043ed7b2f72"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a63e6201085343907a67ba043ed7b2f72">&#9670;&#160;</a></span>gapi_create_image()</h2>
 
@@ -160,6 +189,18 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Creates a platform-specific image handle from raw pixel data. </p>
+<p>This function is used to upload image data to the GPU or create a drawable surface that can be used by <span class="tt"><a class="el" href="#a4958768ff5d3519bcc96b3f56ef98eb1" title="Draws an image referenced by its handle on the screen.">gapi_draw_image</a></span> functions.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>A pointer to the raw RGBA pixel data. </td></tr>
+    <tr><td class="paramname">width</td><td>The width of the image. </td></tr>
+    <tr><td class="paramname">height</td><td>The height of the image. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A unique handle (ID) for the created image on success, 0 on failure. </dd></dl>
 
 </div>
 </div>
@@ -199,6 +240,18 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Draws a filled circle on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">center_x</td><td>The x-coordinate of the center of the circle. </td></tr>
+    <tr><td class="paramname">center_y</td><td>The y-coordinate of the center of the circle. </td></tr>
+    <tr><td class="paramname">radius</td><td>The radius of the circle. </td></tr>
+    <tr><td class="paramname">col</td><td>The <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span> of the circle. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 </div>
 </div>
@@ -244,6 +297,19 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Draws a filled ellipse on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the center of the ellipse. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the center of the ellipse. </td></tr>
+    <tr><td class="paramname">w</td><td>The width of the ellipse. </td></tr>
+    <tr><td class="paramname">h</td><td>The height of the ellipse. </td></tr>
+    <tr><td class="paramname">col</td><td>The <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span> of the ellipse. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
 </div>
 </div>
 <a id="a4958768ff5d3519bcc96b3f56ef98eb1" name="a4958768ff5d3519bcc96b3f56ef98eb1"></a>
@@ -287,6 +353,19 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Draws an image referenced by its handle on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>The handle of the image to draw, obtained from <span class="tt"><a class="el" href="#a63e6201085343907a67ba043ed7b2f72" title="Creates a platform-specific image handle from raw pixel data.">gapi_create_image</a></span>. </td></tr>
+    <tr><td class="paramname">x</td><td>The x-coordinate of the center of the image. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the center of the image. </td></tr>
+    <tr><td class="paramname">width</td><td>The width to draw the image. </td></tr>
+    <tr><td class="paramname">height</td><td>The height to draw the image. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 </div>
 </div>
@@ -352,6 +431,23 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Draws a part of an image referenced by its handle on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>The handle of the image to draw from. </td></tr>
+    <tr><td class="paramname">slice_x</td><td>The x-coordinate of the top-left corner of the source slice. </td></tr>
+    <tr><td class="paramname">slice_y</td><td>The y-coordinate of the top-left corner of the source slice. </td></tr>
+    <tr><td class="paramname">slice_width</td><td>The width of the source slice. </td></tr>
+    <tr><td class="paramname">slice_height</td><td>The height of the source slice. </td></tr>
+    <tr><td class="paramname">x</td><td>The x-coordinate of the center of the destination rectangle. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the center of the destination rectangle. </td></tr>
+    <tr><td class="paramname">width</td><td>The width to draw the slice. </td></tr>
+    <tr><td class="paramname">height</td><td>The height to draw the slice. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
 </div>
 </div>
 <a id="ae114249c27fc729dbaddeb28cddeb915" name="ae114249c27fc729dbaddeb28cddeb915"></a>
@@ -401,6 +497,20 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Draws a line segment on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x1</td><td>The x-coordinate of the start point. </td></tr>
+    <tr><td class="paramname">y1</td><td>The y-coordinate of the start point. </td></tr>
+    <tr><td class="paramname">x2</td><td>The x-coordinate of the end point. </td></tr>
+    <tr><td class="paramname">y2</td><td>The y-coordinate of the end point. </td></tr>
+    <tr><td class="paramname">thickness</td><td>The thickness of the line. </td></tr>
+    <tr><td class="paramname">col</td><td>The <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span> of the line. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
 </div>
 </div>
 <a id="a23cc1111238f4d03f16c575990e521b6" name="a23cc1111238f4d03f16c575990e521b6"></a>
@@ -444,6 +554,19 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Draws a filled rectangle on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the center of the rectangle. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the center of the rectangle. </td></tr>
+    <tr><td class="paramname">w</td><td>The width of the rectangle. </td></tr>
+    <tr><td class="paramname">h</td><td>The height of the rectangle. </td></tr>
+    <tr><td class="paramname">col</td><td>The <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span> of the rectangle. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 </div>
 </div>
@@ -493,6 +616,20 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Draws a filled rectangle with rounded corners on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the center of the rectangle. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the center of the rectangle. </td></tr>
+    <tr><td class="paramname">w</td><td>The width of the rectangle. </td></tr>
+    <tr><td class="paramname">h</td><td>The height of the rectangle. </td></tr>
+    <tr><td class="paramname">r</td><td>The corner radius. </td></tr>
+    <tr><td class="paramname">col</td><td>The <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span> of the rectangle. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 </div>
 </div>
@@ -548,6 +685,21 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Draws text on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the center of the text. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the center of the text. </td></tr>
+    <tr><td class="paramname">height</td><td>The height/size of the text. </td></tr>
+    <tr><td class="paramname">txt</td><td>The null-terminated string to draw. </td></tr>
+    <tr><td class="paramname">font</td><td>The null-terminated font name to use. </td></tr>
+    <tr><td class="paramname">style</td><td>A bitmask for text style (e.g., bold, italic). </td></tr>
+    <tr><td class="paramname">col</td><td>The <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span> of the text. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
 </div>
 </div>
 <a id="a5efc35389c5b7823ee666e3b178fa430" name="a5efc35389c5b7823ee666e3b178fa430"></a>
@@ -602,6 +754,21 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Draws a filled triangle on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x1</td><td>The x-coordinate of the first vertex. </td></tr>
+    <tr><td class="paramname">y1</td><td>The y-coordinate of the first vertex. </td></tr>
+    <tr><td class="paramname">x2</td><td>The x-coordinate of the second vertex. </td></tr>
+    <tr><td class="paramname">y2</td><td>The y-coordinate of the second vertex. </td></tr>
+    <tr><td class="paramname">x3</td><td>The x-coordinate of the third vertex. </td></tr>
+    <tr><td class="paramname">y3</td><td>The y-coordinate of the third vertex. </td></tr>
+    <tr><td class="paramname">col</td><td>The <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span> of the triangle. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
 </div>
 </div>
 <a id="a2542ba5370ccc664cebe2773a64bd577" name="a2542ba5370ccc664cebe2773a64bd577"></a>
@@ -636,6 +803,17 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Draws a batch of triangles on the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n_triangles</td><td>The number of triangles in the batch. </td></tr>
+    <tr><td class="paramname">points</td><td>An array of <span class="tt">double</span>s representing the vertices (x1,y1, x2,y2, x3,y3 for each triangle). </td></tr>
+    <tr><td class="paramname">colors</td><td>An array of <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span>s, one for each triangle. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
 </div>
 </div>
 <a id="a33685759bfe738fd920e7f328d561ccc" name="a33685759bfe738fd920e7f328d561ccc"></a>
@@ -660,6 +838,14 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Toggles fullscreen mode for the application window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fullscreen</td><td>1 to enable fullscreen, 0 to disable. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a3">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -696,6 +882,18 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Initializes the Graphics API and the application window. </p>
+<p>This function must be called once at the start of the application.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>The desired width of the window. </td></tr>
+    <tr><td class="paramname">height</td><td>The desired height of the window. </td></tr>
+    <tr><td class="paramname">title</td><td>The title of the window. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, non-zero on failure. </dd></dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a29">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -728,6 +926,16 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks if a specific key is currently pressed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>The type of key ('c' for character, 'a' for arrow, 's' for special). </td></tr>
+    <tr><td class="paramname">k</td><td>The key code. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the key is down, 0 otherwise. </dd></dl>
+
 </div>
 </div>
 <a id="a62e52648c681f51c0156e49f87e5f731" name="a62e52648c681f51c0156e49f87e5f731"></a>
@@ -752,6 +960,14 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Logs a message to the platform's console. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">message</td><td>The null-terminated string to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a8">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -779,6 +995,9 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Checks if the mouse button is currently pressed. </p>
+<dl class="section return"><dt>Returns</dt><dd>1 if the mouse button is down, 0 otherwise. </dd></dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a21">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -810,6 +1029,16 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves the current mouse cursor position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>A pointer to a double to store the x-coordinate. </td></tr>
+    <tr><td class="paramname">y</td><td>A pointer to a double to store the y-coordinate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a20">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -837,6 +1066,8 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Requests the application to quit. </p>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a22">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -868,6 +1099,15 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Resizes the application window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>The new width of the window in pixels. </td></tr>
+    <tr><td class="paramname">height</td><td>The new height of the window in pixels. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a27">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -895,6 +1135,9 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Checks if the application is still running. </p>
+<dl class="section return"><dt>Returns</dt><dd>1 if running, 0 if quit was requested. </dd></dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a9">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -922,6 +1165,14 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sets the background color of the application window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">background</td><td>The <span class="tt"><a class="el" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b" title="Type definition for color values, stored as a 32-bit unsigned integer. The color components are packe...">gmColor</a></span> to set as the background. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a25">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 
@@ -950,6 +1201,14 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sets the title of the application window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">title</td><td>The null-terminated string for the new window title. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a7fda7996bff29edf614c0ca8ae54f0a0" name="a7fda7996bff29edf614c0ca8ae54f0a0"></a>
@@ -974,6 +1233,16 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Yields control to the platform, processes events, and updates timing. </p>
+<p>This function should be called at the end of each frame. It handles window events, updates input states, swaps buffers, and calculates <span class="tt"><a class="el" href="#a15035e5990e81f9cbb5e450265679ed9">_gm_dt</a></span>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dt</td><td>A pointer to a double where the calculated delta time will be stored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the application should continue, 0 if it should exit. </dd></dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html#a16">/home/engon/gama/gama/lib/gama/gama.h</a>.</dd>
 </dl>
 

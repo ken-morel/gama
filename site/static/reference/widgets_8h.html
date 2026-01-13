@@ -92,6 +92,9 @@ $(function(){initNavTree('widgets_8h.html','',''); });
   <div class="headertitle"><div class="title">widgets.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Master header for Gama UI widgets and theme management.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="button_8h_source.html">widgets/button.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="frame_8h_source.html">widgets/frame.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="joystick_8h_source.html">widgets/joystick.h</a>&quot;</code><br />
@@ -108,6 +111,7 @@ Data Structures</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a1c14c94de7b1d5b10cdab5ffd123b0f8" id="r_a1c14c94de7b1d5b10cdab5ffd123b0f8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c14c94de7b1d5b10cdab5ffd123b0f8">GAMA_MAX_THEME_CACHE_SIZE</a>&#160;&#160;&#160;10</td></tr>
+<tr class="memdesc:a1c14c94de7b1d5b10cdab5ffd123b0f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the maximum number of widget theme states that can be cached.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -119,11 +123,12 @@ Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a9f62d4b646603d6fb235d9e60f43a94f" id="r_a9f62d4b646603d6fb235d9e60f43a94f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgmw_theme_cache.html">gmwThemeCache</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f62d4b646603d6fb235d9e60f43a94f">_theme_cache</a> [<a class="el" href="#a1c14c94de7b1d5b10cdab5ffd123b0f8">GAMA_MAX_THEME_CACHE_SIZE</a>]</td></tr>
-<tr class="memdesc:a9f62d4b646603d6fb235d9e60f43a94f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal cache array for widget themes.  <br /></td></tr>
 <tr class="memitem:a2c5c5c3d5a840f6dcf3bce732f1e5c17" id="r_a2c5c5c3d5a840f6dcf3bce732f1e5c17"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c5c5c3d5a840f6dcf3bce732f1e5c17">gm_theme_cache_index</a> = -1</td></tr>
-<tr class="memdesc:a2c5c5c3d5a840f6dcf3bce732f1e5c17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current index in the theme cache array.  <br /></td></tr>
 </table>
-<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Master header for Gama UI widgets and theme management. </p>
+<p>This file includes all individual widget headers and defines a mechanism for caching and restoring widget themes, allowing for easy styling changes and scoped theme modifications. </p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
 <a id="a1c14c94de7b1d5b10cdab5ffd123b0f8" name="a1c14c94de7b1d5b10cdab5ffd123b0f8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1c14c94de7b1d5b10cdab5ffd123b0f8">&#9670;&#160;</a></span>GAMA_MAX_THEME_CACHE_SIZE</h2>
 
@@ -135,6 +140,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Defines the maximum number of widget theme states that can be cached. </p>
 
 </div>
 </div>
@@ -155,6 +162,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Restores the previous widget themes from the theme cache. </p>
+<p>This function pops the last saved theme state from the stack and applies it to the global widget themes. </p>
 
 </div>
 </div>
@@ -174,6 +182,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Saves the current widget themes to the theme cache. </p>
+<p>This function pushes the current state of all widget themes onto a stack. This is useful for temporarily changing themes and then restoring them later.</p>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the saved theme cache entry, or NULL if the cache is full. </dd></dl>
 
 </div>
@@ -191,8 +200,6 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Internal cache array for widget themes. </p>
-
 </div>
 </div>
 <a id="a2c5c5c3d5a840f6dcf3bce732f1e5c17" name="a2c5c5c3d5a840f6dcf3bce732f1e5c17"></a>
@@ -206,8 +213,6 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Current index in the theme cache array. </p>
 
 </div>
 </div>

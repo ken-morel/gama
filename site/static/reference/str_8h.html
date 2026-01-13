@@ -92,6 +92,9 @@ $(function(){initNavTree('str_8h.html','',''); });
   <div class="headertitle"><div class="title">str.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines a dynamic string structure and provides utility functions for its manipulation.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="__malloc_8h_source.html">_malloc.h</a>&quot;</code><br />
 <code>#include &lt;stddef.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
@@ -101,14 +104,21 @@ $(function(){initNavTree('str_8h.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:gmStr" id="r_gmStr"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm_str.html">gmStr</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a dynamic, heap-allocated string.  <a href="structgm_str.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:abb1414c40ea1d618f0749f2d2bf2240c" id="r_abb1414c40ea1d618f0749f2d2bf2240c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_str.html">gmStr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb1414c40ea1d618f0749f2d2bf2240c">gm_str</a> ()</td></tr>
+<tr class="memdesc:abb1414c40ea1d618f0749f2d2bf2240c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an empty <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span> struct.  <br /></td></tr>
 <tr class="memitem:ac541b78722e0a2afa2650409e21594be" id="r_ac541b78722e0a2afa2650409e21594be"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac541b78722e0a2afa2650409e21594be">gm_str_appendn</a> (<a class="el" href="structgm_str.html">gmStr</a> *s, size_t n, const char *txt)</td></tr>
+<tr class="memdesc:ac541b78722e0a2afa2650409e21594be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a specified number of characters from a C string to a <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span>.  <br /></td></tr>
 <tr class="memitem:a8a34dfb6983f37144fecba0ca2076747" id="r_a8a34dfb6983f37144fecba0ca2076747"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a34dfb6983f37144fecba0ca2076747">gm_str_clear</a> (<a class="el" href="structgm_str.html">gmStr</a> *str)</td></tr>
+<tr class="memdesc:a8a34dfb6983f37144fecba0ca2076747"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees the heap-allocated content of a <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span> and resets its length to 0.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines a dynamic string structure and provides utility functions for its manipulation. </p>
+<p>This file offers a simple dynamic string (<span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span>) implementation that can grow as needed, making it suitable for building strings without fixed-size buffer limitations. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="abb1414c40ea1d618f0749f2d2bf2240c" name="abb1414c40ea1d618f0749f2d2bf2240c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abb1414c40ea1d618f0749f2d2bf2240c">&#9670;&#160;</a></span>gm_str()</h2>
 
@@ -123,6 +133,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initializes an empty <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span> struct. </p>
+<dl class="section return"><dt>Returns</dt><dd>A new <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span> instance with length 0 and NULL content. </dd></dl>
 
 </div>
 </div>
@@ -150,6 +163,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Appends a specified number of characters from a C string to a <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span>. </p>
+<p>This function reallocates memory for the <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span>'s content if necessary to accommodate the new characters.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>A pointer to the <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span> to append to. </td></tr>
+    <tr><td class="paramname">n</td><td>The number of characters from <span class="tt">txt</span> to append. </td></tr>
+    <tr><td class="paramname">txt</td><td>The null-terminated C string to append. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on invalid input, -5 on reallocation failure. </dd></dl>
+
 </div>
 </div>
 <a id="a8a34dfb6983f37144fecba0ca2076747" name="a8a34dfb6983f37144fecba0ca2076747"></a>
@@ -166,6 +191,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Frees the heap-allocated content of a <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span> and resets its length to 0. </p>
+<p>The <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span> struct itself is not freed, only its internal buffer.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>A pointer to the <span class="tt"><a class="el" href="structgm_str.html" title="Represents a dynamic, heap-allocated string.">gmStr</a></span> to clear. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
