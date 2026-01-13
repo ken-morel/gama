@@ -1,11 +1,35 @@
+/**
+ * @file gltf.h
+ * @brief Implements a glTF 3D model file loader.
+ *
+ * This file provides functionality to parse glTF (.gltf, .glb) files and load their
+ * geometric and material data into a `gm3Mesh` structure. It uses the `cgltf`
+ * library for core glTF parsing.
+ */
 #pragma once
 
 #include <stdio.h>
 #include <string.h>
 
 // -- UTILS --
-// Simple dynamic array for vertices, normals, etc.
+/**
+ * @def GM_DYN_ARRAY_INIT_CAP
+ * @internal
+ * @brief Initial capacity for dynamic arrays used in glTF loading.
+ */
 #define GM_DYN_ARRAY_INIT_CAP 256
+/**
+ * @def GM_DYN_ARRAY_APPEND
+ * @internal
+ * @brief Macro to append an item to a dynamically resizing array.
+ *
+ * This macro automatically reallocates the array if its capacity is exceeded.
+ *
+ * @param arr The array pointer (e.g., `gm3Pos*`).
+ * @param count The current number of elements in the array.
+ * @param capacity The current allocated capacity of the array.
+ * @param item The item to append to the array.
+ */
 #define GM_DYN_ARRAY_APPEND(arr, count, capacity, item)                        \
   do {                                                                         \
     if ((count) >= (capacity)) {                                               \
@@ -20,7 +44,18 @@
 #include "position.h"
 
 // Forward declarations
+/**
+ * @brief Loads a glTF 3D model from a file.
+ * @param mesh A pointer to the `gm3Mesh` structure to populate.
+ * @param path The file path to the glTF model (.gltf or .glb).
+ * @return 0 on success, -1 on failure.
+ */
 int gm3_gltf_load(gm3Mesh *mesh, const char *path);
+/**
+ * @brief Prints a diagnostic overview of a glTF file to the console.
+ * @param path The file path to the glTF model (.gltf or .glb).
+ * @return 0 on success, -1 on failure.
+ */
 int gmd_gltf_print(const char *path);
 
 // -- IMPLEMENTATION --
@@ -28,6 +63,12 @@ int gmd_gltf_print(const char *path);
 #define CGLTF_IMPLEMENTATION
 #include "../../cgltf.h"
 
+/**
+ * @internal
+ * @brief Recursively prints information about a glTF node and its children.
+ * @param node A pointer to the `cgltf_node` to print.
+ * @param level The current recursion depth for indentation.
+ */
 static void gmd_gltf_print_node(cgltf_node *node, int level) {
   for (int i = 0; i < level; ++i)
     printf("  ");
@@ -46,7 +87,47 @@ static void gmd_gltf_print_node(cgltf_node *node, int level) {
   }
 }
 
+/**
+ * @brief Prints a diagnostic overview of a glTF file to the console.
+ * @param path The file path to the glTF model (.gltf or .glb).
+ * @return 0 on success, -1 on failure.
+ */
+int gmd_gltf_print(const char *path) {
+  cgltf_options options = {0};
+  cgltf_data *data = NULL;
+  cgltf_result result = cgltf_parse_file(&options, path, &data);
+  if (result != cgltf_result_success) {
+    printf("gmd_gltf_print: Failed to parse GLTF file: %s\n", path);
+    return -1;
+  }
 
+  printf("--- GLTF Inspector: %s ---\n", path);
+  printf("Scenes: %zu\n", data->scenes_count);
+  if (data->scene) {
+    printf("Default Scene: '%s' (%zu root nodes)\n",
+           data->scene->name ? data->scene->name : "unnamed",
+           data->scene->nodes_count);
+    for (size_t i = 0; i < data->scene->nodes_count; ++i) {
+      gmd_gltf_print_node(data->scene->nodes[i], 1);
+    }
+  }
+  printf("Meshes: %zu\n", data->meshes_count);
+  printf("Materials: %zu\n", data->materials_count);
+  printf("Textures: %zu\n", data->textures_count);
+  printf("Images: %zu\n", data->images_count);
+  printf("---------------------------------\n");
+
+  cgltf_free(data);
+  return 0;
+}
+
+/**
+ * @internal
+ * @brief Transforms a 3D position vector by a 4x4 matrix.
+ * @param dst A pointer to the `gm3Pos` to store the transformed result.
+ * @param src A pointer to the source `gm3Pos` vector.
+ * @param m A pointer to the 4x4 transformation matrix (column-major).
+ */
 static void transform_pos(gm3Pos *dst, const gm3Pos *src,
                           const cgltf_float *m) {
   dst->x = src->x * m[0] + src->y * m[4] + src->z * m[8] + m[12];
@@ -54,6 +135,13 @@ static void transform_pos(gm3Pos *dst, const gm3Pos *src,
   dst->z = src->x * m[2] + src->y * m[6] + src->z * m[10] + m[14];
 }
 
+/**
+ * @internal
+ * @brief Transforms a 3D normal vector by a 4x4 matrix (applying only rotation).
+ * @param dst A pointer to the `gm3Pos` to store the transformed normal.
+ * @param src A pointer to the source `gm3Pos` normal vector.
+ * @param m A pointer to the 4x4 transformation matrix (column-major).
+ */
 static void transform_normal(gm3Pos *dst, const gm3Pos *src,
                              const cgltf_float *m) {
   // Apply the 3x3 rotation part of the matrix
@@ -63,6 +151,17 @@ static void transform_normal(gm3Pos *dst, const gm3Pos *src,
   gm3_pos_normalize(dst);
 }
 
+/**
+ * @brief Loads a glTF 3D model from a file into a `gm3Mesh` structure.
+ *
+ * This function parses the glTF file, including geometric data (vertices,
+ * normals, texture coordinates), material properties, and textures. It
+ * dynamically allocates memory for the mesh components as it encounters them.
+ *
+ * @param mesh A pointer to the `gm3Mesh` structure to populate.
+ * @param path The file path to the glTF model (.gltf or .glb).
+ * @return 0 on success, -1 on file parsing or loading failure.
+ */
 int gm3_gltf_load(gm3Mesh *mesh, const char *path) {
   memset(mesh, 0, sizeof(gm3Mesh));
 
@@ -103,8 +202,15 @@ int gm3_gltf_load(gm3Mesh *mesh, const char *path) {
         const char *slash = strrchr(path, '/');
         if (slash) {
           size_t dir_len = slash - path;
-          if (dir_len < sizeof(dir) - 1)
-            strncpy(dir, path, dir_len);
+          // Ensure null-termination and prevent buffer overflow
+          if (dir_len < sizeof(dir)) {
+            memcpy(dir, path, dir_len);
+            dir[dir_len] = '\0';
+          } else {
+            // Handle case where path is too long for dir buffer
+            strncpy(dir, path, sizeof(dir) - 1);
+            dir[sizeof(dir) - 1] = '\0';
+          }
         }
         snprintf(dtex->path, sizeof(dtex->path), "%s/%s", dir, gimg->uri);
         gm_image_data_load(&dtex->data, dtex->path);
