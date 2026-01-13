@@ -111,8 +111,14 @@ fn native() {
 }
 
 fn gama_js() {
+	println('Running bun install')
+  mut	result := execute('cd gama.js && bun install')
+  if result.exit_code != {
+    println(term.warn_message("bun install exited with non-zero code ${result.exit_code}"))
+  }
+  println(result.output)
 	println('Building gama.js')
-	result := execute('cd gama.js && bun run build && cd ..')
+	result = execute('cd gama.js && bun run build && cd ..')
 	if result.exit_code != 0 {
 		println(term.fail_message('  gama.js build failed: ${result.output}'))
 	} else {
