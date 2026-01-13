@@ -1,11 +1,4 @@
 var searchData=
 [
-  ['x_0',['x',['../structgm3_pos.html#ad78d3a835feca798d186292c1220a151',1,'gm3Pos::x'],['../structgm_pos.html#a2a815e2067aa9f0dc12275f21f1bb827',1,'gmPos::x'],['../structjpeg.html#aa32cf2da11f9b410615218fe5feed7ff',1,'jpeg::x'],['../structstbrp__rect.html#a4cc623a3e29f0bc0d3375f6645c84d18',1,'stbrp_rect::x'],['../structstbrp__node.html#a45ab31a88025db27d08040d715b129ea',1,'stbrp_node::x'],['../structstbtt__vertex.html#a81773edbe760d0e090561a3c1e86c919',1,'stbtt_vertex::x'],['../structstbv____floor__ordering.html#ae924c7a53744c143820b8ca1f82eb591',1,'stbv__floor_ordering::x']]],
-  ['x0_1',['x0',['../struct_stb_textedit_row.html#af30b3e1d61d1acea26d3e0ebec2cb81d',1,'StbTexteditRow::x0'],['../structstbtt__bakedchar.html#a8011a0ed0410de9fa405c9cb1ab43da2',1,'stbtt_bakedchar::x0'],['../structstbtt__aligned__quad.html#ad74fd8fd69f8a8e1bd20cb0ab7df6e2e',1,'stbtt_aligned_quad::x0'],['../structstbtt__packedchar.html#a02cb73a5af37ed60dafd5e4b731af09e',1,'stbtt_packedchar::x0'],['../structstbvox__mesh__maker.html#adb193872685399d0140747b0239f1584',1,'stbvox_mesh_maker::x0']]],
-  ['x1_2',['x1',['../struct_stb_textedit_row.html#a3a3e1a506030c871a1b3d09bf26e341f',1,'StbTexteditRow::x1'],['../structstbtt__bakedchar.html#a72c22c32abde95a5ba02925b8bd892bf',1,'stbtt_bakedchar::x1'],['../structstbtt__aligned__quad.html#a43a7eeac24238e289f825e644331dee6',1,'stbtt_aligned_quad::x1'],['../structstbtt__packedchar.html#a99d371f0261cd13dfd1a179f143175d1',1,'stbtt_packedchar::x1'],['../structstbvox__mesh__maker.html#a420e37290433413010e23eb04ea5b3c9',1,'stbvox_mesh_maker::x1']]],
-  ['x_5fstride_5fin_5fbytes_3',['x_stride_in_bytes',['../structstbvox__mesh__maker.html#aa15f9faec1a8efa4adeb7e846775aa9c',1,'stbvox_mesh_maker']]],
-  ['xadvance_4',['xadvance',['../structstbtt__bakedchar.html#ad77b35d1a849d9eb7edb91df05b10536',1,'stbtt_bakedchar::xadvance'],['../structstbtt__packedchar.html#a28707ae98d1fa946b3390840aeff76ab',1,'stbtt_packedchar::xadvance']]],
-  ['xlist_5',['Xlist',['../struct_floor1.html#a2c09f98b7613ec990add2467ea39f240',1,'Floor1']]],
-  ['xoff_6',['xoff',['../structstbtt__bakedchar.html#a0708a6588a2768b68a3ae59002944b7c',1,'stbtt_bakedchar::xoff'],['../structstbtt__packedchar.html#adb30c50674c79d32116ae6f94bd5893f',1,'stbtt_packedchar::xoff']]],
-  ['xoff2_7',['xoff2',['../structstbtt__packedchar.html#a3a33880f925ca826c908cbf9f0673c9f',1,'stbtt_packedchar']]]
+  ['x_0',['x',['../structgm3_pos.html#ad78d3a835feca798d186292c1220a151',1,'gm3Pos::x'],['../structgm_pos.html#a2a815e2067aa9f0dc12275f21f1bb827',1,'gmPos::x']]]
 ];

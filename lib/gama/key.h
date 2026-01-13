@@ -23,10 +23,18 @@ char gm_upper_case(char k) {
 }
 
 /**
- * @brief Decodes a key shortcut into a type and key character.
- * @param key The shortcut key to decode.
+ * @brief Decodes a single character shortcut into a key type and key code.
+ *
+ * This function translates a compact shortcut character into its corresponding
+ * event type and key, used by `gm_key_down`.
+ * - 'U', 'D', 'L', 'R' -> type 'a' (arrow)
+ * - 'E' -> type 's' (special), key 'x'
+ * - 'S', 'C', 'A' -> type 'm' (modifier: Shift, Ctrl, Alt)
+ * - Other characters -> type 'c' (character)
+ *
+ * @param key The single character shortcut (e.g., 'U' for Up Arrow).
  * @param t Pointer to store the decoded key type.
- * @param k Pointer to store the decoded key character.
+ * @param k Pointer to store the decoded key code.
  */
 void gm_decode_key_shortcut(char key, char *t, char *k) {
   switch (key) {
@@ -58,11 +66,11 @@ void gm_decode_key_shortcut(char key, char *t, char *k) {
 }
 
 /**
- * @brief Encodes a type and key character into a shortcut key.
- * @param t The key type ('a' for arrow keys, 'm' for mouse events, 's' for
- * special keys, 'c' for character keys).
- * @param k The key character.
- * @return The encoded shortcut key.
+ * @brief Encodes a key type and code into a single character shortcut.
+ * This is the reverse of `gm_decode_key_shortcut`.
+ * @param t The key type ('a' for arrow, 'm' for modifier, 's' for special, 'c' for character).
+ * @param k The key code.
+ * @return The encoded single character shortcut.
  */
 char gm_encode_key_shortcut(char t, char k) {
   switch (t) {
@@ -88,17 +96,21 @@ char gm_encode_key_shortcut(char t, char k) {
 
 /**
  * @brief Checks if a key is currently pressed.
- * @param t The type of key event ('a' for arrow keys, 'm' for mouse events, 's'
- * for special keys, 'c' for character keys).
- * @param k The specific key character or identifier.
+ *
+ * This is the low-level input checking function.
+ *
+ * @param t The type of key: 'c' for character, 'a' for arrow, 's' for special.
+ * @param k The key code to check (e.g., 'w', 'u' for up arrow).
  * @return 1 if the key is pressed, 0 otherwise.
  */
 int gm_key_down(char t, char k) { return gapi_key_down(t, k); }
 
 /**
- * @brief Checks if a key is currently pressed using a shortcut key.
- * @param key The shortcut key to check.
+ * @brief Checks if a key is currently pressed using a single character shortcut.
+ * @param key The shortcut character to check (e.g., 'w', 'U' for up).
  * @return 1 if the key is pressed, 0 otherwise.
+ * @see gm_decode_key_shortcut
+ * @see gm_key_down
  */
 int gm_key(char key) {
   char t, k;

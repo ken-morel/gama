@@ -26,6 +26,10 @@ this call initializes gama, creates the windows and initializes the
 graphics system, and for that to happen you can specify a window
 title and dimensions.
 
+You can pass 0 as width and height to let gama decide the size of the window, which is
+useful for deploying for the web and android devices where the size of the window is
+determined by the device's screen size or element size.
+
 ```c
 int width = 700, height = 500;
 const char title[] = "My gama application";

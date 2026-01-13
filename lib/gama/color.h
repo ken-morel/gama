@@ -6,7 +6,9 @@
 #include <stdlib.h>
 
 /**
- * @brief Type definition for color values in RGBA format.
+ * @brief Type definition for color values, stored as a 32-bit unsigned integer.
+ * The color components are packed in RGBA order, with each component
+ * occupying 8 bits. The layout is `0xRRGGBBAA`.
  */
 typedef uint32_t gmColor;
 
@@ -45,6 +47,12 @@ int gmg_color(gmStr *str, gmColor col) {
  */
 #define gm_alpha(col) (col & 0x000000FF)
 
+/**
+ * @internal
+ * @brief Clamps an integer value to the valid 8-bit color component range [0, 255].
+ * @param c The integer value to clamp.
+ * @return The clamped value between 0 and 255.
+ */
 static inline gmColor _gm3_color_clamp(int c) {
   c = abs(c);
   return c < 0 ? 0 : c > 255 ? 255 : c;
@@ -64,7 +72,7 @@ static inline gmColor gm_rgba(int r, int g, int b, int a) {
 }
 
 /**
- * @brief Creates a color from RGB components.
+ * @brief Creates an opaque color from RGB components. Alpha is set to 255.
  * @param r Red component (0-255).
  * @param g Green component (0-255).
  * @param b Blue component (0-255).
@@ -114,6 +122,13 @@ static inline gmColor gm_set_alpha(gmColor col, int alpha) {
   return (col & 0xFFFFFF00) | (unsigned)(abs(alpha) % 256);
 }
 
+/**
+ * @brief Scales the RGB components of a color by a factor, leaving alpha unchanged.
+ * @param col The original color.
+ * @param factor The scaling factor, clamped between 0.0 and 1.0. A factor of 1.0
+ * returns the original color, while 0.0 returns black (with original alpha).
+ * @return A new color with its RGB components scaled.
+ */
 static inline gmColor gm_scale_color(gmColor col, double factor) {
   if (factor < 0)
     factor = 0;

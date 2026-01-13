@@ -12,7 +12,7 @@ var dir_c0efb1807f29eac66ba360987ee66b12 =
     [ "color.h", "color_8h.html", "color_8h" ],
     [ "debug.h", "debug_8h.html", "debug_8h" ],
     [ "draw.h", "draw_8h.html", "draw_8h" ],
-    [ "gama.h", "gama_2gama_8h.html", "gama_2gama_8h" ],
+    [ "gama.h", "gama_8h.html", "gama_8h" ],
     [ "gapi.h", "gapi_8h.html", "gapi_8h" ],
     [ "gmg.h", "gmg_8h.html", "gmg_8h" ],
     [ "image.h", "image_8h.html", "image_8h" ],

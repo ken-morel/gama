@@ -1,3 +1,11 @@
+/**
+ * @file widgets.h
+ * @brief Master header for Gama UI widgets and theme management.
+ *
+ * This file includes all individual widget headers and defines a mechanism
+ * for caching and restoring widget themes, allowing for easy styling changes
+ * and scoped theme modifications.
+ */
 #pragma once
 
 #include "widgets/button.h"
@@ -6,6 +14,10 @@
 #include "widgets/scale.h"
 #include "widgets/switch.h"
 
+/**
+ * @def GAMA_MAX_THEME_CACHE_SIZE
+ * @brief Defines the maximum number of widget theme states that can be cached.
+ */
 #ifndef GAMA_MAX_THEME_CACHE_SIZE
 #define GAMA_MAX_THEME_CACHE_SIZE 10
 #endif
@@ -14,25 +26,31 @@
  * @brief Structure containing all widget themes for caching purposes.
  */
 typedef struct {
-  gmwButtonTheme button;     /**< Theme for button widgets */
-  gmwSwitchTheme switch_;    /**< Theme for switch widgets */
-  gmwScaleTheme scale;       /**< Theme for scale widgets */
-  gmwJoystickTheme joystick; /**< Theme for joystick widgets */
-  gmwFrameTheme frame;       /**< Theme for frame widgets */
+  gmwButtonTheme button;     /**< Theme for button widgets. */
+  gmwSwitchTheme switch_;    /**< Theme for switch widgets. */
+  gmwScaleTheme scale;       /**< Theme for scale widgets. */
+  gmwJoystickTheme joystick; /**< Theme for joystick widgets. */
+  gmwFrameTheme frame;       /**< Theme for frame widgets. */
 } gmwThemeCache;
 
 /**
+ * @internal
  * @brief Internal cache array for widget themes.
  */
 gmwThemeCache _theme_cache[GAMA_MAX_THEME_CACHE_SIZE];
 
 /**
+ * @internal
  * @brief Current index in the theme cache array.
  */
 short gm_theme_cache_index = -1;
 
 /**
  * @brief Saves the current widget themes to the theme cache.
+ *
+ * This function pushes the current state of all widget themes onto a stack.
+ * This is useful for temporarily changing themes and then restoring them later.
+ *
  * @return A pointer to the saved theme cache entry, or NULL if the cache is full.
  */
 gmwThemeCache *gmw_save() {
@@ -49,6 +67,9 @@ gmwThemeCache *gmw_save() {
 
 /**
  * @brief Restores the previous widget themes from the theme cache.
+ *
+ * This function pops the last saved theme state from the stack and applies
+ * it to the global widget themes.
  */
 void gmw_restore() {
   if (gm_theme_cache_index < 0)

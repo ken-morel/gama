@@ -27,7 +27,7 @@ var math_8h =
     [ "log_other", "math_8h.html#a0fd7be0a9cd8475b3408cb9821f87894", null ],
     [ "max", "math_8h.html#af082905f7eac6d03e92015146bbc1925", null ],
     [ "min", "math_8h.html#abd8bbcfabb3ddef2ccaafb9928a37b95", null ],
-    [ "pow", "math_8h.html#ae09fae943b521903337acf54ffda37c1", null ],
+    [ "pow", "math_8h.html#a8adb072abd0293d08a9ae718e1f1817a", null ],
     [ "sin", "math_8h.html#aad4af25633b071b0e2cdb8ebd87eca77", null ],
     [ "sqrt", "math_8h.html#ab87521a75ef827a85807f89a6c10629a", null ],
     [ "tan", "math_8h.html#aa48fdfd5eea5f4f9c33496402b9e4039", null ],

@@ -1,3 +1,11 @@
+/**
+ * @file project.h
+ * @brief Implements the software rasterizer for projecting 3D meshes onto a 2D `gm3Image`.
+ *
+ * This file contains the core logic for the 3D rendering pipeline, including
+ * lighting calculations, vertex transformation, clipping, backface culling,
+ * and triangle assembly for the `gm3Image` output.
+ */
 #pragma once
 
 #include "../color.h"
@@ -14,6 +22,18 @@
 
 // --- Optimized Lighting ---
 
+/**
+ * @brief Calculates the final lit color of a face based on its normal, center, material, and scene lighting.
+ *
+ * This function implements a Blinn-Phong lighting model, calculating ambient,
+ * diffuse, and specular components.
+ *
+ * @param norm The normal vector of the face in world space.
+ * @param face_center The world-space center position of the face.
+ * @param mat A pointer to the `gm3Material` of the face. Can be NULL for a default material.
+ * @param scene A pointer to the `gm3Scene` containing light and camera information.
+ * @return The calculated `gmColor` of the lit face.
+ */
 static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
                                              const gm3Material *mat,
                                              const gm3Scene *scene) {
@@ -137,6 +157,22 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
 
 // --- Main Projection Function ---
 
+/**
+ * @brief Projects a 3D mesh onto a 2D image buffer, applying transformations, lighting, and culling.
+ *
+ * This function performs the core 3D to 2D rendering pipeline:
+ * - Transforms mesh vertices from model space to world space, then to screen space.
+ * - Stores world-space vertex positions for lighting and culling.
+ * - Performs basic frustum clipping and backface culling.
+ * - Calculates lighting for each visible face using the Blinn-Phong model.
+ * - Assembles the projected 2D triangles, colors, and depth values into the `gm3Image` output.
+ *
+ * @param output A pointer to the `gm3Image` struct where the projected 2D scene data will be stored.
+ * @param mesh A pointer to the `gm3Mesh` to project.
+ * @param transform A pointer to the `gm3Transform` to apply to the mesh (can be NULL for identity).
+ * @param scene A pointer to the `gm3Scene` containing camera and light settings (can be NULL for defaults).
+ * @return 0 on success, -1 on memory allocation failure, or if the mesh is invalid.
+ */
 int gm3_project(gm3Image *output, const gm3Mesh *mesh,
                 const gm3Transform *transform, const gm3Scene *scene) {
   if (transform == NULL)
@@ -233,6 +269,11 @@ int gm3_project(gm3Image *output, const gm3Mesh *mesh,
 
     // Calculate Normal (Rotated)
     gm3Pos norm = face->normal;
+    // NOTE: gm3_pos_rotate is typically for vectors, not normals with matrix.
+    // For proper normal transformation, inverse transpose of modelview matrix is needed.
+    // However, if only rotation is applied (no non-uniform scaling), simple rotation is fine.
+    // The current transform->rotation is likely a quaternion or rotation matrix representation.
+    // Assuming gm3_pos_rotate correctly applies rotation to a vector.
     gm3_pos_rotate(&norm, &transform->rotation);
 
     // Backface Check: Dot(Normal, Vector_to_Cam)

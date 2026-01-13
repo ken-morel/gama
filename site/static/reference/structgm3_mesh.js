@@ -8,6 +8,6 @@ var structgm3_mesh =
     [ "n_texs", "structgm3_mesh.html#a3d4124b947a3aafca742ad3897f95cd2", null ],
     [ "n_vertices", "structgm3_mesh.html#aacf5338cbc6173562da3fdfb6d4f681d", null ],
     [ "normals", "structgm3_mesh.html#ad397d2f9badbf55a7e0461fd22232eb6", null ],
-    [ "texs", "structgm3_mesh.html#ae477b31b80faf97d67d226aa189f2b48", null ],
+    [ "texs", "structgm3_mesh.html#a23957a14677a46a8cf134f5e83d16c6d", null ],
     [ "vertices", "structgm3_mesh.html#ab78e5fa12772feb5951db42e5ee7f370", null ]
 ];
