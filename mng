@@ -2,164 +2,160 @@
 
 import term
 import os
+import cli
 
-fn copy_html_docs() ! {
-	html_source_dir := 'docs/html'
-	static_dest_dir := 'site/static/reference'
-
-	println('Copying HTML docs from ${html_source_dir} to ${static_dest_dir}')
-
-	// Remove existing static reference directory if it exists
-	if exists(static_dest_dir) {
-		rmdir_all(static_dest_dir) or {} // Don't fail if directory doesn't exist
+mut app := cli.Command{
+	name:        'mng'
+	usage:       './mng <command>'
+	description: 'Gama management script'
+	execute:     fn (_ cli.Command) ! {
+		println('No command specified, run ./mng help for help')
 	}
+	commands:    [
+		cli.Command{
+			name:        'docs'
+			usage:       './mng docs'
+			description: 'Buid the doxygen documentation of lib/gama and integrate it to svelte site'
+			execute:     fn (_ cli.Command) ! {
+				println(term.ok_message('Generating documentation...'))
 
-	// Copy HTML documentation to static directory
-	mkdir_all(static_dest_dir)!
+				// Run doxygen to generate HTML and XML
+				result := execute('doxygen Doxyfile')
+				if result.exit_code != 0 {
+					println(term.fail_message('Doxygen failed to run: ${result.output}'))
+				}
 
-	// Copy all files from HTML directory to static directory
-	files := glob('${html_source_dir}/**') or { []string{} }
-	for file in files {
-		if is_file(file) {
-			// Extract relative path by slicing the string after html_source_dir
-			rel_start := html_source_dir.len + 1
-			if file.len > rel_start {
-				relative_path := file[rel_start..]
-				if relative_path.len > 0 { // Make sure it's not empty
-					dest_file := join_path(static_dest_dir, relative_path)
+				println(term.ok_message('Documentation generated successfully!'))
+				println(term.ok_message('Moving HTML documentation to static directory...'))
 
-					// Create parent directory if needed
-					parent_dir := dir(dest_file)
-					mkdir_all(parent_dir)!
+				html_source_dir := 'docs/html'
+				static_dest_dir := 'site/static/reference'
 
-					println(' - Copying ${relative_path}')
-					cp(file, dest_file)!
+				println('Copying HTML docs from ${html_source_dir} to ${static_dest_dir}')
+
+				// Remove existing static reference directory if it exists
+				if exists(static_dest_dir) {
+					rmdir_all(static_dest_dir) or {} // Don't fail if directory doesn't exist
+				}
+
+				// Copy HTML documentation to static directory
+				mkdir_all(static_dest_dir)!
+
+				// Copy all files from HTML directory to static directory
+				files := glob('${html_source_dir}/**') or { []string{} }
+				for file in files {
+					if is_file(file) {
+						// Extract relative path by slicing the string after html_source_dir
+						rel_start := html_source_dir.len + 1
+						if file.len > rel_start {
+							relative_path := file[rel_start..]
+							if relative_path.len > 0 { // Make sure it's not empty
+								dest_file := join_path(static_dest_dir, relative_path)
+
+								// Create parent directory if needed
+								parent_dir := dir(dest_file)
+								mkdir_all(parent_dir)!
+
+								println(' - Copying ${relative_path}')
+								cp(file, dest_file)!
+							}
+						}
+					}
+				}
+
+				println(term.ok_message('HTML documentation copied to static/reference!'))
+
+				println(term.ok_message('Documentation integrated into Svelte site!'))
+			}
+		},
+		cli.Command{
+			name:        'build'
+			usage:       './mng build'
+			description: 'Build gama cli tool'
+			execute:     fn (_ cli.Command) ! {
+				println('Building gama for linux')
+				mut result := execute('v -os linux cli.v -o bin/gama')
+				if result.exit_code != 0 {
+					println(term.fail_message('host build failed: ${result.output}'))
+				}
+				println('Building gama for windows')
+				result = execute('v -os windows cli.v -o bin/gama')
+				if result.exit_code != 0 {
+					println(term.fail_message('windows build failed: ${result.output}'))
 				}
 			}
-		}
-	}
-
-	println(term.ok_message('HTML documentation copied to static/reference!'))
+		},
+		cli.Command{
+			name:        'package'
+			usage:       './mng package'
+			description: 'Package gama'
+			execute:     fn (_ cli.Command) ! {
+				println('Packaging deb with nfpm')
+				mut result := execute('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
+				if result.exit_code != 0 {
+					println(term.fail_message(result.output))
+				}
+				println('Packaging with nsis')
+				result = execute('makensis nsis/setup.nsi')
+				if result.exit_code != 0 {
+					println(term.fail_message('makensis failed: ${result.output}'))
+				}
+			}
+		},
+		cli.Command{
+			name:        'runner'
+			usage:       './mng runner <name>'
+			description: 'Build one of gama runners'
+			execute:     fn (_ cli.Command) ! {
+				println('You need to specify a runner, like native or web')
+			}
+			commands:    [
+				cli.Command{
+					name:        'native'
+					usage:       './mng runner native'
+					description: 'Build the gama native runner'
+					execute:     fn (_ cli.Command) ! {
+						println('Building vgama for linux')
+						mut result := execute('v libvgama/ -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
+						if result.exit_code != 0 {
+							println(term.fail_message('vgama linux build failed : ${result.output}'))
+						}
+						println('Building vgama for windows')
+						result = execute('v libvgama -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
+						if result.exit_code != 0 {
+							println(term.fail_message('vgama windows build failed : ${result.output}'))
+						}
+					}
+				},
+				cli.Command{
+					name:        'web'
+					usage:       './mng runner web'
+					description: 'Buid the web runner for gama'
+					execute:     fn (_ cli.Command) ! {
+						println('Running bun install')
+						mut result := execute('cd gama.js && bun install')
+						if result.exit_code != 0 {
+							println(term.warn_message('bun install exited with non-zero code ${result.exit_code}'))
+						}
+						println(result.output)
+						println('Building gama.js')
+						result = execute('cd gama.js && bun run build && cd ..')
+						if result.exit_code != 0 {
+							println(term.fail_message('  gama.js build failed: ${result.output}'))
+						} else {
+							println('  ${result.output}')
+						}
+						println('  done building gama.js')
+						println('Copying gama.js/dist/gama.js to runners/web')
+						os.cp('gama.js/dist/gama.js', 'runners/web/gama.js') or {
+							println(term.fail_message('Error compying gama.js: ${err}'))
+						}
+					}
+				},
+			]
+		},
+	]
 }
 
-fn build() {
-	println('Building gama for linux')
-	mut result := execute('v -os linux cli.v -o bin/gama')
-	if result.exit_code != 0 {
-		println(term.fail_message('host build failed: ${result.output}'))
-	}
-	println('Building gama for windows')
-	result = execute('v -os windows cli.v -o bin/gama')
-	if result.exit_code != 0 {
-		println(term.fail_message('windows build failed: ${result.output}'))
-	}
-}
-
-fn package() {
-	println('Packaging deb with nfpm')
-	mut result := execute('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
-	if result.exit_code != 0 {
-		println(term.fail_message(result.output))
-	}
-	println('Packaging with nsis')
-	result = execute('makensis nsis/setup.nsi')
-	if result.exit_code != 0 {
-		println(term.fail_message('makensis failed: ${result.output}'))
-	}
-}
-
-fn help() {
-	println('Gama Documentation Generator')
-	println('Usage: mng build|docs')
-	println('  build/docs - Generate Doxygen documentation and integrate into Svelte site')
-	println('  help       - Show this help message')
-}
-
-fn docs() {
-	// Generate documentation from source
-	println(term.ok_message('Generating documentation...'))
-
-	// Run doxygen to generate HTML and XML
-	result := execute('doxygen Doxyfile')
-	if result.exit_code != 0 {
-		println(term.fail_message('Doxygen failed to run: ${result.output}'))
-	}
-
-	println(term.ok_message('Documentation generated successfully!'))
-	println(term.ok_message('Moving HTML documentation to static directory...'))
-
-	copy_html_docs() or { println(term.fail_message('Error copying HTML docs: ${err}')) }
-
-	println(term.ok_message('Documentation integrated into Svelte site!'))
-}
-
-fn vgama() {
-	println('Building vgama for linux')
-	mut result := execute('v libvgama/ -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
-	if result.exit_code != 0 {
-		println(term.fail_message('vgama linux build failed : ${result.output}'))
-	}
-	println('Building vgama for windows')
-	result = execute('v libvgama -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
-	if result.exit_code != 0 {
-		println(term.fail_message('vgama windows build failed : ${result.output}'))
-	}
-}
-
-fn native() {
-	vgama()
-}
-
-fn gama_js() {
-	println('Running bun install')
-  mut	result := execute('cd gama.js && bun install')
-  if result.exit_code != {
-    println(term.warn_message("bun install exited with non-zero code ${result.exit_code}"))
-  }
-  println(result.output)
-	println('Building gama.js')
-	result = execute('cd gama.js && bun run build && cd ..')
-	if result.exit_code != 0 {
-		println(term.fail_message('  gama.js build failed: ${result.output}'))
-	} else {
-		println('  ${result.output}')
-	}
-	println('  done building gama.js')
-}
-
-fn web() {
-	gama_js()
-	println('Copying gama.js/dist/gama.js to runners/web')
-	os.cp('gama.js/dist/gama.js', 'runners/web/gama.js') or {
-		println(term.fail_message('Error compying gama.js: ${err}'))
-	}
-}
-
-// Get the command from arguments
-mut cmd := 'help'
-if os.args.len > 1 {
-	cmd = os.args[1]
-}
-
-if cmd == 'docs' {
-	docs()
-} else if cmd == 'help' {
-	help()
-} else if cmd == 'build' {
-	build()
-} else if cmd == 'package' {
-	build()
-	vgama()
-	package()
-} else if cmd == 'vgama' {
-	vgama()
-} else if cmd == 'gama.js' {
-	gama_js()
-} else if cmd == 'web' {
-	web()
-} else if cmd == 'native' {
-	native()
-} else {
-	println(term.fail_message('Unknown command: ${cmd}'))
-	help()
-}
+app.setup()
+app.parse(os.args)
