@@ -489,9 +489,9 @@ $(function(){initNavTree('stb__c__lexer_8h_source.html','',''); });
 <div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>   }</div>
 <div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span> </div>
 <div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>   <span class="keywordflow">if</span> (*p == <span class="charliteral">&#39;.&#39;</span>) {</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>      <span class="keywordtype">double</span> <a class="code hl_function" href="math_8h.html#ae09fae943b521903337acf54ffda37c1">pow</a>, addend = 0;</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>      <span class="keywordtype">double</span> <a class="code hl_function" href="math_8h.html#a8adb072abd0293d08a9ae718e1f1817a">pow</a>, addend = 0;</div>
 <div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>      ++p;</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>      <span class="keywordflow">for</span> (<a class="code hl_function" href="math_8h.html#ae09fae943b521903337acf54ffda37c1">pow</a>=1; ; <a class="code hl_function" href="math_8h.html#ae09fae943b521903337acf54ffda37c1">pow</a>*=base) {</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>      <span class="keywordflow">for</span> (<a class="code hl_function" href="math_8h.html#a8adb072abd0293d08a9ae718e1f1817a">pow</a>=1; ; <a class="code hl_function" href="math_8h.html#a8adb072abd0293d08a9ae718e1f1817a">pow</a>*=base) {</div>
 <div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>         <span class="keywordflow">if</span> (*p &gt;= <span class="charliteral">&#39;0&#39;</span> &amp;&amp; *p &lt;= <span class="charliteral">&#39;9&#39;</span>)</div>
 <div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>            addend = addend*base + (*p++ - <span class="charliteral">&#39;0&#39;</span>);</div>
 <div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span><span class="preprocessor">#ifdef STB__clex_hex_floats</span></div>
@@ -503,7 +503,7 @@ $(function(){initNavTree('stb__c__lexer_8h_source.html','',''); });
 <div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>         <span class="keywordflow">else</span></div>
 <div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>            <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>      }</div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>      value += addend / <a class="code hl_function" href="math_8h.html#ae09fae943b521903337acf54ffda37c1">pow</a>;</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>      value += addend / <a class="code hl_function" href="math_8h.html#a8adb072abd0293d08a9ae718e1f1817a">pow</a>;</div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>   }</div>
 <div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span><span class="preprocessor">#ifdef STB__clex_hex_floats</span></div>
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>   <span class="keywordflow">if</span> (base == 16) {</div>
@@ -1038,7 +1038,7 @@ $(function(){initNavTree('stb__c__lexer_8h_source.html','',''); });
 <div class="line"><a id="l00940" name="l00940"></a><span class="lineno">  940</span><span class="comment">------------------------------------------------------------------------------</span></div>
 <div class="line"><a id="l00941" name="l00941"></a><span class="lineno">  941</span><span class="comment">*/</span></div>
 <div class="ttc" id="agama_2gama_8h_html_ae66f6b31b5ad750f1fe042a706a4e3d4"><div class="ttname"><a href="gama_2gama_8h.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a></div><div class="ttdeci">int main()</div></div>
-<div class="ttc" id="amath_8h_html_ae09fae943b521903337acf54ffda37c1"><div class="ttname"><a href="math_8h.html#ae09fae943b521903337acf54ffda37c1">pow</a></div><div class="ttdeci">double pow(double base, double exp)</div><div class="ttdef"><b>Definition</b> math.h:210</div></div>
+<div class="ttc" id="amath_8h_html_a8adb072abd0293d08a9ae718e1f1817a"><div class="ttname"><a href="math_8h.html#a8adb072abd0293d08a9ae718e1f1817a">pow</a></div><div class="ttdeci">double pow(double base, double exp)</div><div class="ttdoc">Calculates the base raised to the power of the exponent (base^exp).</div><div class="ttdef"><b>Definition</b> math.h:358</div></div>
 <div class="ttc" id="astb__c__lexer_8h_html_a28b364fa7a3a881d42f3b4b070581e66"><div class="ttname"><a href="stb__c__lexer_8h.html#a28b364fa7a3a881d42f3b4b070581e66">stb_c_lexer_get_location</a></div><div class="ttdeci">void stb_c_lexer_get_location(const stb_lexer *lexer, const char *where, stb_lex_location *loc)</div></div>
 <div class="ttc" id="astb__c__lexer_8h_html_aa99130f041253ed326a09e3dcb865ec1"><div class="ttname"><a href="stb__c__lexer_8h.html#aa99130f041253ed326a09e3dcb865ec1">stb_c_lexer_get_token</a></div><div class="ttdeci">int stb_c_lexer_get_token(stb_lexer *lexer)</div></div>
 <div class="ttc" id="astb__c__lexer_8h_html_ac02160e44ea8b939d71439bf8999b84aa00f35948683455b3aef904d33d8f87d3"><div class="ttname"><a href="stb__c__lexer_8h.html#ac02160e44ea8b939d71439bf8999b84aa00f35948683455b3aef904d33d8f87d3">CLEX_oror</a></div><div class="ttdeci">@ CLEX_oror</div><div class="ttdef"><b>Definition</b> stb_c_lexer.h:192</div></div>

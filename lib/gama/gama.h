@@ -20,6 +20,11 @@ int main(int, char **);
 int main();
 #endif
 
+/**
+ * @internal
+ * @brief Main entry point for the Gama application, called by the platform runner.
+ * This function calls the user-defined main().
+ */
 int32_t
 #ifdef __ZIG_CC__
     __attribute__((export_name("gama_run")))
@@ -35,16 +40,16 @@ int32_t
 /**
  * @brief Puts the window in fullscreen.
  *
- * @param fullscreen Enable or disable fullscreen.
+ * @param fullscreen Boolean flag to enable (1) or disable (0) fullscreen.
  */
 void gm_fullscreen(int fullscreen) { return gapi_fullscreen(fullscreen); }
 
 /**
- * @brief Draws gama logo.
+ * @brief Draws the Gama logo.
  *
- * @param x The x position to draw the logo.
- * @param y The y position to draw the logo.
- * @param s The logo size.
+ * @param x The center x position to draw the logo.
+ * @param y The center y position to draw the logo.
+ * @param s The size (side length) of the logo.
  */
 void gm_logo(double x, double y, double s) {
   double top_thickness = 0.15 * s;
@@ -57,6 +62,11 @@ void gm_logo(double x, double y, double s) {
                     y, left_thickness, s, GM_GAMA);
 }
 
+
+/**
+ * @brief Logs a message to the platform's console.
+ * @param txt The text message to log.
+ */
 void gm_log(const char *txt) { return gapi_log(txt); }
 
 /**
@@ -67,6 +77,10 @@ void gm_log(const char *txt) { return gapi_log(txt); }
  */
 static inline int gm_runs() { return gapi_runs(); }
 
+/**
+ * @brief Enables or disables the built-in FPS counter display.
+ * @param show Boolean flag to show (1) or hide (0) the FPS counter.
+ */
 int __gm_show_fps = 0;
 void gm_show_fps(int show) { __gm_show_fps = show; }
 
@@ -136,6 +150,12 @@ static inline void gm_quit() { return gapi_quit(); }
  */
 void gm_background(gmColor c) { return gapi_set_background_color(c); }
 
+
+/**
+ * @brief Resizes the application window.
+ * @param width The new width of the window in pixels.
+ * @param height The new height of the window in pixels.
+ */
 void gm_resize(int width, int height) { return gapi_resize(width, height); }
 
 /**
@@ -144,8 +164,8 @@ void gm_resize(int width, int height) { return gapi_resize(width, height); }
  * This must be the first Gama function called. It sets up the graphics context
  * and creates a window with the specified dimensions and title.
  *
- * @param width The width of the window in pixels.
- * @param height The height of the window in pixels.
+ * @param width The width of the window in pixels. Use 0 for automatic sizing.
+ * @param height The height of the window in pixels. Use 0 for automatic sizing.
  * @param title The title of the window.
  */
 void gm_init(int width, int height, const char *title) {
@@ -162,9 +182,12 @@ void gm_init(int width, int height, const char *title) {
 }
 
 /**
- * @brief Sleep(wait) for aproximately the specified number of milliseconds
+ * @brief Pauses execution for a specified duration.
  *
- * @param miliseconds the number of milliseconds to sleep
+ * This function blocks the calling thread for approximately the given number
+ * of milliseconds.
+ *
+ * @param milliseconds The number of milliseconds to sleep.
  */
 void gm_sleep(int milliseconds);
 

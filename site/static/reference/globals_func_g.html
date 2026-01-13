@@ -118,10 +118,13 @@ $(function(){initNavTree('globals_func_g.html','',''); });
 <li>gapi_yield()&#160;:&#160;<a class="el" href="gapi_8h.html#a7fda7996bff29edf614c0ca8ae54f0a0">gapi.h</a></li>
 <li>gm3_camera_create()&#160;:&#160;<a class="el" href="camera_8h.html#a4e7d934f37408d2f9e3b502d1423dd18">camera.h</a></li>
 <li>gm3_draw_image()&#160;:&#160;<a class="el" href="3d_2image_8h.html#a8edfe4736e5794c232c76be868581d86">image.h</a></li>
+<li>gm3_gltf_load()&#160;:&#160;<a class="el" href="gltf_8h.html#af4576e334efaa1ad890475de26e06ce4">gltf.h</a></li>
 <li>gm3_image_free()&#160;:&#160;<a class="el" href="3d_2image_8h.html#a2871c7f18de765c469b654b0b84eb3d6">image.h</a></li>
 <li>gm3_light_create()&#160;:&#160;<a class="el" href="light_8h.html#af887b402b038df6fc91d932d225f5ae3">light.h</a></li>
 <li>gm3_mesh_center()&#160;:&#160;<a class="el" href="mesh_8h.html#a07dae4b6e1e834e538247119862b20ca">mesh.h</a></li>
+<li>gm3_mesh_deserialize()&#160;:&#160;<a class="el" href="mesh_8h.html#a544fbb85db5427a3528a8c92489ef8eb">mesh.h</a></li>
 <li>gm3_mesh_free()&#160;:&#160;<a class="el" href="mesh_8h.html#a27db1181efdb15f13d5dc00eff1d9c75">mesh.h</a></li>
+<li>gm3_mesh_serialize()&#160;:&#160;<a class="el" href="mesh_8h.html#a5be44374837945124dc290fa2763d31a">mesh.h</a></li>
 <li>gm3_mtl_add_texture()&#160;:&#160;<a class="el" href="mtl_8h.html#ad1e10be2d9350b79fd51d7cc7cf5dad3">mtl.h</a></li>
 <li>gm3_mtl_find_mat()&#160;:&#160;<a class="el" href="mtl_8h.html#a5169fa966ee88f06050624e98376aa2a">mtl.h</a></li>
 <li>gm3_mtl_free()&#160;:&#160;<a class="el" href="mtl_8h.html#ac45ad19a77b99568f8b8cfcf537794a0">mtl.h</a></li>
@@ -147,6 +150,7 @@ $(function(){initNavTree('globals_func_g.html','',''); });
 <li>gm_body_create()&#160;:&#160;<a class="el" href="body_8h.html#a50bc9e641cc4086c682cc496fca24f15">body.h</a></li>
 <li>gm_body_update()&#160;:&#160;<a class="el" href="physics_8h.html#af0a997c1e21c8268f0b6d7d8e764e92c">physics.h</a></li>
 <li>gm_body_update_dt()&#160;:&#160;<a class="el" href="physics_8h.html#ad3f02f65ffbf51cd18ec92095c79fa18">physics.h</a></li>
+<li>gm_cache()&#160;:&#160;<a class="el" href="draw_8h.html#aa4c2da232d4afe4ff5af7607134a413e">draw.h</a></li>
 <li>gm_circle_body()&#160;:&#160;<a class="el" href="body_8h.html#aa4fb765e44193dec7646c814ebd526c2">body.h</a></li>
 <li>gm_collision_detect()&#160;:&#160;<a class="el" href="collision_8h.html#a541eebf6ef23a590c3ceeac2e4e9a886">collision.h</a>, <a class="el" href="physics_8h.html#a249b7c9b7732fd0cb0708994d9aec3f1">physics.h</a></li>
 <li>gm_collision_penetration()&#160;:&#160;<a class="el" href="physics_8h.html#af20c4f59223177cc8e19a517a5bced53">physics.h</a></li>
@@ -178,8 +182,11 @@ $(function(){initNavTree('globals_func_g.html','',''); });
 <li>gm_encode_key_shortcut()&#160;:&#160;<a class="el" href="key_8h.html#ac9a64b69e25fe37e916cbf6a6d7cbf50">key.h</a></li>
 <li>gm_fullscreen()&#160;:&#160;<a class="el" href="gama_2gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75">gama.h</a></li>
 <li>gm_image_create()&#160;:&#160;<a class="el" href="image_8h.html#aaab9b6ae97585d3c419ac533a4601f8e">image.h</a></li>
-<li>gm_image_data_free()&#160;:&#160;<a class="el" href="image_8h.html#a929039a6f909e06ce65826d6470b3e6b">image.h</a></li>
-<li>gm_image_data_load()&#160;:&#160;<a class="el" href="image_8h.html#ae81ba8e9b58d1e19aefda23af9edabad">image.h</a></li>
+<li>gm_image_create_from_memory()&#160;:&#160;<a class="el" href="image_8h.html#a6c6bc6b1056907284a8d57bbcd946655">image.h</a></li>
+<li>gm_image_data_average_color()&#160;:&#160;<a class="el" href="image_8h.html#a4fd201307a7e0c31bbce281b98a4a3a3">image.h</a></li>
+<li>gm_image_data_free()&#160;:&#160;<a class="el" href="image_8h.html#a50c45540a021cba5a362bc0742d4d40b">image.h</a></li>
+<li>gm_image_data_load()&#160;:&#160;<a class="el" href="image_8h.html#a66d341e35f25ae7f873d466dfa236cc9">image.h</a></li>
+<li>gm_image_data_load_from_memory()&#160;:&#160;<a class="el" href="image_8h.html#a30f679032b168ebde998e79fc727f1ec">image.h</a></li>
 <li>gm_image_draw()&#160;:&#160;<a class="el" href="image_8h.html#aec56e25f8f3aab9a80ac99ea14751cdb">image.h</a></li>
 <li>gm_image_draw_part()&#160;:&#160;<a class="el" href="image_8h.html#a93b48efa6484ce4d2b7e6bec2ab52949">image.h</a></li>
 <li>gm_init()&#160;:&#160;<a class="el" href="gama_2gama_8h.html#afe888881882c032aeecb0e3e4e6de460">gama.h</a></li>
@@ -229,14 +236,11 @@ $(function(){initNavTree('globals_func_g.html','',''); });
 <li>gm_triangle_area()&#160;:&#160;<a class="el" href="position_8h.html#ac40eae999aa0eaa130f4b774c2f09aab">position.h</a></li>
 <li>gm_upper_case()&#160;:&#160;<a class="el" href="key_8h.html#a0056e7f9917e085fc265555a470a9f2c">key.h</a></li>
 <li>gmd_color()&#160;:&#160;<a class="el" href="debug_8h.html#a4571cae9fa2bbc5ef5b9a31ebee7069b">debug.h</a></li>
+<li>gmd_gltf_print()&#160;:&#160;<a class="el" href="gltf_8h.html#aa3ee07c7c997a07cd92036e6e3324711">gltf.h</a></li>
 <li>gmd_mesh()&#160;:&#160;<a class="el" href="debug_8h.html#a123eeb135725e8837b13ecd7781ad95b">debug.h</a></li>
 <li>gmd_pos2()&#160;:&#160;<a class="el" href="debug_8h.html#ad8df94421d43eefdbc7c872c9ab7756f">debug.h</a></li>
 <li>gmd_pos3()&#160;:&#160;<a class="el" href="debug_8h.html#a5078f2e15fbf7c8c564afd367e02bdf5">debug.h</a></li>
 <li>gmg_color()&#160;:&#160;<a class="el" href="color_8h.html#a0c14ffe2bab36e58af6f58271b27bc52">color.h</a></li>
-<li>gmg_face()&#160;:&#160;<a class="el" href="mesh_8h.html#a6f798081dfeac9e03d757e42d39a7c4e">mesh.h</a></li>
-<li>gmg_material()&#160;:&#160;<a class="el" href="mtl_8h.html#abe709ed26b585ce432c53e3316a303b9">mtl.h</a></li>
-<li>gmg_mesh()&#160;:&#160;<a class="el" href="mesh_8h.html#a24deb6fce3c71e836264cbad080ab071">mesh.h</a></li>
-<li>gmg_mtllib()&#160;:&#160;<a class="el" href="mtl_8h.html#a831cc224ff2afd5214aec5eff3a56bd6">mtl.h</a></li>
 <li>gmg_pos3()&#160;:&#160;<a class="el" href="3d_2position_8h.html#a23a03344bd4708806c5185d3535d4954">position.h</a></li>
 <li>gmu_get_filename_base()&#160;:&#160;<a class="el" href="utils_8h.html#a856b0de3343f4ad975fac9598769aaae">utils.h</a></li>
 <li>gmu_get_filename_stem()&#160;:&#160;<a class="el" href="utils_8h.html#ac88a3d0a4d62b7ac6a1f5de8be18a5da">utils.h</a></li>

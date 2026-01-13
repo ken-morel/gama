@@ -1,29 +1,5 @@
 var searchData=
 [
-  ['h_0',['h',['../structjpeg.html#a5234104744a9edef60b6080fadd90ebe',1,'jpeg::h'],['../structstbi__gif__struct.html#a6ce6b990464cdbbe9a408fe26581b296',1,'stbi_gif_struct::h'],['../structstbrp__rect.html#af68de2dadc7972b7c089d5e0c0558398',1,'stbrp_rect::h'],['../structstbtt____bitmap.html#a2afc802e26e9f1dda897ac16ecfff10e',1,'stbtt__bitmap::h']]],
-  ['h2_1',['h2',['../structjpeg.html#a0da0da6936f4b22681a3b6035b67bc50',1,'jpeg']]],
-  ['h_5foversample_2',['h_oversample',['../structstbtt__pack__range.html#a7a642139ce446c58fde5c48553bcf008',1,'stbtt_pack_range::h_oversample'],['../structstbtt__pack__context.html#aee1019f9634cad49fa07e8e1f897d6b7',1,'stbtt_pack_context::h_oversample']]],
-  ['h_5ftiles_3',['h_tiles',['../structstbhw__tileset.html#ae01780a7755cdcd7eb378f36325134bf',1,'stbhw_tileset']]],
-  ['ha_4',['ha',['../structjpeg.html#a1b91deb74bf7b7730abaacc29d85016c',1,'jpeg']]],
-  ['half_5fheight_5',['half_height',['../struct_hex_wave_parameters.html#ae1ade06a68bde659da6ed8549d4a711f',1,'HexWaveParameters']]],
-  ['handle_6',['handle',['../structgm_image.html#a8b080f4012c81f98763f6d1f50ba43f0',1,'gmImage']]],
-  ['has_5fpreferred_5fx_7',['has_preferred_x',['../struct_s_t_b___textedit_state.html#aaca2d581ed565f86288038816274e007',1,'STB_TexteditState']]],
-  ['hash_8',['hash',['../structstb__dupe.html#a6abcb39ad7f7e2de734086c8f344c717',1,'stb_dupe']]],
-  ['hash_5fshift_9',['hash_shift',['../structstb__dupe.html#a3854a8d4f4e46fdcc5c5041361160d8e',1,'stb_dupe']]],
-  ['hash_5fsize_10',['hash_size',['../structstb__dupe.html#af78a91edcb8f7c5b04c298901b681ff1',1,'stb_dupe']]],
-  ['hash_5ftable_11',['hash_table',['../structstb__dupe.html#a3190e0c8a4e80faac34e602b091c701a',1,'stb_dupe::hash_table'],['../structstbds__array__header.html#a760159660cc88953c75743d4d806b8c2',1,'stbds_array_header::hash_table']]],
-  ['have_5fpending_12',['have_pending',['../struct_hex_wave.html#a6210bfb7b78acb065cfdf1a3158e5342',1,'HexWave']]],
-  ['hd_13',['hd',['../structjpeg.html#a5a14ee72835b815846df7c3eec7bfd21',1,'jpeg']]],
-  ['head_14',['head',['../structstbtt__fontinfo.html#ab76ed2f4cbd8fcbd8465ca5f88e7e2b9',1,'stbtt_fontinfo']]],
-  ['height_15',['height',['../structgm_body.html#a2b357ba00d3a97f7d1bcbeb3e4d40030',1,'gmBody::height'],['../structgm_image_data.html#a800a6c86859e28eace22c639c2ebd5ad',1,'gmImageData::height'],['../structgm_image.html#ac42212938646c37a56f0e01a0886fb2c',1,'gmImage::height'],['../structstbrp__context.html#af3715a6f3faecfb4fac8f6ccbb71f9c7',1,'stbrp_context::height'],['../structstbtt__pack__context.html#a817ec010d7f09ba9776517c5a87f13a7',1,'stbtt_pack_context::height']]],
-  ['heuristic_16',['heuristic',['../structstbrp__context.html#a4b61a7f94e50a54c075e2a8f99f6503a',1,'stbrp_context']]],
-  ['hhea_17',['hhea',['../structstbtt__fontinfo.html#a91b82ae03d68892eb7f3fbd3a8b990e5',1,'stbtt_fontinfo']]],
-  ['hmtx_18',['hmtx',['../structstbtt__fontinfo.html#aebf42701e99b88d07a59bf99cb84b9a1',1,'stbtt_fontinfo']]],
-  ['horizontal_5fedge_19',['horizontal_edge',['../struct_s_t_b_i_r___r_e_s_i_z_e.html#a28356ce3d86aacab507e5da53665d04d',1,'STBIR_RESIZE']]],
-  ['horizontal_5ffilter_20',['horizontal_filter',['../struct_s_t_b_i_r___r_e_s_i_z_e.html#a94214c24f2352d0b38b99f18dbcedde4',1,'STBIR_RESIZE']]],
-  ['horizontal_5ffilter_5fkernel_21',['horizontal_filter_kernel',['../struct_s_t_b_i_r___r_e_s_i_z_e.html#a6ab585acfb663cd5247a5d04c962ffe4',1,'STBIR_RESIZE']]],
-  ['horizontal_5ffilter_5fsupport_22',['horizontal_filter_support',['../struct_s_t_b_i_r___r_e_s_i_z_e.html#a8cc8a3a017fbe4eaf1e3e22e1ac82081',1,'STBIR_RESIZE']]],
-  ['hs_23',['hs',['../structstbi__resample.html#a1513390ba0102364169a52ff26d5e0f2',1,'stbi_resample']]],
-  ['huff_5fac_24',['huff_ac',['../structjpeg.html#a6fab0b2d90425db5d609edbde8bddd92',1,'jpeg']]],
-  ['huff_5fdc_25',['huff_dc',['../structjpeg.html#aae44f91bafcc73fa70544573458abe33',1,'jpeg']]]
+  ['handle_0',['handle',['../structgm_image.html#a8b080f4012c81f98763f6d1f50ba43f0',1,'gmImage']]],
+  ['height_1',['height',['../structgm_body.html#a2b357ba00d3a97f7d1bcbeb3e4d40030',1,'gmBody::height'],['../structgm_image_data.html#ab34f37caa49e9e73f7d8381be7fabd27',1,'gmImageData::height'],['../structgm_image.html#ac42212938646c37a56f0e01a0886fb2c',1,'gmImage::height']]]
 ];

@@ -1,3 +1,11 @@
+/**
+ * @file widgets/joystick.h
+ * @brief Defines the theme and functionality for a virtual joystick widget.
+ *
+ * This file provides structures for customizing the appearance of an on-screen
+ * joystick and a function to render an interactive joystick that responds
+ * to mouse input, outputting its normalized position.
+ */
 #pragma once
 
 #include "../animate.h"
@@ -7,26 +15,26 @@
  * @brief Structure defining the visual theme for a joystick widget.
  */
 typedef struct {
-  int enabled; /**< Whether the joystick is enabled */
+  int enabled; /**< Whether the joystick is enabled for interaction (1) or disabled (0). */
 
-  double scale;       /**< Overall joystick size scale */
-  gmColor background; /**< Circle background color */
-  gmColor border;     /**< Border color */
-
-  struct {
-    double scale;   /**< Scale factor when focused/hovered */
-    gmColor border; /**< Border color when focused/hovered */
-  } focussed;
+  double scale;       /**< Overall joystick size scale when normal. */
+  gmColor background; /**< Background color of the joystick base circle when normal. */
+  gmColor border;     /**< Border color of the joystick base circle when normal. */
 
   struct {
-    double scale;   /**< Scale factor when active pressed */
-    gmColor border; /**< Border color when active pressed */
-  } active;
+    double scale;   /**< Scale factor of the joystick when focused/hovered. */
+    gmColor border; /**< Border color when focused/hovered. */
+  } focussed; /**< Theme properties when the joystick is focused or hovered. */
 
-  gmColor knob;        /**< Knob color */
-  gmColor knob_border; /**< Knob border color */
+  struct {
+    double scale;   /**< Scale factor of the joystick when active (being dragged). */
+    gmColor border; /**< Border color when active. */
+  } active; /**< Theme properties when the joystick is active (mouse button down on it). */
 
-  double border_width; /**< Width of the circle border */
+  gmColor knob;        /**< Color of the joystick knob. */
+  gmColor knob_border; /**< Border color of the joystick knob. */
+
+  double border_width; /**< Width of the joystick base circle border. */
 } gmwJoystickTheme;
 
 /**
@@ -46,14 +54,19 @@ gmwJoystickTheme gmwJoystick = {
 /**
  * @brief Creates and renders an animated joystick widget that can be
  * manipulated with the mouse.
+ *
+ * This function draws a virtual joystick on screen, tracks mouse interaction,
+ * and outputs its normalized logical position. The visual knob position is
+ * animated smoothly.
+ *
  * @param x The x-coordinate of the joystick's center.
  * @param y The y-coordinate of the joystick's center.
- * @param radius The radius of the joystick base.
- * @param pos Pointer to a gmPos structure to store the joystick's logical
- * position (-1 to 1).
- * @param vpos Pointer to a gmPos structure for animated visual position (can be
- * NULL to use pos).
- * @return 1 if the joystick is currently hovered, 0 otherwise.
+ * @param radius The radius of the joystick base circle.
+ * @param pos Pointer to a `gmPos` structure to store the joystick's logical
+ *        position (normalized to -1.0 to 1.0 in X and Y).
+ * @param vpos Pointer to a `gmPos` structure for the animated visual knob
+ *        position. If NULL, `pos` is used for both logical and visual position.
+ * @return 1 if the joystick is currently hovered over, 0 otherwise.
  */
 int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
                      gmPos *vpos) {
@@ -117,13 +130,17 @@ int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
 
 /**
  * @brief Creates and renders a joystick widget that can be manipulated with the
- * mouse.
+ * mouse (non-animated version).
+ *
+ * This is a simplified wrapper around `gm_joystick_anim` that does not use
+ * a separate visual position for animation, making the knob snap to position.
+ *
  * @param x The x-coordinate of the joystick's center.
  * @param y The y-coordinate of the joystick's center.
  * @param radius The radius of the joystick base.
- * @param pos Pointer to a gmPos structure to store the joystick's logical
- * position (-1 to 1).
- * @return 1 if the joystick is currently hovered, 0 otherwise.
+ * @param pos Pointer to a `gmPos` structure to store the joystick's logical
+ *        position (normalized to -1.0 to 1.0 in X and Y).
+ * @return 1 if the joystick is currently hovered over, 0 otherwise.
  */
 int gmw_joystick(double x, double y, double radius, gmPos *pos) {
   return gm_joystick_anim(x, y, radius, pos, NULL);
