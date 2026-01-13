@@ -1,12 +1,20 @@
+/**
+ * @file obj.h
+ * @brief Implements a Wavefront OBJ 3D model file loader.
+ *
+ * This file provides functionality to parse .obj files and load their
+ * geometric and material data into a `gm3Mesh` structure. It also handles
+ * the parsing of associated .mtl files indirectly via `mtl.h`.
+ */
 #pragma once
 
-#include <ctype.h>
-#include <float.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <ctype.h> // For isspace, isalpha
+#include <float.h> // For DBL_MAX
+#include <stddef.h> // For size_t
+#include <stdint.h> // For int32_t
+#include <stdio.h> // For snprintf
+#include <stdlib.h> // For malloc, realloc, free, strtod, strtoll
+#include <string.h> // For strcmp, strncmp, memset, strlen
 
 #include "mesh.h"
 #include "mtl.h"
@@ -14,20 +22,36 @@
 
 // --- Structures ---
 
+/**
+ * @internal
+ * @brief Represents a single parsed line from an OBJ file.
+ */
 typedef struct {
-  char type;      // one of: nvfLUog#
-  char name[128]; // For mtllib and usemtl names
-  double points[3];
-  long long indices[64][3]; // [v, vt, vn]
-  size_t n_indices;
+  char type;      /**< The type of OBJ line (e.g., 'v', 'f', 'L' for mtllib, 'U' for usemtl). */
+  char name[128]; /**< For mtllib and usemtl names. */
+  double points[3]; /**< Stores vertex/normal/texcoord data. */
+  long long indices[64][3]; /**< Stores face indices [v, vt, vn] for up to 64 vertices. */
+  size_t n_indices; /**< Number of indices parsed for a face. */
 } gm3ObjLine;
 
+/**
+ * @internal
+ * @brief Skips leading whitespace characters in a string.
+ * @param s The string to process.
+ * @return A pointer to the first non-whitespace character in the string.
+ */
 static inline char *gmu_skip_ws(char *s) {
   while (*s && *s == ' ')
     s++;
   return s;
 }
 
+/**
+ * @internal
+ * @brief Parses a single index value from an OBJ face line.
+ * @param ptr A pointer to the current position in the line string.
+ * @return The parsed index, or 0 if no valid index is found.
+ */
 static long long _gm3u_parse_idx(char **ptr) {
   if (!ptr || !*ptr || isspace((unsigned char)**ptr) || **ptr == '/')
     return 0;
@@ -39,6 +63,19 @@ static long long _gm3u_parse_idx(char **ptr) {
 
 // --- Parsing Logic ---
 
+/**
+ * @internal
+ * @brief Parses the next line from an OBJ file content string.
+ *
+ * This function identifies the type of OBJ line (vertex, face, normal,
+ * texture coordinate, material library, use material, object/group)
+ * and extracts its relevant data into a `gm3ObjLine` struct.
+ *
+ * @param end A pointer to the current read position in the OBJ content string.
+ *        This will be updated to point to the start of the next line.
+ * @param ln A pointer to the `gm3ObjLine` struct to populate with parsed data.
+ * @return 1 if a line was successfully parsed, 0 if the end of content is reached.
+ */
 int gm3_obj_parse_next_line(char **end, gm3ObjLine *ln) {
   memset(ln, 0, sizeof(*ln));
   ln->type = '?';
@@ -101,6 +138,16 @@ int gm3_obj_parse_next_line(char **end, gm3ObjLine *ln) {
   return 1;
 }
 
+/**
+ * @internal
+ * @brief Normalizes an index read from an OBJ file.
+ *
+ * OBJ indices can be 1-based (positive), relative to the end (-negative),
+ * or 0 (fallback). This converts them to 0-based absolute indices.
+ *
+ * @param idx A pointer to the index to normalize.
+ * @param total The total number of elements in the corresponding array (e.g., total vertices).
+ */
 static void _gm3u_normalize_idx(long long *idx, size_t total) {
   if (*idx > 0)
     *idx -= 1;
@@ -110,6 +157,15 @@ static void _gm3u_normalize_idx(long long *idx, size_t total) {
     *idx = 0; // fallback
 }
 
+/**
+ * @internal
+ * @brief Parses the entire content of an OBJ file into an array of `gm3ObjLine` structs.
+ * @param content The null-terminated string content of the OBJ file.
+ * @param result A pointer to a `gm3ObjLine**` that will store the parsed lines. This memory
+ *        is dynamically allocated and must be freed by the caller.
+ * @param n_lines A pointer to a `size_t` that will store the number of parsed lines.
+ * @return 0 on success, -1 on memory allocation failure.
+ */
 int gm3_obj_parse(char *content, gm3ObjLine **result, size_t *n_lines) {
   char *pos = content;
   size_t buffer_size = 128;
@@ -138,6 +194,19 @@ int gm3_obj_parse(char *content, gm3ObjLine **result, size_t *n_lines) {
   return 0;
 }
 
+/**
+ * @brief Loads a Wavefront OBJ 3D model from a file into a `gm3Mesh` structure.
+ *
+ * This function parses the `.obj` file, including vertices, normals, texture
+ * coordinates, and faces. It also loads associated `.mtl` material libraries.
+ * The `gm3Mesh` will be populated with all the data.
+ *
+ * @param m A pointer to the `gm3Mesh` structure to populate.
+ * @param path The file path to the .obj model.
+ * @param dir The directory containing the .obj file, used for resolving relative .mtl paths.
+ * @return 0 on success, -1 on file reading or parsing failure, or a negative
+ *         value from `gm3_mtl_load` on material loading failure.
+ */
 int32_t gm3_obj_load(gm3Mesh *m, const char *path, const char *dir) {
   char *content = NULL;
   size_t content_len;

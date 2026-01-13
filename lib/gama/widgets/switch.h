@@ -1,3 +1,11 @@
+/**
+ * @file widgets/switch.h
+ * @brief Defines the theme and functionality for a toggle switch widget.
+ *
+ * This file provides structures for customizing the appearance of an on-screen
+ * toggle switch and a function to render an interactive switch that allows
+ * users to toggle a boolean state.
+ */
 #pragma once
 
 #include "../animate.h"
@@ -8,35 +16,35 @@
  * @brief Structure defining the visual theme for a switch widget.
  */
 typedef struct {
-  int enabled; /**< Whether the switch is enabled */
+  int enabled; /**< Whether the switch is enabled for interaction (1) or disabled (0). */
 
-  double scale; /**< Default scale of the switch */
-
-  struct {
-    gmColor background;  /**< Background color when switched off */
-    gmColor border;      /**< Border color when switched off */
-    gmColor knob;        /**< Knob color when switched off */
-    gmColor knob_border; /**< Knob border color when switched off */
-  } off;
+  double scale; /**< Default overall widget scale when normal. */
 
   struct {
-    gmColor background;  /**< Background color when switched on */
-    gmColor border;      /**< Border color when switched on */
-    gmColor knob;        /**< Knob color when switched on */
-    gmColor knob_border; /**< Knob border color when switched on */
-  } on;
+    gmColor background;  /**< Background color when the switch is off. */
+    gmColor border;      /**< Border color when the switch is off. */
+    gmColor knob;        /**< Knob color when the switch is off. */
+    gmColor knob_border; /**< Knob border color when the switch is off. */
+  } off; /**< Theme properties for the 'off' state of the switch. */
 
   struct {
-    double scale;   /**< Scale factor when focused/hovered */
-    gmColor border; /**< Border color when focused/hovered */
-  } focussed;
+    gmColor background;  /**< Background color when the switch is on. */
+    gmColor border;      /**< Border color when the switch is on. */
+    gmColor knob;        /**< Knob color when the switch is on. */
+    gmColor knob_border; /**< Knob border color when the switch is on. */
+  } on; /**< Theme properties for the 'on' state of the switch. */
 
   struct {
-    double scale;   /**< Scale factor when active pressed */
-    gmColor border; /**< Border color when active pressed */
-  } active;
+    double scale;   /**< Scale factor when focused/hovered. */
+    gmColor border; /**< Border color when focused/hovered. */
+  } focussed; /**< Theme properties when the switch is focused or hovered. */
 
-  double border_width; /**< Width of the switch border */
+  struct {
+    double scale;   /**< Scale factor when active (being clicked). */
+    gmColor border; /**< Border color when active. */
+  } active; /**< Theme properties when the switch is active (mouse button down on it). */
+
+  double border_width; /**< Width of the switch's outer border. */
 } gmwSwitchTheme;
 
 /**
@@ -80,14 +88,19 @@ gmwSwitchTheme gmwSwitch = {.enabled = 1,
 
 /**
  * @brief Creates and renders an animated switch widget that toggles on click.
+ *
+ * This function draws a toggle switch, tracks mouse interaction to update its
+ * state, and animates the knob's position smoothly between 'off' (0) and 'on' (1).
+ *
  * @param x The x-coordinate of the switch's center.
  * @param y The y-coordinate of the switch's center.
  * @param width The width of the switch.
  * @param height The height of the switch.
- * @param value Pointer to an integer to store the switch state (0=off, 1=on).
- * @param anim Pointer to a double for animated visual position (can be NULL to
- * use value).
- * @return 1 if the switch was clicked (toggled), 0 otherwise.
+ * @param value Pointer to an integer to store the switch state (0 for off, 1 for on).
+ *        This value is toggled by user clicks.
+ * @param anim Pointer to a double for the animated visual position of the knob.
+ *        If NULL, `value` is used for the knob's position (non-animated).
+ * @return 1 if the switch was clicked (toggled) in the current frame, 0 otherwise.
  */
 int gmw_switch_anim(double x, double y, double width, double height, int *value,
                     double *anim) {
@@ -153,13 +166,18 @@ int gmw_switch_anim(double x, double y, double width, double height, int *value,
 }
 
 /**
- * @brief Creates and renders a switch widget that toggles on click.
+ * @brief Creates and renders a switch widget that toggles on click (non-animated version).
+ *
+ * This is a simplified wrapper around `gmw_switch_anim` that does not use
+ * a separate animated visual position, causing the knob to snap to the
+ * current value.
+ *
  * @param x The x-coordinate of the switch's center.
  * @param y The y-coordinate of the switch's center.
  * @param width The width of the switch.
  * @param height The height of the switch.
  * @param value Pointer to an integer to store the switch state (0=off, 1=on).
- * @return 1 if the switch was clicked (toggled), 0 otherwise.
+ * @return 1 if the switch was clicked (toggled) in the current frame, 0 otherwise.
  */
 int gmw_switch(double x, double y, double width, double height, int *value) {
   return gmw_switch_anim(x, y, width, height, value, NULL);

@@ -1,3 +1,11 @@
+/**
+ * @file widgets/frame.h
+ * @brief Defines the theme and functionality for a frame widget.
+ *
+ * This file provides structures for customizing the appearance of frames
+ * (panels) and a function to render them. Frames are typically used as
+ * containers for other UI elements or for displaying information.
+ */
 #pragma once
 
 #include "../collision.h"
@@ -7,25 +15,25 @@
  * @brief Structure defining the visual theme for a frame widget.
  */
 typedef struct {
-  int enabled;              /**< Whether the frame is enabled */
+  int enabled;              /**< Whether the frame is interactive or displays focused state (1) or always displays inactive state (0). */
 
-  gmColor background;       /**< Background color when normal */
-  gmColor border;           /**< Border color when normal */
-  double scale;             /**< Scale factor when normal */
-
-  struct {
-    gmColor background;     /**< Background color when focused */
-    gmColor border;         /**< Border color when focused */
-    double scale;           /**< Scale factor when focused */
-  } focussed;
+  gmColor background;       /**< Background color when normal. */
+  gmColor border;           /**< Border color when normal. */
+  double scale;             /**< Scale factor when normal. */
 
   struct {
-    gmColor background;     /**< Background color when inactive */
-    gmColor border;         /**< Border color when inactive */
-    double scale;           /**< Scale factor when inactive */
-  } inactive;
+    gmColor background;     /**< Background color when focused/hovered. */
+    gmColor border;         /**< Border color when focused/hovered. */
+    double scale;           /**< Scale factor when focused/hovered. */
+  } focussed; /**< Theme properties when the frame is focused or hovered. */
 
-  double border_width;      /**< Width of the frame border */
+  struct {
+    gmColor background;     /**< Background color when inactive. */
+    gmColor border;         /**< Border color when inactive. */
+    double scale;           /**< Scale factor when inactive. */
+  } inactive; /**< Theme properties when the frame is inactive. */
+
+  double border_width;      /**< Width of the frame border. */
 } gmwFrameTheme;
 
 /**
@@ -58,11 +66,16 @@ gmwFrameTheme gmwFrame = {.enabled = 1,
 
 /**
  * @brief Creates and renders a frame widget (a bordered panel).
+ *
+ * This function draws a rectangular frame at the specified coordinates,
+ * applying styling based on the global `gmwFrame` theme and its state
+ * (hovered/focused or normal).
+ *
  * @param x The x-coordinate of the frame's center.
  * @param y The y-coordinate of the frame's center.
  * @param width The width of the frame.
  * @param height The height of the frame.
- * @return 1 if the frame is currently hovered, 0 otherwise.
+ * @return 1 if the frame is currently hovered over, 0 otherwise.
  */
 int gmw_frame(double x, double y, double width, double height) {
   int enabled = gmwFrame.enabled;
