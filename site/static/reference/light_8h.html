@@ -100,10 +100,17 @@ $(function(){initNavTree('light_8h.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:gm3Light" id="r_gm3Light"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm3_light.html">gm3Light</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a single light source in a 3D scene.  <a href="structgm3_light.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af887b402b038df6fc91d932d225f5ae3" id="r_af887b402b038df6fc91d932d225f5ae3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af887b402b038df6fc91d932d225f5ae3">gm3_light_create</a> (<a class="el" href="structgm3_light.html">gm3Light</a> *l)</td></tr>
+<tr class="memdesc:af887b402b038df6fc91d932d225f5ae3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a <span class="tt"><a class="el" href="structgm3_light.html" title="Represents a single light source in a 3D scene.">gm3Light</a></span> struct with default values.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:adf22b7b3e33b824d390f5bd1c043c97c" id="r_adf22b7b3e33b824d390f5bd1c043c97c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structgm3_light.html">gm3Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf22b7b3e33b824d390f5bd1c043c97c">gm3_default_light</a></td></tr>
+<tr class="memdesc:adf22b7b3e33b824d390f5bd1c043c97c"><td class="mdescLeft">&#160;</td><td class="mdescRight">A default <span class="tt"><a class="el" href="structgm3_light.html" title="Represents a single light source in a 3D scene.">gm3Light</a></span> instance.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="af887b402b038df6fc91d932d225f5ae3" name="af887b402b038df6fc91d932d225f5ae3"></a>
@@ -120,6 +127,40 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initializes a <span class="tt"><a class="el" href="structgm3_light.html" title="Represents a single light source in a 3D scene.">gm3Light</a></span> struct with default values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">l</td><td>A pointer to the <span class="tt"><a class="el" href="structgm3_light.html" title="Represents a single light source in a 3D scene.">gm3Light</a></span> struct to initialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if <span class="tt">l</span> is NULL. </dd></dl>
+
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="adf22b7b3e33b824d390f5bd1c043c97c" name="adf22b7b3e33b824d390f5bd1c043c97c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf22b7b3e33b824d390f5bd1c043c97c">&#9670;&#160;</a></span>gm3_default_light</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structgm3_light.html">gm3Light</a> gm3_default_light</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    .position = {0, 1, 0},</div>
+<div class="line">    .direction = {0, -1, 1},</div>
+<div class="line">    .color = 0xCCCCCCFF,</div>
+<div class="line">    .intensity = 0.5,</div>
+<div class="line">    .ambient = 0.5,</div>
+<div class="line">}</div>
+</div><!-- fragment -->
+<p>A default <span class="tt"><a class="el" href="structgm3_light.html" title="Represents a single light source in a 3D scene.">gm3Light</a></span> instance. </p>
+<p>Initializes a light source at <span class="tt">{0, 1, 0}</span> pointing towards <span class="tt">{0, -1, 1}</span>, with a white color, medium intensity, and some ambient light. </p>
 
 </div>
 </div>

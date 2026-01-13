@@ -92,6 +92,9 @@ $(function(){initNavTree('utils_8h.html','',''); });
   <div class="headertitle"><div class="title">utils.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Provides general utility functions for file handling and string manipulation.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="__malloc_8h_source.html">_malloc.h</a>&quot;</code><br />
 <code>#include &lt;ctype.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
@@ -102,10 +105,16 @@ $(function(){initNavTree('utils_8h.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a856b0de3343f4ad975fac9598769aaae" id="r_a856b0de3343f4ad975fac9598769aaae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a856b0de3343f4ad975fac9598769aaae">gmu_get_filename_base</a> (const char *path, char *out_base, size_t out_size)</td></tr>
+<tr class="memdesc:a856b0de3343f4ad975fac9598769aaae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the base filename (filename with extension) from a full path.  <br /></td></tr>
 <tr class="memitem:ac88a3d0a4d62b7ac6a1f5de8be18a5da" id="r_ac88a3d0a4d62b7ac6a1f5de8be18a5da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac88a3d0a4d62b7ac6a1f5de8be18a5da">gmu_get_filename_stem</a> (const char *path, char *out_stem, size_t out_size)</td></tr>
+<tr class="memdesc:ac88a3d0a4d62b7ac6a1f5de8be18a5da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the filename stem (filename without extension) from a full path.  <br /></td></tr>
 <tr class="memitem:adc312db45679a9725d25c1724eac461c" id="r_adc312db45679a9725d25c1724eac461c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc312db45679a9725d25c1724eac461c">gmu_read_file</a> (const char *path, char **content, size_t *size)</td></tr>
+<tr class="memdesc:adc312db45679a9725d25c1724eac461c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the entire content of a file into a dynamically allocated buffer.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Provides general utility functions for file handling and string manipulation. </p>
+<p>This file contains miscellaneous helper functions that are not directly related to a specific Gama module but are useful across the engine. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a856b0de3343f4ad975fac9598769aaae" name="a856b0de3343f4ad975fac9598769aaae"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a856b0de3343f4ad975fac9598769aaae">&#9670;&#160;</a></span>gmu_get_filename_base()</h2>
 
@@ -129,6 +138,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Extracts the base filename (filename with extension) from a full path. </p>
+<p>Example: <span class="tt">path = "/home/user/image.<a class="el" href="structpng.html">png</a>"</span> -&gt; <span class="tt">out_base = "image.png"</span></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The full path string. </td></tr>
+    <tr><td class="paramname">out_base</td><td>Buffer to store the extracted filename. </td></tr>
+    <tr><td class="paramname">out_size</td><td>The size of the <span class="tt">out_base</span> buffer. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -156,6 +176,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Extracts the filename stem (filename without extension) from a full path. </p>
+<p>Example: <span class="tt">path = "/home/user/image.<a class="el" href="structpng.html">png</a>"</span> -&gt; <span class="tt">out_stem = "image"</span></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The full path string. </td></tr>
+    <tr><td class="paramname">out_stem</td><td>Buffer to store the extracted filename stem. </td></tr>
+    <tr><td class="paramname">out_size</td><td>The size of the <span class="tt">out_stem</span> buffer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="adc312db45679a9725d25c1724eac461c" name="adc312db45679a9725d25c1724eac461c"></a>
@@ -181,6 +212,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Reads the entire content of a file into a dynamically allocated buffer. </p>
+<p>The caller is responsible for freeing the <span class="tt">*content</span> buffer.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The path to the file to read. </td></tr>
+    <tr><td class="paramname">content</td><td>A pointer to a <span class="tt">char*</span> that will be allocated and filled with the file's content. </td></tr>
+    <tr><td class="paramname">size</td><td>A pointer to a <span class="tt">size_t</span> that will store the size of the read content. Can be NULL. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if the file cannot be opened, -5 on memory allocation failure. </dd></dl>
 
 </div>
 </div>

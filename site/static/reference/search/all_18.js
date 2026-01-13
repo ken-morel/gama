@@ -6,6 +6,7 @@ var searchData=
   ['x_5fstride_5fin_5fbytes_3',['x_stride_in_bytes',['../structstbvox__mesh__maker.html#aa15f9faec1a8efa4adeb7e846775aa9c',1,'stbvox_mesh_maker']]],
   ['xadvance_4',['xadvance',['../structstbtt__bakedchar.html#ad77b35d1a849d9eb7edb91df05b10536',1,'stbtt_bakedchar::xadvance'],['../structstbtt__packedchar.html#a28707ae98d1fa946b3390840aeff76ab',1,'stbtt_packedchar::xadvance']]],
   ['xlist_5',['Xlist',['../struct_floor1.html#a2c09f98b7613ec990add2467ea39f240',1,'Floor1']]],
-  ['xoff_6',['xoff',['../structstbtt__bakedchar.html#a0708a6588a2768b68a3ae59002944b7c',1,'stbtt_bakedchar::xoff'],['../structstbtt__packedchar.html#adb30c50674c79d32116ae6f94bd5893f',1,'stbtt_packedchar::xoff']]],
-  ['xoff2_7',['xoff2',['../structstbtt__packedchar.html#a3a33880f925ca826c908cbf9f0673c9f',1,'stbtt_packedchar']]]
+  ['xmag_6',['xmag',['../structcgltf__camera__orthographic.html#a0e4d6003ce4b8d450b644d171f6bb04a',1,'cgltf_camera_orthographic']]],
+  ['xoff_7',['xoff',['../structstbtt__bakedchar.html#a0708a6588a2768b68a3ae59002944b7c',1,'stbtt_bakedchar::xoff'],['../structstbtt__packedchar.html#adb30c50674c79d32116ae6f94bd5893f',1,'stbtt_packedchar::xoff']]],
+  ['xoff2_8',['xoff2',['../structstbtt__packedchar.html#a3a33880f925ca826c908cbf9f0673c9f',1,'stbtt_packedchar']]]
 ];

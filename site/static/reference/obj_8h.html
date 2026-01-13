@@ -92,6 +92,9 @@ $(function(){initNavTree('obj_8h.html','',''); });
   <div class="headertitle"><div class="title">obj.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements a Wavefront OBJ 3D model file loader.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;ctype.h&gt;</code><br />
 <code>#include &lt;float.h&gt;</code><br />
 <code>#include &lt;stddef.h&gt;</code><br />
@@ -114,8 +117,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ac5488bc96f21ca435db9f3168970ff41" id="r_ac5488bc96f21ca435db9f3168970ff41"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5488bc96f21ca435db9f3168970ff41">gm3_obj_parse_next_line</a> (char **end, <a class="el" href="structgm3_obj_line.html">gm3ObjLine</a> *ln)</td></tr>
 <tr class="memitem:a50879110694101cdd43098b07f0ec0af" id="r_a50879110694101cdd43098b07f0ec0af"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50879110694101cdd43098b07f0ec0af">gm3_obj_parse</a> (char *content, <a class="el" href="structgm3_obj_line.html">gm3ObjLine</a> **result, size_t *n_lines)</td></tr>
 <tr class="memitem:ac2f8ab3cc0c8d4303190f21f68394e49" id="r_ac2f8ab3cc0c8d4303190f21f68394e49"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2f8ab3cc0c8d4303190f21f68394e49">gm3_obj_load</a> (<a class="el" href="structgm3_mesh.html">gm3Mesh</a> *m, const char *path, const char *dir)</td></tr>
+<tr class="memdesc:ac2f8ab3cc0c8d4303190f21f68394e49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a Wavefront OBJ 3D model from a file into a <span class="tt"><a class="el" href="structgm3_mesh.html" title="Represents a 3D mesh composed of vertices, faces, normals, and texture coordinates.">gm3Mesh</a></span> structure.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements a Wavefront OBJ 3D model file loader. </p>
+<p>This file provides functionality to parse .obj files and load their geometric and material data into a <span class="tt"><a class="el" href="structgm3_mesh.html" title="Represents a 3D mesh composed of vertices, faces, normals, and texture coordinates.">gm3Mesh</a></span> structure. It also handles the parsing of associated .mtl files indirectly via <span class="tt"><a class="el" href="mtl_8h.html" title="Defines structures for 3D materials and material libraries, and functions for loading MTL files.">mtl.h</a></span>. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="ac2f8ab3cc0c8d4303190f21f68394e49" name="ac2f8ab3cc0c8d4303190f21f68394e49"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac2f8ab3cc0c8d4303190f21f68394e49">&#9670;&#160;</a></span>gm3_obj_load()</h2>
 
@@ -139,6 +146,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Loads a Wavefront OBJ 3D model from a file into a <span class="tt"><a class="el" href="structgm3_mesh.html" title="Represents a 3D mesh composed of vertices, faces, normals, and texture coordinates.">gm3Mesh</a></span> structure. </p>
+<p>This function parses the <span class="tt">.obj</span> file, including vertices, normals, texture coordinates, and faces. It also loads associated <span class="tt">.mtl</span> material libraries. The <span class="tt"><a class="el" href="structgm3_mesh.html" title="Represents a 3D mesh composed of vertices, faces, normals, and texture coordinates.">gm3Mesh</a></span> will be populated with all the data.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>A pointer to the <span class="tt"><a class="el" href="structgm3_mesh.html" title="Represents a 3D mesh composed of vertices, faces, normals, and texture coordinates.">gm3Mesh</a></span> structure to populate. </td></tr>
+    <tr><td class="paramname">path</td><td>The file path to the .obj model. </td></tr>
+    <tr><td class="paramname">dir</td><td>The directory containing the .obj file, used for resolving relative .mtl paths. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, -1 on file reading or parsing failure, or a negative value from <span class="tt"><a class="el" href="mtl_8h.html#aaf60613edaf4222d6a760333d234ef19" title="Loads materials and textures from an OBJ-style .mtl file.">gm3_mtl_load</a></span> on material loading failure. </dd></dl>
 
 </div>
 </div>

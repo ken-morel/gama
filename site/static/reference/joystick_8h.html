@@ -92,6 +92,9 @@ $(function(){initNavTree('joystick_8h.html','',''); });
   <div class="headertitle"><div class="title">joystick.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines the theme and functionality for a virtual joystick widget.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="animate_8h_source.html">../animate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="draw_8h_source.html">../draw.h</a>&quot;</code><br />
 </div>
@@ -107,14 +110,17 @@ Functions</h2></td></tr>
 <tr class="memitem:ae83e07e753c14ada4c9bf60d3e989f42" id="r_ae83e07e753c14ada4c9bf60d3e989f42"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae83e07e753c14ada4c9bf60d3e989f42">gm_joystick_anim</a> (double x, double y, double radius, <a class="el" href="structgm_pos.html">gmPos</a> *pos, <a class="el" href="structgm_pos.html">gmPos</a> *vpos)</td></tr>
 <tr class="memdesc:ae83e07e753c14ada4c9bf60d3e989f42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and renders an animated joystick widget that can be manipulated with the mouse.  <br /></td></tr>
 <tr class="memitem:a01735ba00743cac93e25c1db1d3d3472" id="r_a01735ba00743cac93e25c1db1d3d3472"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01735ba00743cac93e25c1db1d3d3472">gmw_joystick</a> (double x, double y, double radius, <a class="el" href="structgm_pos.html">gmPos</a> *pos)</td></tr>
-<tr class="memdesc:a01735ba00743cac93e25c1db1d3d3472"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and renders a joystick widget that can be manipulated with the mouse.  <br /></td></tr>
+<tr class="memdesc:a01735ba00743cac93e25c1db1d3d3472"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and renders a joystick widget that can be manipulated with the mouse (non-animated version).  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:aad9aad4426aebbdb12f0e8826cc5f88d" id="r_aad9aad4426aebbdb12f0e8826cc5f88d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgmw_joystick_theme.html">gmwJoystickTheme</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad9aad4426aebbdb12f0e8826cc5f88d">gmwJoystick</a></td></tr>
 <tr class="memdesc:aad9aad4426aebbdb12f0e8826cc5f88d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global joystick theme instance with default values.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines the theme and functionality for a virtual joystick widget. </p>
+<p>This file provides structures for customizing the appearance of an on-screen joystick and a function to render an interactive joystick that responds to mouse input, outputting its normalized position. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="ae83e07e753c14ada4c9bf60d3e989f42" name="ae83e07e753c14ada4c9bf60d3e989f42"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae83e07e753c14ada4c9bf60d3e989f42">&#9670;&#160;</a></span>gm_joystick_anim()</h2>
 
@@ -150,17 +156,18 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates and renders an animated joystick widget that can be manipulated with the mouse. </p>
+<p>This function draws a virtual joystick on screen, tracks mouse interaction, and outputs its normalized logical position. The visual knob position is animated smoothly.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x-coordinate of the joystick's center. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the joystick's center. </td></tr>
-    <tr><td class="paramname">radius</td><td>The radius of the joystick base. </td></tr>
-    <tr><td class="paramname">pos</td><td>Pointer to a <a class="el" href="structgm_pos.html">gmPos</a> structure to store the joystick's logical position (-1 to 1). </td></tr>
-    <tr><td class="paramname">vpos</td><td>Pointer to a <a class="el" href="structgm_pos.html">gmPos</a> structure for animated visual position (can be NULL to use pos). </td></tr>
+    <tr><td class="paramname">radius</td><td>The radius of the joystick base circle. </td></tr>
+    <tr><td class="paramname">pos</td><td>Pointer to a <span class="tt"><a class="el" href="structgm_pos.html" title="Represents a 2D position or vector.">gmPos</a></span> structure to store the joystick's logical position (normalized to -1.0 to 1.0 in X and Y). </td></tr>
+    <tr><td class="paramname">vpos</td><td>Pointer to a <span class="tt"><a class="el" href="structgm_pos.html" title="Represents a 2D position or vector.">gmPos</a></span> structure for the animated visual knob position. If NULL, <span class="tt">pos</span> is used for both logical and visual position. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 if the joystick is currently hovered, 0 otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the joystick is currently hovered over, 0 otherwise. </dd></dl>
 
 </div>
 </div>
@@ -193,17 +200,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates and renders a joystick widget that can be manipulated with the mouse. </p>
+<p>Creates and renders a joystick widget that can be manipulated with the mouse (non-animated version). </p>
+<p>This is a simplified wrapper around <span class="tt"><a class="el" href="#ae83e07e753c14ada4c9bf60d3e989f42" title="Creates and renders an animated joystick widget that can be manipulated with the mouse.">gm_joystick_anim</a></span> that does not use a separate visual position for animation, making the knob snap to position.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x-coordinate of the joystick's center. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the joystick's center. </td></tr>
     <tr><td class="paramname">radius</td><td>The radius of the joystick base. </td></tr>
-    <tr><td class="paramname">pos</td><td>Pointer to a <a class="el" href="structgm_pos.html">gmPos</a> structure to store the joystick's logical position (-1 to 1). </td></tr>
+    <tr><td class="paramname">pos</td><td>Pointer to a <span class="tt"><a class="el" href="structgm_pos.html" title="Represents a 2D position or vector.">gmPos</a></span> structure to store the joystick's logical position (normalized to -1.0 to 1.0 in X and Y). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>1 if the joystick is currently hovered, 0 otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the joystick is currently hovered over, 0 otherwise. </dd></dl>
 
 </div>
 </div>

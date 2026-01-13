@@ -10,10 +10,12 @@ var searchData=
   ['zbuffer_7',['zbuffer',['../structzbuf.html#a85112267319de6964346dbff57dcca28',1,'zbuf']]],
   ['zbuffer_5fend_8',['zbuffer_end',['../structzbuf.html#ab0ebe70f086953251c8ef15783fc8ae7',1,'zbuf']]],
   ['zero_5fwait_9',['zero_wait',['../struct_hex_wave_parameters.html#ab2eabea27ac359ae127393105d280375',1,'HexWaveParameters']]],
-  ['zfast_5fbits_10',['ZFAST_BITS',['../stb__image_8c.html#a37d8564ae0a820fb44b1a751c702e33a',1,'stb_image.c']]],
-  ['zfast_5fmask_11',['ZFAST_MASK',['../stb__image_8c.html#a7d437afc1bf1ea5a0a2441f3c0aca1fb',1,'stb_image.c']]],
-  ['zhuffman_12',['zhuffman',['../structzhuffman.html',1,'']]],
-  ['zout_13',['zout',['../structzbuf.html#aaf137c25fa5b9fb14e92354da4203c38',1,'zbuf']]],
-  ['zout_5fend_14',['zout_end',['../structzbuf.html#af07c0b7b7227f670ee1413bc0dcab791',1,'zbuf']]],
-  ['zout_5fstart_15',['zout_start',['../structzbuf.html#af31571e8d74c78c9bb18d92205150b28',1,'zbuf']]]
+  ['zfar_10',['zfar',['../structcgltf__camera__perspective.html#a65a831f5a75ddeef39dd1a18b2e903dc',1,'cgltf_camera_perspective::zfar'],['../structcgltf__camera__orthographic.html#a63ad88cdd9da5de1c1be92b796429e56',1,'cgltf_camera_orthographic::zfar']]],
+  ['zfast_5fbits_11',['ZFAST_BITS',['../stb__image_8c.html#a37d8564ae0a820fb44b1a751c702e33a',1,'stb_image.c']]],
+  ['zfast_5fmask_12',['ZFAST_MASK',['../stb__image_8c.html#a7d437afc1bf1ea5a0a2441f3c0aca1fb',1,'stb_image.c']]],
+  ['zhuffman_13',['zhuffman',['../structzhuffman.html',1,'']]],
+  ['znear_14',['znear',['../structcgltf__camera__perspective.html#a916266178d92d019a103bb392747fa48',1,'cgltf_camera_perspective::znear'],['../structcgltf__camera__orthographic.html#a04301970dfa2951ef8bc0862889ef2fd',1,'cgltf_camera_orthographic::znear']]],
+  ['zout_15',['zout',['../structzbuf.html#aaf137c25fa5b9fb14e92354da4203c38',1,'zbuf']]],
+  ['zout_5fend_16',['zout_end',['../structzbuf.html#af07c0b7b7227f670ee1413bc0dcab791',1,'zbuf']]],
+  ['zout_5fstart_17',['zout_start',['../structzbuf.html#af31571e8d74c78c9bb18d92205150b28',1,'zbuf']]]
 ];

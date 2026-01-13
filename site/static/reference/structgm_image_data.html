@@ -93,15 +93,21 @@ $(function(){initNavTree('structgm_image_data.html','',''); });
 </div><!--header-->
 <div class="contents">
 
+<p>A container for raw, CPU-side image pixel data.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="image_8h_source.html">image.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:adb29636c42f6cb340833849259cc0a4b" id="r_adb29636c42f6cb340833849259cc0a4b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb29636c42f6cb340833849259cc0a4b">width</a></td></tr>
-<tr class="memitem:a800a6c86859e28eace22c639c2ebd5ad" id="r_a800a6c86859e28eace22c639c2ebd5ad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a800a6c86859e28eace22c639c2ebd5ad">height</a></td></tr>
+<tr class="memitem:a0580b3ba3e19e38b30ce21d872e4fb16" id="r_a0580b3ba3e19e38b30ce21d872e4fb16"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0580b3ba3e19e38b30ce21d872e4fb16">width</a></td></tr>
+<tr class="memitem:ab34f37caa49e9e73f7d8381be7fabd27" id="r_ab34f37caa49e9e73f7d8381be7fabd27"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab34f37caa49e9e73f7d8381be7fabd27">height</a></td></tr>
 <tr class="memitem:ac90e3a39ac4beb43aeab27c88c0d48b5" id="r_ac90e3a39ac4beb43aeab27c88c0d48b5"><td class="memItemLeft" align="right" valign="top">unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac90e3a39ac4beb43aeab27c88c0d48b5">data</a></td></tr>
 </table>
-<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A container for raw, CPU-side image pixel data. </p>
+<p>This struct holds raw pixel data decoded from an image file. It is typically used as an intermediate step before creating a <span class="tt"><a class="el" href="structgm_image.html" title="A handle to a GPU-managed image or texture.">gmImage</a></span>, which manages the texture on the GPU. </p>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
 <a id="ac90e3a39ac4beb43aeab27c88c0d48b5" name="ac90e3a39ac4beb43aeab27c88c0d48b5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac90e3a39ac4beb43aeab27c88c0d48b5">&#9670;&#160;</a></span>data</h2>
 
@@ -113,31 +119,33 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pointer to the raw RGBA pixel data. </p>
 
 </div>
 </div>
-<a id="a800a6c86859e28eace22c639c2ebd5ad" name="a800a6c86859e28eace22c639c2ebd5ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a800a6c86859e28eace22c639c2ebd5ad">&#9670;&#160;</a></span>height</h2>
+<a id="ab34f37caa49e9e73f7d8381be7fabd27" name="ab34f37caa49e9e73f7d8381be7fabd27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab34f37caa49e9e73f7d8381be7fabd27">&#9670;&#160;</a></span>height</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int gmImageData::height</td>
+          <td class="memname">int32_t gmImageData::height</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Dimensions of the image in pixels. </p>
 
 </div>
 </div>
-<a id="adb29636c42f6cb340833849259cc0a4b" name="adb29636c42f6cb340833849259cc0a4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb29636c42f6cb340833849259cc0a4b">&#9670;&#160;</a></span>width</h2>
+<a id="a0580b3ba3e19e38b30ce21d872e4fb16" name="a0580b3ba3e19e38b30ce21d872e4fb16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0580b3ba3e19e38b30ce21d872e4fb16">&#9670;&#160;</a></span>width</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int gmImageData::width</td>
+          <td class="memname">int32_t gmImageData::width</td>
         </tr>
       </table>
 </div><div class="memdoc">

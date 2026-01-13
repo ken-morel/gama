@@ -93,6 +93,9 @@ $(function(){initNavTree('structgm3_mesh.html','',''); });
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a 3D mesh composed of vertices, faces, normals, and texture coordinates.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="mesh_8h_source.html">mesh.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -103,12 +106,15 @@ Data Fields</h2></td></tr>
 <tr class="memitem:af313b374f393c591cf3246ae675c9b4b" id="r_af313b374f393c591cf3246ae675c9b4b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af313b374f393c591cf3246ae675c9b4b">n_faces</a></td></tr>
 <tr class="memitem:ad397d2f9badbf55a7e0461fd22232eb6" id="r_ad397d2f9badbf55a7e0461fd22232eb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm3_pos.html">gm3Pos</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad397d2f9badbf55a7e0461fd22232eb6">normals</a></td></tr>
 <tr class="memitem:a1cc2d0641f765d7389716cf5187b623e" id="r_a1cc2d0641f765d7389716cf5187b623e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cc2d0641f765d7389716cf5187b623e">n_normals</a></td></tr>
-<tr class="memitem:ae477b31b80faf97d67d226aa189f2b48" id="r_ae477b31b80faf97d67d226aa189f2b48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm_pos.html">gmPos</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae477b31b80faf97d67d226aa189f2b48">texs</a></td></tr>
+<tr class="memitem:a23957a14677a46a8cf134f5e83d16c6d" id="r_a23957a14677a46a8cf134f5e83d16c6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm3_tex.html">gm3Tex</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23957a14677a46a8cf134f5e83d16c6d">texs</a></td></tr>
 <tr class="memitem:a3d4124b947a3aafca742ad3897f95cd2" id="r_a3d4124b947a3aafca742ad3897f95cd2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d4124b947a3aafca742ad3897f95cd2">n_texs</a></td></tr>
 <tr class="memitem:ac52e27a27bc1b8c41001fe73d7e9c0ef" id="r_ac52e27a27bc1b8c41001fe73d7e9c0ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structgm3_mtl_lib.html">gm3MtlLib</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac52e27a27bc1b8c41001fe73d7e9c0ef">mtllibs</a></td></tr>
 <tr class="memitem:a0acb82aff2583bd366cce6f286058e91" id="r_a0acb82aff2583bd366cce6f286058e91"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0acb82aff2583bd366cce6f286058e91">n_mtllibs</a></td></tr>
 </table>
-<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a 3D mesh composed of vertices, faces, normals, and texture coordinates. </p>
+<p>This struct stores all geometric and material data for a 3D model. </p>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
 <a id="a6ab3a259f6e2313384276317ce4cafbd" name="a6ab3a259f6e2313384276317ce4cafbd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6ab3a259f6e2313384276317ce4cafbd">&#9670;&#160;</a></span>faces</h2>
 
@@ -120,6 +126,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Array of mesh faces (triangles). </p>
 
 </div>
 </div>
@@ -134,6 +141,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Array of material libraries. </p>
 
 </div>
 </div>
@@ -148,6 +156,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Number of faces in the mesh. </p>
 
 </div>
 </div>
@@ -162,6 +171,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Number of material libraries. </p>
 
 </div>
 </div>
@@ -176,6 +186,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Number of vertex normals in the mesh. </p>
 
 </div>
 </div>
@@ -190,6 +201,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Number of texture coordinates in the mesh. </p>
 
 </div>
 </div>
@@ -204,6 +216,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Number of vertices in the mesh. </p>
 
 </div>
 </div>
@@ -218,20 +231,22 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Array of vertex normals. </p>
 
 </div>
 </div>
-<a id="ae477b31b80faf97d67d226aa189f2b48" name="ae477b31b80faf97d67d226aa189f2b48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae477b31b80faf97d67d226aa189f2b48">&#9670;&#160;</a></span>texs</h2>
+<a id="a23957a14677a46a8cf134f5e83d16c6d" name="a23957a14677a46a8cf134f5e83d16c6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23957a14677a46a8cf134f5e83d16c6d">&#9670;&#160;</a></span>texs</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structgm_pos.html">gmPos</a>* gm3Mesh::texs</td>
+          <td class="memname"><a class="el" href="structgm3_tex.html">gm3Tex</a>* gm3Mesh::texs</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Array of texture coordinates. </p>
 
 </div>
 </div>
@@ -246,6 +261,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Array of vertex positions. </p>
 
 </div>
 </div>

@@ -1,5 +1,7 @@
 var collision_8h =
 [
+    [ "gm_collision", "structgm__collision.html", "structgm__collision" ],
+    [ "gmCollision", "collision_8h.html#a0ddcceaea9c4b8e77bedb6bb87bb61d9", null ],
     [ "gm_body_contains", "collision_8h.html#adbec9ca3526ac2812434096fc53f0832", null ],
     [ "gm_collision_detect", "collision_8h.html#a541eebf6ef23a590c3ceeac2e4e9a886", null ],
     [ "gm_mouse_in_circle", "collision_8h.html#aa95f283d64ac1a540d39453ef90edffd", null ],

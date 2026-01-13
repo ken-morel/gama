@@ -106,6 +106,7 @@ $(function(){initNavTree('3d_2image_8h.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:gm3Image" id="r_gm3Image"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm3_image.html">gm3Image</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing the 2D projected output of a 3D scene.  <a href="structgm3_image.html#details">More...</a><br /></td></tr>
 <tr class="memitem:_5FgmImageDepthEntry" id="r__5FgmImageDepthEntry"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__gm_image_depth_entry.html">_gmImageDepthEntry</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
@@ -113,6 +114,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a2871c7f18de765c469b654b0b84eb3d6" id="r_a2871c7f18de765c469b654b0b84eb3d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2871c7f18de765c469b654b0b84eb3d6">gm3_image_free</a> (<a class="el" href="structgm3_image.html">gm3Image</a> *i)</td></tr>
 <tr class="memitem:af8dfe8aae5fe2ee28846f3c5b05a44ec" id="r_af8dfe8aae5fe2ee28846f3c5b05a44ec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8dfe8aae5fe2ee28846f3c5b05a44ec">_gm3_depth_compare</a> (const void *a, const void *b)</td></tr>
 <tr class="memitem:a8edfe4736e5794c232c76be868581d86" id="r_a8edfe4736e5794c232c76be868581d86"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8edfe4736e5794c232c76be868581d86">gm3_draw_image</a> (<a class="el" href="structgm3_image.html">gm3Image</a> *img, double x, double y, double scale)</td></tr>
+<tr class="memdesc:a8edfe4736e5794c232c76be868581d86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the projected 3D scene contained within a <span class="tt"><a class="el" href="structgm3_image.html" title="Structure representing the 2D projected output of a 3D scene.">gm3Image</a></span> onto the screen.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="af8dfe8aae5fe2ee28846f3c5b05a44ec" name="af8dfe8aae5fe2ee28846f3c5b05a44ec"></a>
@@ -164,6 +166,19 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Draws the projected 3D scene contained within a <span class="tt"><a class="el" href="structgm3_image.html" title="Structure representing the 2D projected output of a 3D scene.">gm3Image</a></span> onto the screen. </p>
+<p>This function sorts the projected triangles by depth (Painter's Algorithm) and then calls the <span class="tt"><a class="el" href="gapi_8h.html#a2542ba5370ccc664cebe2773a64bd577" title="Draws a batch of triangles on the screen.">gapi_draw_triangles</a></span> function to render them.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">img</td><td>Pointer to the <span class="tt"><a class="el" href="structgm3_image.html" title="Structure representing the 2D projected output of a 3D scene.">gm3Image</a></span> containing the projected scene data. </td></tr>
+    <tr><td class="paramname">x</td><td>The X-offset for drawing the entire image. </td></tr>
+    <tr><td class="paramname">y</td><td>The Y-offset for drawing the entire image. </td></tr>
+    <tr><td class="paramname">scale</td><td>The scaling factor to apply to the projected image. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 on successful drawing, 0 if no triangles to draw, -1 on memory allocation failure. </dd></dl>
 
 </div>
 </div>

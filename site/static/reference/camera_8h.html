@@ -93,17 +93,29 @@ $(function(){initNavTree('camera_8h.html','',''); });
 </div><!--header-->
 <div class="contents">
 
+<p>Defines the 3D camera structure for scene projection.  
+<a href="#details">More...</a></p>
+
 <p><a href="camera_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:gm3Camera" id="r_gm3Camera"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgm3_camera.html">gm3Camera</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a camera in a 3D scene, used for projection.  <a href="structgm3_camera.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a4e7d934f37408d2f9e3b502d1423dd18" id="r_a4e7d934f37408d2f9e3b502d1423dd18"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e7d934f37408d2f9e3b502d1423dd18">gm3_camera_create</a> (<a class="el" href="structgm3_camera.html">gm3Camera</a> *c)</td></tr>
+<tr class="memdesc:a4e7d934f37408d2f9e3b502d1423dd18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a <span class="tt"><a class="el" href="structgm3_camera.html" title="Represents a camera in a 3D scene, used for projection.">gm3Camera</a></span> struct with default values.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a018b03145d798a3bc3cc6ea10309f5c9" id="r_a018b03145d798a3bc3cc6ea10309f5c9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structgm3_camera.html">gm3Camera</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a018b03145d798a3bc3cc6ea10309f5c9">gm3_default_camera</a></td></tr>
+<tr class="memdesc:a018b03145d798a3bc3cc6ea10309f5c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A default <span class="tt"><a class="el" href="structgm3_camera.html" title="Represents a camera in a 3D scene, used for projection.">gm3Camera</a></span> instance.  <br /></td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines the 3D camera structure for scene projection. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a4e7d934f37408d2f9e3b502d1423dd18" name="a4e7d934f37408d2f9e3b502d1423dd18"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4e7d934f37408d2f9e3b502d1423dd18">&#9670;&#160;</a></span>gm3_camera_create()</h2>
 
@@ -118,6 +130,38 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initializes a <span class="tt"><a class="el" href="structgm3_camera.html" title="Represents a camera in a 3D scene, used for projection.">gm3Camera</a></span> struct with default values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>A pointer to the <span class="tt"><a class="el" href="structgm3_camera.html" title="Represents a camera in a 3D scene, used for projection.">gm3Camera</a></span> struct to initialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if <span class="tt">c</span> is NULL. </dd></dl>
+
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="a018b03145d798a3bc3cc6ea10309f5c9" name="a018b03145d798a3bc3cc6ea10309f5c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a018b03145d798a3bc3cc6ea10309f5c9">&#9670;&#160;</a></span>gm3_default_camera</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structgm3_camera.html">gm3Camera</a> gm3_default_camera</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    .far = 100,</div>
+<div class="line">    .near = 0.01,</div>
+<div class="line">    .focal = 1.3,</div>
+<div class="line">}</div>
+</div><!-- fragment -->
+<p>A default <span class="tt"><a class="el" href="structgm3_camera.html" title="Represents a camera in a 3D scene, used for projection.">gm3Camera</a></span> instance. </p>
+<p>Initializes a camera with a typical focal length and clipping planes. </p>
 
 </div>
 </div>

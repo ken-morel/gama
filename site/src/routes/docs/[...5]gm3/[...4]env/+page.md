@@ -28,7 +28,6 @@ in most cases. However, you can change it to fit your needs.
 Information about the scene lighting is stored in the `gmLight` object, which
 contains the position, ambient factor, color, direction and intensity of the light.
 
-view more in the [gm3Light reference](/reference/)
 
 
 ### The scene camera
