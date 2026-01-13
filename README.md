@@ -10,7 +10,6 @@ Gama is a lightweight, cross-platform game engine written in C, designed with si
 
 Gama is built on a few core principles to make game development in C more approachable and fun:
 
--   **Simplicity Over Features**: The API is designed to be small, intuitive, and easy to learn, avoiding complex abstractions and boilerplate.
 -   **You Have Control**: Gama gives you, the developer, full control over the main game loop. The engine provides utilities but stays out of your way.
 -   **Stack First, Heap Less**: The API encourages using stack-allocated data structures to leverage C's automatic memory management and reduce the cognitive load of `malloc` and `free`.
 -   **No Global State**: Gama is designed to avoid global state. You can structure your game into different scenes (as simple C functions), each with its own initialization, objects, and cleanup.
@@ -23,6 +22,8 @@ Gama is built on a few core principles to make game development in C more approa
 - **Simple C API**: A clean, beginner-friendly C99 API.
 - **Full Game Loop Control**: You own the `main` loop.
 - **Custom Memory Allocator**: A static-pool-based `malloc` implementation, ideal for controlled memory environments like WASM.
+- **Lightweight**: gama installation is less than `30MB`, tcc compiler is less than `100MB`, and `zig cc`  compiler
+  used to build for web less than `200MB`.
 
 ### Rendering
 - **2D Immediate-Mode Graphics**: Simple functions to draw primitive shapes like rectangles, circles, lines, and triangles.
@@ -52,38 +53,10 @@ Gama is built on a few core principles to make game development in C more approa
 - **Input Handling**: Straightforward functions for checking keyboard and mouse state.
 - **Math & Debug Libraries**: A custom math library and simple print-based debugging macros.
 
+
+
 ## Getting Started
 
-### Prerequisites
-- **V Compiler**: The `mng` build script is written in V. You will need to install the V compiler from [vlang.io](https://vlang.io).
-- **C Compiler**: A C compiler like `gcc`, `clang`, or `tcc`.
-- **Doxygen (Optional)**: For generating documentation.
-- **`makensis` (Optional)**: For building the Windows installer.
-- **`nfpm` (Optional)**: For creating `.deb` packages.
-
-### Building and Running
-
-The project uses a custom `mng` script (written in V) as a task runner for all common operations.
-
-1.  **Build the `gama` CLI tool:**
-    ```bash
-    ./mng build
-    ```
-    This compiles the main `gama` command-line tool to the `bin/` directory.
-
-2.  **Build the Web Version:**
-    To prepare the web runner, you need to build the `gama.js` library. This requires `bun`.
-    ```bash
-    ./mng web
-    ```
-    This command builds the JavaScript components and places the necessary files in `runners/web/`.
-
-3.  **Generate Documentation:**
-    To generate the Doxygen API documentation and integrate it into the website:
-    ```bash
-    ./mng docs
-    ```
-    The generated HTML documentation will be available in `site/static/reference/`.
 
 ## Development with Gama
 
@@ -115,6 +88,41 @@ int main() {
   return 0;
 }
 ```
+## Development on Gama
+
+### Prerequisites
+- **V Compiler**: The `mng` build script is written in V. You will need to install the V compiler from [vlang.io](https://vlang.io).
+- **C Compiler**: A C compiler, preferably `clang`, but `gcc` should work to. `tcc` failed on
+  my system.
+- **`bun` (Optional)**: For building gama.js
+- **`zig` (Optional)**: For buiding gama projects to webassembly.
+- **Doxygen (Optional)**: For generating reference documentation.
+- **`makensis` (Optional)**: For building the Windows installer.
+- **`nfpm` (Optional)**: For creating `.deb` packages.
+
+### Building and Running
+
+The project uses a custom `mng` script (written in V) as a task runner for all common operations.
+
+1.  **Build the `gama` CLI tool:**
+    ```bash
+    ./mng build
+    ```
+    This compiles the main `gama` command-line tool to the `bin/` directory.
+
+2.  **Build the Web Version:**
+    To prepare the web runner, you need to build the `gama.js` library. This requires `bun`.
+    ```bash
+    ./mng web
+    ```
+    This command builds the JavaScript components and places the necessary files in `runners/web/`.
+
+3.  **Generate Documentation:**
+    To generate the Doxygen API documentation and integrate it into the website:
+    ```bash
+    ./mng docs
+    ```
+    The generated HTML documentation will be copied in `site/static/reference/`.
 
 ## Project Structure
 - `lib/gama/`: Contains all the core C header files for the engine's modules (3D, physics, widgets, etc.).
