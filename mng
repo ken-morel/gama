@@ -103,6 +103,68 @@ mut app := cli.Command{
 			}
 		},
 		cli.Command{
+			name:        'get-zig'
+			usage:       './mng get-zig'
+			description: 'Downloads and sets up the appropriate Zig compiler if not already present.'
+
+			execute: fn (cmd cli.Command) ! {
+				zig_version := '0.15.2'
+				zig_arch := 'x86_64'
+				os_name := 'windows' // Always target Windows for packaging
+				archive_ext := 'zip'
+				zig_exe_name := 'zig.exe'
+
+				dest_dir := 'compilers/zig/${os_name}'
+				extracted_folder_name := 'zig-${os_name}-${zig_arch}-${zig_version}'
+				zig_final_path := os.join_path(dest_dir, extracted_folder_name)
+				zig_exe_full_path := os.join_path(zig_final_path, zig_exe_name)
+
+				if os.exists(zig_exe_full_path) {
+					println(term.ok_message('Windows Zig compiler already found at ${zig_exe_full_path}. Skipping download.'))
+					return
+				}
+
+				// Ensure parent directory for extraction exists
+				os.mkdir_all(dest_dir)!
+
+				// Download to dest_dir
+				zig_archive_name := 'zig-${os_name}-${zig_arch}-${zig_version}.${archive_ext}'
+				zig_url := 'https://ziglang.org/download/${zig_version}/${zig_archive_name}'
+				local_archive_path := os.join_path(dest_dir, zig_archive_name)
+
+				if !os.exists(local_archive_path) {
+					println(term.warn_message('Windows Zig compiler not found. Downloading...'))
+					println('  - URL: ${zig_url}')
+
+					mut result := execute('curl -L -o ${local_archive_path} ${zig_url}')
+					if result.exit_code != 0 {
+						println(term.fail_message('  Zig download failed: ${result.output}'))
+						return
+					}
+				} else {
+					println('Found downloaded archive. Extracting...')
+				}
+
+				// Clean up previous extraction if any
+				if os.exists(zig_final_path) {
+					os.rmdir_all(zig_final_path)!
+				}
+
+				// Extract directly to dest_dir
+				println('  Extracting ${local_archive_path} to ${dest_dir}...')
+				result := execute('unzip -o ${local_archive_path} -d ${dest_dir}')
+				if result.exit_code != 0 {
+					println(term.fail_message('  Extraction failed: ${result.output}'))
+					return
+				}
+
+				// Cleanup archive
+				os.rm(local_archive_path) or {}
+
+				println(term.ok_message('Windows Zig compiler setup complete at ${zig_exe_full_path}.'))
+			}
+		},
+		cli.Command{
 			name:        'runner'
 			usage:       './mng runner <name>'
 			description: 'Build one of gama runners'
@@ -154,7 +216,6 @@ mut app := cli.Command{
 				},
 			]
 		},
-
 	]
 }
 
