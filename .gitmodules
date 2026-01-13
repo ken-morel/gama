@@ -1,3 +1,0 @@
-[submodule "contrib/tinycc"]
-	path = contrib/tinycc
-	url = https://github.com/TinyCC/tinycc.git

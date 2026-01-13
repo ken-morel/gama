@@ -154,36 +154,7 @@ mut app := cli.Command{
 				},
 			]
 		},
-		cli.Command{
-			name:        'tcc'
-			usage:       './mng tcc'
-			description: 'Build the TCC compiler from source for Linux using clang'
-			execute:     fn (_ cli.Command) ! {
-				tcc_dir := 'contrib/tinycc'
-				if !os.exists(tcc_dir) {
-					println(term.fail_message('TCC source not found at ${tcc_dir}. Please ensure the submodule is initialized.'))
-					return
-				}
 
-				println('Building TCC from source in ${tcc_dir} using clang')
-
-				// Configure and Make using clang
-				println('  Running ./configure and make')
-				cmd_str := 'cd ${tcc_dir} && ./configure && make CC=clang'
-				mut result := execute(cmd_str)
-				if result.exit_code != 0 {
-					println(term.fail_message('  TCC build failed: ${result.output}'))
-					return
-				}
-
-				// Copy executable
-				dest_dir := 'bin/compilers/tcc/linux'
-				os.mkdir_all(dest_dir)!
-				os.cp('${tcc_dir}/tcc', '${dest_dir}/tcc')!
-
-				println(term.ok_message('TCC built and copied to ${dest_dir}/tcc'))
-			}
-		},
 	]
 }
 

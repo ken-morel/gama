@@ -8,6 +8,12 @@ pub:
 	templates string @[required]
 	runners   string @[required]
 	assets    string @[required]
+	tcc       string @[required]
+	zig       string @[required]
+}
+
+pub fn (i Installation) zcc() !string {
+	return '${i.zig_exe()!} cc'
 }
 
 pub fn Installation.folder(repo string) Installation {
@@ -16,6 +22,24 @@ pub fn Installation.folder(repo string) Installation {
 		templates: os.join_path(repo, 'templates')
 		runners:   os.join_path(repo, 'runners')
 		assets:    os.join_path(repo, 'assets')
+		tcc:       os.join_path(repo, 'compilers', 'tcc')
+		zig:       os.join_path(repo, 'compilers', 'zig')
+	}
+}
+
+pub fn (i Installation) tcc_exe() !string {
+	return $if windows {
+		os.join_path(i.tcc, 'windows', 'tcc.exe')
+	} $else {
+		'tcc'
+	}
+}
+
+pub fn (i Installation) zig_exe() !string {
+	return $if windows {
+		os.join_path(i.zig, 'windows', 'zig.exe')
+	} $else {
+		'zig'
 	}
 }
 

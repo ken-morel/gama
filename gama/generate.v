@@ -33,5 +33,8 @@ pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTempla
 	project.copy_build_native_artifacts(inst, true) or {
 		println(term.warn_message('Error copying ubild artifacts: ${err}'))
 	}
+	project.copy_build_web_artifacts(inst, true) or {
+		println(term.warn_message('Error copying ubild artifacts: ${err}'))
+	}
 	return project
 }

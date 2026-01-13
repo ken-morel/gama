@@ -73,6 +73,7 @@ Section "Install gama" SecInstall
   File "..\gama.svg"
   File "..\LICENSE"
   File "..\README.md"
+  File /r "..\bin\compilers"
   File /r "..\lib"
   File /r "..\templates"
   File /r "..\assets"
