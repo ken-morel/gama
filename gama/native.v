@@ -35,18 +35,14 @@ pub fn (p Project) run_native_build(replace bool) ! {
 }
 
 fn resolve_compiler(inst Installation, name string) !string {
-	if name == '' {
-		return inst.zcc()
+	return if name == '' {
+		inst.zcc()
 	} else if name == '.tcc' {
-		return inst.tcc_exe()
+		inst.tcc_exe()
 	} else if name == '.zcc' {
-		return inst.zcc()
+		inst.zcc()
 	} else {
-		if !os.exists(name) {
-			return error('Compiler not found ${name}, use .tcc, or .zcc for builtin compilers, or compiler path')
-		} else {
-			return name
-		}
+		name
 	}
 }
 

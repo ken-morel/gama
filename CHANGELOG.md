@@ -1,5 +1,14 @@
 # gama changelog
 
+## v0.1.1-dev4
+
+- **Integrated Compiler Toolchain**: Reworked the entire build process to improve developer experience and portability.
+  - **Bundled Compilers (Windows)**: The Windows installer now comes with pre-configured **TCC** and **Zig** compilers, providing a true "out-of-the-box" development environment with no external dependencies required.
+  - **System Dependencies (Linux)**: The Linux packages (`.deb`, `.pkg.tar.zst`) now declare `tcc` and `zig` as external dependencies, leveraging the system's package manager for a smaller footprint and native integration.
+  - **New `gama dev` command**: A new command for rapid, iterative development. It uses the fast **TCC** compiler by default and features hot-reloading on file changes.
+  - **Updated `gama build` command**: The `build` command is now focused on release builds, using the more powerful and optimizing **Zig CC** compiler by default.
+- **Improved Project Portability**: Removed the `compiler` field from `gama.toml`, making project files toolchain-agnostic and easier to share between different systems.
+
 ## v0.1.1-dev3
 
 - Started the changelog.

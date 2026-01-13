@@ -204,25 +204,16 @@ fn main() {
 			},
 			cli.Command{
 				name:        'dev'
-				usage:       'dev [-tcc] [-cc name]'
-				description: 'Build and re-run the project on code changes'
-				flags:       [
-					cli.Flag{
-						name:        'cc'
-						abbrev:      'cc'
-						description: 'Use an alternative compiler'
-						required:    false
-					},
-				]
-				execute:     fn (cmd cli.Command) ! {
-					cc := cmd.flags.get_string('cc') or { '.tcc' }
+				usage:       'dev [cc]'
+				description: 'Build and re-run the project on code changes using compiler [cc]'
+
+				execute: fn (cmd cli.Command) ! {
+					cc := cmd.args[0] or { '.tcc' }
 					inst := get_installation()!
 					project := get_project()!
-					println(term.ok_message('Running project at: ${project.path} in dev mode'))
 
 					// Ensure we only watch source files, not binaries
 					watch_path := os.join_path(project.path, 'src', '**')
-					println('Watching: ${os.glob(watch_path)!}')
 
 					mut w := Watcher.new(watch_path) or {
 						println(term.fail_message('Failed watching directory'))
