@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['_5f_5fgm_5fshow_5ffps_0',['__gm_show_fps',['../gama_2gama_8h.html#a75099652e829ac61185b5e12deb06040',1,'gama.h']]],
+  ['_5f_5fgm_5fshow_5ffps_0',['__gm_show_fps',['../gama_8h.html#a75099652e829ac61185b5e12deb06040',1,'gama.h']]],
   ['_5fbacklog_5ft_1',['_backlog_t',['../structgm_sprite.html#af778d2e561c8ad956cc526ba88beb15c',1,'gmSprite']]],
   ['_5fframe_2',['_frame',['../structgm_sprite.html#aac6eaf560085a028d131525853d8ccec',1,'gmSprite']]],
   ['_5fgm_5fdt_3',['_gm_dt',['../gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9',1,'gapi.h']]],

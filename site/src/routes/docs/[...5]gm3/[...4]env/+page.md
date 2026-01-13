@@ -10,6 +10,8 @@ stored in the scene include:
 - The lighting position, color and intensity.
 - The camera position and viewport.
 
+See <a href="/reference/scene_8h.html">gama/3d/scene.h reference</a>
+
 ```c
 gm3Scene scene = gm3_scene();
 scene.viewport

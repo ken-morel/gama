@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['log_0',['log',['../math_8h.html#adb302c9aafbaa5e180d9f60ee954bb82',1,'math.h']]],
-  ['log_5f0_5f2_1',['log_0_2',['../math_8h.html#a37c70899a17f8ffabb0ad00c1a949b40',1,'math.h']]],
-  ['log_5fother_2',['log_other',['../math_8h.html#a0fd7be0a9cd8475b3408cb9821f87894',1,'math.h']]]
+  ['main_0',['main',['../gama_8h.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'gama.h']]],
+  ['malloc_1',['malloc',['../malloc_8h.html#a9c36d0fe3ec4675cbffdc9b52f5fb399',1,'malloc.h']]],
+  ['max_2',['max',['../math_8h.html#af082905f7eac6d03e92015146bbc1925',1,'math.h']]],
+  ['min_3',['min',['../math_8h.html#abd8bbcfabb3ddef2ccaafb9928a37b95',1,'math.h']]]
 ];
