@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pow_0',['pow',['../math_8h.html#a8adb072abd0293d08a9ae718e1f1817a',1,'math.h']]]
+  ['realloc_0',['realloc',['../malloc_8h.html#ad28fed1039f35d754710633141b4edf0',1,'malloc.h']]]
 ];

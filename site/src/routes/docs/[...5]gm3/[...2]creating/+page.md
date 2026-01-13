@@ -1,5 +1,7 @@
 # Creating 3d mesh files
 
+View <a href="/reference/mesh_8h.html">gama/3d/mesh.h reference</a>
+
 There exists several formats for saving 3d files, such as OBJ, FBX, and glTF. Each format has its own advantages and disadvantages, and the choice of format depends on the specific requirements of your project, for convenience, gama
 has support for both the OBJ(wavefront) and the glTF formats.
 

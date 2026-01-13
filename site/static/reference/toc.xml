@@ -1,0 +1,1047 @@
+<toc label="Gama C Library" topic="index.html">
+  <topic label="Data Structures" href="annotated.html">
+    <topic label="Data Structures" href="annotated.html">
+      <topic label="_gmImageDepthEntry" href="struct__gm_image_depth_entry.html">
+        <topic label="tri_idx" href="struct__gm_image_depth_entry.html#a4c73afa46a9006b67dba897d4585eec4"/>
+        <topic label="z" href="struct__gm_image_depth_entry.html#a84c4c948435611416d7102db6267267b"/>
+      </topic>
+      <topic label="_gmMouse" href="struct__gm_mouse.html">
+        <topic label="clicked" href="struct__gm_mouse.html#ac9abc24f7c8b6949d44bbcf24623b866"/>
+        <topic label="down" href="struct__gm_mouse.html#a197ec8bf5f40da47d9c94fe9b30c58a1"/>
+        <topic label="lastPosition" href="struct__gm_mouse.html#accc5281df2f3dbc6355b57d62ebcd680"/>
+        <topic label="movement" href="struct__gm_mouse.html#a678355818640a7464c1d9f5f2180bdb8"/>
+        <topic label="position" href="struct__gm_mouse.html#a4b09423200b64cd2a0bf67273b1960ef"/>
+      </topic>
+      <topic label="_memory_spot" href="struct__memory__spot.html">
+        <topic label="index" href="struct__memory__spot.html#afc5f6b290ed1744904d18b6185696b60"/>
+        <topic label="size" href="struct__memory__spot.html#a0d1bfe057de0f97091727d2cdb95b931"/>
+      </topic>
+      <topic label="gm3BakedMeshHeader" href="structgm3_baked_mesh_header.html">
+        <topic label="magic" href="structgm3_baked_mesh_header.html#a3a5c092b6d0556fd8887b64abe671a5a"/>
+        <topic label="n_faces" href="structgm3_baked_mesh_header.html#ac09c14c32f9ba4f3503c0a223e34c53d"/>
+        <topic label="n_mtllibs" href="structgm3_baked_mesh_header.html#afe6a0edb3069e6100889e81f5827d60a"/>
+        <topic label="n_normals" href="structgm3_baked_mesh_header.html#a48ef0896de8ea49189ab4df2f0ad9e2b"/>
+        <topic label="n_texs" href="structgm3_baked_mesh_header.html#ae28b34038028a72cac1504591b1071bd"/>
+        <topic label="n_vertices" href="structgm3_baked_mesh_header.html#a61eeda6427fadaa8d5d31c3889aec60e"/>
+      </topic>
+      <topic label="gm3Camera" href="structgm3_camera.html">
+        <topic label="far" href="structgm3_camera.html#a9b7569c7476823006d7cc3d1f3bedd10"/>
+        <topic label="focal" href="structgm3_camera.html#a78497d2fb39089fbf603a35982c2fb07"/>
+        <topic label="near" href="structgm3_camera.html#a1598ed29343af51bb2c406cf3f8c8378"/>
+      </topic>
+      <topic label="gm3Image" href="structgm3_image.html">
+        <topic label="_internal" href="structgm3_image.html#ad8f21597233d1ae7f479a859b2dbb010"/>
+        <topic label="cap_colors" href="structgm3_image.html#a2c73a6daf73291a05bcc609c501604e4"/>
+        <topic label="cap_depths" href="structgm3_image.html#a03664997c330a2d6362fca270aa9ca52"/>
+        <topic label="cap_sort" href="structgm3_image.html#a2a23fa3342f0997c757eceac684e50ad"/>
+        <topic label="cap_tri" href="structgm3_image.html#afced222262eb1ae5ecddfc4a972ab041"/>
+        <topic label="cap_triangles" href="structgm3_image.html#a6509151ea56e86c6f07004dba8a995fb"/>
+        <topic label="cap_vertices" href="structgm3_image.html#ab10da9692b9664374d36bd84765a0455"/>
+        <topic label="cap_world" href="structgm3_image.html#ac75cc4368acb71ea7967fa277ade4e5e"/>
+        <topic label="colors" href="structgm3_image.html#a579fb23c0fedb142c04f9372572f94ef"/>
+        <topic label="cols" href="structgm3_image.html#a4c10bfabed56a3a0c39622072f7f8a42"/>
+        <topic label="depths" href="structgm3_image.html#a57459159939c4905a065cb74c7626b1e"/>
+        <topic label="n_colors" href="structgm3_image.html#a4ea240aa784e57c49d862dfa5d879b91"/>
+        <topic label="n_triangles" href="structgm3_image.html#ad2a8c2f5d4c3e30c86a8a766dd301609"/>
+        <topic label="n_vertices" href="structgm3_image.html#aa0a21c2605e5a0235ebf55566ac0f8fe"/>
+        <topic label="sort_buf" href="structgm3_image.html#a2f7b7ca68eb228b02d69c9fc58d11587"/>
+        <topic label="tri" href="structgm3_image.html#a5deb5ea278cf0e3cd072e1c056e86fea"/>
+        <topic label="triangles" href="structgm3_image.html#a96fe223f3689bbecaa3f45fd9b7b5c73"/>
+        <topic label="vertices" href="structgm3_image.html#a92caa7f274acae9b400cf4216c3c9c58"/>
+        <topic label="world_verts" href="structgm3_image.html#ac8a88226c6370f83783072fa152dedae"/>
+      </topic>
+      <topic label="gm3Light" href="structgm3_light.html">
+        <topic label="ambient" href="structgm3_light.html#ae819fbeb768867a4f18ab91e8236542e"/>
+        <topic label="color" href="structgm3_light.html#aab44662fab37641998dc747eee595d38"/>
+        <topic label="direction" href="structgm3_light.html#a785e8d5af073ad988b0195767978c16c"/>
+        <topic label="intensity" href="structgm3_light.html#a10f4acaaa125d2dccdec110b2ccb7514"/>
+        <topic label="position" href="structgm3_light.html#a50007cf0115954793ab1b0d8493c64c0"/>
+      </topic>
+      <topic label="gm3Material" href="structgm3_material.html">
+        <topic label="alpha" href="structgm3_material.html#a214db142e80594130baf08c588a3b27a"/>
+        <topic label="diffuse" href="structgm3_material.html#a56f79cf217f5d2e90464e173d46ecd76"/>
+        <topic label="emissive" href="structgm3_material.html#a8fe8970e38ac3378233475bb762c76e1"/>
+        <topic label="name" href="structgm3_material.html#ab9aee025e1583e8ba18c83828c56c181"/>
+        <topic label="shininess" href="structgm3_material.html#ac46aee0b0e2bfda3a9cb67edff350d64"/>
+        <topic label="specular" href="structgm3_material.html#abe6b44ecd81f8dd044466cdaa01855d9"/>
+        <topic label="tex_alpha" href="structgm3_material.html#a700f95bbabe285b49e03ec61b4bd8f09"/>
+        <topic label="tex_diffuse" href="structgm3_material.html#a0b855877ea618071dce26216d8b3c964"/>
+        <topic label="tex_emissive" href="structgm3_material.html#a0d48386da67cef17c255ccc2c93e0f6e"/>
+        <topic label="tex_specular" href="structgm3_material.html#ad60037a9479aedfa96d9349f620253c4"/>
+      </topic>
+      <topic label="gm3Mesh" href="structgm3_mesh.html">
+        <topic label="faces" href="structgm3_mesh.html#a6ab3a259f6e2313384276317ce4cafbd"/>
+        <topic label="mtllibs" href="structgm3_mesh.html#ac52e27a27bc1b8c41001fe73d7e9c0ef"/>
+        <topic label="n_faces" href="structgm3_mesh.html#af313b374f393c591cf3246ae675c9b4b"/>
+        <topic label="n_mtllibs" href="structgm3_mesh.html#a0acb82aff2583bd366cce6f286058e91"/>
+        <topic label="n_normals" href="structgm3_mesh.html#a1cc2d0641f765d7389716cf5187b623e"/>
+        <topic label="n_texs" href="structgm3_mesh.html#a3d4124b947a3aafca742ad3897f95cd2"/>
+        <topic label="n_vertices" href="structgm3_mesh.html#aacf5338cbc6173562da3fdfb6d4f681d"/>
+        <topic label="normals" href="structgm3_mesh.html#ad397d2f9badbf55a7e0461fd22232eb6"/>
+        <topic label="texs" href="structgm3_mesh.html#a23957a14677a46a8cf134f5e83d16c6d"/>
+        <topic label="vertices" href="structgm3_mesh.html#ab78e5fa12772feb5951db42e5ee7f370"/>
+      </topic>
+      <topic label="gm3MeshFace" href="structgm3_mesh_face.html">
+        <topic label="material" href="structgm3_mesh_face.html#a4fa665d7b98a424baea90c424ef7118e"/>
+        <topic label="material_file" href="structgm3_mesh_face.html#a6ce3bd47974fc539d80fce3d0adc80c0"/>
+        <topic label="normal" href="structgm3_mesh_face.html#aec4e2510ae6a57a5a725e6ab9bd4206c"/>
+        <topic label="uvs" href="structgm3_mesh_face.html#ae3c73f8b3ea5f0c4948e23613196df02"/>
+        <topic label="vertices" href="structgm3_mesh_face.html#a8cc56c1d05a86d1fd9f28b8c336fb564"/>
+      </topic>
+      <topic label="gm3MtlLib" href="structgm3_mtl_lib.html">
+        <topic label="materials" href="structgm3_mtl_lib.html#a5b521bc553882d2f0c246f1419c67490"/>
+        <topic label="n_materials" href="structgm3_mtl_lib.html#ab8433677af7c1489f3a1160bf30dca17"/>
+        <topic label="n_textures" href="structgm3_mtl_lib.html#a2712a98443322237768730e7858847a9"/>
+        <topic label="name" href="structgm3_mtl_lib.html#a923847a62195ac2415c1864e5b895a74"/>
+        <topic label="textures" href="structgm3_mtl_lib.html#af902aa7038681012c9c208e989b07d11"/>
+      </topic>
+      <topic label="gm3ObjLine" href="structgm3_obj_line.html">
+        <topic label="indices" href="structgm3_obj_line.html#a8c95891a8f366ee2ed90d15f18026f9b"/>
+        <topic label="n_indices" href="structgm3_obj_line.html#aa8deadad0b58e4bbdacd057570f1f071"/>
+        <topic label="name" href="structgm3_obj_line.html#af1b55772776f81a88979372f25f7155d"/>
+        <topic label="points" href="structgm3_obj_line.html#ae302b184264b2a65db6e04e878669c01"/>
+        <topic label="type" href="structgm3_obj_line.html#af46bc07f8d4fa62c058279e31f228edc"/>
+      </topic>
+      <topic label="gm3Pos" href="structgm3_pos.html">
+        <topic label="x" href="structgm3_pos.html#ad78d3a835feca798d186292c1220a151"/>
+        <topic label="y" href="structgm3_pos.html#a4c3c6ce166a15ab4b9f1fa749730907b"/>
+        <topic label="z" href="structgm3_pos.html#a6dc52fdf890134bac0d3ac7dd9b545e8"/>
+      </topic>
+      <topic label="gm3Scene" href="structgm3_scene.html">
+        <topic label="camera" href="structgm3_scene.html#a0f8266387982569256cf95ab39f140ab"/>
+        <topic label="light" href="structgm3_scene.html#a1e57557a9836f2ea433ec6ab70094644"/>
+        <topic label="viewport" href="structgm3_scene.html#a13d4e8d94b9094806dc9ca7e93f62602"/>
+      </topic>
+      <topic label="gm3Tex" href="structgm3_tex.html">
+        <topic label="u" href="structgm3_tex.html#ade9b61c5ed41b647974ae06ed000dc79"/>
+        <topic label="v" href="structgm3_tex.html#a4ce2ea3c67e4a8b664c88b28addd033a"/>
+      </topic>
+      <topic label="gm3Texture" href="structgm3_texture.html">
+        <topic label="data" href="structgm3_texture.html#ac23648cedf2b18fb3b7b5853b9a30d9f"/>
+        <topic label="path" href="structgm3_texture.html#af3a0d678f03a42ba587fc499e0f6551b"/>
+      </topic>
+      <topic label="gm3Transform" href="structgm3_transform.html">
+        <topic label="position" href="structgm3_transform.html#acb64743d8e210a5d036abc5b78cd10d1"/>
+        <topic label="rotation" href="structgm3_transform.html#ac045e29fd65dae273fbdf0cc18d3c453"/>
+        <topic label="scale" href="structgm3_transform.html#aae68047934007fd2160c84b1e3859b93"/>
+      </topic>
+      <topic label="gm_collision" href="structgm__collision.html">
+        <topic label="bodies" href="structgm__collision.html#a8e4104ed4c4473b104e14f02d2e87537"/>
+        <topic label="normals" href="structgm__collision.html#a0baea27643665b55ff27fbdc1389a00b"/>
+        <topic label="penetration" href="structgm__collision.html#a53944913d37590288e9428dd323cce25"/>
+        <topic label="since" href="structgm__collision.html#a4e95571a8da3cf5437ac0b804d2f9b20"/>
+        <topic label="sys" href="structgm__collision.html#ae7539bba9c1bffeab0985d413bb1e370"/>
+      </topic>
+      <topic label="gm_system" href="structgm__system.html">
+        <topic label="acceleration" href="structgm__system.html#a04e471339c635281e7fb81857fcd54de"/>
+        <topic label="bodies" href="structgm__system.html#ad041cd983fb9906440932a02ede15037"/>
+        <topic label="collisions" href="structgm__system.html#a8a1f46ebbc67c60f6de12eaaac38478f"/>
+        <topic label="damping" href="structgm__system.html#a40d52885fd4d36ca430e5359acd952ee"/>
+        <topic label="is_active" href="structgm__system.html#ac4794f02d4f3353531ed139fde2b8a48"/>
+        <topic label="velocity" href="structgm__system.html#a6f2d2acface6269c1ff8486cfae057e5"/>
+      </topic>
+      <topic label="gmBody" href="structgm_body.html">
+        <topic label="acceleration" href="structgm_body.html#a13a8825c428ce54187d36c734d799f2c"/>
+        <topic label="collider_type" href="structgm_body.html#a18345fac85ef2bb1942fd54f46ac68a3"/>
+        <topic label="friction" href="structgm_body.html#a3ca379cd95791ba3bbc2c13a9e689d47"/>
+        <topic label="height" href="structgm_body.html#a2b357ba00d3a97f7d1bcbeb3e4d40030"/>
+        <topic label="is_active" href="structgm_body.html#a5ea731d9d24fef08542442cd7923503b"/>
+        <topic label="is_static" href="structgm_body.html#ae3b337fbc0aae3d8a3ff0a2a95dd8bf6"/>
+        <topic label="mass" href="structgm_body.html#a9081c3fdd7cf1a1b4ce20a294f298cc1"/>
+        <topic label="position" href="structgm_body.html#ac4f50dc7df38bc448f197b5106e2b4c5"/>
+        <topic label="radius" href="structgm_body.html#a7151913f47f2403a9b50f8c3d949bb3f"/>
+        <topic label="restitution" href="structgm_body.html#a508d551809ad1fa979af9b723ce787b8"/>
+        <topic label="velocity" href="structgm_body.html#a9ed0eeb9e98061d897fb7c5838f338ea"/>
+        <topic label="width" href="structgm_body.html#a082594202d2b419c6d8d9259fd35258d"/>
+      </topic>
+      <topic label="gmImage" href="structgm_image.html">
+        <topic label="handle" href="structgm_image.html#a8b080f4012c81f98763f6d1f50ba43f0"/>
+        <topic label="height" href="structgm_image.html#ac42212938646c37a56f0e01a0886fb2c"/>
+        <topic label="width" href="structgm_image.html#ac1cc465bdde54933b99bb01c28a3ec62"/>
+      </topic>
+      <topic label="gmImageData" href="structgm_image_data.html">
+        <topic label="data" href="structgm_image_data.html#ac90e3a39ac4beb43aeab27c88c0d48b5"/>
+        <topic label="height" href="structgm_image_data.html#ab34f37caa49e9e73f7d8381be7fabd27"/>
+        <topic label="width" href="structgm_image_data.html#a0580b3ba3e19e38b30ce21d872e4fb16"/>
+      </topic>
+      <topic label="gmPos" href="structgm_pos.html">
+        <topic label="x" href="structgm_pos.html#a2a815e2067aa9f0dc12275f21f1bb827"/>
+        <topic label="y" href="structgm_pos.html#a63991667a054f31d2905a365c4e0473b"/>
+      </topic>
+      <topic label="gmSprite" href="structgm_sprite.html">
+        <topic label="_backlog_t" href="structgm_sprite.html#af778d2e561c8ad956cc526ba88beb15c"/>
+        <topic label="_frame" href="structgm_sprite.html#aac6eaf560085a028d131525853d8ccec"/>
+        <topic label="animation" href="structgm_sprite.html#aa6c6dc1254f2376401c8f2d5e5413900"/>
+        <topic label="animation_frame" href="structgm_sprite.html#a44a82d76b15a00018ef06cdbc616b9c7"/>
+        <topic label="image" href="structgm_sprite.html#a4c969008993f1fb93472302a7d705187"/>
+        <topic label="n_frames" href="structgm_sprite.html#a432fe01d9bb96e92b05f108a7fa418ee"/>
+      </topic>
+      <topic label="gmSpriteAnim" href="structgm_sprite_anim.html">
+        <topic label="anim" href="structgm_sprite_anim.html#a4078ccf7e32cbec569ac50ee68685f21"/>
+        <topic label="interval" href="structgm_sprite_anim.html#a63a10b2face721fa93d452af79d1fe72"/>
+        <topic label="length" href="structgm_sprite_anim.html#a78cff7f6ef84454a0fe2c112b13683d5"/>
+      </topic>
+      <topic label="gmStr" href="structgm_str.html">
+        <topic label="content" href="structgm_str.html#a355c435ce2c8ae098ef2da6759e2f03a"/>
+        <topic label="length" href="structgm_str.html#af5a72439ffc10b8def62f47359c5b035"/>
+      </topic>
+      <topic label="gmwButtonTheme" href="structgmw_button_theme.html">
+        <topic label="active" href="structgmw_button_theme.html#a182da7534ab8d556536ffc67e164103b"/>
+        <topic label="background" href="structgmw_button_theme.html#af1f45c1da666ad41beb26d37566eaaf1"/>
+        <topic label="border" href="structgmw_button_theme.html#ad59d9fc401c4ca7f4ed6eaf02f8ea8be"/>
+        <topic label="border_thickness" href="structgmw_button_theme.html#a3979ac9d970063c8595778a8d009295a"/>
+        <topic label="disabled" href="structgmw_button_theme.html#a4359cbdba0e488e2ea7ff770900018eb"/>
+        <topic label="enabled" href="structgmw_button_theme.html#a7e7cfdc54b5b0e550ed17ad4c632e9be"/>
+        <topic label="focussed" href="structgmw_button_theme.html#a7af3ec012a61602cebc5c492d201e777"/>
+        <topic label="font" href="structgmw_button_theme.html#a264f7609f75a50f6a85708b12cf65eba"/>
+        <topic label="scale" href="structgmw_button_theme.html#aa37ebb4d57573d81f4754c29405a8a54"/>
+        <topic label="text" href="structgmw_button_theme.html#ac361a11da0d74f624bd4f1b2c700404c"/>
+      </topic>
+      <topic label="gmwFrameTheme" href="structgmw_frame_theme.html">
+        <topic label="background" href="structgmw_frame_theme.html#a9c2e5bf631e0e4b1beec5338d00150d8"/>
+        <topic label="border" href="structgmw_frame_theme.html#ac0e5f1f0f6c686a7fbd95c6b19ba9b6f"/>
+        <topic label="border_width" href="structgmw_frame_theme.html#a69f215ac7fd6af4f89723b2cdb231f9b"/>
+        <topic label="enabled" href="structgmw_frame_theme.html#a3a956dd61caaeb091986a53e972a5da6"/>
+        <topic label="focussed" href="structgmw_frame_theme.html#a1f8baf2db9307d34e20cea7b8d757446"/>
+        <topic label="inactive" href="structgmw_frame_theme.html#a5af129b93100f11d31fa7d4c7cc2d581"/>
+        <topic label="scale" href="structgmw_frame_theme.html#a341136d31eb80f2f4f71c4765ba5fdc5"/>
+      </topic>
+      <topic label="gmwJoystickTheme" href="structgmw_joystick_theme.html">
+        <topic label="active" href="structgmw_joystick_theme.html#acda8730bc40e257e53bed4fead052409"/>
+        <topic label="background" href="structgmw_joystick_theme.html#a7fe142a6eb4f20b11d75ccbc1da3fac2"/>
+        <topic label="border" href="structgmw_joystick_theme.html#aeb7929cc29936d63fe4ada4b999ae40b"/>
+        <topic label="border_width" href="structgmw_joystick_theme.html#a0b2a9cae2a4a8f9e41056d0be0fe05f6"/>
+        <topic label="enabled" href="structgmw_joystick_theme.html#aee3b6d8fa8b69fb6a36e83d5689df41e"/>
+        <topic label="focussed" href="structgmw_joystick_theme.html#a42cf842d1b985f21576d0bffaadd45f9"/>
+        <topic label="knob" href="structgmw_joystick_theme.html#abfdeb7c7c2f6333676161a0efc61d925"/>
+        <topic label="knob_border" href="structgmw_joystick_theme.html#ad6ca01a800723545807d9d156617179a"/>
+        <topic label="scale" href="structgmw_joystick_theme.html#a421af19185af04e97bcffbde1acd42b6"/>
+      </topic>
+      <topic label="gmwScaleTheme" href="structgmw_scale_theme.html">
+        <topic label="active" href="structgmw_scale_theme.html#af7b285ba17b6cf8f8c87a4fd69d6d941"/>
+        <topic label="background" href="structgmw_scale_theme.html#a462f63c844d223e50831e2b1d94cefd7"/>
+        <topic label="border" href="structgmw_scale_theme.html#a31cfdd5b82447c7b2d66f999ea47d2b8"/>
+        <topic label="border_width" href="structgmw_scale_theme.html#ad1f483bf3b943336a2e9bf6a5ee98631"/>
+        <topic label="enabled" href="structgmw_scale_theme.html#aaa2333af1c0492f70ce8885cff90a3c7"/>
+        <topic label="focussed" href="structgmw_scale_theme.html#a5bc72e0bbec2caf42a96e0bbdfba8ea5"/>
+        <topic label="knob" href="structgmw_scale_theme.html#adf60d561e5b870d39cbce1fb71255361"/>
+        <topic label="knob_border" href="structgmw_scale_theme.html#a01921870335b0c79dde6ece8155fcb0c"/>
+        <topic label="scale" href="structgmw_scale_theme.html#af738b7a544f3d556284576a5453d41a7"/>
+        <topic label="step" href="structgmw_scale_theme.html#a5ef3a75f06d57adb8ea21ffeb57d5a8f"/>
+      </topic>
+      <topic label="gmwSwitchTheme" href="structgmw_switch_theme.html">
+        <topic label="active" href="structgmw_switch_theme.html#afce20eadd6e79e6e2f323ec47fb4fe5a"/>
+        <topic label="background" href="structgmw_switch_theme.html#aeeecbcea03105d8c61f0e40113d18a6d"/>
+        <topic label="border" href="structgmw_switch_theme.html#a7de58b3ad17feb062fda597fe72266d0"/>
+        <topic label="border_width" href="structgmw_switch_theme.html#a73587dc9867cc73b52740323c1fdd440"/>
+        <topic label="enabled" href="structgmw_switch_theme.html#a93c0012d1303d76d826ed018e19cdb6b"/>
+        <topic label="focussed" href="structgmw_switch_theme.html#a09075d398980dee833ef432747843230"/>
+        <topic label="knob" href="structgmw_switch_theme.html#a17858a4d33665d85573fc55d1c502438"/>
+        <topic label="knob_border" href="structgmw_switch_theme.html#a70f40f36298186e7e111ffe46da7968b"/>
+        <topic label="off" href="structgmw_switch_theme.html#a544151363847babc1b516c5a7463b72f"/>
+        <topic label="on" href="structgmw_switch_theme.html#a5b3ef70a5b5eac98e3ea61299e32e815"/>
+        <topic label="scale" href="structgmw_switch_theme.html#a0f5b46551d7a6a3179f11d2163c93528"/>
+      </topic>
+      <topic label="gmwThemeCache" href="structgmw_theme_cache.html">
+        <topic label="button" href="structgmw_theme_cache.html#a3ca1bd32a42a221f7d3c337dbbd6eea9"/>
+        <topic label="frame" href="structgmw_theme_cache.html#a6649ff923b9f134b4ff6d9e8225dd868"/>
+        <topic label="joystick" href="structgmw_theme_cache.html#a41ea8542a846675599465f57e258599f"/>
+        <topic label="scale" href="structgmw_theme_cache.html#a17156235cd5d246ff53516157a62c335"/>
+        <topic label="switch_" href="structgmw_theme_cache.html#a184d15ca4bc01ddfcee572898f5602e9"/>
+      </topic>
+      <topic label="special" href="structspecial.html">
+        <topic label="e" href="structspecial.html#a79797636ac74d844d1965fd39e5c0200"/>
+        <topic label="mantisa" href="structspecial.html#aff9708b8fd9af46d5d767da880950718"/>
+        <topic label="pow" href="structspecial.html#a5372914771ba2669aa7077cab3aebc14"/>
+        <topic label="sign" href="structspecial.html#a790c76b4fc4e2d5a6698bfa345ff3feb"/>
+      </topic>
+    </topic>
+    <topic label="Data Fields" href="functions.html">
+      <topic label="All" href="functions.html"/>
+      <topic label="Variables" href="functions_vars.html"/>
+    </topic>
+  </topic>
+  <topic label="Files" href="files.html">
+    <topic label="File List" href="files.html">
+      <topic label="lib" href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">
+        <topic label="gama" href="dir_c0efb1807f29eac66ba360987ee66b12.html">
+          <topic label="3d" href="dir_6364b0f113d1e4eeaa335192002c4834.html">
+            <topic label="camera.h" href="camera_8h.html">
+              <topic label="gm3Camera" href="structgm3_camera.html">
+                <topic label="far" href="structgm3_camera.html#a9b7569c7476823006d7cc3d1f3bedd10"/>
+                <topic label="focal" href="structgm3_camera.html#a78497d2fb39089fbf603a35982c2fb07"/>
+                <topic label="near" href="structgm3_camera.html#a1598ed29343af51bb2c406cf3f8c8378"/>
+              </topic>
+              <topic label="gm3_camera_create" href="camera_8h.html#a4e7d934f37408d2f9e3b502d1423dd18"/>
+              <topic label="gm3_default_camera" href="camera_8h.html#a018b03145d798a3bc3cc6ea10309f5c9"/>
+            </topic>
+            <topic label="gltf.h" href="gltf_8h.html">
+              <topic label="CGLTF_IMPLEMENTATION" href="gltf_8h.html#ae3362d91f343c043590b549b3835037d"/>
+              <topic label="GM_DYN_ARRAY_APPEND" href="gltf_8h.html#af4a67bd0c9a0478848f0fada86d4b6db"/>
+              <topic label="GM_DYN_ARRAY_INIT_CAP" href="gltf_8h.html#a7d37feea3cd3e6136bb4e1b3d0509376"/>
+              <topic label="gm3_gltf_load" href="gltf_8h.html#af4576e334efaa1ad890475de26e06ce4"/>
+              <topic label="gmd_gltf_print" href="gltf_8h.html#aa3ee07c7c997a07cd92036e6e3324711"/>
+            </topic>
+            <topic label="image.h" href="3d_2image_8h.html">
+              <topic label="gm3Image" href="structgm3_image.html">
+                <topic label="_internal" href="structgm3_image.html#ad8f21597233d1ae7f479a859b2dbb010"/>
+                <topic label="cap_colors" href="structgm3_image.html#a2c73a6daf73291a05bcc609c501604e4"/>
+                <topic label="cap_depths" href="structgm3_image.html#a03664997c330a2d6362fca270aa9ca52"/>
+                <topic label="cap_sort" href="structgm3_image.html#a2a23fa3342f0997c757eceac684e50ad"/>
+                <topic label="cap_tri" href="structgm3_image.html#afced222262eb1ae5ecddfc4a972ab041"/>
+                <topic label="cap_triangles" href="structgm3_image.html#a6509151ea56e86c6f07004dba8a995fb"/>
+                <topic label="cap_vertices" href="structgm3_image.html#ab10da9692b9664374d36bd84765a0455"/>
+                <topic label="cap_world" href="structgm3_image.html#ac75cc4368acb71ea7967fa277ade4e5e"/>
+                <topic label="colors" href="structgm3_image.html#a579fb23c0fedb142c04f9372572f94ef"/>
+                <topic label="cols" href="structgm3_image.html#a4c10bfabed56a3a0c39622072f7f8a42"/>
+                <topic label="depths" href="structgm3_image.html#a57459159939c4905a065cb74c7626b1e"/>
+                <topic label="n_colors" href="structgm3_image.html#a4ea240aa784e57c49d862dfa5d879b91"/>
+                <topic label="n_triangles" href="structgm3_image.html#ad2a8c2f5d4c3e30c86a8a766dd301609"/>
+                <topic label="n_vertices" href="structgm3_image.html#aa0a21c2605e5a0235ebf55566ac0f8fe"/>
+                <topic label="sort_buf" href="structgm3_image.html#a2f7b7ca68eb228b02d69c9fc58d11587"/>
+                <topic label="tri" href="structgm3_image.html#a5deb5ea278cf0e3cd072e1c056e86fea"/>
+                <topic label="triangles" href="structgm3_image.html#a96fe223f3689bbecaa3f45fd9b7b5c73"/>
+                <topic label="vertices" href="structgm3_image.html#a92caa7f274acae9b400cf4216c3c9c58"/>
+                <topic label="world_verts" href="structgm3_image.html#ac8a88226c6370f83783072fa152dedae"/>
+              </topic>
+              <topic label="_gmImageDepthEntry" href="struct__gm_image_depth_entry.html">
+                <topic label="tri_idx" href="struct__gm_image_depth_entry.html#a4c73afa46a9006b67dba897d4585eec4"/>
+                <topic label="z" href="struct__gm_image_depth_entry.html#a84c4c948435611416d7102db6267267b"/>
+              </topic>
+              <topic label="_gm3_depth_compare" href="3d_2image_8h.html#af8dfe8aae5fe2ee28846f3c5b05a44ec"/>
+              <topic label="gm3_draw_image" href="3d_2image_8h.html#a8edfe4736e5794c232c76be868581d86"/>
+              <topic label="gm3_image_free" href="3d_2image_8h.html#a2871c7f18de765c469b654b0b84eb3d6"/>
+            </topic>
+            <topic label="light.h" href="light_8h.html">
+              <topic label="gm3Light" href="structgm3_light.html">
+                <topic label="ambient" href="structgm3_light.html#ae819fbeb768867a4f18ab91e8236542e"/>
+                <topic label="color" href="structgm3_light.html#aab44662fab37641998dc747eee595d38"/>
+                <topic label="direction" href="structgm3_light.html#a785e8d5af073ad988b0195767978c16c"/>
+                <topic label="intensity" href="structgm3_light.html#a10f4acaaa125d2dccdec110b2ccb7514"/>
+                <topic label="position" href="structgm3_light.html#a50007cf0115954793ab1b0d8493c64c0"/>
+              </topic>
+              <topic label="gm3_light_create" href="light_8h.html#af887b402b038df6fc91d932d225f5ae3"/>
+              <topic label="gm3_default_light" href="light_8h.html#adf22b7b3e33b824d390f5bd1c043c97c"/>
+            </topic>
+            <topic label="mesh.h" href="mesh_8h.html">
+              <topic label="gm3MeshFace" href="structgm3_mesh_face.html">
+                <topic label="material" href="structgm3_mesh_face.html#a4fa665d7b98a424baea90c424ef7118e"/>
+                <topic label="material_file" href="structgm3_mesh_face.html#a6ce3bd47974fc539d80fce3d0adc80c0"/>
+                <topic label="normal" href="structgm3_mesh_face.html#aec4e2510ae6a57a5a725e6ab9bd4206c"/>
+                <topic label="uvs" href="structgm3_mesh_face.html#ae3c73f8b3ea5f0c4948e23613196df02"/>
+                <topic label="vertices" href="structgm3_mesh_face.html#a8cc56c1d05a86d1fd9f28b8c336fb564"/>
+              </topic>
+              <topic label="gm3Tex" href="structgm3_tex.html">
+                <topic label="u" href="structgm3_tex.html#ade9b61c5ed41b647974ae06ed000dc79"/>
+                <topic label="v" href="structgm3_tex.html#a4ce2ea3c67e4a8b664c88b28addd033a"/>
+              </topic>
+              <topic label="gm3Mesh" href="structgm3_mesh.html">
+                <topic label="faces" href="structgm3_mesh.html#a6ab3a259f6e2313384276317ce4cafbd"/>
+                <topic label="mtllibs" href="structgm3_mesh.html#ac52e27a27bc1b8c41001fe73d7e9c0ef"/>
+                <topic label="n_faces" href="structgm3_mesh.html#af313b374f393c591cf3246ae675c9b4b"/>
+                <topic label="n_mtllibs" href="structgm3_mesh.html#a0acb82aff2583bd366cce6f286058e91"/>
+                <topic label="n_normals" href="structgm3_mesh.html#a1cc2d0641f765d7389716cf5187b623e"/>
+                <topic label="n_texs" href="structgm3_mesh.html#a3d4124b947a3aafca742ad3897f95cd2"/>
+                <topic label="n_vertices" href="structgm3_mesh.html#aacf5338cbc6173562da3fdfb6d4f681d"/>
+                <topic label="normals" href="structgm3_mesh.html#ad397d2f9badbf55a7e0461fd22232eb6"/>
+                <topic label="texs" href="structgm3_mesh.html#a23957a14677a46a8cf134f5e83d16c6d"/>
+                <topic label="vertices" href="structgm3_mesh.html#ab78e5fa12772feb5951db42e5ee7f370"/>
+              </topic>
+              <topic label="gm3BakedMeshHeader" href="structgm3_baked_mesh_header.html">
+                <topic label="magic" href="structgm3_baked_mesh_header.html#a3a5c092b6d0556fd8887b64abe671a5a"/>
+                <topic label="n_faces" href="structgm3_baked_mesh_header.html#ac09c14c32f9ba4f3503c0a223e34c53d"/>
+                <topic label="n_mtllibs" href="structgm3_baked_mesh_header.html#afe6a0edb3069e6100889e81f5827d60a"/>
+                <topic label="n_normals" href="structgm3_baked_mesh_header.html#a48ef0896de8ea49189ab4df2f0ad9e2b"/>
+                <topic label="n_texs" href="structgm3_baked_mesh_header.html#ae28b34038028a72cac1504591b1071bd"/>
+                <topic label="n_vertices" href="structgm3_baked_mesh_header.html#a61eeda6427fadaa8d5d31c3889aec60e"/>
+              </topic>
+              <topic label="GM3_BAKED_MESH_MAGIC" href="mesh_8h.html#aedf440ba1ba0f2a6ade742afc0596fa4"/>
+              <topic label="gm3_mesh_center" href="mesh_8h.html#a07dae4b6e1e834e538247119862b20ca"/>
+              <topic label="gm3_mesh_deserialize" href="mesh_8h.html#a544fbb85db5427a3528a8c92489ef8eb"/>
+              <topic label="gm3_mesh_free" href="mesh_8h.html#a27db1181efdb15f13d5dc00eff1d9c75"/>
+              <topic label="gm3_mesh_serialize" href="mesh_8h.html#a5be44374837945124dc290fa2763d31a"/>
+            </topic>
+            <topic label="mtl.h" href="mtl_8h.html">
+              <topic label="gm3Material" href="structgm3_material.html">
+                <topic label="alpha" href="structgm3_material.html#a214db142e80594130baf08c588a3b27a"/>
+                <topic label="diffuse" href="structgm3_material.html#a56f79cf217f5d2e90464e173d46ecd76"/>
+                <topic label="emissive" href="structgm3_material.html#a8fe8970e38ac3378233475bb762c76e1"/>
+                <topic label="name" href="structgm3_material.html#ab9aee025e1583e8ba18c83828c56c181"/>
+                <topic label="shininess" href="structgm3_material.html#ac46aee0b0e2bfda3a9cb67edff350d64"/>
+                <topic label="specular" href="structgm3_material.html#abe6b44ecd81f8dd044466cdaa01855d9"/>
+                <topic label="tex_alpha" href="structgm3_material.html#a700f95bbabe285b49e03ec61b4bd8f09"/>
+                <topic label="tex_diffuse" href="structgm3_material.html#a0b855877ea618071dce26216d8b3c964"/>
+                <topic label="tex_emissive" href="structgm3_material.html#a0d48386da67cef17c255ccc2c93e0f6e"/>
+                <topic label="tex_specular" href="structgm3_material.html#ad60037a9479aedfa96d9349f620253c4"/>
+              </topic>
+              <topic label="gm3Texture" href="structgm3_texture.html">
+                <topic label="data" href="structgm3_texture.html#ac23648cedf2b18fb3b7b5853b9a30d9f"/>
+                <topic label="path" href="structgm3_texture.html#af3a0d678f03a42ba587fc499e0f6551b"/>
+              </topic>
+              <topic label="gm3MtlLib" href="structgm3_mtl_lib.html">
+                <topic label="materials" href="structgm3_mtl_lib.html#a5b521bc553882d2f0c246f1419c67490"/>
+                <topic label="n_materials" href="structgm3_mtl_lib.html#ab8433677af7c1489f3a1160bf30dca17"/>
+                <topic label="n_textures" href="structgm3_mtl_lib.html#a2712a98443322237768730e7858847a9"/>
+                <topic label="name" href="structgm3_mtl_lib.html#a923847a62195ac2415c1864e5b895a74"/>
+                <topic label="textures" href="structgm3_mtl_lib.html#af902aa7038681012c9c208e989b07d11"/>
+              </topic>
+              <topic label="gm3_mtl_add_texture" href="mtl_8h.html#ad1e10be2d9350b79fd51d7cc7cf5dad3"/>
+              <topic label="gm3_mtl_find_mat" href="mtl_8h.html#a5169fa966ee88f06050624e98376aa2a"/>
+              <topic label="gm3_mtl_free" href="mtl_8h.html#ac45ad19a77b99568f8b8cfcf537794a0"/>
+              <topic label="gm3_mtl_load" href="mtl_8h.html#aaf60613edaf4222d6a760333d234ef19"/>
+            </topic>
+            <topic label="obj.h" href="obj_8h.html">
+              <topic label="gm3ObjLine" href="structgm3_obj_line.html">
+                <topic label="indices" href="structgm3_obj_line.html#a8c95891a8f366ee2ed90d15f18026f9b"/>
+                <topic label="n_indices" href="structgm3_obj_line.html#aa8deadad0b58e4bbdacd057570f1f071"/>
+                <topic label="name" href="structgm3_obj_line.html#af1b55772776f81a88979372f25f7155d"/>
+                <topic label="points" href="structgm3_obj_line.html#ae302b184264b2a65db6e04e878669c01"/>
+                <topic label="type" href="structgm3_obj_line.html#af46bc07f8d4fa62c058279e31f228edc"/>
+              </topic>
+              <topic label="gm3_obj_load" href="obj_8h.html#ac2f8ab3cc0c8d4303190f21f68394e49"/>
+              <topic label="gm3_obj_parse" href="obj_8h.html#a50879110694101cdd43098b07f0ec0af"/>
+              <topic label="gm3_obj_parse_next_line" href="obj_8h.html#ac5488bc96f21ca435db9f3168970ff41"/>
+            </topic>
+            <topic label="position.h" href="3d_2position_8h.html">
+              <topic label="gm3Pos" href="structgm3_pos.html">
+                <topic label="x" href="structgm3_pos.html#ad78d3a835feca798d186292c1220a151"/>
+                <topic label="y" href="structgm3_pos.html#a4c3c6ce166a15ab4b9f1fa749730907b"/>
+                <topic label="z" href="structgm3_pos.html#a6dc52fdf890134bac0d3ac7dd9b545e8"/>
+              </topic>
+              <topic label="gm3_pos_cross" href="3d_2position_8h.html#a50d6b73ae58d820ece430bbc2cb2aa0b"/>
+              <topic label="gm3_pos_distance" href="3d_2position_8h.html#a7d0db920d28a64402f75daf70469a1f4"/>
+              <topic label="gm3_pos_dot" href="3d_2position_8h.html#afbce371b2a5865950255e1038d02c247"/>
+              <topic label="gm3_pos_from2" href="3d_2position_8h.html#a809a84f017d5ef91992cf58daffbdb1c"/>
+              <topic label="gm3_pos_magnitude" href="3d_2position_8h.html#a9d2dc78cd01a2bd519b2dd87d03203c3"/>
+              <topic label="gm3_pos_project_simple" href="3d_2position_8h.html#aad1992e5ce01bebe99564c5050c39291"/>
+              <topic label="gm3_pos_reset" href="3d_2position_8h.html#a83e361c232b7aedcea310851e1496b0a"/>
+              <topic label="gm3pos" href="3d_2position_8h.html#ae0dfba3b45f534fe017008bf907fa5a6"/>
+              <topic label="gm3_pos_mul" href="3d_2position_8h.html#a6794b4c3dacbf959fda3815bb4524d21"/>
+              <topic label="gm3_pos_mul_scalar" href="3d_2position_8h.html#ae62bf7c1d211e246fc71f9363be74979"/>
+              <topic label="gmg_pos3" href="3d_2position_8h.html#a23a03344bd4708806c5185d3535d4954"/>
+            </topic>
+            <topic label="project.h" href="project_8h.html">
+              <topic label="gm3_project" href="project_8h.html#a5e817fb039af6402fae560be30587573"/>
+            </topic>
+            <topic label="scene.h" href="scene_8h.html">
+              <topic label="gm3Scene" href="structgm3_scene.html">
+                <topic label="camera" href="structgm3_scene.html#a0f8266387982569256cf95ab39f140ab"/>
+                <topic label="light" href="structgm3_scene.html#a1e57557a9836f2ea433ec6ab70094644"/>
+                <topic label="viewport" href="structgm3_scene.html#a13d4e8d94b9094806dc9ca7e93f62602"/>
+              </topic>
+              <topic label="gm3_scene" href="scene_8h.html#ac5c8570fb63a7244803d9976d073c506"/>
+              <topic label="gm3_scene_create" href="scene_8h.html#ac29ad7029afe5b0113684a0fc2a523e5"/>
+              <topic label="gm3_scene_free" href="scene_8h.html#ad8d219e5f1ddca506358f49e3c076720"/>
+              <topic label="gm3_default_scene" href="scene_8h.html#ad37fd7fb5342b41a5e1e9ed6e2dc77ad"/>
+            </topic>
+            <topic label="transform.h" href="transform_8h.html">
+              <topic label="gm3Transform" href="structgm3_transform.html">
+                <topic label="position" href="structgm3_transform.html#acb64743d8e210a5d036abc5b78cd10d1"/>
+                <topic label="rotation" href="structgm3_transform.html#ac045e29fd65dae273fbdf0cc18d3c453"/>
+                <topic label="scale" href="structgm3_transform.html#aae68047934007fd2160c84b1e3859b93"/>
+              </topic>
+              <topic label="gm3_pos_rotate" href="transform_8h.html#a8c7a39bbf3e12bf38df77cb96147c97d"/>
+              <topic label="gm3_transform" href="transform_8h.html#ae761f3a78646331ba32c1a4608546010"/>
+              <topic label="gm3_transform_pos" href="transform_8h.html#ad5513a58c1830a6e86c30bdb664de1b7"/>
+              <topic label="gm3_default_transform" href="transform_8h.html#a18cc6f4e50381ebac169af7c8b83f40d"/>
+            </topic>
+          </topic>
+          <topic label="widgets" href="dir_2973f2b50139aedb0acaac5d826403e9.html">
+            <topic label="button.h" href="button_8h.html">
+              <topic label="gmwButtonTheme" href="structgmw_button_theme.html">
+                <topic label="active" href="structgmw_button_theme.html#a182da7534ab8d556536ffc67e164103b"/>
+                <topic label="background" href="structgmw_button_theme.html#af1f45c1da666ad41beb26d37566eaaf1"/>
+                <topic label="border" href="structgmw_button_theme.html#ad59d9fc401c4ca7f4ed6eaf02f8ea8be"/>
+                <topic label="border_thickness" href="structgmw_button_theme.html#a3979ac9d970063c8595778a8d009295a"/>
+                <topic label="disabled" href="structgmw_button_theme.html#a4359cbdba0e488e2ea7ff770900018eb"/>
+                <topic label="enabled" href="structgmw_button_theme.html#a7e7cfdc54b5b0e550ed17ad4c632e9be"/>
+                <topic label="focussed" href="structgmw_button_theme.html#a7af3ec012a61602cebc5c492d201e777"/>
+                <topic label="font" href="structgmw_button_theme.html#a264f7609f75a50f6a85708b12cf65eba"/>
+                <topic label="scale" href="structgmw_button_theme.html#aa37ebb4d57573d81f4754c29405a8a54"/>
+                <topic label="text" href="structgmw_button_theme.html#ac361a11da0d74f624bd4f1b2c700404c"/>
+              </topic>
+              <topic label="gmw_button" href="button_8h.html#a0526f242e6862847894392ece14a424f"/>
+              <topic label="gmwButton" href="button_8h.html#a3d77950205c783f13e352f3fe3995c88"/>
+            </topic>
+            <topic label="frame.h" href="frame_8h.html">
+              <topic label="gmwFrameTheme" href="structgmw_frame_theme.html">
+                <topic label="background" href="structgmw_frame_theme.html#a9c2e5bf631e0e4b1beec5338d00150d8"/>
+                <topic label="border" href="structgmw_frame_theme.html#ac0e5f1f0f6c686a7fbd95c6b19ba9b6f"/>
+                <topic label="border_width" href="structgmw_frame_theme.html#a69f215ac7fd6af4f89723b2cdb231f9b"/>
+                <topic label="enabled" href="structgmw_frame_theme.html#a3a956dd61caaeb091986a53e972a5da6"/>
+                <topic label="focussed" href="structgmw_frame_theme.html#a1f8baf2db9307d34e20cea7b8d757446"/>
+                <topic label="inactive" href="structgmw_frame_theme.html#a5af129b93100f11d31fa7d4c7cc2d581"/>
+                <topic label="scale" href="structgmw_frame_theme.html#a341136d31eb80f2f4f71c4765ba5fdc5"/>
+              </topic>
+              <topic label="gmw_frame" href="frame_8h.html#ac7eb9487dca540d1bfd9adce50dc636c"/>
+              <topic label="gmwFrame" href="frame_8h.html#a61411a5509f707059e7d1852b6964e40"/>
+            </topic>
+            <topic label="joystick.h" href="joystick_8h.html">
+              <topic label="gmwJoystickTheme" href="structgmw_joystick_theme.html">
+                <topic label="active" href="structgmw_joystick_theme.html#acda8730bc40e257e53bed4fead052409"/>
+                <topic label="background" href="structgmw_joystick_theme.html#a7fe142a6eb4f20b11d75ccbc1da3fac2"/>
+                <topic label="border" href="structgmw_joystick_theme.html#aeb7929cc29936d63fe4ada4b999ae40b"/>
+                <topic label="border_width" href="structgmw_joystick_theme.html#a0b2a9cae2a4a8f9e41056d0be0fe05f6"/>
+                <topic label="enabled" href="structgmw_joystick_theme.html#aee3b6d8fa8b69fb6a36e83d5689df41e"/>
+                <topic label="focussed" href="structgmw_joystick_theme.html#a42cf842d1b985f21576d0bffaadd45f9"/>
+                <topic label="knob" href="structgmw_joystick_theme.html#abfdeb7c7c2f6333676161a0efc61d925"/>
+                <topic label="knob_border" href="structgmw_joystick_theme.html#ad6ca01a800723545807d9d156617179a"/>
+                <topic label="scale" href="structgmw_joystick_theme.html#a421af19185af04e97bcffbde1acd42b6"/>
+              </topic>
+              <topic label="gm_joystick_anim" href="joystick_8h.html#ae83e07e753c14ada4c9bf60d3e989f42"/>
+              <topic label="gmw_joystick" href="joystick_8h.html#a01735ba00743cac93e25c1db1d3d3472"/>
+              <topic label="gmwJoystick" href="joystick_8h.html#aad9aad4426aebbdb12f0e8826cc5f88d"/>
+            </topic>
+            <topic label="scale.h" href="scale_8h.html">
+              <topic label="gmwScaleTheme" href="structgmw_scale_theme.html">
+                <topic label="active" href="structgmw_scale_theme.html#af7b285ba17b6cf8f8c87a4fd69d6d941"/>
+                <topic label="background" href="structgmw_scale_theme.html#a462f63c844d223e50831e2b1d94cefd7"/>
+                <topic label="border" href="structgmw_scale_theme.html#a31cfdd5b82447c7b2d66f999ea47d2b8"/>
+                <topic label="border_width" href="structgmw_scale_theme.html#ad1f483bf3b943336a2e9bf6a5ee98631"/>
+                <topic label="enabled" href="structgmw_scale_theme.html#aaa2333af1c0492f70ce8885cff90a3c7"/>
+                <topic label="focussed" href="structgmw_scale_theme.html#a5bc72e0bbec2caf42a96e0bbdfba8ea5"/>
+                <topic label="knob" href="structgmw_scale_theme.html#adf60d561e5b870d39cbce1fb71255361"/>
+                <topic label="knob_border" href="structgmw_scale_theme.html#a01921870335b0c79dde6ece8155fcb0c"/>
+                <topic label="scale" href="structgmw_scale_theme.html#af738b7a544f3d556284576a5453d41a7"/>
+                <topic label="step" href="structgmw_scale_theme.html#a5ef3a75f06d57adb8ea21ffeb57d5a8f"/>
+              </topic>
+              <topic label="gmw_scale_anim" href="scale_8h.html#a6e11a61188aef49b7e1705da260b748c"/>
+              <topic label="gmwScale" href="scale_8h.html#aa05ce64adbff0673804ce9c60862233a"/>
+            </topic>
+            <topic label="switch.h" href="switch_8h.html">
+              <topic label="gmwSwitchTheme" href="structgmw_switch_theme.html">
+                <topic label="active" href="structgmw_switch_theme.html#afce20eadd6e79e6e2f323ec47fb4fe5a"/>
+                <topic label="background" href="structgmw_switch_theme.html#aeeecbcea03105d8c61f0e40113d18a6d"/>
+                <topic label="border" href="structgmw_switch_theme.html#a7de58b3ad17feb062fda597fe72266d0"/>
+                <topic label="border_width" href="structgmw_switch_theme.html#a73587dc9867cc73b52740323c1fdd440"/>
+                <topic label="enabled" href="structgmw_switch_theme.html#a93c0012d1303d76d826ed018e19cdb6b"/>
+                <topic label="focussed" href="structgmw_switch_theme.html#a09075d398980dee833ef432747843230"/>
+                <topic label="knob" href="structgmw_switch_theme.html#a17858a4d33665d85573fc55d1c502438"/>
+                <topic label="knob_border" href="structgmw_switch_theme.html#a70f40f36298186e7e111ffe46da7968b"/>
+                <topic label="off" href="structgmw_switch_theme.html#a544151363847babc1b516c5a7463b72f"/>
+                <topic label="on" href="structgmw_switch_theme.html#a5b3ef70a5b5eac98e3ea61299e32e815"/>
+                <topic label="scale" href="structgmw_switch_theme.html#a0f5b46551d7a6a3179f11d2163c93528"/>
+              </topic>
+              <topic label="gmw_switch" href="switch_8h.html#a514d0c4e63953633b6db0394602c5895"/>
+              <topic label="gmw_switch_anim" href="switch_8h.html#a97ead0c100102e85b6f79922ba8084e6"/>
+              <topic label="gmwSwitch" href="switch_8h.html#acdee3f0e204932d9fe9feb51bad8cbab"/>
+            </topic>
+          </topic>
+          <topic label="3d.h" href="3d_8h.html"/>
+          <topic label="_malloc.h" href="__malloc_8h.html"/>
+          <topic label="_math.h" href="__math_8h.html"/>
+          <topic label="animate.h" href="animate_8h.html">
+            <topic label="gm_anim_ease_in_quad" href="animate_8h.html#a8134061858847e4b5e80d8f79834b166"/>
+            <topic label="gm_anim_ease_out_cubic" href="animate_8h.html#ad7ec9b6d0a0714a18f600bc4207da8e1"/>
+            <topic label="gm_anim_ease_out_quad" href="animate_8h.html#af913f89fbbffd08428a99d653f9170a5"/>
+            <topic label="gm_anim_spring" href="animate_8h.html#a7d91bbd904f7d60b44364ddc8731437a"/>
+          </topic>
+          <topic label="body.h" href="body_8h.html">
+            <topic label="gmBody" href="structgm_body.html">
+              <topic label="acceleration" href="structgm_body.html#a13a8825c428ce54187d36c734d799f2c"/>
+              <topic label="collider_type" href="structgm_body.html#a18345fac85ef2bb1942fd54f46ac68a3"/>
+              <topic label="friction" href="structgm_body.html#a3ca379cd95791ba3bbc2c13a9e689d47"/>
+              <topic label="height" href="structgm_body.html#a2b357ba00d3a97f7d1bcbeb3e4d40030"/>
+              <topic label="is_active" href="structgm_body.html#a5ea731d9d24fef08542442cd7923503b"/>
+              <topic label="is_static" href="structgm_body.html#ae3b337fbc0aae3d8a3ff0a2a95dd8bf6"/>
+              <topic label="mass" href="structgm_body.html#a9081c3fdd7cf1a1b4ce20a294f298cc1"/>
+              <topic label="position" href="structgm_body.html#ac4f50dc7df38bc448f197b5106e2b4c5"/>
+              <topic label="radius" href="structgm_body.html#a7151913f47f2403a9b50f8c3d949bb3f"/>
+              <topic label="restitution" href="structgm_body.html#a508d551809ad1fa979af9b723ce787b8"/>
+              <topic label="velocity" href="structgm_body.html#a9ed0eeb9e98061d897fb7c5838f338ea"/>
+              <topic label="width" href="structgm_body.html#a082594202d2b419c6d8d9259fd35258d"/>
+            </topic>
+            <topic label="gnothing" href="body_8h.html#ab1e41670b6d26fcd4b078f103d0f3df3"/>
+            <topic label="gmColliderType" href="body_8h.html#a6e6cedf4d8c815d43650ed10e722bf9c">
+              <topic label="GM_COLLIDER_CIRCLE" href="body_8h.html#a6e6cedf4d8c815d43650ed10e722bf9cadcf410aec9bca3d59300b737fd1c540f"/>
+              <topic label="GM_COLLIDER_RECT" href="body_8h.html#a6e6cedf4d8c815d43650ed10e722bf9ca358d98a7beff33b4cd314528712728ae"/>
+            </topic>
+            <topic label="gm_body_contains" href="body_8h.html#adbec9ca3526ac2812434096fc53f0832"/>
+            <topic label="gm_body_create" href="body_8h.html#a50bc9e641cc4086c682cc496fca24f15"/>
+            <topic label="gm_circle_body" href="body_8h.html#aa4fb765e44193dec7646c814ebd526c2"/>
+            <topic label="gm_max_speed" href="body_8h.html#a14466974edd9c0f5d03568edc0892264"/>
+            <topic label="gm_max_speed_anim" href="body_8h.html#ae2b285e1f111f2b78c8e20a7e651f475"/>
+            <topic label="gm_min_speed" href="body_8h.html#a571b4fd622112b2048f416f3f47b8e3d"/>
+            <topic label="gm_min_speed_anim" href="body_8h.html#ae08bd1063702eb908fd81905b6a4ca97"/>
+            <topic label="gm_rectangle_body" href="body_8h.html#a1cabf192f8e65f00161d2a9344884505"/>
+            <topic label="gm_speed" href="body_8h.html#a34697776393d36219888120423a464d6"/>
+            <topic label="gm_speed_anim" href="body_8h.html#a0660e16d965ab17c1aa0432b4e9b2813"/>
+          </topic>
+          <topic label="body_list.h" href="body__list_8h.html">
+            <topic label="gm_bodies_for_each" href="body__list_8h.html#ab298fc0de9eb09b64e5bbce8523f06f3"/>
+            <topic label="gm_ptr_list_for_each" href="body__list_8h.html#a30f5b13872a3318f73192a39894b697d"/>
+            <topic label="gmBodies" href="body__list_8h.html#accee67073d78bddbdc0932f9940f22f5"/>
+            <topic label="gmPtrList" href="body__list_8h.html#a7b2f53c316ac2748b5b9fed7beb84221"/>
+            <topic label="gm_ptr_list_clear" href="body__list_8h.html#a8a864ca30660d3ffd6d73aee351a84ce"/>
+            <topic label="gm_ptr_list_count" href="body__list_8h.html#ae95d20939f9993abdced1f3c42d12a4c"/>
+            <topic label="gm_ptr_list_find" href="body__list_8h.html#ad76588d51b089dc1db9532ad0397079d"/>
+            <topic label="gm_ptr_list_get" href="body__list_8h.html#aeea1c9b228c66bee558905ca55b55607"/>
+            <topic label="gm_ptr_list_insert_at" href="body__list_8h.html#a1d201fd3edd69b1b45bfa4ded9c44661"/>
+            <topic label="gm_ptr_list_is_empty" href="body__list_8h.html#ab2c007fb4ff60731ee0634adf10cae01"/>
+            <topic label="gm_ptr_list_last" href="body__list_8h.html#a27bed379349755e983b7e6d00fbfd390"/>
+            <topic label="gm_ptr_list_length" href="body__list_8h.html#a864d23ff71c499a6815bca2962bebb4f"/>
+            <topic label="gm_ptr_list_pop" href="body__list_8h.html#a88bdc6041f2d5031d108b05307d0d698"/>
+            <topic label="gm_ptr_list_pop_at" href="body__list_8h.html#a140f77db3685803d483854a00c9167bd"/>
+            <topic label="gm_ptr_list_push" href="body__list_8h.html#a66d8d72359d120c962c6464c8ed5d78e"/>
+            <topic label="gm_ptr_list_remove" href="body__list_8h.html#a97f439996b575d88f7dbb1b4461ff246"/>
+          </topic>
+          <topic label="collision.h" href="collision_8h.html">
+            <topic label="gm_collision" href="structgm__collision.html">
+              <topic label="bodies" href="structgm__collision.html#a8e4104ed4c4473b104e14f02d2e87537"/>
+              <topic label="normals" href="structgm__collision.html#a0baea27643665b55ff27fbdc1389a00b"/>
+              <topic label="penetration" href="structgm__collision.html#a53944913d37590288e9428dd323cce25"/>
+              <topic label="since" href="structgm__collision.html#a4e95571a8da3cf5437ac0b804d2f9b20"/>
+              <topic label="sys" href="structgm__collision.html#ae7539bba9c1bffeab0985d413bb1e370"/>
+            </topic>
+            <topic label="gmCollision" href="collision_8h.html#a0ddcceaea9c4b8e77bedb6bb87bb61d9"/>
+            <topic label="gm_body_contains" href="collision_8h.html#adbec9ca3526ac2812434096fc53f0832"/>
+            <topic label="gm_collision_detect" href="collision_8h.html#a541eebf6ef23a590c3ceeac2e4e9a886"/>
+            <topic label="gm_mouse_in_circle" href="collision_8h.html#aa95f283d64ac1a540d39453ef90edffd"/>
+            <topic label="gm_mouse_in_rect" href="collision_8h.html#a1e66353df244e83504129380e2d81795"/>
+          </topic>
+          <topic label="color.h" href="color_8h.html">
+            <topic label="GM_ALICEBLUE" href="color_8h.html#a62e0d8c8cd49b1f4966fbac5554b62ab"/>
+            <topic label="gm_alpha" href="color_8h.html#a9132579c0ea6e7941bace8c50729fb95"/>
+            <topic label="GM_ANTIQUEWHITE" href="color_8h.html#a8ac4a440631472c6873088ab10a7f3fc"/>
+            <topic label="GM_AQUA" href="color_8h.html#a9c32b4b3f89edc065468d5ae3573afc7"/>
+            <topic label="GM_AQUAMARINE" href="color_8h.html#a8cd0a5b0552029e5af8201ecb872cbcf"/>
+            <topic label="GM_AZURE" href="color_8h.html#a15647cab91dbf07e77864e3b907d2874"/>
+            <topic label="GM_BEIGE" href="color_8h.html#ad9f9fedb7e8acb6b7a7327d63894b118"/>
+            <topic label="GM_BISQUE" href="color_8h.html#a0d3b98a3eec383b97f9ba56e32c69f1d"/>
+            <topic label="GM_BLACK" href="color_8h.html#a8f79450a8d64d2ed9d5a7165939cc9c2"/>
+            <topic label="GM_BLANCHEDALMOND" href="color_8h.html#a871eeac1b31552c5a7e3930412ebd8db"/>
+            <topic label="GM_BLUE" href="color_8h.html#a628a9f8a857de1402e1f25241f068ab7"/>
+            <topic label="gm_blue" href="color_8h.html#a0e570620bec78a8254bbaff4050ead6b"/>
+            <topic label="GM_BLUEVIOLET" href="color_8h.html#aae0c4608c26397d49fce4893196ffdcf"/>
+            <topic label="GM_BROWN" href="color_8h.html#a794477ea97f9b38bb1cb4f0cf65db3fc"/>
+            <topic label="GM_BURLYWOOD" href="color_8h.html#a87fe916dab69c91a19eaf2c0bee17cd2"/>
+            <topic label="GM_CADETBLUE" href="color_8h.html#a4a11ba57035ec212eb39fbc8e924e6a6"/>
+            <topic label="GM_CHARTREUSE" href="color_8h.html#a91a9dfda4d0c6831008262a40f45f889"/>
+            <topic label="GM_CHOCOLATE" href="color_8h.html#ac96301a5593e1c98ab73379af8a942a9"/>
+            <topic label="GM_CORAL" href="color_8h.html#a02fdd5ca7f75de171dae5dd1e36a35f3"/>
+            <topic label="GM_CORNFLOWERBLUE" href="color_8h.html#aa891e6088d835dbc202617dbc3ddd230"/>
+            <topic label="GM_CORNSILK" href="color_8h.html#ac3532c5624d6dd93b3350cbe90458827"/>
+            <topic label="GM_CRIMSON" href="color_8h.html#a7e47e68fe4047256086add9d14b6e8f5"/>
+            <topic label="GM_CYAN" href="color_8h.html#a760fcd8569a98fb631edbbf78e078607"/>
+            <topic label="GM_DARKBLUE" href="color_8h.html#a2ef414838158f93ee03db05e0240aa09"/>
+            <topic label="GM_DARKCYAN" href="color_8h.html#aa3aebd60e31a4a579a21ba63784b4395"/>
+            <topic label="GM_DARKGOLDENROD" href="color_8h.html#a856d046f15149f377cdd09baa085be07"/>
+            <topic label="GM_DARKGRAY" href="color_8h.html#a5f6024c66880cfd1e5c35b7ec4fd37f1"/>
+            <topic label="GM_DARKGREEN" href="color_8h.html#a5be243be157a84efdcac41245130c71c"/>
+            <topic label="GM_DARKGREY" href="color_8h.html#a0b878591ca2d70c9a5d444d0816b32e6"/>
+            <topic label="GM_DARKKHAKI" href="color_8h.html#a5687985d62614addc17487782db7d35d"/>
+            <topic label="GM_DARKMAGENTA" href="color_8h.html#a5337c7ae0b63c5fdf837075be309effb"/>
+            <topic label="GM_DARKOLIVEGREEN" href="color_8h.html#a85e0ea234bea10eda1969b694cf6a7ef"/>
+            <topic label="GM_DARKORANGE" href="color_8h.html#accf4e244ced37940c8b5d2516867d907"/>
+            <topic label="GM_DARKORCHID" href="color_8h.html#a252174bd372874031c198654ebae74f9"/>
+            <topic label="GM_DARKRED" href="color_8h.html#a4bf9989770695578e45f10c1cd70a936"/>
+            <topic label="GM_DARKSALMON" href="color_8h.html#a930a5b4f1538428cc8cdae275cc5b79f"/>
+            <topic label="GM_DARKSEAGREEN" href="color_8h.html#a9de5faf671f037399f576611aaaad42d"/>
+            <topic label="GM_DARKSLATEBLUE" href="color_8h.html#a4a65beb147b52cc5c8e7a5ac4936e2ea"/>
+            <topic label="GM_DARKSLATEGRAY" href="color_8h.html#a283d5fc9da189364d06eb0b21c6ae138"/>
+            <topic label="GM_DARKSLATEGREY" href="color_8h.html#a995ca6fd3ba24bbaa849cc0f57748b1c"/>
+            <topic label="GM_DARKTURQUOISE" href="color_8h.html#af17c3c9636fbcec02796cad5bea6d73b"/>
+            <topic label="GM_DARKVIOLET" href="color_8h.html#af86487c422a17d80e3105027597171fb"/>
+            <topic label="GM_DEEPPINK" href="color_8h.html#a7d4033d00c7516f72a2220d781c367e5"/>
+            <topic label="GM_DEEPSKYBLUE" href="color_8h.html#a45e4969ba80e3a4a57efb0554ff451e0"/>
+            <topic label="GM_DIMGRAY" href="color_8h.html#ad5adc735c66653d2c8187270f6307712"/>
+            <topic label="GM_DIMGREY" href="color_8h.html#ad6ba7fcdd28268a1784cb894fe32653e"/>
+            <topic label="GM_DODGERBLUE" href="color_8h.html#ae2ffff8a099b936d5b8569edd5a76b6b"/>
+            <topic label="GM_FIREBRICK" href="color_8h.html#a82e3b20965785dccd66ad1473c347fbd"/>
+            <topic label="GM_FLORALWHITE" href="color_8h.html#ae5107650acf7a4657dfec0e4950ec218"/>
+            <topic label="GM_FORESTGREEN" href="color_8h.html#aa69aaff492592204b0eb25eed5d4ca94"/>
+            <topic label="GM_FUCHSIA" href="color_8h.html#ae15f49e24379e5eedc7e3afd0b2335ea"/>
+            <topic label="GM_GAINSBORO" href="color_8h.html#ad617d6de70ecfde441b5ba03a63fa3b2"/>
+            <topic label="GM_GAMA" href="color_8h.html#a85816fef50d777b609f81cd0f1f52c04"/>
+            <topic label="GM_GHOSTWHITE" href="color_8h.html#a5ddc296e0e74a5a0bf27f7e0c88259f7"/>
+            <topic label="GM_GOLD" href="color_8h.html#a21accb69a800eaa5dd04d9989fa813e8"/>
+            <topic label="GM_GOLDENROD" href="color_8h.html#a081af78f11bf2bc6e1546993aab6c3db"/>
+            <topic label="GM_GRAY" href="color_8h.html#a1d4b446b42d7cded0f5533e8d52401af"/>
+            <topic label="GM_GREEN" href="color_8h.html#aaa8142c1208a61c16207d6153a17061d"/>
+            <topic label="gm_green" href="color_8h.html#a45d5d65dafab83c09112d8a9eee235fe"/>
+            <topic label="GM_GREENYELLOW" href="color_8h.html#a3497203c3568be03513247980bf77b87"/>
+            <topic label="GM_GREY" href="color_8h.html#a801c400a3b4e798cf9ba63d98a48244f"/>
+            <topic label="GM_HONEYDEW" href="color_8h.html#ac98a8bcc87333635fffbb6f4487cf114"/>
+            <topic label="GM_HOTPINK" href="color_8h.html#a6531ed858bc557f0dac176a57b58b2c3"/>
+            <topic label="GM_INDIANRED" href="color_8h.html#ac81eb2e12b94a852c6b15bcd4ad9a5d3"/>
+            <topic label="GM_INDIGO" href="color_8h.html#a6cb648d93316664e988f977b81e717a3"/>
+            <topic label="GM_IVORY" href="color_8h.html#a984ba4ec31318eb764f90a484a1783fe"/>
+            <topic label="GM_KHAKI" href="color_8h.html#a2b16923edbc181b7a62e05f39d6cb0dd"/>
+            <topic label="GM_LAVENDER" href="color_8h.html#a1ceb505f7a1a42c66b3cf5bc14f5fe9b"/>
+            <topic label="GM_LAVENDERBLUSH" href="color_8h.html#a89b093a49726e204c7f68b75feaeba00"/>
+            <topic label="GM_LAWNGREEN" href="color_8h.html#a1b6fc81d4fc2ccf75b2fa17d175fcc95"/>
+            <topic label="GM_LEMONCHIFFON" href="color_8h.html#a81b0c76ed109efea8494c4af79e051eb"/>
+            <topic label="GM_LIGHTBLUE" href="color_8h.html#a3747effaa7fd13f55ff642c1574836a7"/>
+            <topic label="GM_LIGHTCORAL" href="color_8h.html#a6a75550cfa04636bbe4e5f195528f76b"/>
+            <topic label="GM_LIGHTCYAN" href="color_8h.html#a07c7d0dee9b2522eaba95a8cda1c49ff"/>
+            <topic label="GM_LIGHTGOLDENRODYELLOW" href="color_8h.html#a543a10fa4d6bf80198173028116398ee"/>
+            <topic label="GM_LIGHTGRAY" href="color_8h.html#ae853dad5084c8dbb86e5d35de2cf8906"/>
+            <topic label="GM_LIGHTGREEN" href="color_8h.html#accd6ddccb9ee6a53ce8a8f22a940e2aa"/>
+            <topic label="GM_LIGHTGREY" href="color_8h.html#ab09cea752ab23332fc8ad304879ec460"/>
+            <topic label="GM_LIGHTPINK" href="color_8h.html#ae69007443f6c057791cdddef8c9e1bba"/>
+            <topic label="GM_LIGHTSALMON" href="color_8h.html#ab1dd75394df2ca97190296d0c111a999"/>
+            <topic label="GM_LIGHTSEAGREEN" href="color_8h.html#aa007a9a00c3060c0992bfafc95575114"/>
+            <topic label="GM_LIGHTSKYBLUE" href="color_8h.html#a22e1bbf37c741b727f8f6c2619286f26"/>
+            <topic label="GM_LIGHTSLATEGRAY" href="color_8h.html#a6d0132c28ef9ac15ab78f4e8bc398599"/>
+            <topic label="GM_LIGHTSLATEGREY" href="color_8h.html#a8d1508296be47751b2429beba3ad5e40"/>
+            <topic label="GM_LIGHTSTEELBLUE" href="color_8h.html#afa66fa97ac43d4452feb52a4a194c1df"/>
+            <topic label="GM_LIGHTYELLOW" href="color_8h.html#ae0bb630c8e6a0892a543687a538518ec"/>
+            <topic label="GM_LIME" href="color_8h.html#ac931c9c49350b7c57b86b0403ba3629d"/>
+            <topic label="GM_LIMEGREEN" href="color_8h.html#a7b17f252b6ecce6c92126c4c2fa497a9"/>
+            <topic label="GM_LINEN" href="color_8h.html#a69e7a73097bc7bc2dedc5fe79b7e0c81"/>
+            <topic label="GM_MAGENTA" href="color_8h.html#a5a26e7b0c4d0e44ce0926c9eb26cd021"/>
+            <topic label="GM_MAROON" href="color_8h.html#a4cd0903dd55b1aa5249c2b1f541340d2"/>
+            <topic label="GM_MEDIUMAQUAMARINE" href="color_8h.html#a96b350759c72e448796d83e0f1e7b4b3"/>
+            <topic label="GM_MEDIUMBLUE" href="color_8h.html#a47a7b14203d36d102d74c7e99926b8e9"/>
+            <topic label="GM_MEDIUMORCHID" href="color_8h.html#a8c81f38d87a6cf4d89f1bd74e37577b2"/>
+            <topic label="GM_MEDIUMPURPLE" href="color_8h.html#a65b46c2ea0887be751d6ad2cb919c304"/>
+            <topic label="GM_MEDIUMSEAGREEN" href="color_8h.html#a80c208854eb811510fcfb6c1a22a8de4"/>
+            <topic label="GM_MEDIUMSLATEBLUE" href="color_8h.html#ab17ce2ced5e382f314eb660c4c39684b"/>
+            <topic label="GM_MEDIUMSPRINGGREEN" href="color_8h.html#a1fa92956e4a6ccd17bbe95a19c33290b"/>
+            <topic label="GM_MEDIUMTURQUOISE" href="color_8h.html#a190560552ab8f4cf9f71f6d40743de26"/>
+            <topic label="GM_MEDIUMVIOLETRED" href="color_8h.html#a1348682f9fa891588dde9dab16b8d095"/>
+            <topic label="GM_MIDNIGHTBLUE" href="color_8h.html#a7eb61235c7c22b7dcaa6a47afe5a095b"/>
+            <topic label="GM_MINTCREAM" href="color_8h.html#aa606da02e2838a83bd095e5c991df1d8"/>
+            <topic label="GM_MISTYROSE" href="color_8h.html#ae9e8f437867e254d472186d538cda1e5"/>
+            <topic label="GM_MOCCASIN" href="color_8h.html#a7538c249ba51828b9ce0b4befe7d0dce"/>
+            <topic label="GM_NAVAJOWHITE" href="color_8h.html#ac6fd41f9e8b95e62a881bf5221e9b957"/>
+            <topic label="GM_NAVY" href="color_8h.html#aa302cdb2eefb8f146910762d6afa4f7f"/>
+            <topic label="GM_OLDLACE" href="color_8h.html#a93aeb437e830f23835197505f71d6ef2"/>
+            <topic label="GM_OLIVE" href="color_8h.html#a24275a6549dfac6bdd732ae29ea25e21"/>
+            <topic label="GM_OLIVEDRAB" href="color_8h.html#a91a27cfa7a164e6af3c3601d8f848f84"/>
+            <topic label="GM_OPAQUE" href="color_8h.html#a73f005b787171d63aa35e5c60405ef31"/>
+            <topic label="GM_ORANGE" href="color_8h.html#a3ba99a258f3a9c44afa115052dadc4fb"/>
+            <topic label="GM_ORANGERED" href="color_8h.html#abd59347064e1462b40cd1d362b8b31c5"/>
+            <topic label="GM_ORCHID" href="color_8h.html#a0acf355a92b8e9f5d0d26ea3bebc39cf"/>
+            <topic label="GM_PALEGOLDENROD" href="color_8h.html#a2a9b2e64331a82e793d20083291af031"/>
+            <topic label="GM_PALEGREEN" href="color_8h.html#a86c4178b0afb4a9baefc755d489e69fc"/>
+            <topic label="GM_PALETURQUOISE" href="color_8h.html#aa6f32a2222fd0ac240a085816925bb0a"/>
+            <topic label="GM_PALEVIOLETRED" href="color_8h.html#a5db2a6e3b6ce7e13951d87c6b1e2a326"/>
+            <topic label="GM_PAPAYAWHIP" href="color_8h.html#abe3f8c678260a330e24d626b81177746"/>
+            <topic label="GM_PEACHPUFF" href="color_8h.html#ac561c944168bd02caea6faa9b00fa7e7"/>
+            <topic label="GM_PERU" href="color_8h.html#a89a6d9cf7fc831057019b65f12a03c2b"/>
+            <topic label="GM_PINK" href="color_8h.html#ad88a74fce89983fd7216b41d063d39ee"/>
+            <topic label="GM_PLUM" href="color_8h.html#a6c6dfd772c4f44ebd5d3eab2c8307e3b"/>
+            <topic label="GM_POWDERBLUE" href="color_8h.html#a591eecab95dc9d75e2e15d2cf5f97714"/>
+            <topic label="GM_PURPLE" href="color_8h.html#a3db233b6a81a10774ee239b4fc67a823"/>
+            <topic label="GM_REBECCAPURPLE" href="color_8h.html#a9a8320d15ceb8ac2424f8a93e77556f6"/>
+            <topic label="GM_RED" href="color_8h.html#a936a71fa42a59c43db1995476fe153ee"/>
+            <topic label="gm_red" href="color_8h.html#a7a5b040d2ae3d2776f4cc3d21c111dcc"/>
+            <topic label="GM_ROSYBROWN" href="color_8h.html#a66232b6f416446812320d2d848757f7d"/>
+            <topic label="GM_ROYALBLUE" href="color_8h.html#a5322a1111c283ae0bfdedb9e78789caa"/>
+            <topic label="GM_SADDLEBROWN" href="color_8h.html#aa9c8d758d76a8e4454f611e4bb66cf4b"/>
+            <topic label="GM_SALMON" href="color_8h.html#a4223347c63db0198b604a1a8b37f8925"/>
+            <topic label="GM_SANDYBROWN" href="color_8h.html#ae0a1421f8550479355a4559464db8541"/>
+            <topic label="GM_SEAGREEN" href="color_8h.html#a2e0cdf942cf673de9c95889d1067380c"/>
+            <topic label="GM_SEASHELL" href="color_8h.html#ac62bc1b9cc05e5be446e059e00cc324f"/>
+            <topic label="GM_SIENNA" href="color_8h.html#aa48434b57f6b2d642dda509410bfa2fa"/>
+            <topic label="GM_SILVER" href="color_8h.html#a769ba2b95e7864afada9a6bf4b6b00a2"/>
+            <topic label="GM_SKYBLUE" href="color_8h.html#ae23017c8224f214226d1b98cce561eef"/>
+            <topic label="GM_SLATEBLUE" href="color_8h.html#a715553ebf46b47dbd2ba5c3736b17d80"/>
+            <topic label="GM_SLATEGRAY" href="color_8h.html#a01ff612f936a9bb46fd04191dbb25d70"/>
+            <topic label="GM_SLATEGREY" href="color_8h.html#af7814f260ba60d4432c1513a512a06f5"/>
+            <topic label="GM_SNOW" href="color_8h.html#a7bfccb38d5cc6877743bb0273ff6f609"/>
+            <topic label="GM_SPRINGGREEN" href="color_8h.html#a20a5e4be6eac48e3fa0ebaef9b025143"/>
+            <topic label="GM_STEELBLUE" href="color_8h.html#a9ed2bc49dda261cdce9bd217715a3654"/>
+            <topic label="GM_TAN" href="color_8h.html#ae50f2651458c2f1ae19acf25a9fa9f4b"/>
+            <topic label="GM_TEAL" href="color_8h.html#a71cc78be992cf89f2c5fae182580008b"/>
+            <topic label="GM_THISTLE" href="color_8h.html#aad9c9746fc73c791fe91accb90879441"/>
+            <topic label="GM_TOMATO" href="color_8h.html#a6c85a68261e617bc646018ae9c7fab75"/>
+            <topic label="GM_TRANSLUCENT" href="color_8h.html#a47e9bcc92878c7aa57191e584d0802ca"/>
+            <topic label="GM_TRANSPARENT" href="color_8h.html#a087c6bfcc8286920d88262c4259d10dc"/>
+            <topic label="GM_TURQUOISE" href="color_8h.html#ab63e5d10f141c646b090521143226683"/>
+            <topic label="GM_VIOLET" href="color_8h.html#ad2c175a981b9674e6355af20e3aefbfb"/>
+            <topic label="GM_WHEAT" href="color_8h.html#a998ae7880b2a5ad38475cc52b35ddc0b"/>
+            <topic label="GM_WHITE" href="color_8h.html#ac9ccb21a482aae91b3d0658fa8f8ef27"/>
+            <topic label="GM_WHITESMOKE" href="color_8h.html#abcec1e039dd913970bfd52cecb1abe0a"/>
+            <topic label="GM_YELLOW" href="color_8h.html#a3ecac9a8d1d50fcda1bf1ddfee4e1467"/>
+            <topic label="GM_YELLOWGREEN" href="color_8h.html#a59be4c062fa42f82e0b7e531796645ec"/>
+            <topic label="gmColor" href="color_8h.html#ad1e1d31842049cda71b54fb67f83036b"/>
+            <topic label="gmg_color" href="color_8h.html#a0c14ffe2bab36e58af6f58271b27bc52"/>
+          </topic>
+          <topic label="debug.h" href="debug_8h.html">
+            <topic label="gmd" href="debug_8h.html#aea6386ed5a702e244f0973d0fd558a8b"/>
+            <topic label="gmdi" href="debug_8h.html#ac6d9633709b2c419519d287962109a70"/>
+            <topic label="gmdn" href="debug_8h.html#a5e1db74e8f31fb8d7ad6b51300f3440b"/>
+            <topic label="gmd_color" href="debug_8h.html#a4571cae9fa2bbc5ef5b9a31ebee7069b"/>
+            <topic label="gmd_mesh" href="debug_8h.html#a123eeb135725e8837b13ecd7781ad95b"/>
+            <topic label="gmd_pos2" href="debug_8h.html#ad8df94421d43eefdbc7c872c9ab7756f"/>
+            <topic label="gmd_pos3" href="debug_8h.html#a5078f2e15fbf7c8c564afd367e02bdf5"/>
+          </topic>
+          <topic label="draw.h" href="draw_8h.html">
+            <topic label="gm_cache" href="draw_8h.html#aa4c2da232d4afe4ff5af7607134a413e"/>
+            <topic label="gm_draw_body" href="draw_8h.html#af1d374243f24fec4bd9f7a3cf461b001"/>
+            <topic label="gm_draw_circle" href="draw_8h.html#a00eaed26d4bcaac3e554df2cf63fd9e1"/>
+            <topic label="gm_draw_circle_bodies" href="draw_8h.html#a07420d631aca7ec1137c39dfda6e5382"/>
+            <topic label="gm_draw_circle_body" href="draw_8h.html#ad12ce184bf75f660fd46d59077c65c26"/>
+            <topic label="gm_draw_ellipse" href="draw_8h.html#a1db8ad8ed3f28e2a4842a50e3850d7f6"/>
+            <topic label="gm_draw_ellipse_bodies" href="draw_8h.html#a3342f6d14d82059da433bb587dde3247"/>
+            <topic label="gm_draw_ellipse_body" href="draw_8h.html#a6f71ac6a2b8d60dbe550b29d1942bd33"/>
+            <topic label="gm_draw_image" href="draw_8h.html#acaf39bbefb6cf81693def9c2d80bdcff"/>
+            <topic label="gm_draw_image_bodies" href="draw_8h.html#a3ab1bdfb8b01d98adcb878a87519a773"/>
+            <topic label="gm_draw_image_body" href="draw_8h.html#a3e46ff676b9c42fac5a65f8fda9b4119"/>
+            <topic label="gm_draw_line" href="draw_8h.html#a4bffddc5ee83a7fe92ff645664b42bd0"/>
+            <topic label="gm_draw_rect_bodies" href="draw_8h.html#a951e4ccf949f56bf4ac0af72611f5134"/>
+            <topic label="gm_draw_rect_body" href="draw_8h.html#a14df85bc18ba33bfb88e7fa9768a831f"/>
+            <topic label="gm_draw_rectangle" href="draw_8h.html#a2a7a927b01836ad2067e35f12b9c26ea"/>
+            <topic label="gm_draw_round_rect_body" href="draw_8h.html#a4fd8b725f6dd1fa954a12c36e6c02447"/>
+            <topic label="gm_draw_rounded_rectangle" href="draw_8h.html#a88751544ef68489d1992c5f87f1b7d88"/>
+            <topic label="gm_draw_text" href="draw_8h.html#a0afcc18a7c8c63fcab848d8848ca2176"/>
+            <topic label="gm_draw_text_bodies" href="draw_8h.html#a7b23eb1bc134968ee14665291c2be21e"/>
+            <topic label="gm_draw_text_body" href="draw_8h.html#a60f29dd06b6f2cd767f94084255e9b1d"/>
+            <topic label="gm_draw_triangle" href="draw_8h.html#a6aa84cbade814455ccdcc33464c43df2"/>
+            <topic label="gm_draw_triangle_bodies" href="draw_8h.html#a058ede8247dd74470f762c134b61a3b9"/>
+            <topic label="gm_draw_triangle_body" href="draw_8h.html#a76ed7446d86188d245c8c8fc14aa54a6"/>
+          </topic>
+          <topic label="gama.h" href="gama_8h.html">
+            <topic label="gama_run" href="gama_8h.html#af2233e1d1ff834c39373255b305e1e9f"/>
+            <topic label="gm_background" href="gama_8h.html#acf62b5795b66bce9b310277356575c66"/>
+            <topic label="gm_fullscreen" href="gama_8h.html#ac1855c15ae19bfb11c9876b5261b9f75"/>
+            <topic label="gm_init" href="gama_8h.html#afe888881882c032aeecb0e3e4e6de460"/>
+            <topic label="gm_log" href="gama_8h.html#a0c22ed781536b72d723dc3d3a0245b53"/>
+            <topic label="gm_logo" href="gama_8h.html#aae83aab0cf87d11fba0fc0b5779ad6a0"/>
+            <topic label="gm_resize" href="gama_8h.html#aa65985ca5b8454ee69087f2243276e77"/>
+            <topic label="gm_show_fps" href="gama_8h.html#a11b841ac66eacd657c78efaea6c07b01"/>
+            <topic label="gm_sleep" href="gama_8h.html#ab7997f4879229850843f681e9eb36c59"/>
+            <topic label="main" href="gama_8h.html#ae66f6b31b5ad750f1fe042a706a4e3d4"/>
+            <topic label="__gm_show_fps" href="gama_8h.html#a75099652e829ac61185b5e12deb06040"/>
+          </topic>
+          <topic label="gapi.h" href="gapi_8h.html">
+            <topic label="gapi_create_image" href="gapi_8h.html#a63e6201085343907a67ba043ed7b2f72"/>
+            <topic label="gapi_draw_circle" href="gapi_8h.html#abb3cf891ffa029878f1c3a2465958d1e"/>
+            <topic label="gapi_draw_ellipse" href="gapi_8h.html#adc5f160e2f85e20dd2c1f6ad7771f5b4"/>
+            <topic label="gapi_draw_image" href="gapi_8h.html#a4958768ff5d3519bcc96b3f56ef98eb1"/>
+            <topic label="gapi_draw_image_part" href="gapi_8h.html#ad0a4d37645fa603d8c332c2fae3ef3b3"/>
+            <topic label="gapi_draw_line" href="gapi_8h.html#ae114249c27fc729dbaddeb28cddeb915"/>
+            <topic label="gapi_draw_rect" href="gapi_8h.html#a23cc1111238f4d03f16c575990e521b6"/>
+            <topic label="gapi_draw_rounded_rect" href="gapi_8h.html#a4259289ffd7cfbb8c13e1ca085feabe2"/>
+            <topic label="gapi_draw_text" href="gapi_8h.html#a89b0ad831787ffa74a4c203149b74a97"/>
+            <topic label="gapi_draw_triangle" href="gapi_8h.html#a5efc35389c5b7823ee666e3b178fa430"/>
+            <topic label="gapi_draw_triangles" href="gapi_8h.html#a2542ba5370ccc664cebe2773a64bd577"/>
+            <topic label="gapi_fullscreen" href="gapi_8h.html#a33685759bfe738fd920e7f328d561ccc"/>
+            <topic label="gapi_init" href="gapi_8h.html#a4ae4f9434b6179e6d7148c2b187dfa41"/>
+            <topic label="gapi_key_down" href="gapi_8h.html#a591eb37e63feff38ea5a43311b72b4a5"/>
+            <topic label="gapi_log" href="gapi_8h.html#a62e52648c681f51c0156e49f87e5f731"/>
+            <topic label="gapi_mouse_down" href="gapi_8h.html#a13c454d2ca7b47724dd5b085111a66e6"/>
+            <topic label="gapi_mouse_get" href="gapi_8h.html#af06e27344257a957a108c5830fdd20d2"/>
+            <topic label="gapi_quit" href="gapi_8h.html#a75992a93a66aeea7d867a59e0911889f"/>
+            <topic label="gapi_resize" href="gapi_8h.html#a5807835814d6e9575b1c3bddff3fed5a"/>
+            <topic label="gapi_runs" href="gapi_8h.html#aba1dc1654054d397e6325d4c55cae27b"/>
+            <topic label="gapi_set_background_color" href="gapi_8h.html#affb93473d7b3ccfb1c8e7019376e6350"/>
+            <topic label="gapi_set_title" href="gapi_8h.html#a011056a6351d47641cf3c674124c022c"/>
+            <topic label="gapi_yield" href="gapi_8h.html#a7fda7996bff29edf614c0ca8ae54f0a0"/>
+            <topic label="_gm_dt" href="gapi_8h.html#a15035e5990e81f9cbb5e450265679ed9"/>
+            <topic label="_gm_t" href="gapi_8h.html#a47fd570f212b7717d9d2013930fbe5d0"/>
+          </topic>
+          <topic label="gmg.h" href="gmg_8h.html">
+            <topic label="gmg" href="gmg_8h.html#a562a533dda0044d5ea45740051a7df77"/>
+          </topic>
+          <topic label="image.h" href="image_8h.html">
+            <topic label="gmImageData" href="structgm_image_data.html">
+              <topic label="data" href="structgm_image_data.html#ac90e3a39ac4beb43aeab27c88c0d48b5"/>
+              <topic label="height" href="structgm_image_data.html#ab34f37caa49e9e73f7d8381be7fabd27"/>
+              <topic label="width" href="structgm_image_data.html#a0580b3ba3e19e38b30ce21d872e4fb16"/>
+            </topic>
+            <topic label="gmImage" href="structgm_image.html">
+              <topic label="handle" href="structgm_image.html#a8b080f4012c81f98763f6d1f50ba43f0"/>
+              <topic label="height" href="structgm_image.html#ac42212938646c37a56f0e01a0886fb2c"/>
+              <topic label="width" href="structgm_image.html#ac1cc465bdde54933b99bb01c28a3ec62"/>
+            </topic>
+            <topic label="STB_IMAGE_IMPLEMENTATION" href="image_8h.html#a18372412ad2fc3ce1e3240b3cf0efe78"/>
+            <topic label="gm_image_create" href="image_8h.html#aaab9b6ae97585d3c419ac533a4601f8e"/>
+            <topic label="gm_image_create_from_memory" href="image_8h.html#a6c6bc6b1056907284a8d57bbcd946655"/>
+            <topic label="gm_image_data_average_color" href="image_8h.html#a4fd201307a7e0c31bbce281b98a4a3a3"/>
+            <topic label="gm_image_data_free" href="image_8h.html#a50c45540a021cba5a362bc0742d4d40b"/>
+            <topic label="gm_image_data_load" href="image_8h.html#a66d341e35f25ae7f873d466dfa236cc9"/>
+            <topic label="gm_image_data_load_from_memory" href="image_8h.html#a30f679032b168ebde998e79fc727f1ec"/>
+            <topic label="gm_image_draw" href="image_8h.html#aec56e25f8f3aab9a80ac99ea14751cdb"/>
+            <topic label="gm_image_draw_part" href="image_8h.html#a93b48efa6484ce4d2b7e6bec2ab52949"/>
+          </topic>
+          <topic label="key.h" href="key_8h.html">
+            <topic label="gm_decode_key_shortcut" href="key_8h.html#ac6e841ec57972c400025a67fb3662711"/>
+            <topic label="gm_encode_key_shortcut" href="key_8h.html#ac9a64b69e25fe37e916cbf6a6d7cbf50"/>
+            <topic label="gm_key" href="key_8h.html#aed7124055190a27c29c680c17c08df3b"/>
+            <topic label="gm_key_down" href="key_8h.html#ac7f86dec784c76782cbbf72acaad1bff"/>
+            <topic label="gm_lower_case" href="key_8h.html#ad06d4ae7c509b6e7e53025c36fda755c"/>
+            <topic label="gm_upper_case" href="key_8h.html#a0056e7f9917e085fc265555a470a9f2c"/>
+          </topic>
+          <topic label="malloc.h" href="malloc_8h.html">
+            <topic label="_memory_spot" href="struct__memory__spot.html">
+              <topic label="index" href="struct__memory__spot.html#afc5f6b290ed1744904d18b6185696b60"/>
+              <topic label="size" href="struct__memory__spot.html#a0d1bfe057de0f97091727d2cdb95b931"/>
+            </topic>
+            <topic label="_MALLOC_H" href="malloc_8h.html#a5ef42d8834eb476c193fc2ad486f4e8e"/>
+            <topic label="GM_MALLOC" href="malloc_8h.html#af0a1c4cf0d1bff7c61ebc026b1be5bb5"/>
+            <topic label="MEMORY" href="malloc_8h.html#aaf08a63f67339d49d4c4efec7562496f"/>
+            <topic label="MEMORY_B" href="malloc_8h.html#adb3e105ef3a97bb49087fb0d010c36c7"/>
+            <topic label="MEMORY_SPOTS" href="malloc_8h.html#a3affde40e6ee6032c20309711805cef4"/>
+            <topic label="MEMORY_TOTAL" href="malloc_8h.html#aa17f2563c468c962c10dd2f07d151319"/>
+            <topic label="calloc" href="malloc_8h.html#ad65564be3c3e7ff6f7586303aebf9949"/>
+            <topic label="free" href="malloc_8h.html#afbedc913aa4651b3c3b4b3aecd9b4711"/>
+            <topic label="malloc" href="malloc_8h.html#a9c36d0fe3ec4675cbffdc9b52f5fb399"/>
+            <topic label="realloc" href="malloc_8h.html#ad28fed1039f35d754710633141b4edf0"/>
+          </topic>
+          <topic label="math.h" href="math_8h.html">
+            <topic label="special" href="structspecial.html">
+              <topic label="e" href="structspecial.html#a79797636ac74d844d1965fd39e5c0200"/>
+              <topic label="mantisa" href="structspecial.html#aff9708b8fd9af46d5d767da880950718"/>
+              <topic label="pow" href="structspecial.html#a5372914771ba2669aa7077cab3aebc14"/>
+              <topic label="sign" href="structspecial.html#a790c76b4fc4e2d5a6698bfa345ff3feb"/>
+            </topic>
+            <topic label="EPS" href="math_8h.html#a6ebf6899d6c1c8b7b9d09be872c05aae"/>
+            <topic label="GM_MATH" href="math_8h.html#aa4dde2c945676527ba188b6b3d5564ef"/>
+            <topic label="INF" href="math_8h.html#a12c2040f25d8e3a7b9e1c2024c618cb6"/>
+            <topic label="ln10" href="math_8h.html#a2b9d0dfdfd33ea5c391686153378d6c3"/>
+            <topic label="M_PI" href="math_8h.html#ae71449b1cc6e6250b91f539153a7a0d3"/>
+            <topic label="MAX_double" href="math_8h.html#acd7676aec4ff7af085e6e607a953b794"/>
+            <topic label="NAN" href="math_8h.html#a8abfcc76130f3f991d124dd22d7e69bc"/>
+            <topic label="PI" href="math_8h.html#a598a3330b3c21701223ee0ca14316eca"/>
+            <topic label="acos" href="math_8h.html#ae93afe22ff34c79ee97ea3eaf77557db"/>
+            <topic label="asin" href="math_8h.html#aa9528d92a3ae44ad6484da0774604454"/>
+            <topic label="atan" href="math_8h.html#a1e2f8f6d64eaa95131bc63fee34970ea"/>
+            <topic label="atan_1_1" href="math_8h.html#a57bf87e6638f95a62379820baaa5e6f5"/>
+            <topic label="ceil" href="math_8h.html#a1ea6d7b591132268abc2e843ababd084"/>
+            <topic label="cos" href="math_8h.html#a5e7b53a694b3cf0f2d7debd444140fbd"/>
+            <topic label="delete" href="math_8h.html#ae0bfca7683a4e9277e5192aa8d1bfe1e"/>
+            <topic label="exp" href="math_8h.html#ae09128febbbe6372cde4fa0c65608a42"/>
+            <topic label="fabs" href="math_8h.html#a8fb5c0b9b43a108724b355136d29d2f9"/>
+            <topic label="floor" href="math_8h.html#a6de60a3e907dcf0bfe3ea8d64f1e8873"/>
+            <topic label="fmax" href="math_8h.html#a418eb86addfb1c9d1f1cf9e29e1468f0"/>
+            <topic label="fmin" href="math_8h.html#a1871869bcfe513e73a3c4f5df37508f9"/>
+            <topic label="fmod" href="math_8h.html#a537296d1a8f9fb621676038b99ba7edf"/>
+            <topic label="log" href="math_8h.html#adb302c9aafbaa5e180d9f60ee954bb82"/>
+            <topic label="log_0_2" href="math_8h.html#a37c70899a17f8ffabb0ad00c1a949b40"/>
+            <topic label="log_other" href="math_8h.html#a0fd7be0a9cd8475b3408cb9821f87894"/>
+            <topic label="max" href="math_8h.html#af082905f7eac6d03e92015146bbc1925"/>
+            <topic label="min" href="math_8h.html#abd8bbcfabb3ddef2ccaafb9928a37b95"/>
+            <topic label="pow" href="math_8h.html#a8adb072abd0293d08a9ae718e1f1817a"/>
+            <topic label="sin" href="math_8h.html#aad4af25633b071b0e2cdb8ebd87eca77"/>
+            <topic label="sqrt" href="math_8h.html#ab87521a75ef827a85807f89a6c10629a"/>
+            <topic label="tan" href="math_8h.html#aa48fdfd5eea5f4f9c33496402b9e4039"/>
+            <topic label="translate" href="math_8h.html#ae76736970c969d040497b85f5485175e"/>
+          </topic>
+          <topic label="mouse.h" href="mouse_8h.html">
+            <topic label="_gmMouse" href="struct__gm_mouse.html">
+              <topic label="clicked" href="struct__gm_mouse.html#ac9abc24f7c8b6949d44bbcf24623b866"/>
+              <topic label="down" href="struct__gm_mouse.html#a197ec8bf5f40da47d9c94fe9b30c58a1"/>
+              <topic label="lastPosition" href="struct__gm_mouse.html#accc5281df2f3dbc6355b57d62ebcd680"/>
+              <topic label="movement" href="struct__gm_mouse.html#a678355818640a7464c1d9f5f2180bdb8"/>
+              <topic label="position" href="struct__gm_mouse.html#a4b09423200b64cd2a0bf67273b1960ef"/>
+            </topic>
+            <topic label="gm_mouse" href="mouse_8h.html#ae348e1e764210f492ce421ed6460db40"/>
+          </topic>
+          <topic label="physics.h" href="physics_8h.html">
+            <topic label="gm_body_update" href="physics_8h.html#af0a997c1e21c8268f0b6d7d8e764e92c"/>
+            <topic label="gm_body_update_dt" href="physics_8h.html#ad3f02f65ffbf51cd18ec92095c79fa18"/>
+            <topic label="gm_collision_detect" href="physics_8h.html#a249b7c9b7732fd0cb0708994d9aec3f1"/>
+            <topic label="gm_collision_penetration" href="physics_8h.html#af20c4f59223177cc8e19a517a5bced53"/>
+            <topic label="gm_collision_penetration_normals" href="physics_8h.html#a4c56b60f43b7436eddb908b92b36047e"/>
+            <topic label="gm_collision_resolve" href="physics_8h.html#af097fcff2f40d53df7608a26cbe3e956"/>
+            <topic label="gm_system_get_collision" href="physics_8h.html#a6e23f19116c7a9eb9a3e3f9ef0cc4112"/>
+            <topic label="gm_system_update_body_dt" href="physics_8h.html#ac1ac77805ae41795281e1b06778de5ee"/>
+            <topic label="gm_system_update_dt" href="physics_8h.html#a3bf74162bee0abd7b551bb01926ed7c7"/>
+            <topic label="gm_system_frame_time" href="physics_8h.html#aaf44d95db95ffe236995ef317d48dfce"/>
+          </topic>
+          <topic label="position.h" href="position_8h.html">
+            <topic label="gmPos" href="structgm_pos.html">
+              <topic label="x" href="structgm_pos.html#a2a815e2067aa9f0dc12275f21f1bb827"/>
+              <topic label="y" href="structgm_pos.html#a63991667a054f31d2905a365c4e0473b"/>
+            </topic>
+            <topic label="gm_triangle_area" href="position_8h.html#ac40eae999aa0eaa130f4b774c2f09aab"/>
+          </topic>
+          <topic label="sprite.h" href="sprite_8h.html">
+            <topic label="gmSpriteAnim" href="structgm_sprite_anim.html">
+              <topic label="anim" href="structgm_sprite_anim.html#a4078ccf7e32cbec569ac50ee68685f21"/>
+              <topic label="interval" href="structgm_sprite_anim.html#a63a10b2face721fa93d452af79d1fe72"/>
+              <topic label="length" href="structgm_sprite_anim.html#a78cff7f6ef84454a0fe2c112b13683d5"/>
+            </topic>
+            <topic label="gmSprite" href="structgm_sprite.html">
+              <topic label="_backlog_t" href="structgm_sprite.html#af778d2e561c8ad956cc526ba88beb15c"/>
+              <topic label="_frame" href="structgm_sprite.html#aac6eaf560085a028d131525853d8ccec"/>
+              <topic label="animation" href="structgm_sprite.html#aa6c6dc1254f2376401c8f2d5e5413900"/>
+              <topic label="animation_frame" href="structgm_sprite.html#a44a82d76b15a00018ef06cdbc616b9c7"/>
+              <topic label="image" href="structgm_sprite.html#a4c969008993f1fb93472302a7d705187"/>
+              <topic label="n_frames" href="structgm_sprite.html#a432fe01d9bb96e92b05f108a7fa418ee"/>
+            </topic>
+            <topic label="GAMA_MAX_SPRITE_ANIM_LENGTH" href="sprite_8h.html#abb0282485a5932f74a3a988601212af1"/>
+            <topic label="gm_sprite_anim_browse" href="sprite_8h.html#a24b129544f61b139cc6b25625f34bb37"/>
+            <topic label="gm_sprite_anim_create" href="sprite_8h.html#a54b463efc50065a0c4569d2e5fbf93b7"/>
+            <topic label="gm_sprite_create" href="sprite_8h.html#abcf8f8132d5644a48265bd61275f23df"/>
+            <topic label="gm_sprite_draw" href="sprite_8h.html#a5bd3dfca1d0421efd054f34094cf81ae"/>
+            <topic label="gm_sprite_update_dt" href="sprite_8h.html#ad5d10c69bbd841b6d2902be030e078f5"/>
+          </topic>
+          <topic label="str.h" href="str_8h.html">
+            <topic label="gmStr" href="structgm_str.html">
+              <topic label="content" href="structgm_str.html#a355c435ce2c8ae098ef2da6759e2f03a"/>
+              <topic label="length" href="structgm_str.html#af5a72439ffc10b8def62f47359c5b035"/>
+            </topic>
+            <topic label="gm_str" href="str_8h.html#abb1414c40ea1d618f0749f2d2bf2240c"/>
+            <topic label="gm_str_appendn" href="str_8h.html#ac541b78722e0a2afa2650409e21594be"/>
+            <topic label="gm_str_clear" href="str_8h.html#a8a34dfb6983f37144fecba0ca2076747"/>
+          </topic>
+          <topic label="system.h" href="system_8h.html">
+            <topic label="gm_system" href="structgm__system.html">
+              <topic label="acceleration" href="structgm__system.html#a04e471339c635281e7fb81857fcd54de"/>
+              <topic label="bodies" href="structgm__system.html#ad041cd983fb9906440932a02ede15037"/>
+              <topic label="collisions" href="structgm__system.html#a8a1f46ebbc67c60f6de12eaaac38478f"/>
+              <topic label="damping" href="structgm__system.html#a40d52885fd4d36ca430e5359acd952ee"/>
+              <topic label="is_active" href="structgm__system.html#ac4794f02d4f3353531ed139fde2b8a48"/>
+              <topic label="velocity" href="structgm__system.html#a6f2d2acface6269c1ff8486cfae057e5"/>
+            </topic>
+            <topic label="gmSystem" href="system_8h.html#a634d398c9f8e622e4bc9fc79eeb5f876"/>
+            <topic label="gm_system_create" href="system_8h.html#a12674760bc8132b8a9c64afe03ac7106"/>
+            <topic label="gm_system_destroy" href="system_8h.html#a625e32ce9bd9e7ce217ffd01b87990df"/>
+          </topic>
+          <topic label="utils.h" href="utils_8h.html">
+            <topic label="gmu_get_filename_base" href="utils_8h.html#a856b0de3343f4ad975fac9598769aaae"/>
+            <topic label="gmu_get_filename_stem" href="utils_8h.html#ac88a3d0a4d62b7ac6a1f5de8be18a5da"/>
+            <topic label="gmu_read_file" href="utils_8h.html#adc312db45679a9725d25c1724eac461c"/>
+          </topic>
+          <topic label="widgets.h" href="widgets_8h.html">
+            <topic label="gmwThemeCache" href="structgmw_theme_cache.html">
+              <topic label="button" href="structgmw_theme_cache.html#a3ca1bd32a42a221f7d3c337dbbd6eea9"/>
+              <topic label="frame" href="structgmw_theme_cache.html#a6649ff923b9f134b4ff6d9e8225dd868"/>
+              <topic label="joystick" href="structgmw_theme_cache.html#a41ea8542a846675599465f57e258599f"/>
+              <topic label="scale" href="structgmw_theme_cache.html#a17156235cd5d246ff53516157a62c335"/>
+              <topic label="switch_" href="structgmw_theme_cache.html#a184d15ca4bc01ddfcee572898f5602e9"/>
+            </topic>
+            <topic label="GAMA_MAX_THEME_CACHE_SIZE" href="widgets_8h.html#a1c14c94de7b1d5b10cdab5ffd123b0f8"/>
+            <topic label="gmw_restore" href="widgets_8h.html#aafe3242c73b7f60626c7b31a42e219b2"/>
+            <topic label="gmw_save" href="widgets_8h.html#a0c7d83d78f300c0be1107ce48f19a57a"/>
+            <topic label="_theme_cache" href="widgets_8h.html#a9f62d4b646603d6fb235d9e60f43a94f"/>
+            <topic label="gm_theme_cache_index" href="widgets_8h.html#a2c5c5c3d5a840f6dcf3bce732f1e5c17"/>
+          </topic>
+        </topic>
+      </topic>
+    </topic>
+    <topic label="Globals" href="globals.html">
+      <topic label="All" href="globals.html">
+        <topic label="_" href="globals.html"/>
+        <topic label="a" href="globals_a.html"/>
+        <topic label="c" href="globals_c.html"/>
+        <topic label="d" href="globals_d.html"/>
+        <topic label="e" href="globals_e.html"/>
+        <topic label="f" href="globals_f.html"/>
+        <topic label="g" href="globals_g.html"/>
+        <topic label="i" href="globals_i.html"/>
+        <topic label="l" href="globals_l.html"/>
+        <topic label="m" href="globals_m.html"/>
+        <topic label="n" href="globals_n.html"/>
+        <topic label="p" href="globals_p.html"/>
+        <topic label="r" href="globals_r.html"/>
+        <topic label="s" href="globals_s.html"/>
+        <topic label="t" href="globals_t.html"/>
+      </topic>
+      <topic label="Functions" href="globals_func.html"/>
+      <topic label="Variables" href="globals_vars.html"/>
+      <topic label="Typedefs" href="globals_type.html"/>
+      <topic label="Enumerations" href="globals_enum.html"/>
+      <topic label="Enumerator" href="globals_eval.html"/>
+      <topic label="Macros" href="globals_defs.html"/>
+    </topic>
+  </topic>
+  <topic label="Examples" href="examples.html">
+    <topic label="/home/engon/gama/gama/lib/gama/gama.h" href="_2home_2engon_2gama_2gama_2lib_2gama_2gama_8h-example.html"/>
+    <topic label="/home/engon/gama/gama/lib/gama/mouse.h" href="_2home_2engon_2gama_2gama_2lib_2gama_2mouse_8h-example.html"/>
+  </topic>
+</toc>
