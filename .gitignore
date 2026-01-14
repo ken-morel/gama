@@ -3,4 +3,4 @@
 /build/
 /docs
 /bin
-/compilers/zig/windows
+/compilers/zig/*

@@ -115,9 +115,8 @@ mut app := cli.Command{
 				zig_exe_name := 'zig.exe'
 
 				dest_dir := 'compilers/zig/${os_name}'
-				extracted_folder_name := 'zig-${os_name}-${zig_arch}-${zig_version}'
-				zig_final_path := os.join_path(dest_dir, extracted_folder_name)
-				zig_exe_full_path := os.join_path(zig_final_path, zig_exe_name)
+				extracted_folder_name := 'zig-${os_name}-${zig_arch}-${zig_version}' // This is the nested folder name
+				zig_exe_full_path := os.join_path(dest_dir, zig_exe_name) // Correct path to direct executable
 
 				if os.exists(zig_exe_full_path) {
 					println(term.ok_message('Windows Zig compiler already found at ${zig_exe_full_path}. Skipping download.'))
@@ -127,10 +126,10 @@ mut app := cli.Command{
 				// Ensure parent directory for extraction exists
 				os.mkdir_all(dest_dir)!
 
-				// Download to dest_dir
+				// Download to dest_dir (temporarily, or in current dir and move)
 				zig_archive_name := 'zig-${os_name}-${zig_arch}-${zig_version}.${archive_ext}'
 				zig_url := 'https://ziglang.org/download/${zig_version}/${zig_archive_name}'
-				local_archive_path := os.join_path(dest_dir, zig_archive_name)
+				local_archive_path := os.join_path(dest_dir, zig_archive_name) // Download archive into dest_dir
 
 				if !os.exists(local_archive_path) {
 					println(term.warn_message('Windows Zig compiler not found. Downloading...'))
@@ -145,18 +144,37 @@ mut app := cli.Command{
 					println('Found downloaded archive. Extracting...')
 				}
 
-				// Clean up previous extraction if any
-				if os.exists(zig_final_path) {
-					os.rmdir_all(zig_final_path)!
+				// Clean up previous extraction if any (the nested folder)
+				extracted_root_folder_path := os.join_path(dest_dir, extracted_folder_name)
+				if os.exists(extracted_root_folder_path) {
+					os.rmdir_all(extracted_root_folder_path)!
+				}
+				// Clean up any direct files that might have been there from a failed attempt
+				if os.exists(zig_exe_full_path) {
+					os.rm(zig_exe_full_path)!
 				}
 
-				// Extract directly to dest_dir
+				// Extract directly to dest_dir. This will create the 'zig-x86_64-windows-0.15.2' folder inside dest_dir.
 				println('  Extracting ${local_archive_path} to ${dest_dir}...')
-				result := execute('unzip -o ${local_archive_path} -d ${dest_dir}')
+				mut result := execute('unzip -o ${local_archive_path} -d ${dest_dir}')
 				if result.exit_code != 0 {
 					println(term.fail_message('  Extraction failed: ${result.output}'))
 					return
 				}
+
+				// Move contents of the extracted root folder (e.g., dest_dir/zig-x86_64-windows-0.15.2/)
+				// directly into dest_dir (e.g., dest_dir/)
+				println('  Moving contents from ${extracted_root_folder_path} to ${dest_dir}...')
+				// Use a shell command for robustness with moving contents
+				// mv command works by moving all contents from source_dir/* to dest_dir/
+				result = execute('mv ${extracted_root_folder_path}/* ${dest_dir}/')
+				if result.exit_code != 0 {
+					println(term.fail_message('  Failed to move extracted contents: ${result.output}'))
+					return
+				}
+
+				// Cleanup the now-empty extracted root folder
+				os.rmdir(extracted_root_folder_path)!
 
 				// Cleanup archive
 				os.rm(local_archive_path) or {}
