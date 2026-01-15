@@ -2,6 +2,8 @@
 
 ## v0.1.1-dev4
 
+- **New compiler api**: the compilées powering gama can be accessed via `gama tcc` , `zig` and `zcc` , where `zcc` is `zig cc`.  this permits you to integrate gama compilées in your workflow especially on windows where it's quite useful.
+
 - **Integrated Compiler Toolchain**: Reworked the entire build process to improve developer experience and portability.
   - **Bundled Compilers (Windows)**: The Windows installer now comes with pre-configured **TCC** and **Zig** compilers, providing a true "out-of-the-box" development environment with no external dependencies required.
   - **System Dependencies (Linux)**: The Linux packages (`.deb`, `.pkg.tar.zst`) now declare `tcc` and `zig` as external dependencies, leveraging the system's package manager for a smaller footprint and native integration.
