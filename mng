@@ -73,10 +73,11 @@ mut app := cli.Command{
 			usage:       './mng build'
 			description: 'Build gama cli tool'
 			execute:     fn (_ cli.Command) ! {
+				os.mkdir_all('bin') or {}
 				println('Building gama for linux')
-				mut result := execute('v -os linux cli.v -o bin/gama')
+				mut result := execute('v -cc clang -os linux cli.v -o bin/gama')
 				if result.exit_code != 0 {
-					println(term.fail_message('host build failed: ${result.output}'))
+					println(term.fail_message('linux build failed: ${result.output}'))
 				}
 				println('Building gama for windows')
 				result = execute('v -os windows cli.v -o bin/gama')

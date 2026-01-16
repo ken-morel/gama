@@ -177,8 +177,10 @@ fn run_gg_loop() {
 	gapi_gama_runs__ = false
 	gapi_queue__.close() // cancel remaining draw operaions
 	gapi_end_frame__.close()
-	gapi_queue_wait__.unlock()
 	println(term.cyan('[vgama] bye'))
+	gapi_queue_wait__.unlock()
+
+	gapi_end_frame__ <- true or {} // close the current frame
 }
 
 @[export: 'gapi_init']
@@ -219,11 +221,6 @@ fn gapi_init(width int, height int, title &char) i32 {
 fn gapi_set_title(title &char) {
 	gapi_title__ = title.vstring()
 	gg.set_window_title(gapi_title__)
-}
-
-@[export: 'gapi_runs']
-fn gapi_runs() i32 {
-	return if gapi_gama_runs__ { i32(1) } else { i32(0) }
 }
 
 @[export: 'gapi_quit']

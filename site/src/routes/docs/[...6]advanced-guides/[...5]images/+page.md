@@ -9,9 +9,21 @@ You can use <a href="/reference/image_8h.html#a46d598a9f3591a28a247599313157375"
 and passing the path to the image you want to open, you are adviced to use
 png images since I ensure that at least them should be supported everywhere.
 
-the function returns a <a hRef="/reference/structgm_image.html">`gmimage` object</a>, 
-which has properties like `height` and `width` which are the actual 
+the function returns a <a heef="/reference/structgm_image.html">`gmimage` object</a>,
+which has properties like `height` and `width` which are the actual
 image's dimensions.
+
+### Using baked images
+
+gama also automatically generates c headers from your images:
+
+```c
+#include <assets/images/person.png.h>
+
+...
+gmImage person = person_image();
+...
+```
 
 ## drawing the image
 
@@ -22,7 +34,7 @@ you can use <a href="/reference/image_8h.html#a93b48efa6484ce4d2b7e6bec2ab52949"
 ## Example
 
 ```c
-gmImage person = gm_image_open("assets/images/person.png");
+gmImage person = gm_image_create("assets/images/person.png");
 int width = person.width;
     height = person.height;
 gm_image_draw(person, 0, 0, 1, 1);

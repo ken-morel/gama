@@ -15,13 +15,11 @@ In the end you should have an image like this:
 ## loading the image
 
 You can load the sprite image as you open a normal image:
-See [image guid](/docs/guides/images).
+See [image guide](/docs/guides/images).
 
 ```c
-gmImage img = gm_image_open("assets/sprites/player.png");
+gmImage img = person_image();
 ```
-if `assets/sprites/player.png` is the path to your player image
-in assets folder.
 
 ## Creating the sprite
 

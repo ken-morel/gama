@@ -1,20 +1,21 @@
 {
   "name": "gama",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "Gama bindings library",
+  "module": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build.mjs"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "gama",
+    "canvas",
+    "wasm"
+  ],
+  "author": "ken-morel <engonken8@gmail.com>",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@types/pako": "^2.0.3",
     "esbuild": "^0.27.2",
-    "pako": "^2.1.0",
     "typescript": "^5.9.3"
   }
 }

@@ -4,7 +4,7 @@ View:
 - <a href="/reference/obj_8h.html">gama/3d/obj.h reference</a>
 - <a href="/reference/gltf_8h.html">gama/3d/gltf.h reference</a>
 
-There are two ways of using 3d mesh files in your apps, you 
+There are two ways of using 3d mesh files in your apps, you
 can either load the files at runtime(works for native builds only)
 which will load the data when your app is running, or you can bake
 them, producing source files you can directly include in your project,
@@ -37,7 +37,7 @@ folder, then when you build your application, gama will automatically generate `
 which you can incude in your app.
 
 Create a file at `assets/obj/cube.obj`, and in that file insert this:
-```obj
+```python
 # Simple Cube with Vertices and Normals
 o Cube
 
