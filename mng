@@ -202,7 +202,7 @@ mut app := cli.Command{
 							println(term.fail_message('vgama linux build failed : ${result.output}'))
 						}
 						println('Building vgama for windows')
-						result = execute('v libvgama -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
+						result = execute('v libvgama -cc clang -os windows -shared -enable-globals -cflags -DWIN32_LEAN_AND_MEAN -o ./runners/native/libvgama')
 						if result.exit_code != 0 {
 							println(term.fail_message('vgama windows build failed : ${result.output}'))
 						}
