@@ -2,6 +2,7 @@
 
 #ifndef GM_MATH
 #define GM_MATH
+#define _MATH_H
 #endif
 
 /**
@@ -26,7 +27,8 @@
 #define ln10 2.30258509299404590109
 /**
  * @def INF
- * @brief Represents positive infinity for double-precision floating-point numbers.
+ * @brief Represents positive infinity for double-precision floating-point
+ * numbers.
  */
 #define INF 1.0 / 0.0
 /**
@@ -36,7 +38,8 @@
 #define NAN 0.0 / 0.0
 /**
  * @def MAX_double
- * @brief The maximum representable value for a double-precision floating-point number.
+ * @brief The maximum representable value for a double-precision floating-point
+ * number.
  */
 #define MAX_double 1.7976931348623158e308
 
@@ -69,7 +72,8 @@ double fabs(double x);
 
 /**
  * @internal
- * @brief Translates a double-precision float into its scientific notation components.
+ * @brief Translates a double-precision float into its scientific notation
+ * components.
  * @param x The double to translate.
  * @param _special Pointer to a `special` struct to store the components.
  */
@@ -212,7 +216,8 @@ double atan_1_1(double x) {
 /**
  * @brief Calculates the arccosine of x.
  * @param x The floating-point value, expected to be in the range [-1, 1].
- * @return The arccosine of x in radians, in the range [0, PI], or NAN if x is out of range.
+ * @return The arccosine of x in radians, in the range [0, PI], or NAN if x is
+ * out of range.
  */
 double acos(double x) {
   return (x <= 1 && x >= -1)
@@ -223,7 +228,8 @@ double acos(double x) {
 /**
  * @brief Calculates the arcsine of x.
  * @param x The floating-point value, expected to be in the range [-1, 1].
- * @return The arcsine of x in radians, in the range [-PI/2, PI/2], or NAN if x is out of range.
+ * @return The arcsine of x in radians, in the range [-PI/2, PI/2], or NAN if x
+ * is out of range.
  */
 double asin(double x) {
   double result = x, temp = x;
@@ -291,7 +297,8 @@ double exp(double x) {
 /**
  * @brief Calculates the natural logarithm of x (ln(x)).
  * @param x The floating-point value.
- * @return The natural logarithm of x, or NAN if x is negative, or -INF if x is zero.
+ * @return The natural logarithm of x, or NAN if x is negative, or -INF if x is
+ * zero.
  */
 double log(double x) {
   double temp;
@@ -370,7 +377,8 @@ double fabs(double x) { return x < 0 ? x *= -1. : x; }
 
 /**
  * @internal
- * @brief Translates a double-precision float into its scientific notation components.
+ * @brief Translates a double-precision float into its scientific notation
+ * components.
  * @param x The double to translate.
  * @param _special Pointer to a `special` struct to store the components.
  */
@@ -403,7 +411,7 @@ void translate(double x, struct special *_special) {
  * @param b The second integer.
  * @return The smaller of a and b.
  */
-int min(int a, int b) { return a > b ? b : a; }
+static inline int min(int a, int b) { return a > b ? b : a; }
 /**
  * @brief Returns the smaller of two double values.
  * @param a The first double.

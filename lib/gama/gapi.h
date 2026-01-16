@@ -10,35 +10,12 @@
  */
 #pragma once
 
+#ifdef GM_NO_GAPI
+#error "gapi.h included"
+#endif
+
 #include "color.h"
 #include <stdint.h>
-
-/**
- * @internal
- * @brief Stores the delta time (time since last frame) in seconds.
- * This value is updated by `gapi_yield`.
- */
-double _gm_dt = 0;
-/**
- * @internal
- * @brief Stores the total accumulated time since the engine started, in
- * seconds. This value is updated by `gapi_yield`.
- */
-double _gm_t = 0;
-
-/**
- * @brief Retrieves the delta time (time since the last frame) in seconds.
- * @return The delta time.
- */
-static inline double gm_dt() { return _gm_dt; }
-/**
- * @brief Retrieves the total accumulated time since the engine started, in
- * seconds.
- * @return The total elapsed time.
- */
-static inline double gm_t() { return _gm_t; }
-
-#ifndef GM_NO_GAPI
 
 /**
  * @brief Sets the title of the application window.
@@ -353,5 +330,3 @@ extern int32_t
     __attribute__((import_module("gapi"), import_name("mouse_get")))
 #endif
     gapi_mouse_get(double *x, double *y);
-
-#endif
