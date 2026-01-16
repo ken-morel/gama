@@ -72,17 +72,21 @@ mut app := cli.Command{
 			name:        'build'
 			usage:       './mng build'
 			description: 'Build gama cli tool'
-			execute:     fn (_ cli.Command) ! {
+			execute:     fn (cmd cli.Command) ! {
 				os.mkdir_all('bin') or {}
-				println('Building gama for linux')
-				mut result := execute('v -cc clang -os linux cli.v -o bin/gama')
-				if result.exit_code != 0 {
-					println(term.fail_message('linux build failed: ${result.output}'))
+				if cmd.args.len == 0 || cmd.args[0] == 'linux' {
+					println('Building gama for linux')
+					result := execute('v -cc clang -force-bounds-checking -showcc -os linux cli.v -o bin/gama')
+					if result.exit_code != 0 {
+						println(term.fail_message('linux build failed: ${result.output}'))
+					}
 				}
-				println('Building gama for windows')
-				result = execute('v -os windows cli.v -o bin/gama')
-				if result.exit_code != 0 {
-					println(term.fail_message('windows build failed: ${result.output}'))
+				if cmd.args.len == 0 || cmd.args[0] == 'windows' {
+					println('Building gama for windows')
+					result := execute('v -force-bounds-checking -showcc -os windows  cli.v -o bin/gama')
+					if result.exit_code != 0 {
+						println(term.fail_message('windows build failed: ${result.output}'))
+					}
 				}
 			}
 		},
@@ -197,12 +201,12 @@ mut app := cli.Command{
 					description: 'Build the gama native runner'
 					execute:     fn (_ cli.Command) ! {
 						println('Building vgama for linux')
-						mut result := execute('v libvgama/ -cc clang -os linux -shared -enable-globals -o ./runners/native/libvgama')
+						mut result := execute('v libvgama/ -cc clang -force-bounds-checking -showcc -os linux -shared -enable-globals -o ./runners/native/libvgama')
 						if result.exit_code != 0 {
 							println(term.fail_message('vgama linux build failed : ${result.output}'))
 						}
 						println('Building vgama for windows')
-						result = execute('v libvgama -cc clang -os windows -shared -enable-globals -cflags -DWIN32_LEAN_AND_MEAN -o ./runners/native/libvgama')
+						result = execute('v libvgama -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
 						if result.exit_code != 0 {
 							println(term.fail_message('vgama windows build failed : ${result.output}'))
 						}
