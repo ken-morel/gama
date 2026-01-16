@@ -12,6 +12,8 @@ typedef struct {
   double x, y, z; /**< The X, Y, and Z coordinates. */
 } gm3Pos;
 
+const gm3Pos gm3zero = {0};
+
 /**
  * @brief Creates a new `gm3Pos` struct with the given coordinates.
  * @param x The X-coordinate.
@@ -59,7 +61,8 @@ static inline void gm3_pos_set(gm3Pos *p, double x, double y, double z) {
 #define gm3_pos_from2(p, z) gm3pos((p).x, (p).y, z)
 
 /**
- * @brief Performs a simple perspective projection of a 3D point onto a 2D plane.
+ * @brief Performs a simple perspective projection of a 3D point onto a 2D
+ * plane.
  *
  * This macro assumes a camera at the origin looking down the Z-axis, and
  * projects the point onto the Z=1 plane.
@@ -123,7 +126,8 @@ static inline void gm3_pos_add(gm3Pos *va, const gm3Pos *vb) {
  */
 static inline void gm3_pos_normalize(gm3Pos *v) {
   double m = gm3_pos_magnitude(*v);
-  if (m == 0) return; // Avoid division by zero
+  if (m == 0)
+    return; // Avoid division by zero
   v->x /= m;
   v->y /= m;
   v->z /= m;
@@ -161,7 +165,8 @@ static inline void gm3_pos_normalize(gm3Pos *v) {
  */
 static inline gm3Pos gm3_pos_centerN(const gm3Pos *arr, const size_t n) {
   gm3Pos res = {0};
-  if (n == 0) return res;
+  if (n == 0)
+    return res;
   double dn = (double)n;
   for (size_t i = 0; i < n; i++) {
     res.x += arr[i].x / dn;

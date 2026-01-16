@@ -12,6 +12,7 @@
 #include "draw.h"
 #include "gapi.h"
 #include "stdio.h"
+#include "t.h"
 #include "widgets/frame.h"
 
 #ifdef GM_ARGC_MAIN
