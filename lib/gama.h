@@ -13,14 +13,6 @@
 #include "gama/sprite.h"
 #endif
 
-typedef struct {
-  int name;
-} Thing;
-
-const Thing ama = {
-    .name = 0,
-};
-
 #include "gama/3d.h"
 #include "gama/animate.h"
 #include "gama/body.h"

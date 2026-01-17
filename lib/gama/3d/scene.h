@@ -38,25 +38,6 @@ static inline gm3Scene gm3_scene() {
 }
 
 /**
- * @brief Initializes a `gm3Scene` struct with default values and a specified
- * viewport.
- * @param s A pointer to the `gm3Scene` struct to initialize.
- * @param w The width of the viewport.
- * @param h The height of the viewport.
- * @return 0 on success, -1 if `s` is NULL.
- */
-int gm3_scene_create(gm3Scene *s, double w, double h) {
-  if (s == NULL)
-    return -1;
-  *s = gm3_scene();
-  s->viewport.x = w;
-  s->viewport.y = h;
-  s->light = gm3_light();
-  s->camera = gm3_camera();
-  return 0;
-}
-
-/**
  * @brief Frees any dynamically allocated memory associated with a `gm3Scene`.
  *
  * Currently, the `gm3Scene` struct does not directly manage any dynamically
