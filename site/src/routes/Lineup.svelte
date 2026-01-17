@@ -1,21 +1,17 @@
-<script>
-  import { GamaInstance } from "gama-svelte";
-
+<script lang="ts">
+  import Gama from "gama";
   import { onMount } from "svelte";
 
-  onMount(() => {
-    // const instance = new GamaInstance();
-    // instance.bind(document.getElementById("lineup"));
-    // instance.bindKeyboard(document);
-    // instance.setup("/lineup.wasm").then(() => {
-    //   instance.start();
-    // });
+  onMount(async () => {
+    const canvas = document.querySelector("canvas#lineup");
+    const lineup = await Gama.create("/lineup.wasm", "ac35a8e00047d46679d46");
+    if (canvas) lineup.attach(canvas as HTMLCanvasElement);
+    lineup.bindKeyboard(document);
+    await lineup.start();
   });
 </script>
 
-<div id="lineup">
-  <GamaInstance binary="/lineup.wasm" uuid="a3d1d4f35704-1234-f567-8901" />
-</div>
+<canvas id="lineup"></canvas>
 
 <style>
   @media all and (orientation: portrait) {
