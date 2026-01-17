@@ -4,7 +4,7 @@
   "description": "Gama bindings library",
   "module": "src/index.ts",
   "scripts": {
-    "build": "node build.mjs"
+    "build": "bun build.mjs"
   },
   "keywords": [
     "gama",

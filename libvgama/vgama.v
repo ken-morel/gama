@@ -7,6 +7,10 @@ import rand
 
 // #flag -D_SGL_DEFAULT_MAX_COMMANDS=65536
 // #flag -D_SGL_DEFAULT_MAX_VERTICES=4194304
+// errors:
+// #flag -static
+// #flag -static-libgcc
+// #flag -static-libstdc++
 
 type GapiTask = fn ()
 
