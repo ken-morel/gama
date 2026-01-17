@@ -11,6 +11,11 @@ const config = {
     prerender: {
       handleMissingId: "warn",
     },
+    files: {
+      hooks: {
+        server: "./src/hook.server.ts"
+      }
+    }
   },
 };
 

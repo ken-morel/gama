@@ -5,7 +5,8 @@
   onMount(async () => {
     const canvas = document.querySelector("canvas#lineup");
     const lineup = await Gama.create("/lineup.wasm", "ac35a8e00047d46679d46");
-    if (canvas) lineup.attach(canvas as HTMLCanvasElement);
+    // @ts-ignore
+    if (canvas) lineup.attach(canvas);
     lineup.bindKeyboard(document);
     await lineup.start();
   });
