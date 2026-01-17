@@ -25,16 +25,6 @@
       id: 'platform',
       title: "Cross-Platform by Design",
       description: "Write your game once in C and build it for native desktop (Linux, Windows) or for the Web via WebAssembly, using the exact same code.",
-    },
-     {
-      id: 'ui',
-      title: "UI & Widgets",
-      description: "An immediate-mode UI suite with skinnable widgets like buttons, sliders, and joysticks to quickly build interfaces.",
-    },
-    {
-      id: '3d',
-      title: "Software 3D Renderer",
-      description: "A built-in 3D pipeline for rendering `.obj` and `.gltf` models, perfect for learning the fundamentals of 3D graphics."
     }
   ];
 
@@ -92,9 +82,7 @@ int main() {
     library: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2l4 4-9 9-4-4 9-9z"/><path d="M3 21v-4l4 4H3z"/><path d="m15 5 4 4"/></svg>`,
     physics: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>`,
     rendering: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
-    platform: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
-    ui: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-7.07 7.07a5.4 5.4 0 0 0 0 7.65l7.07 7.07a5.4 5.4 0 0 0 7.65 0l7.07-7.07a5.4 5.4 0 0 0 0-7.65z"/><line x1="12" y1="6" x2="12" y2="18"/></svg>`,
-    '3d': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`
+    platform: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`
   };
 
 </script>
@@ -119,10 +107,10 @@ int main() {
     </div>
   </div>
 
-  <!-- Core Features Section (New Icon Grid Design) -->
+  <!-- Core Features Section (Updated Design) -->
   <div class="section">
     <h2 class="section-title">Core Features</h2>
-    <div class="features-grid">
+    <div class="features-list-vertical">
       {#each features as feature}
         <div class="feature-tile">
           <div class="feature-icon">
@@ -135,16 +123,14 @@ int main() {
     </div>
   </div>
   
-  <!-- Philosophy Section (New Numbered List Design) -->
+  <!-- Philosophy Section (Updated Design) -->
   <div class="section philosophy-section">
     <h2 class="section-title">Guiding Philosophy</h2>
     <div class="philosophy-list">
       {#each philosophy as item, i}
-        <div class="philosophy-item" class:reverse={i % 2 !== 0}>
-          <div class="philosophy-number-container">
-            <div class="philosophy-number">
-              <span>0{i + 1}</span>
-            </div>
+        <div class="philosophy-item">
+          <div class="philosophy-number">
+            <span>0{i + 1}</span>
           </div>
           <div class="philosophy-card">
             <h3 class="philosophy-title">{item.title}</h3>
@@ -181,7 +167,7 @@ int main() {
     </div>
   </div>
 
-  <!-- Live Demo Section -->
+  <!-- Live Demo Section (Updated Design) -->
   <div class="section">
     <h2 class="section-title">Live WebAssembly Demo</h2>
     <p class="section-subtitle">Gama projects compile directly to WebAssembly. Here is a small interactive sample running entirely in your browser.</p>
@@ -231,23 +217,9 @@ int main() {
   }
 
   /* Sections */
-  .section {
-    padding: 6rem 0;
-  }
-  .section-title {
-    font-size: 2.5rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-  .section-subtitle {
-    font-size: 1.1rem;
-    color: var(--subtitle-color);
-    max-width: 600px;
-    margin: -2rem auto 2rem;
-    line-height: 1.6;
-    text-align: center;
-  }
+  .section { padding: 6rem 0; }
+  .section-title { font-size: 2.5rem; font-weight: 600; text-align: center; margin-bottom: 3rem; }
+  .section-subtitle { font-size: 1.1rem; color: var(--subtitle-color); max-width: 600px; margin: -2rem auto 2rem; line-height: 1.6; text-align: center; }
 
   /* Hero */
   .hero { text-align: center; padding: 4rem 0; }
@@ -261,11 +233,13 @@ int main() {
   .button-secondary { color: var(--text-color); border-color: var(--border-color); }
   .button-secondary:hover { background-color: var(--border-color); }
 
-  /* Core Features (Icon Grid) */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
+  /* Core Features (One per line, bigger icons, centered) */
+  .features-list-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* Spacing between features */
+    max-width: 800px; /* Constrain width for better readability */
+    margin: 0 auto;
   }
   .feature-tile {
     background-color: var(--tile-bg-color);
@@ -274,6 +248,7 @@ int main() {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     transition: all 0.2s ease-in-out;
+    text-align: center; /* Center content */
   }
   .feature-tile:hover {
     border-color: var(--accent-color);
@@ -282,71 +257,66 @@ int main() {
   .feature-icon {
     margin-bottom: 1.5rem;
     color: var(--accent-color);
+    display: flex; /* Use flex to center SVG */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
   }
   .feature-icon svg {
-      width: 32px;
-      height: 32px;
+    width: 60px; /* Significantly increased icon size */
+    height: 60px; /* Significantly increased icon size */
   }
   .feature-title {
-    font-size: 1.25rem;
+    font-size: 1.75rem; /* Increased title size */
     font-weight: 600;
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.75rem;
   }
   .feature-description {
-    font-size: 1rem;
+    font-size: 1.1rem; /* Slightly larger description */
     color: var(--subtitle-color);
     margin: 0;
     line-height: 1.6;
   }
 
-  /* Philosophy Section (Numbered List) */
-  .philosophy-section {
-      position: relative;
-      overflow: hidden;
-  }
+  /* Philosophy Section (Number above card, glowing, centered) */
   .philosophy-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 6rem; /* More vertical space */
+    max-width: 600px; /* Constrain width for better readability */
+    margin: 0 auto;
+    align-items: center; /* Center philosophy items */
   }
   .philosophy-item {
-    display: grid;
-    grid-template-columns: 100px 1fr;
+    display: flex;
+    flex-direction: column; /* Stack number above card */
     align-items: center;
-    gap: 2rem;
-    position: relative;
-    padding: 2rem 0;
-  }
-  .philosophy-item.reverse {
-    grid-template-columns: 1fr 100px;
-  }
-  .philosophy-item.reverse .philosophy-number-container {
-      order: 2;
-  }
-  .philosophy-number-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    text-align: center;
+    width: 100%; /* Ensure it takes full width of parent */
   }
   .philosophy-number {
-    width: 80px;
-    height: 80px;
+    width: 90px; /* Slightly larger number container */
+    height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--border-color);
     background: linear-gradient(135deg, var(--accent-color), #583758);
+    box-shadow: 0 0 35px rgba(170, 119, 170, 0.7); /* Stronger glowing effect */
+    margin-bottom: -45px; /* Adjust overlap */
+    position: relative;
+    z-index: 2;
   }
   .philosophy-number span {
-    font-size: 2rem;
+    font-size: 2.5rem; /* Larger number */
     font-weight: 700;
     color: white;
   }
   .philosophy-card {
-     padding: 2rem;
+     width: 100%;
+     padding: 5rem 2rem 2rem; /* More top padding to account for number overlap */
      background: var(--tile-bg-color);
      border: 1px solid var(--border-color);
      backdrop-filter: blur(20px);
+     z-index: 1;
   }
   .philosophy-title {
     font-size: 1.75rem;
@@ -361,49 +331,40 @@ int main() {
 
   /* Toolchain List Section */
   .toolchain-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    background-color: var(--border-color);
-    border: 1px solid var(--border-color);
+    display: flex; flex-direction: column; gap: 1px;
+    background-color: var(--border-color); border: 1px solid var(--border-color);
   }
   .toolchain-item {
-    background-color: #202025;
-    padding: 2rem;
-    transition: background-color 0.2s ease-in-out;
+    background-color: #202025; padding: 2rem; transition: background-color 0.2s ease-in-out;
   }
-  .toolchain-item:hover {
-     background-color: #28282d;
-  }
-  .toolchain-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--accent-color);
-    margin: 0 0 0.5rem;
-  }
-  .toolchain-description {
-    font-size: 1rem;
-    color: var(--subtitle-color);
-    margin: 0;
-    line-height: 1.6;
-  }
+  .toolchain-item:hover { background-color: #28282d; }
+  .toolchain-title { font-size: 1.25rem; font-weight: 600; color: var(--accent-color); margin: 0 0 0.5rem; }
+  .toolchain-description { font-size: 1rem; color: var(--subtitle-color); margin: 0; line-height: 1.6; }
 
   /* Code & Demo Sections */
-  .code-container, .demo-container { max-width: 800px; margin: 0 auto; background: #1e1e1e; border: 1px solid var(--border-color); overflow: hidden; }
+  .code-container { max-width: 800px; margin: 0 auto; background: #1e1e1e; border: 1px solid var(--border-color); overflow: hidden; }
+  .demo-container {
+    width: 100%; /* Full width */
+    max-width: 100%; /* Ensure it doesn't exceed content-wrapper */
+    aspect-ratio: 16 / 9; /* Maintain aspect ratio for video-like content */
+    background: #1e1e1e;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    display: flex;
+    margin: 0 auto; /* Center the demo container */
+  }
+  .demo-container > :global(*) {
+      flex-grow: 1;
+  }
   .code-header-tabs { background: #2d2d2d; padding: 0.75rem 1rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); }
   .tab-dot { width: 12px; height: 12px; background: #555; }
 
   /* Universal: No border-radius */
-  * {
-    border-radius: 0 !important;
-  }
+  * { border-radius: 0 !important; }
 
   @media (max-width: 768px) {
     .hero-title { font-size: 2.5rem; }
-    .hero-subtitle { font-size: 1.1rem; }
     .section { padding: 4rem 0; }
-    .features-grid { grid-template-columns: 1fr; }
-    .philosophy-item, .philosophy-item.reverse { grid-template-columns: 1fr; text-align: center; gap: 1rem; }
-    .philosophy-item.reverse .philosophy-number-container { order: 0; }
+    .features-grid { grid-template-columns: 1fr; } /* Features revert to 1 col on mobile */
   }
 </style>
