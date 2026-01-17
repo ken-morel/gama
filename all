@@ -1,0 +1,5 @@
+#!/usr/bin/sh
+
+# takes abit less than 2 minutes on my system
+
+./mng build && ./mng runner web && ./mng runner native && ./mng get-zig && ./mng package

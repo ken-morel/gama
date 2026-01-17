@@ -18,7 +18,7 @@ ${Using:StrFunc} StrStr ; <-- THIS IS THE FIX for the new error.
 ;--------------------------------
 ; General
 Name "gama"
-OutFile "../bin/gama-0.1.0-windows-setup.exe"
+OutFile "../bin/gama-0.1.1-windows-setup.exe"
 InstallDir "$PROFILE\.gama"
 InstallDirRegKey HKCU "Software\cm.engon.gama" "InstallDir"
 RequestExecutionLevel user
@@ -82,8 +82,8 @@ Section "Install gama" SecInstall
   File /r "..\runners\native\libvgama.dll"
 
   SetOutPath "$INSTDIR\runners\web"
-  File /r "..\runners\web\index.html" 
-  File /r "..\runners\web\gama.js" 
+  File /r "..\runners\web\index.html"
+  File /r "..\runners\web\gama.js"
 
   !echo "Packaging tcc"
 

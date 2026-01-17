@@ -9,7 +9,7 @@
 name: "gama"
 arch: "amd64"
 platform: "linux"
-version: "0.1.0"
+version: "0.1.1"
 section: "default"
 priority: "extra"
 provides:
