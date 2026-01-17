@@ -28,7 +28,7 @@ gmImage person = person_image();
 ## drawing the image
 
 easy, use <a href="/reference/image_8h.html#aec56e25f8f3aab9a80ac99ea14751cdb">`gm_image_draw`</a>, passing image dimensins,
-if you want to draw only part of an image(that's what [sprites](/docs/guides/sprites) do)
+if you want to draw only part of an image(that's what [sprites](/docs/advanced-guides/sprites) do)
 you can use <a href="/reference/image_8h.html#a93b48efa6484ce4d2b7e6bec2ab52949">`gm_image_draw_part`</a>.
 
 ## Example
