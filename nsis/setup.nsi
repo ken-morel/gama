@@ -20,7 +20,7 @@ ${Using:StrFunc} StrStr ; <-- THIS IS THE FIX for the new error.
 Name "gama"
 OutFile "../bin/gama-0.1.0-windows-setup.exe"
 InstallDir "$PROFILE\.gama"
-InstallDirRegKey HKCU "Software\cm.ama.gama" "InstallDir"
+InstallDirRegKey HKCU "Software\cm.engon.gama" "InstallDir"
 RequestExecutionLevel user
 
 ;--------------------------------
@@ -73,13 +73,17 @@ Section "Install gama" SecInstall
   File "..\gama.svg"
   File "..\LICENSE"
   File "..\README.md"
-  File /r "..\bin\compilers"
+  File /r "..\compilers"
   File /r "..\lib"
   File /r "..\templates"
   File /r "..\assets"
 
   SetOutPath "$INSTDIR\runners\native"
   File /r "..\runners\native\libvgama.dll"
+
+  SetOutPath "$INSTDIR\runners\web"
+  File /r "..\runners\native\web\index.html" 
+  File /r "..\runners\native\web\gama.js" 
 
   ; --- Add the installation directory to the user's PATH ---
   Call AddGamaToPath

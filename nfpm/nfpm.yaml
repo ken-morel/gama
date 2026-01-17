@@ -51,11 +51,13 @@ contents:
   - src: ./templates
     dst: /usr/share/gama/templates
 
+
   - src: ./runners/native/libvgama.so
     dst: /usr/lib/libvgama.so
   - src: /usr/lib/libvgama.so
     dst: /usr/share/gama/runners/native/libvgama.so
     type: symlink
+
   - src: ./runners/web
     dst: /usr/share/gama/runners/web
 scripts:

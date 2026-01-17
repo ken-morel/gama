@@ -12,6 +12,8 @@
   - **Updated `gama build` command**: The `build` command is now focused on release builds, using the more powerful and optimizing **Zig CC** compiler by default.
 - **Improved Project Portability**: Removed the `compiler` field from `gama.toml`, making project files toolchain-agnostic and easier to share between different systems.
 
+- Gama headers are located to /usr/lib/gama on linux
+
 ## v0.1.1-dev3
 
 - Started the changelog.
