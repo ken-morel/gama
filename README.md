@@ -48,6 +48,13 @@ Gama is built on a few core principles to make game development in C more approa
     - `gmw_frame`: A panel for grouping UI elements.
 - **Theming System**: A simple system for saving and restoring widget themes to easily change UI styles.
 
+### Compiler Toolchain
+- **Zero-Setup on Windows**: On Windows, Gama comes bundled with pre-configured **TCC** and **Zig** compilers. No external downloads or `PATH` configuration needed.
+- **System-Native on Linux**: On Linux, Gama relies on `tcc` and `zig` from your system's package manager, ensuring seamless integration.
+- **`gama dev` for Rapid Development**: Use `gama dev` to instantly run your project with the fast **TCC** compiler. This command also features hot-reloading for rapid iteration.
+- **`gama build` for Optimization**: When ready to create a release build, `gama build` uses the more powerful and optimizing **Zig CC** compiler.
+- **Direct Compiler Access**: Gama provides proxy commands to access the underlying compilers directly, which is great for educational purposes or advanced build scripting. You can use `gama tcc`, `gama zig`, and `gama zcc` as direct replacements for the real commands.
+
 ### And More...
 - **Animation Utilities**: A collection of easing functions (`spring`, `ease-in`, `ease-out`) for smooth animations.
 - **Input Handling**: Straightforward functions for checking keyboard and mouse state.
@@ -57,6 +64,25 @@ Gama is built on a few core principles to make game development in C more approa
 
 ## Getting Started
 
+Getting started with Gama is designed to be as simple as possible.
+
+1.  **Download and Install**:
+    -   **Windows**: Download and run the latest `gama-*-windows-setup.exe` from the [releases page](https://github.com/ken-morel/gama/releases). The installer handles everything for you.
+    -   **Linux**: Download the `.deb` or `.pkg.tar.zst` package and install it with your system's package manager. Make sure you also have `tcc` and `zig` installed (`sudo apt install tcc zig` or `sudo pacman -S tcc zig`).
+
+2.  **Create a New Project**:
+    Open a terminal and run:
+    ```bash
+    gama new my_first_game
+    ```
+
+3.  **Run in Development Mode**:
+    Navigate into your new project and start the development server:
+    ```bash
+    cd my_first_game
+    gama dev
+    ```
+    Your game window will appear, and the code will automatically re-compile and re-run whenever you save a change.
 
 ## Development with Gama
 
@@ -92,10 +118,9 @@ int main() {
 
 ### Prerequisites
 - **V Compiler**: The `mng` build script is written in V. You will need to install the V compiler from [vlang.io](https://vlang.io).
-- **C Compiler**: A C compiler, preferably `clang`, but `gcc` should work to. `tcc` failed on
-  my system.
-- **`bun` (Optional)**: For building gama.js
-- **`zig` (Optional)**: For buiding gama projects to webassembly.
+- **A C Compiler**: For building `vlibvgama` (e.g., `clang` or `gcc`).
+- **`bun`**: For building `gama.js`.
+- **`unzip`**: The `mng` script uses `unzip` to set up the Zig toolchain for packaging.
 - **Doxygen (Optional)**: For generating reference documentation.
 - **`makensis` (Optional)**: For building the Windows installer.
 - **`nfpm` (Optional)**: For creating `.deb` packages.
