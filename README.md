@@ -60,7 +60,12 @@ Gama is built on a few core principles to make game development in C more approa
 - **Input Handling**: Straightforward functions for checking keyboard and mouse state.
 - **Math & Debug Libraries**: A custom math library and simple print-based debugging macros.
 
+## Architecture Overview
 
+Gama's cross-platform power comes from its flexible backend architecture.
+
+-   **`libvgama`**: The native heart of the engine. Written in V, `libvgama` runs a `sokol`-based game loop, providing a fast and efficient rendering backend via `gg`.
+-   **`gama.js`**: The web backend. This TypeScript runner uses a Web Worker and `SharedArrayBuffer` to run your C code (compiled to WASM) off the main thread for maximum performance in the browser.
 
 ## Getting Started
 
@@ -83,6 +88,13 @@ Getting started with Gama is designed to be as simple as possible.
     gama dev
     ```
     Your game window will appear, and the code will automatically re-compile and re-run whenever you save a change.
+
+4.  **Build for the Web**:
+    To compile your project for a web browser, run:
+    ```bash
+    gama build web
+    ```
+    This will create a `build/web` directory containing all the files needed to run your game on a local web server.
 
 ## Development with Gama
 
@@ -127,33 +139,23 @@ int main() {
 
 ### Building and Running
 
-The project uses a custom `mng` script (written in V) as a task runner for all common operations.
+The project uses two primary scripts for development and packaging, both located at the project root.
 
-1.  **Build the `gama` CLI tool:**
-    ```bash
-    ./mng build
-    ```
-    This compiles the main `gama` command-line tool to the `bin/` directory.
+-   **`./mng`**: This is a task runner written in V, used for most common development operations. It allows you to build individual components of the Gama ecosystem.
+    -   `./mng build`: Compiles the `gama` CLI tool for all target platforms.
+    -   `./mng runner native`: Builds the `libvgama` native library.
+    -   `./mng runner web`: Builds the `gama.js` web runner.
+    -   `./mng get-zig`: Downloads and sets up the Zig compiler needed for packaging.
+    -   `./mng package`: Creates the final distributable packages (`.deb`, `.tar.zst`, `.exe` installer).
 
-2.  **Build the Web Version:**
-    To prepare the web runner, you need to build the `gama.js` library. This requires `bun`.
-    ```bash
-    ./mng web
-    ```
-    This command builds the JavaScript components and places the necessary files in `runners/web/`.
-
-3.  **Generate Documentation:**
-    To generate the Doxygen API documentation and integrate it into the website:
-    ```bash
-    ./mng docs
-    ```
-    The generated HTML documentation will be copied in `site/static/reference/`.
+-   **`./all`**: This is a simple shell script that runs the entire build and packaging pipeline from start to finish. It's the easiest way to ensure all components are up-to-date and generate a full release.
 
 ## Project Structure
 - `lib/gama/`: Contains all the core C header files for the engine's modules (3D, physics, widgets, etc.).
 - `gama/`: Vlang source code for the main `gama` CLI tool and build logic.
 - `gama.js/`: TypeScript source for the WebAssembly frontend and JS/C interop.
 - `mng`: The main V script used for building, packaging, and managing the project.
+- `all`: The master shell script to build and package everything.
 - `runners/`: Contains the platform-specific code for running Gama applications (e.g., on web or native).
 - `site/`: SvelteKit source code for the official website and documentation portal.
 - `test/`: Contains example projects and test cases for the engine.

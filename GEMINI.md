@@ -37,9 +37,17 @@ Gemini interacts with the project via a command-line interface that provides a s
 
 Gemini has been made aware of the following conventions during its work on the project:
 
--   **Language**: The core engine is written in **C99-style C**. The build script and CLI tool are written in **Vlang**. The web frontend is written in **TypeScript**.
+-   **Language**: The core engine is written in **C99-style C**. The build script (`./mng`) and CLI tool (`gama`) are written in **Vlang**. The web frontend (`gama.js`) is written in **TypeScript**.
 -   **Documentation**: All public-facing C code in header files should be documented using **Doxygen** format (`/** ... */`).
--   **Build System**: The primary build and task runner is the `./mng` script. It handles builds for different platforms, documentation generation, and packaging.
+-   **Build System**:
+    - The primary task runner is the `./mng` script, used for modular builds (e.g., `./mng build`, `./mng runner native`).
+    - The `./all` script is a master script that builds and packages the entire project.
+-   **Architecture**:
+    -   **`libvgama`**: The native backend, written in V. It uses `sokol` for its game loop and `gg` for rendering.
+    -   **`gama.js`**: The web backend. It runs the C code as a WebAssembly module inside a Web Worker, communicating with the main thread via `SharedArrayBuffer`.
+-   **User Commands**:
+    - End-users run projects with `gama dev` (for development) and `gama build` (for release).
+    - The command to create a web build is `gama build web`.
 -   **3D Rendering**: The 3D renderer is a **software-based rasterizer**. It does not use GPU-specific APIs like OpenGL or Vulkan directly for rendering logic, instead outputting to a 2D triangle buffer.
 -   **Web Platform**: The web build uses **WebAssembly** for the core engine and a **2D Canvas** for rendering. Communication between the WASM module and the JavaScript frontend is handled via a **Web Worker** and `postMessage`.
 
