@@ -74,7 +74,7 @@
         "Create optimized release builds for native or web targets using the powerful Zig C compiler for maximum performance.",
     },
     {
-      title: "Zero-Setup on Windows",
+      title: "gama tcc&gama zcc",
       description:
         "Gama for Windows bundles pre-configured TCC and Zig compilers. No external downloads or PATH setup needed.",
     },
@@ -90,16 +90,15 @@
 int main() {
   // Initialize with window size and title
   gm_init(800, 600, "My Gama Game");
-  gm_background(gm_rgb(20, 20, 25)); // Dark background
+  gm_background(GM_DARKGRAY);
 
   // Game loop
   do {
     // Draw a moving, purple rectangle
     gm_draw_rectangle(
-      gm_sin(gm_time() * 2.0) * 0.5, // Animate x-position
-      0, 0.3, 0.2, GM_rgb(170, 119, 170)
+      gm_anim_sin(0., 1., 1., 0.), 0, // Animate x-position
+      0.3, 0.2, gm_rgb(170, 119, 170)
     );
-
   } while (gm_yield()); // Handles events, clears screen, and loops
 
   return 0;
@@ -298,7 +297,6 @@ int main() {
     padding: 4rem 0;
   }
   .hero-logo {
-    width: 150px;
     height: 150px;
     margin-bottom: 2rem;
   }

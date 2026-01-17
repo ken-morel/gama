@@ -275,35 +275,6 @@ fn main() {
 				}
 			},
 			cli.Command{
-				name:        'lib'
-				usage:       'lib <cmd>'
-				description: "manage the project's gama library"
-				args:        [
-					'cmd',
-				]
-				execute:     fn (_ cli.Command) ! {
-					println(term.warn_message('No command specified'))
-				}
-				commands:    [
-					cli.Command{
-						name:        'reset'
-						usage:       'reset'
-						description: "reset the project's gama library to the cli tool's verion"
-						execute:     fn (_ cli.Command) ! {
-							installation := get_installation()!
-							project := get_project()!
-							project.reset_gama(installation) or {
-								println(term.fail_message('Error reseting gama: ${err}'))
-								return err
-							}
-							println(term.ok_message('Reset gama successfuly'))
-
-							return
-						}
-					},
-				]
-			},
-			cli.Command{
 				name:        'package'
 				usage:       'package'
 				description: 'Package the current gama project into a setup'
