@@ -1,0 +1,9 @@
+{
+  "name": "gama-monorepo",
+  "private": true,
+  "workspaces": [
+    "gama.js",
+    "gama.js/bindings/gama-svelte",
+    "site"
+  ]
+}
