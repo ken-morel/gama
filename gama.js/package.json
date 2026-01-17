@@ -2,7 +2,18 @@
   "name": "gama",
   "version": "0.1.1",
   "description": "Gama bindings library",
-  "module": "src/index.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "bun build.mjs"
   },
@@ -13,7 +24,6 @@
   ],
   "author": "ken-morel <engonken8@gmail.com>",
   "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "esbuild": "^0.27.2",
     "typescript": "^5.9.3"

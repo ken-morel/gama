@@ -36,12 +36,15 @@ pub fn (p Project) build_web(inst Installation, reset bool) ! {
 
 	output := os.join_path(build_dir, '${conf.name}.wasm')
 
-	res := os.execute('zig cc -target wasm32-wasi -g -mexec-model=reactor ${source_files.join(' ')} -I${include_path} -I${gen_path} -lc -lm -Wl,--no-entry -o ${output} -DGM_WEB -D__ZIG_CC__')
+	compiler := inst.zcc()!
 
-	if res.exit_code != 0 {
-		return error('Failed to build app: ${res.output}')
+	cmd := '${compiler} -target wasm32-wasi -g -mexec-model=reactor ${source_files.join(' ')} -I${include_path} -I${gen_path} -lc -lm -Wl,--no-entry -o ${output} -DGM_WEB -D__ZIG_CC__'
+	println('Running: ${cmd}')
+	res := os.system(cmd)
+
+	if res != 0 {
+		return error('Failed to build app')
 	} else {
-		println(res.output)
 	}
 }
 

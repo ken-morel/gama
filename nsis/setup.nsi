@@ -23,6 +23,9 @@ InstallDir "$PROFILE\.gama"
 InstallDirRegKey HKCU "Software\cm.engon.gama" "InstallDir"
 RequestExecutionLevel user
 
+SetCompress off
+
+
 ;--------------------------------
 ; Modern UI Configuration
 !define MUI_ABORTWARNING
@@ -65,31 +68,33 @@ FunctionEnd
 ; Installer Section
 ;=============================================================================
 Section "Install gama" SecInstall
-  SetOutPath "$INSTDIR"
 
-  !echo "Packaging applicaiton files"
-  ; --- Install application files ---
+  SetOutPath "$INSTDIR"
   File "..\bin\gama.exe"
   File "..\gama.png"
   File "..\gama.svg"
   File "..\LICENSE"
   File "..\README.md"
+
+  SetOutPath "$INSTDIR\lib"
   File /r "..\lib\"
+
+  SetOutPath "$INSTDIR\templates"
   File /r "..\templates\"
+
+  SetOutPath "$INSTDIR\assets"
   File /r "..\assets\"
 
   SetOutPath "$INSTDIR\runners\native"
-  File /r "..\runners\native\libvgama.dll"
+  File "..\runners\native\libvgama.dll"
 
   SetOutPath "$INSTDIR\runners\web"
   File "..\runners\web\index.html"
   File "..\runners\web\gama.js"
 
-  !echo "Packaging tcc"
 
   SetOutPath "$INSTDIR\compilers\tcc\windows"
   File /r "..\compilers\tcc\windows\"
-  !echo "Packaging zig"
 
   SetOutPath "$INSTDIR\compilers\zig\windows"
   File /r "..\compilers\zig\windows\"

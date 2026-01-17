@@ -18,7 +18,7 @@ pub fn (i Installation) zcc() !string {
 
 pub fn (i Installation) tcc_exe() !string {
 	return $if windows {
-		os.join_path(i.tcc, 'windows', 'tcc.exe')
+		'"' + os.join_path(i.tcc, 'windows', 'tcc.exe') + '"'
 	} $else {
 		'tcc'
 	}
@@ -26,7 +26,7 @@ pub fn (i Installation) tcc_exe() !string {
 
 pub fn (i Installation) zig_exe() !string {
 	return $if windows {
-		os.join_path(i.zig, 'windows', 'zig.exe')
+		'"' + os.join_path(i.zig, 'windows', 'zig.exe') + '"'
 	} $else {
 		'zig'
 	}

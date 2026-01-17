@@ -4,3 +4,5 @@
 /docs
 /bin
 /compilers/zig/*
+/node_modules
+node_modules

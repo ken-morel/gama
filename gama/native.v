@@ -4,7 +4,14 @@ import os
 import term
 
 pub fn (p Project) get_src_c_files() []string {
-	return (os.glob(os.join_path(p.path, 'src', '**.c')) or { [] }).filter(it.ends_with('.c'))
+	mut files := (os.glob(os.join_path(p.path, 'src', '**.c')) or { [] }).filter(it.ends_with('.c'))
+	$if windows { // windows tweak
+		files = files.map(fn [p] (f string) string {
+			println('${f}', os.join_path(p.path, 'src', f))
+			return os.join_path(p.path, 'src', f)
+		})
+	}
+	return files.map(|i| '"${i}"')
 }
 
 pub fn (p Project) copy_build_native_artifacts(inst Installation, reset bool) ! {
@@ -42,7 +49,7 @@ fn resolve_compiler(inst Installation, name string) !string {
 	} else if name == '.zcc' {
 		inst.zcc()
 	} else {
-		name
+		'"' + name + '"'
 	}
 }
 
@@ -63,13 +70,13 @@ pub fn (p Project) build_native(inst Installation, use_cc string) !string {
 
 	include_path := os.join_path(p.path, 'include')
 	gen_path := p.build_path('gen')
-	cmd := "${compiler} -o ${executable_path} ${source_files.join(' ')} -I${include_path} -I${gen_path} -L${build_dir} -Wl,-rpath,'\$ORIGIN' -DGM_NATIVE -lvgama -lm -v"
+	cmd := "${compiler} -o \"${executable_path}\" ${source_files.join(' ')} \"-I${include_path}\" \"-I${gen_path}\" \"-L${build_dir}\" -Wl,-rpath,'\$ORIGIN' -DGM_NATIVE -lvgama -lm -v"
 	println('Executing: ${cmd}')
-	res := os.execute(cmd)
-	if res.exit_code != 0 {
-		return error('Failed to build app: ${res.output}')
+	res := os.system(cmd)
+	if res != 0 {
+		return error('Failed to build app')
 	} else {
-		println(res.output)
+		println(term.ok_message('App build succeful'))
 	}
 
 	return executable_path

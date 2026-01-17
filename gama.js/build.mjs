@@ -50,6 +50,21 @@ async function buildProject() {
     // 4. Clean up the temporary worker file.
     await rm(workerTempFile);
 
+    console.log('Generating TypeScript declarations...');
+    // 5. Generate .d.ts files
+    const { exec } = await import('child_process');
+    await new Promise((resolve, reject) => {
+      exec('tsc --emitDeclarationOnly --outDir dist', (error, stdout, stderr) => {
+        if (error) {
+          console.error('Declaration generation failed:', stderr);
+          reject(error);
+        } else {
+          console.log(stdout);
+          resolve();
+        }
+      });
+    });
+
     console.log(`Build successful! Output in ${outputFile}`);
   } catch (error) {
     console.error('Build failed:', error);

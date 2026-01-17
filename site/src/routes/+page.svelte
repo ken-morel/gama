@@ -25,6 +25,16 @@
       id: 'platform',
       title: "Cross-Platform by Design",
       description: "Write your game once in C and build it for native desktop (Linux, Windows) or for the Web via WebAssembly, using the exact same code.",
+    },
+    {
+      id: 'animation',
+      title: "Animation System",
+      description: "A complete sprite system with support for sprite sheets, custom animation sequences, and a collection of easing functions for smooth motion."
+    },
+    {
+      id: 'asset_loading',
+      title: "Asset Loading",
+      description: "Natively load common 3D model formats like `.obj` and `.gltf` and popular image formats for textures and sprites."
     }
   ];
 
@@ -55,6 +65,10 @@
     {
       title: "Zero-Setup on Windows",
       description: "Gama for Windows bundles pre-configured TCC and Zig compilers. No external downloads or PATH setup needed."
+    },
+    {
+      title: "gama bake",
+      description: "Embed assets like images and models directly into your game's executable, simplifying distribution and improving load times."
     }
   ];
 
@@ -82,7 +96,9 @@ int main() {
     library: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2l4 4-9 9-4-4 9-9z"/><path d="M3 21v-4l4 4H3z"/><path d="m15 5 4 4"/></svg>`,
     physics: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>`,
     rendering: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
-    platform: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`
+    platform: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+    animation: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v-2c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v2M3 15h18V9H3v6z"/><path d="M7 12V6M17 12V6"/></svg>`,
+    asset_loading: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
   };
 
 </script>
@@ -302,7 +318,8 @@ int main() {
     font-size: 1.1rem;
   }
 
-  /* Philosophy Section */
+
+  /* Philosophy Section (Number above card, glowing, centered) */
   .philosophy-list {
     display: flex; flex-direction: column; gap: 6rem;
     max-width: 600px; margin: 0 auto; align-items: center;
