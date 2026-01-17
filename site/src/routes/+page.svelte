@@ -110,14 +110,18 @@ int main() {
   <!-- Core Features Section (Updated Design) -->
   <div class="section">
     <h2 class="section-title">Core Features</h2>
-    <div class="features-list-vertical">
-      {#each features as feature}
-        <div class="feature-tile">
-          <div class="feature-icon">
-            {@html icons[feature.id]}
+    <div class="features-alternating-list">
+      {#each features as feature, i}
+        <div class="feature-item" class:reverse={i % 2 !== 0}>
+          <div class="feature-icon-container">
+            <div class="feature-icon">
+              {@html icons[feature.id]}
+            </div>
           </div>
-          <h3 class="feature-title">{feature.title}</h3>
-          <p class="feature-description">{feature.description}</p>
+          <div class="feature-card">
+            <h3 class="feature-title">{feature.title}</h3>
+            <p class="feature-description">{feature.description}</p>
+          </div>
         </div>
       {/each}
     </div>
@@ -141,14 +145,18 @@ int main() {
     </div>
   </div>
 
-  <!-- Toolchain Section (List Design) -->
+  <!-- Toolchain Section (New Superposed Design) -->
   <div class="section">
     <h2 class="section-title">A Modern Toolchain</h2>
-    <div class="toolchain-list">
+    <div class="toolchain-grid">
       {#each toolchain as item}
         <div class="toolchain-item">
-          <h3 class="toolchain-title">{item.title}</h3>
-          <p class="toolchain-description">{item.description}</p>
+          <div class="toolchain-title-card">
+            <h3 class="toolchain-title">{item.title}</h3>
+          </div>
+          <div class="toolchain-content-card">
+            <p class="toolchain-description">{item.description}</p>
+          </div>
         </div>
       {/each}
     </div>
@@ -218,8 +226,8 @@ int main() {
 
   /* Sections */
   .section { padding: 6rem 0; }
-  .section-title { font-size: 2.5rem; font-weight: 600; text-align: center; margin-bottom: 3rem; }
-  .section-subtitle { font-size: 1.1rem; color: var(--subtitle-color); max-width: 600px; margin: -2rem auto 2rem; line-height: 1.6; text-align: center; }
+  .section-title { font-size: 2.5rem; font-weight: 600; text-align: center; margin-bottom: 4rem; }
+  .section-subtitle { font-size: 1.1rem; color: var(--subtitle-color); max-width: 600px; margin: -3rem auto 2rem; line-height: 1.6; text-align: center; }
 
   /* Hero */
   .hero { text-align: center; padding: 4rem 0; }
@@ -233,129 +241,138 @@ int main() {
   .button-secondary { color: var(--text-color); border-color: var(--border-color); }
   .button-secondary:hover { background-color: var(--border-color); }
 
-  /* Core Features (One per line, bigger icons, centered) */
-  .features-list-vertical {
+  /* Core Features (Alternating Icon/Card with Large Glowing Icon) */
+  .features-alternating-list {
     display: flex;
     flex-direction: column;
-    gap: 2rem; /* Spacing between features */
-    max-width: 800px; /* Constrain width for better readability */
-    margin: 0 auto;
+    gap: 8rem;
   }
-  .feature-tile {
+  .feature-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    gap: 4rem;
+  }
+  .feature-item.reverse {
+    grid-template-columns: 2fr 1fr;
+  }
+  .feature-item.reverse .feature-icon-container {
+      order: 2;
+  }
+  .feature-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  .feature-icon {
+    color: var(--accent-color);
+    position: relative;
+    z-index: 2;
+  }
+  .feature-icon :global(svg) { /* Force size on the SVG element itself */
+    width: 90px !important;
+    height: 90px !important;
+  }
+  .feature-icon-container::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: var(--accent-color);
+      filter: blur(120px); /* Increased blur for huge glow */
+      opacity: 0.8;
+      z-index: 1;
+  }
+  .feature-card {
     background-color: var(--tile-bg-color);
     border: 1px solid var(--border-color);
     padding: 2.5rem;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    transition: all 0.2s ease-in-out;
-    text-align: center; /* Center content */
-  }
-  .feature-tile:hover {
-    border-color: var(--accent-color);
-    transform: translateY(-5px);
-  }
-  .feature-icon {
-    margin-bottom: 1.5rem;
-    color: var(--accent-color);
-    display: flex; /* Use flex to center SVG */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-  }
-  .feature-icon svg {
-    width: 60px; /* Significantly increased icon size */
-    height: 60px; /* Significantly increased icon size */
   }
   .feature-title {
-    font-size: 1.75rem; /* Increased title size */
-    font-weight: 600;
-    margin: 0 0 0.75rem;
-  }
-  .feature-description {
-    font-size: 1.1rem; /* Slightly larger description */
-    color: var(--subtitle-color);
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  /* Philosophy Section (Number above card, glowing, centered) */
-  .philosophy-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6rem; /* More vertical space */
-    max-width: 600px; /* Constrain width for better readability */
-    margin: 0 auto;
-    align-items: center; /* Center philosophy items */
-  }
-  .philosophy-item {
-    display: flex;
-    flex-direction: column; /* Stack number above card */
-    align-items: center;
-    text-align: center;
-    width: 100%; /* Ensure it takes full width of parent */
-  }
-  .philosophy-number {
-    width: 90px; /* Slightly larger number container */
-    height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--accent-color), #583758);
-    box-shadow: 0 0 35px rgba(170, 119, 170, 0.7); /* Stronger glowing effect */
-    margin-bottom: -45px; /* Adjust overlap */
-    position: relative;
-    z-index: 2;
-  }
-  .philosophy-number span {
-    font-size: 2.5rem; /* Larger number */
-    font-weight: 700;
-    color: white;
-  }
-  .philosophy-card {
-     width: 100%;
-     padding: 5rem 2rem 2rem; /* More top padding to account for number overlap */
-     background: var(--tile-bg-color);
-     border: 1px solid var(--border-color);
-     backdrop-filter: blur(20px);
-     z-index: 1;
-  }
-  .philosophy-title {
     font-size: 1.75rem;
     margin: 0 0 1rem;
     font-weight: 600;
   }
-  .philosophy-description {
+  .feature-description {
     color: var(--subtitle-color);
     line-height: 1.7;
     font-size: 1.1rem;
   }
 
-  /* Toolchain List Section */
-  .toolchain-list {
-    display: flex; flex-direction: column; gap: 1px;
-    background-color: var(--border-color); border: 1px solid var(--border-color);
+  /* Philosophy Section */
+  .philosophy-list {
+    display: flex; flex-direction: column; gap: 6rem;
+    max-width: 600px; margin: 0 auto; align-items: center;
+  }
+  .philosophy-item {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; width: 100%;
+  }
+  .philosophy-number {
+    width: 90px; height: 90px; display: flex; align-items: center;
+    justify-content: center; background: linear-gradient(135deg, var(--accent-color), #583758);
+    box-shadow: 0 0 35px rgba(170, 119, 170, 0.7); margin-bottom: -45px;
+    position: relative; z-index: 2;
+  }
+  .philosophy-number span { font-size: 2.5rem; font-weight: 700; color: white; }
+  .philosophy-card {
+     width: 100%; padding: 5rem 2rem 2rem; background: var(--tile-bg-color);
+     border: 1px solid var(--border-color); backdrop-filter: blur(20px); z-index: 1;
+  }
+  .philosophy-title { font-size: 1.75rem; margin: 0 0 1rem; font-weight: 600; }
+  .philosophy-description { color: var(--subtitle-color); line-height: 1.7; font-size: 1.1rem; }
+
+  /* Toolchain Section (New Superposed Design) */
+  .toolchain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 4rem 2rem; /* More row gap */
+    margin-top: 4rem;
   }
   .toolchain-item {
-    background-color: #202025; padding: 2rem; transition: background-color 0.2s ease-in-out;
+    position: relative;
   }
-  .toolchain-item:hover { background-color: #28282d; }
-  .toolchain-title { font-size: 1.25rem; font-weight: 600; color: var(--accent-color); margin: 0 0 0.5rem; }
-  .toolchain-description { font-size: 1rem; color: var(--subtitle-color); margin: 0; line-height: 1.6; }
+  .toolchain-title-card {
+    position: absolute;
+    top: -2rem; /* Superpose */
+    left: 1rem;
+    background: var(--accent-color);
+    padding: 0.75rem 1.5rem;
+    z-index: 2;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+  .toolchain-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    font-family: 'Fira Code', 'Consolas', monospace;
+  }
+  .toolchain-content-card {
+    background: var(--tile-bg-color);
+    border: 1px solid var(--border-color);
+    padding: 4rem 2rem 2rem; /* More top padding */
+    backdrop-filter: blur(20px);
+    height: 100%;
+  }
+  .toolchain-description {
+    font-size: 1rem;
+    color: var(--subtitle-color);
+    margin: 0;
+    line-height: 1.6;
+  }
+
 
   /* Code & Demo Sections */
   .code-container { max-width: 800px; margin: 0 auto; background: #1e1e1e; border: 1px solid var(--border-color); overflow: hidden; }
   .demo-container {
-    width: 100%; /* Full width */
-    max-width: 100%; /* Ensure it doesn't exceed content-wrapper */
-    aspect-ratio: 16 / 9; /* Maintain aspect ratio for video-like content */
-    background: #1e1e1e;
-    border: 1px solid var(--border-color);
-    overflow: hidden;
-    display: flex;
-    margin: 0 auto; /* Center the demo container */
+    width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #1e1e1e;
+    border: 1px solid var(--border-color); overflow: hidden; display: flex; margin: 0 auto;
   }
-  .demo-container > :global(*) {
-      flex-grow: 1;
-  }
+  .demo-container > :global(*) { flex-grow: 1; }
   .code-header-tabs { background: #2d2d2d; padding: 0.75rem 1rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); }
   .tab-dot { width: 12px; height: 12px; background: #555; }
 
@@ -365,6 +382,10 @@ int main() {
   @media (max-width: 768px) {
     .hero-title { font-size: 2.5rem; }
     .section { padding: 4rem 0; }
-    .features-grid { grid-template-columns: 1fr; } /* Features revert to 1 col on mobile */
+    .feature-item, .feature-item.reverse { grid-template-columns: 1fr; text-align: center; }
+    .feature-item.reverse .feature-icon-container { order: 0; }
+    .toolchain-grid {
+        grid-template-columns: 1fr;
+    }
   }
 </style>
