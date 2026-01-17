@@ -1,327 +1,178 @@
 <script>
-  import Lineup from "./Lineup.svelte";
-  import { onMount } from "svelte";
   import Highlight from "svelte-highlight/Highlight.svelte";
   import c from "svelte-highlight/languages/c";
   import monokai from "svelte-highlight/styles/monokai";
-  // Set up animation when component mounts
-  onMount(() => {
-    // Add animation class to trigger hero animation on mount
-    // Use a small delay to ensure DOM is ready
+  import Lineup from "./Lineup.svelte";
 
-    const hero = document.querySelector(".hero-content");
-    console.log(hero);
-    if (hero) hero.classList.add("animate-in");
-    else alert("Could not show hero");
-  });
-
-  // Features data expanded with more specific Gama features
+  // Using objects with id for easier icon mapping
   const features = [
     {
+      id: 'library',
       title: "Lightweight C Library",
-      description:
-        "Simple, easy-to-learn C API with clear function names designed specifically for students and beginners.",
-      icon: "⚙️",
+      description: "A simple and clean C99 API designed for students and beginners, focusing on core concepts without overwhelming complexity.",
     },
     {
-      title: "Built-in 2D Physics Engine",
-      description:
-        "Physics system with bodies, shapes, and collision detection supporting restitution, friction, and constraints.",
-      icon: "⚖️",
+      id: 'physics',
+      title: "Built-in 2D Physics",
+      description: "An effective physics engine is included, with support for bodies, shapes, and collision detection to easily add dynamic interactions.",
     },
     {
+      id: 'rendering',
       title: "Immediate Mode Rendering",
-      description:
-        "Draw shapes directly without creating objects. Reduces pointer usage and manual memory management.",
-      icon: "🎯",
+      description: "Draw shapes and UI widgets directly to the screen each frame, simplifying state management and making your code easier to reason about.",
     },
     {
-      title: "Comprehensive Animation System",
-      description:
-        "Multiple easing functions and wave animations for smooth, professional-looking motion.",
-      icon: "⏱️",
+      id: 'platform',
+      title: "Cross-Platform by Design",
+      description: "Write your game once in C and build it for native desktop (Linux, Windows) or for the Web via WebAssembly, using the exact same code.",
+    },
+     {
+      id: 'ui',
+      title: "UI & Widgets",
+      description: "An immediate-mode UI suite with skinnable widgets like buttons, sliders, and joysticks to quickly build interfaces.",
     },
     {
-      title: "Modern CLI Tool",
-      description:
-        "Fast project manager written in V with zero-dependency setup using embedded TCC compiler.",
-      icon: "🔧",
-    },
-    {
-      title: "Advanced Input System",
-      description:
-        "Intuitive key and mouse input with predefined shortcuts for arrows, space, and mouse buttons.",
-      icon: "🎮",
-    },
-    {
-      title: "Cross-Platform Development",
-      description:
-        "Target Windows, Linux, and Web with consistent APIs and behavior.",
-      icon: "🌐",
-    },
-    {
-      title: "Educational Focus",
-      description:
-        "Designed specifically for teaching C programming with safety and simplicity in mind.",
-      icon: "🎓",
-    },
+      id: '3d',
+      title: "Software 3D Renderer",
+      description: "A built-in 3D pipeline for rendering `.obj` and `.gltf` models, perfect for learning the fundamentals of 3D graphics."
+    }
   ];
 
-  // Principles data
-  const principles = [
-    {
-      title: "Stack More, Heap Less",
-      description:
-        "Gama encourages stack allocation in functions for safer memory management, reducing common C pitfalls for beginners.",
-    },
+  const philosophy = [
     {
       title: "You Have Control",
-      description:
-        "Your code owns the mainloop, allowing you to control exactly how your game runs without hidden abstractions.",
+      description: "Gama gives you full control over the main game loop. The engine provides utilities but stays out of your way, allowing you to structure your game exactly as you see fit."
+    },
+    {
+      title: "Stack First, Heap Less",
+      description: "The API encourages using stack-allocated structs to leverage C's automatic memory management, reducing the cognitive load and common pitfalls of manual memory allocation."
     },
     {
       title: "No Global State",
-      description:
-        "Functions can serve as scenes with automatic initialization, destruction, and object management.",
-    },
-    {
-      title: "Immediate Mode",
-      description:
-        "Draw shapes directly when needed rather than creating and managing objects, simplifying game logic.",
-    },
+      description: "Designed to avoid global state, Gama allows you to structure your game into different scenes, each with its own state, initialization, and cleanup logic."
+    }
   ];
 
-  // Applications data
-  const applications = [
+  const toolchain = [
     {
-      title: "Game Development",
-      description:
-        "Create 2D games with physics, animation and user input handling using simple C code.",
-      icon: "🎮",
+      title: "gama dev",
+      description: "Instantly run your project with the fast TCC compiler and enjoy hot-reloading on every file change for a rapid development feedback loop."
     },
     {
-      title: "Data Visualization",
-      description:
-        "Build interactive tools to visualize data and algorithms with animated elements.",
-      icon: "📊",
+      title: "gama build",
+      description: "Create optimized release builds for native or web targets using the powerful Zig C compiler for maximum performance."
     },
     {
-      title: "Scientific Simulations",
-      description:
-        "Develop physics simulations, mathematical visualizations, and educational tools.",
-      icon: "🔬",
-    },
-    {
-      title: "Educational Tools",
-      description:
-        "Create interactive applications for teaching programming, math, and science concepts.",
-      icon: "📚",
-    },
+      title: "Zero-Setup on Windows",
+      description: "Gama for Windows bundles pre-configured TCC and Zig compilers. No external downloads or PATH setup needed."
+    }
   ];
 
-  // Code example based on the lineup project
   const codeExample = `#include <gama.h>
 
 int main() {
   // Initialize with window size and title
-  gm_init(800, 600, "My Game");
-  gm_background(GM_BLACK);
-
-  // Create a physics body
-  gmBody player = gm_circle_body(1.0, 400, 300, 32, 32);
-  player.acceleration.y = 0.9;
+  gm_init(800, 600, "My Gama Game");
+  gm_background(gm_rgb(20, 20, 25)); // Dark background
 
   // Game loop
   do {
-    // update position
-    gm_body_update(&player);
-    // Handle input
-    if (gm_key('L')) player.velocity.x -= 0.1;  // Move left
-    if (gm_key('R')) player.velocity.x += 0.1;  // Move right
+    // Draw a moving, purple rectangle
+    gm_draw_rectangle(
+      gm_sin(gm_time() * 2.0) * 0.5, // Animate x-position
+      0, 0.3, 0.2, GM_rgb(170, 119, 170)
+    );
 
-    if(gm_mouse.pressed && gm_button(0, 0.9, 0.3, 0.1, "jump", 0.1))
-      player.velocity.y  += 1;
-
-
-    // Draw elements
-    gm_draw_circle_body(&player, GM_BLUE);
-
-    // Check for exit condition
-    if (gm_key('E'))
-      gm_quit();
-  } while (gm_yield());
+  } while (gm_yield()); // Handles events, clears screen, and loops
 
   return 0;
 }`;
 
-  // CLI commands
-  const cliCommands = [
-    {
-      command: "gama create",
-      description: "Create a new Gama project interactively",
-    },
-    {
-      command: "gama dev",
-      description: "Build and run with auto-rebuild on changes",
-    },
-    {
-      command: "gama build",
-      description: "Compile your project to an executable",
-    },
-    {
-      command: "gama package",
-      description: "Package your project for distribution",
-    },
-  ];
+ const icons = {
+    library: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2l4 4-9 9-4-4 9-9z"/><path d="M3 21v-4l4 4H3z"/><path d="m15 5 4 4"/></svg>`,
+    physics: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>`,
+    rendering: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+    platform: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+    ui: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-7.07 7.07a5.4 5.4 0 0 0 0 7.65l7.07 7.07a5.4 5.4 0 0 0 7.65 0l7.07-7.07a5.4 5.4 0 0 0 0-7.65z"/><line x1="12" y1="6" x2="12" y2="18"/></svg>`,
+    '3d': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`
+  };
+
 </script>
 
 <svelte:head>
   {@html monokai}
 </svelte:head>
-<div class="hero">
-  <div class="content-wrapper">
-    <div class="hero-content">
-      <div class="logo-container">
-        <img src="/gama-text.png" alt="Gama Logo" />
-      </div>
-      <h1>Gama Engine - Simple 2D Game Development in C</h1>
-      <p class="subtitle">
-        A lightweight, minimalist game engine that combines a powerful C library
-        with a modern toolchain. Perfect for students learning C programming and
-        developers who want a zero-dependency, educational approach to game
-        development.
-      </p>
-      <div class="buttons-container">
-        <a href="/docs" class="button">Get Started</a>
-        <a href="/reference/index.html" class="button button-secondary"
-          >Reference</a
-        >
-      </div>
+
+<div class="background-effect"></div>
+
+<div class="content-wrapper">
+  <!-- Hero Section -->
+  <div class="hero">
+    <img src="/gama-text.png" alt="Gama Logo" class="hero-logo" />
+    <h1 class="hero-title">A Simple C Game Engine</h1>
+    <p class="hero-subtitle">
+      Gama provides a lightweight C library and a modern toolchain, designed to make 2D game development approachable and fun for students and developers.
+    </p>
+    <div class="hero-buttons">
+      <a href="/docs/getting-started" class="button button-primary">Get Started</a>
+      <a href="https://github.com/ken-morel/gama" class="button button-secondary">View on GitHub</a>
     </div>
   </div>
-</div>
 
-<div class="features">
-  <div class="content-wrapper">
-    <div class="section-header">
-      <h2 class="section-title">Powerful Features</h2>
-      <p class="section-subtitle">
-        Everything you need to build impressive 2D games and visualizations
-      </p>
-    </div>
+  <!-- Core Features Section (New Icon Grid Design) -->
+  <div class="section">
+    <h2 class="section-title">Core Features</h2>
     <div class="features-grid">
-      {#each features as feature, i}
-        <div class="feature-card">
-          <span class="feature-icon">{feature.icon}</span>
+      {#each features as feature}
+        <div class="feature-tile">
+          <div class="feature-icon">
+            {@html icons[feature.id]}
+          </div>
           <h3 class="feature-title">{feature.title}</h3>
           <p class="feature-description">{feature.description}</p>
         </div>
       {/each}
     </div>
   </div>
-</div>
-
-<div class="principles">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Design Principles</h2>
-      <p class="section-subtitle">
-        Built with educational excellence and practical safety at its core
-      </p>
-    </div>
-    <div class="principles-grid">
-      {#each principles as principle, i}
-        <div class="principle-item">
-          {#if i % 2 === 0}
-            <!-- Left side: Icon/Title -->
-            <div class="principle-content">
-              <div class="principle-icon">
-                {#if i == 0}
-                  🏗️
-                {/if}
-                {#if i == 1}
-                  ⚙️
-                {/if}
-                {#if i == 2}
-                  🔄
-                {/if}
-                {#if i == 3}
-                  ⚡
-                {/if}
-              </div>
-              <h3 class="principle-title">{principle.title}</h3>
+  
+  <!-- Philosophy Section (New Numbered List Design) -->
+  <div class="section philosophy-section">
+    <h2 class="section-title">Guiding Philosophy</h2>
+    <div class="philosophy-list">
+      {#each philosophy as item, i}
+        <div class="philosophy-item" class:reverse={i % 2 !== 0}>
+          <div class="philosophy-number-container">
+            <div class="philosophy-number">
+              <span>0{i + 1}</span>
             </div>
-            <!-- Right side: Card with description -->
-            <div class="principle-card">
-              <p class="principle-description">
-                {principle.description}
-              </p>
-            </div>
-          {:else}
-            <!-- Left side: Card with description -->
-            <div class="principle-card">
-              <p class="principle-description">
-                {principle.description}
-              </p>
-            </div>
-            <!-- Right side: Icon/Title -->
-            <div class="principle-content">
-              <div class="principle-icon">
-                {#if i == 0}
-                  🏗️
-                {/if}
-                {#if i == 1}
-                  ⚙️
-                {/if}
-                {#if i == 2}
-                  🔄
-                {/if}
-                {#if i == 3}
-                  ⚡
-                {/if}
-              </div>
-              <h3 class="principle-title">{principle.title}</h3>
-            </div>
-          {/if}
+          </div>
+          <div class="philosophy-card">
+            <h3 class="philosophy-title">{item.title}</h3>
+            <p class="philosophy-description">{item.description}</p>
+          </div>
         </div>
       {/each}
     </div>
   </div>
-</div>
 
-<div class="applications">
-  <div class="container">
-    <div class="applications-container">
-      <div class="section-header">
-        <h2 class="section-title">Real-World Applications</h2>
-        <p class="section-subtitle">
-          Gama is not just for games! Perfect for education, visualization, and
-          scientific applications
-        </p>
-      </div>
-      <div class="applications-grid">
-        {#each applications as app, i}
-          <div class="application-card">
-            <span class="application-icon">{app.icon}</span>
-            <h3 class="application-title">{app.title}</h3>
-            <p class="application-description">{app.description}</p>
-          </div>
-        {/each}
-      </div>
+  <!-- Toolchain Section (List Design) -->
+  <div class="section">
+    <h2 class="section-title">A Modern Toolchain</h2>
+    <div class="toolchain-list">
+      {#each toolchain as item}
+        <div class="toolchain-item">
+          <h3 class="toolchain-title">{item.title}</h3>
+          <p class="toolchain-description">{item.description}</p>
+        </div>
+      {/each}
     </div>
   </div>
-</div>
 
-<div class="code-section">
-  <div class="container">
-    <div class="code-header">
-      <h2 class="code-title">Clean & Readable Code</h2>
-      <p class="code-subtitle">
-        Build games with minimal, easy-to-understand C code
-      </p>
-    </div>
+  <!-- Code Example Section -->
+  <div class="section">
+     <h2 class="section-title">Clean & Readable Code</h2>
     <div class="code-container">
-      <div class="code-header-tabs">
+       <div class="code-header-tabs">
         <div class="tab-dot"></div>
         <div class="tab-dot"></div>
         <div class="tab-dot"></div>
@@ -329,679 +180,230 @@ int main() {
       <Highlight language={c} code={codeExample} />
     </div>
   </div>
-</div>
-<div class="cli-section">
-  <div class="container">
-    <div class="cli-container">
-      <div class="section-header">
-        <h2 class="section-title">Powerful CLI Tool</h2>
-        <p class="section-subtitle">
-          Fast project management with zero dependencies
-        </p>
-      </div>
-      <div class="cli-commands">
-        {#each cliCommands as cmd, i}
-          <div class="cli-command">
-            <span class="cli-command-text">{cmd.command}</span>
-            <span class="cli-description">{cmd.description}</span>
-          </div>
-        {/each}
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="cta">
-  <div class="container">
-    <div class="cta-content">
-      <h2 class="cta-title">Ready to Start Building?</h2>
-      <p class="cta-subtitle">
-        Become another student learning game development with Gama's
-        beginner-friendly approach
-      </p>
-      <div class="buttons-container">
-        <a href="/docs" class="button">Start Learning</a>
-        <a
-          href="https://github.com/ken-morel/gama"
-          class="button button-secondary">View on GitHub</a
-        >
-      </div>
+  <!-- Live Demo Section -->
+  <div class="section">
+    <h2 class="section-title">Live WebAssembly Demo</h2>
+    <p class="section-subtitle">Gama projects compile directly to WebAssembly. Here is a small interactive sample running entirely in your browser.</p>
+    <div class="demo-container">
+      <Lineup />
     </div>
   </div>
-</div>
-<div class="cli-section">
-  <div class="container">
-    <div class="cli-container">
-      <div class="section-header">
-        <h2 class="section-title">Experimental web support</h2>
-        <p class="section-subtitle">
-          A little sample of lineup loaded with gama.js before you go...
-        </p>
-      </div>
-    </div>
-  </div>
-  <Lineup />
-</div>
 
-<div class="footer">
-  <div class="container">
-    <p>Gama Engine - A C toolkit for safe and simple 2D game development</p>
-    <p>Website: <a href="https://gama.rbs.cm">https://gama.rbs.cm</a></p>
-  </div>
 </div>
 
 <style>
+  :root {
+    --bg-color: #1a1a1a;
+    --tile-bg-color: rgba(35, 35, 40, 0.6);
+    --text-color: #f0f0f0;
+    --subtitle-color: #a0a0a0;
+    --accent-color: rgb(170, 119, 170);
+    --border-color: rgba(255, 255, 255, 0.1);
+  }
+
   :global(body) {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen,
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    background-color: #f8fafc;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow-x: hidden;
   }
 
-  .container {
+  .background-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 20% 20%, var(--accent-color) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, #0078d4 0%, transparent 25%);
+    filter: blur(120px) opacity(0.2);
+    z-index: -1;
+  }
+
+  .content-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 2rem;
   }
 
-  .hero {
-    padding: 4rem 0 2rem;
-    text-align: center;
-    background: linear-gradient(135deg, #f0f0f7 0%, #e5e5ec 100%);
-    border-bottom: 1px solid #d1d1e0;
+  /* Sections */
+  .section {
+    padding: 6rem 0;
   }
-
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    50% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .hero-content {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.8s ease forwards;
-  }
-  h1 {
-    font-size: 3.5rem;
-    margin: 0 0 1rem;
-    font-weight: 700;
-    color: #0f172a;
-    line-height: 1.1;
-  }
-
-  .subtitle {
-    font-size: 1.5rem;
-    color: #475569;
-    margin-bottom: 2rem;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
-  }
-
-  .logo-container {
-    margin: 0 auto 2rem;
-    width: 180px;
-    height: 180px;
-  }
-
-  .logo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .features {
-    padding: 4rem 0;
-    background-color: #f8fafc;
-  }
-
-  .section-header {
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 600;
     text-align: center;
     margin-bottom: 3rem;
   }
-
-  .section-title {
-    font-size: 2.5rem;
-    color: #0f172a;
-    margin: 0 0 1rem;
-  }
-
   .section-subtitle {
-    font-size: 1.25rem;
-    color: #64748b;
+    font-size: 1.1rem;
+    color: var(--subtitle-color);
     max-width: 600px;
-    margin: 0 auto;
+    margin: -2rem auto 2rem;
+    line-height: 1.6;
+    text-align: center;
   }
 
+  /* Hero */
+  .hero { text-align: center; padding: 4rem 0; }
+  .hero-logo { width: 150px; height: 150px; margin-bottom: 2rem; }
+  .hero-title { font-size: 3.5rem; font-weight: 600; margin: 0 0 1rem; }
+  .hero-subtitle { font-size: 1.25rem; color: var(--subtitle-color); max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.6; }
+  .hero-buttons { display: flex; justify-content: center; gap: 1rem; }
+  .button { display: inline-block; padding: 0.75rem 1.5rem; text-decoration: none; font-weight: 600; transition: all 0.2s ease-in-out; border: 2px solid transparent; }
+  .button-primary { background-color: var(--accent-color); color: white; }
+  .button-primary:hover { background-color: rgb(150, 99, 150); box-shadow: 0 0 15px rgba(170, 119, 170, 0.5); }
+  .button-secondary { color: var(--text-color); border-color: var(--border-color); }
+  .button-secondary:hover { background-color: var(--border-color); }
+
+  /* Core Features (Icon Grid) */
   .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 1.5rem;
+    gap: 1rem;
   }
-
-  .feature-card {
-    background: white;
-    border-radius: 1rem;
-    padding: 2rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    transition:
-      transform 0.3s ease,
-      box-shadow 0.3s ease;
+  .feature-tile {
+    background-color: var(--tile-bg-color);
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.2s ease-in-out;
   }
-
-  .feature-card:nth-child(2n) {
-    transition-delay: 0.1s;
-  }
-
-  .feature-card:nth-child(3n) {
-    transition-delay: 0.2s;
-  }
-
-  .feature-card:hover {
+  .feature-tile:hover {
+    border-color: var(--accent-color);
     transform: translateY(-5px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   }
-
   .feature-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    display: block;
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
   }
-
+  .feature-icon svg {
+      width: 32px;
+      height: 32px;
+  }
   .feature-title {
-    font-size: 1.5rem;
-    color: #0f172a;
-    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
   }
-
   .feature-description {
-    color: #64748b;
+    font-size: 1rem;
+    color: var(--subtitle-color);
     margin: 0;
     line-height: 1.6;
   }
 
-  .principles {
-    padding: 4rem 0;
-    background-color: #f1f5f9;
+  /* Philosophy Section (Numbered List) */
+  .philosophy-section {
+      position: relative;
+      overflow: hidden;
   }
-
-  .principles .container {
-    max-width: 100%;
-    padding: 0 1.5rem;
-  }
-
-  .principles-grid {
+  .philosophy-list {
     display: flex;
     flex-direction: column;
-    gap: 4rem;
-    margin-top: 3rem;
+    gap: 1rem;
   }
-
-  .principle-item {
-    font-size: large;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .principle-item:nth-child(odd) {
-    justify-content: flex-start;
-  }
-
-  .principle-item:nth-child(even) {
-    justify-content: flex-end;
-  }
-
-  .principle-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
-    padding: 2rem;
-    transform: translateX(-20px);
-    transition:
-      opacity 0.6s ease,
-      transform 0.6s ease;
-    max-width: 500px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .principle-item:nth-child(even) .principle-card {
-    transform: translateX(20px);
-  }
-  .principle-content:nth-child(even),
-  .principle-icon:nth-child(even) {
-    text-align: right;
-  }
-  .principle-content {
-    flex: 1;
-    padding: 0 2rem;
-  }
-
-  .principle-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-  }
-
-  .principle-title {
-    font-size: 1.75rem;
-    color: #0f172a;
-    margin: 0 0 1rem;
-  }
-
-  .principle-description {
-    color: #64748b;
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  .applications {
-    padding: 4rem 0;
-    background: white;
-  }
-
-  .applications-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-
-  .applications-grid {
+  .philosophy-item {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 100px 1fr;
+    align-items: center;
     gap: 2rem;
-    margin-top: 3rem;
+    position: relative;
+    padding: 2rem 0;
   }
-
-  .application-card {
-    background: #f8fafc;
-    border-radius: 1rem;
-    padding: 2rem;
-    text-align: center;
-    transform: translateY(20px);
-    transition:
-      opacity 0.6s ease,
-      transform 0.6s ease;
+  .philosophy-item.reverse {
+    grid-template-columns: 1fr 100px;
   }
-
-  .application-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    display: block;
+  .philosophy-item.reverse .philosophy-number-container {
+      order: 2;
   }
-
-  .application-title {
-    font-size: 1.5rem;
-    color: #0f172a;
-    margin: 0 0 1rem;
+  .philosophy-number-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
   }
-
-  .application-description {
-    color: #64748b;
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  .code-section {
-    padding: 4rem 0;
-    background: #0f172a;
-    color: white;
-  }
-
-  .code-header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-
-  .code-title {
-    font-size: 2.5rem;
-    color: white;
-    margin: 0 0 1rem;
-  }
-
-  .code-subtitle {
-    font-size: 1.25rem;
-    color: #94a3b8;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .code-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: #1e293b;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-  }
-
-  .code-header-tabs {
-    background: #334155;
-    padding: 0.75rem 1rem;
+  .philosophy-number {
+    width: 80px;
+    height: 80px;
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border-color);
+    background: linear-gradient(135deg, var(--accent-color), #583758);
+  }
+  .philosophy-number span {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+  }
+  .philosophy-card {
+     padding: 2rem;
+     background: var(--tile-bg-color);
+     border: 1px solid var(--border-color);
+     backdrop-filter: blur(20px);
+  }
+  .philosophy-title {
+    font-size: 1.75rem;
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+  .philosophy-description {
+    color: var(--subtitle-color);
+    line-height: 1.7;
+    font-size: 1.1rem;
   }
 
-  .tab-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-
-  .tab-dot:first-child {
-    background: #ff605c;
-  }
-  .tab-dot:nth-child(2) {
-    background: #ffbd44;
-  }
-  .tab-dot:nth-child(3) {
-    background: #00ca4e;
-  }
-  .code-block {
-    padding: 1.5rem;
-    font-family: "Fira Code", "Monaco", "Consolas", monospace;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    overflow-x: auto;
-    color: #cbd5e1;
-    margin: 0;
-  }
-
-  .code-block code {
-    display: block;
-    white-space: pre;
-  }
-
-  .cli-section {
-    padding: 4rem 0;
-    background: white;
-  }
-
-  .cli-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-
-  .cli-commands {
+  /* Toolchain List Section */
+  .toolchain-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-top: 2rem;
+    gap: 1px;
+    background-color: var(--border-color);
+    border: 1px solid var(--border-color);
   }
-
-  .cli-command {
-    background: #f1f5f9;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .toolchain-item {
+    background-color: #202025;
+    padding: 2rem;
+    transition: background-color 0.2s ease-in-out;
   }
-
-  .cli-command-text {
-    font-family: "Fira Code", "Monaco", "Consolas", monospace;
-    font-size: 1.1rem;
-    color: #0f172a;
-    font-weight: 600;
-    background: #e2e8f0;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
+  .toolchain-item:hover {
+     background-color: #28282d;
   }
-
-  .cli-description {
-    color: #64748b;
-    margin-left: 1rem;
-  }
-
-  .cta {
-    padding: 4rem 0;
-    text-align: center;
-    background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
-  }
-
-  .cta-content {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .cta-title {
-    font-size: 2.5rem;
-    color: #3f475a;
-    margin: 0 0 1rem;
-  }
-
-  .cta-subtitle {
+  .toolchain-title {
     font-size: 1.25rem;
-    color: #64748b;
-    margin-bottom: 2rem;
-  }
-
-  .button {
-    display: inline-block;
-    background: #aa77aa;
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 0.5rem;
-    text-decoration: none;
     font-weight: 600;
-    font-size: 1.1rem;
-    transition:
-      background-color 0.3s ease,
-      transform 0.2s ease;
-    border: none;
-    cursor: pointer;
+    color: var(--accent-color);
+    margin: 0 0 0.5rem;
+  }
+  .toolchain-description {
+    font-size: 1rem;
+    color: var(--subtitle-color);
+    margin: 0;
+    line-height: 1.6;
   }
 
-  .button:hover {
-    background: #955da5;
-    transform: translateY(-2px);
-  }
+  /* Code & Demo Sections */
+  .code-container, .demo-container { max-width: 800px; margin: 0 auto; background: #1e1e1e; border: 1px solid var(--border-color); overflow: hidden; }
+  .code-header-tabs { background: #2d2d2d; padding: 0.75rem 1rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); }
+  .tab-dot { width: 12px; height: 12px; background: #555; }
 
-  .button-secondary {
-    background: transparent;
-    color: #aa77aa;
-    border: 2px solid #aa77aa;
-    margin-left: 1rem;
-  }
-
-  .button-secondary:hover {
-    background: #f0e6f0;
-  }
-
-  .buttons-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .footer {
-    padding: 2rem 0;
-    text-align: center;
-    color: #64748b;
-    background-color: #f8fafc;
-    border-top: 1px solid #e2e8f0;
-  }
-
-  /* Dark mode styles */
-  :global(.dark) .hero,
-  :global(.dark) .cta {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  }
-
-  :global(.dark) .hero h1,
-  :global(.dark) .hero .subtitle,
-  :global(.dark) .section-title,
-  :global(.dark) .section-subtitle {
-    color: #f1f5f9;
-  }
-
-  :global(.dark) .features {
-    background-color: #0f172a;
-  }
-
-  :global(.dark) .feature-card {
-    background: #1e293b;
-    color: #e2e8f0;
-  }
-
-  :global(.dark) .feature-title {
-    color: #f1f5f9;
-  }
-
-  :global(.dark) .feature-description {
-    color: #cbd5e1;
-  }
-
-  :global(.dark) .applications {
-    background-color: #0f172a;
-  }
-
-  :global(.dark) .application-card {
-    background: #1e293b;
-    color: #e2e8f0;
-  }
-
-  :global(.dark) .application-title {
-    color: #f1f5f9;
-  }
-
-  :global(.dark) .application-description {
-    color: #cbd5e1;
-  }
-
-  :global(.dark) .principles {
-    background-color: #0c1a2b;
-  }
-
-  :global(.dark) .principle-card {
-    background: rgba(30, 41, 59, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  :global(.dark) .principle-title {
-    color: #f1f5f9;
-  }
-
-  :global(.dark) .principle-description {
-    color: #cbd5e1;
-  }
-
-  :global(.dark) .cli-section {
-    background-color: #0f172a;
-  }
-
-  :global(.dark) .cli-command {
-    background: #1e293b;
-    color: #e2e8f0;
-  }
-
-  :global(.dark) .cli-command-text {
-    color: #f1f5f9;
-    background: #334155;
-  }
-
-  :global(.dark) .cli-description {
-    color: #94a3b8;
-  }
-
-  :global(.dark) .footer {
-    color: #cbd5e1;
-    background-color: #0f172a;
-    border-top: 1px solid #334155;
-  }
-
-  /* Additional dark mode improvements */
-  :global(.dark) .logo-container img {
-    filter: brightness(0.9);
-  }
-
-  :global(.dark) .button {
-    background: #aa77aa;
-    color: white;
-  }
-
-  :global(.dark) .button:hover {
-    background: #955da5;
-  }
-
-  :global(.dark) .button-secondary {
-    background: transparent;
-    color: #aa77aa;
-    border: 2px solid #aa77aa;
-  }
-
-  :global(.dark) .button-secondary:hover {
-    background: #4a3a4a;
-  }
-
-  :global(.dark) .feature-icon,
-  :global(.dark) .application-icon,
-  :global(.dark) .principle-icon {
-    filter: brightness(0.9);
+  /* Universal: No border-radius */
+  * {
+    border-radius: 0 !important;
   }
 
   @media (max-width: 768px) {
-    h1 {
-      font-size: 2.5rem;
-    }
-
-    .subtitle {
-      font-size: 1.25rem;
-    }
-
-    .section-title {
-      font-size: 2rem;
-    }
-
-    .logo-container {
-      width: 140px;
-      height: 140px;
-    }
-
-    .buttons-container {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .button-secondary {
-      margin-left: 0;
-      margin-top: 1rem;
-    }
-
-    .features-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .cli-command {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .cli-description {
-      margin-left: 0;
-    }
-
-    .principle-card {
-      flex-direction: column !important;
-      text-align: center;
-    }
+    .hero-title { font-size: 2.5rem; }
+    .hero-subtitle { font-size: 1.1rem; }
+    .section { padding: 4rem 0; }
+    .features-grid { grid-template-columns: 1fr; }
+    .philosophy-item, .philosophy-item.reverse { grid-template-columns: 1fr; text-align: center; gap: 1rem; }
+    .philosophy-item.reverse .philosophy-number-container { order: 0; }
   }
 </style>

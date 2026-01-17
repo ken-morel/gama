@@ -82,16 +82,16 @@ Section "Install gama" SecInstall
   File /r "..\runners\native\libvgama.dll"
 
   SetOutPath "$INSTDIR\runners\web"
-  File /r "..\runners\web\index.html"
-  File /r "..\runners\web\gama.js"
+  File "..\runners\web\index.html"
+  File "..\runners\web\gama.js"
 
   !echo "Packaging tcc"
 
-  SetOutPath "$INSTDIR\compilers\tcc"
+  SetOutPath "$INSTDIR\compilers\tcc\windows"
   File /r "..\compilers\tcc\windows\"
   !echo "Packaging zig"
 
-  SetOutPath "$INSTDIR\compilers\zig"
+  SetOutPath "$INSTDIR\compilers\zig\windows"
   File /r "..\compilers\zig\windows\"
 
 
