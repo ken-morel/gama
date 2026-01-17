@@ -1,6 +1,6 @@
 # Gama widgets
 
-If you are already familiar to [drawing shapes](/docs/learn/drawing),
+If you are already familiar to [drawing shapes](/docs/learning-gama/drawing),
 widgets are more complex user interface elements which compose of shapes,
 gama provides a few built in widgets so you don't have to craft them yourself.
 

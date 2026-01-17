@@ -15,7 +15,7 @@ In the end you should have an image like this:
 ## loading the image
 
 You can load the sprite image as you open a normal image:
-See [image guide](/docs/guides/images).
+See [image guide](/docs/advanced-guides/images).
 
 ```c
 gmImage img = person_image();
