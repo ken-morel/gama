@@ -1,0 +1,164 @@
+#pragma once
+
+#include "color.h"
+#include <stdint.h>
+
+double _gm_dt = 0;
+double _gm_t = 0;
+
+static inline double gm_dt() { return _gm_dt; }
+static inline double gm_t() { return _gm_t; }
+
+#ifndef GM_NO_GAPI
+
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("set_title")))
+#endif
+    gapi_set_title(const char *title);
+
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("resize")))
+#endif
+    gapi_resize(const int32_t width, const int32_t height);
+
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("set_background_color")))
+#endif
+    gapi_set_background_color(const gmColor background);
+
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("fullscreen")))
+#endif
+    gapi_fullscreen(const int32_t fullscreen);
+
+// --- Utils ---
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("log")))
+#endif
+    gapi_log(const char *message);
+
+// --- Game Loop ---
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("init")))
+#endif
+    gapi_init(const int32_t width, const int32_t height, const char *title);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("yield")))
+#endif
+    gapi_yield(double *dt); // Changed to int32_t return type
+
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("quit")))
+#endif
+    gapi_quit();
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("runs")))
+#endif
+    gapi_runs();
+
+// --- Drawing Primitives ---
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_line")))
+#endif
+    gapi_draw_line(double x1, double y1, double x2, double y2, double thickness,
+                   gmColor col);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_rect")))
+#endif
+    gapi_draw_rect(double x, double y, double w, double h, gmColor col);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_rounded_rect")))
+#endif
+    gapi_draw_rounded_rect(double x, double y, double w, double h, double r,
+                           gmColor col);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_circle")))
+#endif
+    gapi_draw_circle(double center_x, double center_y, double radius,
+                     gmColor col);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_ellipse")))
+#endif
+    gapi_draw_ellipse(double x, double y, double w, double h, gmColor col);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_triangle")))
+#endif
+    gapi_draw_triangle(double x1, double y1, double x2, double y2, double x3,
+                       double y3, gmColor col);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_triangles")))
+#endif
+    gapi_draw_triangles(uint32_t n_triangles, double *points, gmColor *colors);
+
+extern uint32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("create_image")))
+#endif
+    gapi_create_image(const unsigned char *data, uint32_t width,
+                      uint32_t height);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_image")))
+#endif
+    gapi_draw_image(uint32_t handle, double x, double y, double width,
+                    double height);
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_image_part")))
+#endif
+    gapi_draw_image_part(uint32_t handle, uint32_t slice_x, uint32_t slice_y,
+                         uint32_t slice_width, uint32_t slice_height, double x,
+                         double y, double width, double height);
+
+// --- Text Functions ---
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("draw_text")))
+#endif
+    gapi_draw_text(double x, double y, double height, const char *txt,
+                   const char *font, uint8_t style, gmColor col);
+
+// --- Event Functions ---
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("key_down")))
+#endif
+    gapi_key_down(char t, char k);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("mouse_down")))
+#endif
+    gapi_mouse_down();
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("mouse_get")))
+#endif
+    gapi_mouse_get(double *x, double *y);
+
+#endif

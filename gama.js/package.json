@@ -1,0 +1,21 @@
+{
+  "name": "gama",
+  "version": "0.1.1",
+  "description": "Gama bindings library",
+  "module": "src/index.ts",
+  "scripts": {
+    "build": "bun build.mjs"
+  },
+  "keywords": [
+    "gama",
+    "canvas",
+    "wasm"
+  ],
+  "author": "ken-morel <engonken8@gmail.com>",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "esbuild": "^0.27.2",
+    "typescript": "^5.9.3"
+  }
+}

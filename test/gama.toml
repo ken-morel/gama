@@ -1,0 +1,11 @@
+
+name = "test"
+uuid = "019ba8d9-2a38-723b-ab41-a1158a1dabc1"
+description = "a test"
+version = "0.1.0"
+author = "gama"
+
+[gama]
+
+version = "0.1.0"
+compiler = "/usr/bin/clang"

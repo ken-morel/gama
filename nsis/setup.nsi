@@ -18,9 +18,9 @@ ${Using:StrFunc} StrStr ; <-- THIS IS THE FIX for the new error.
 ;--------------------------------
 ; General
 Name "gama"
-OutFile "../bin/gama-0.1.0-windows-setup.exe"
+OutFile "../bin/gama-0.1.1-windows-setup.exe"
 InstallDir "$PROFILE\.gama"
-InstallDirRegKey HKCU "Software\cm.ama.gama" "InstallDir"
+InstallDirRegKey HKCU "Software\cm.engon.gama" "InstallDir"
 RequestExecutionLevel user
 
 ;--------------------------------
@@ -67,24 +67,40 @@ FunctionEnd
 Section "Install gama" SecInstall
   SetOutPath "$INSTDIR"
 
+  !echo "Packaging applicaiton files"
   ; --- Install application files ---
   File "..\bin\gama.exe"
   File "..\gama.png"
   File "..\gama.svg"
   File "..\LICENSE"
   File "..\README.md"
-  File /r "..\lib"
-  File /r "..\templates"
-  File /r "..\assets"
+  File /r "..\lib\"
+  File /r "..\templates\"
+  File /r "..\assets\"
 
   SetOutPath "$INSTDIR\runners\native"
   File /r "..\runners\native\libvgama.dll"
+
+  SetOutPath "$INSTDIR\runners\web"
+  File /r "..\runners\web\index.html"
+  File /r "..\runners\web\gama.js"
+
+  !echo "Packaging tcc"
+
+  SetOutPath "$INSTDIR\compilers\tcc"
+  File /r "..\compilers\tcc\windows\"
+  !echo "Packaging zig"
+
+  SetOutPath "$INSTDIR\compilers\zig"
+  File /r "..\compilers\zig\windows\"
+
+
 
   ; --- Add the installation directory to the user's PATH ---
   Call AddGamaToPath
 
   ; --- Create Uninstaller and Registry entries for Add/Remove Programs ---
-  WriteRegStr HKCU "Software\cm.engon.gama" "InstallDir" "$INSTDIR"
+  WriteRegStr HKCU "Software\cm.morel.gama" "InstallDir" "$INSTDIR"
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\cm.engon.gama" "DisplayName" "gama"
@@ -108,8 +124,8 @@ Section "Uninstall"
   RMDir "$SMPROGRAMS\gama"
 
   ; --- Remove registry keys ---
-  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\cm.engon.gama"
-  DeleteRegKey HKCU "Software\cm.engon.gama"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\cm.morel.gama"
+  DeleteRegKey HKCU "Software\cm.morel.gama"
 
   ; --- Remove all installed files and directories ---
   RMDir /r "$INSTDIR"

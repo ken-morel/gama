@@ -1,0 +1,4 @@
+module gama
+
+interface Compiler {
+}

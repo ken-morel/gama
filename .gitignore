@@ -1,4 +1,6 @@
 /cli
-/bin/
+/bin
 /build/
 /docs
+/bin
+/compilers/zig/*

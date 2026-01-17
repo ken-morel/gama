@@ -1,6 +1,6 @@
 # Gama widgets
 
-If you are already familiar to [drawing shapes](/docs/learn/drawing),
+If you are already familiar to [drawing shapes](/docs/learning-gama/drawing),
 widgets are more complex user interface elements which compose of shapes,
 gama provides a few built in widgets so you don't have to craft them yourself.
 
@@ -26,11 +26,11 @@ fmwFrame.enabled = 0;
 gmw_frame(...);
 gmw_restore(); // restore last save, i.e #1
 // draw other frames
- 
+
 gmw_restore(); // restore last save i.e default theme #0
 ```
 
 ## Reference
 
 - <a href="/reference/widgets_8h.html">widgets.h reference</a>
-- <a href="/reference/dir_23e0dee3fd6f26038bcbe9982731bc10.html">widgets/ references</a>
+- <a href="/reference/dir_2973f2b50139aedb0acaac5d826403e9.html">widgets/ references</a>

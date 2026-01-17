@@ -1,5 +1,19 @@
 var searchData=
 [
-  ['off_0',['off',['../structgmw_switch_theme.html#a78506b6d2c26c3050b994a78e60c2d30',1,'gmwSwitchTheme']]],
-  ['on_1',['on',['../structgmw_switch_theme.html#a78564312f6450092529ae865dd4bc69e',1,'gmwSwitchTheme']]]
+  ['n_5fcolors_0',['n_colors',['../structgm3_image.html#a4ea240aa784e57c49d862dfa5d879b91',1,'gm3Image']]],
+  ['n_5ffaces_1',['n_faces',['../structgm3_mesh.html#af313b374f393c591cf3246ae675c9b4b',1,'gm3Mesh::n_faces'],['../structgm3_baked_mesh_header.html#ac09c14c32f9ba4f3503c0a223e34c53d',1,'gm3BakedMeshHeader::n_faces']]],
+  ['n_5fframes_2',['n_frames',['../structgm_sprite.html#a432fe01d9bb96e92b05f108a7fa418ee',1,'gmSprite']]],
+  ['n_5findices_3',['n_indices',['../structgm3_obj_line.html#aa8deadad0b58e4bbdacd057570f1f071',1,'gm3ObjLine']]],
+  ['n_5fmaterials_4',['n_materials',['../structgm3_mtl_lib.html#ab8433677af7c1489f3a1160bf30dca17',1,'gm3MtlLib']]],
+  ['n_5fmtllibs_5',['n_mtllibs',['../structgm3_mesh.html#a0acb82aff2583bd366cce6f286058e91',1,'gm3Mesh::n_mtllibs'],['../structgm3_baked_mesh_header.html#afe6a0edb3069e6100889e81f5827d60a',1,'gm3BakedMeshHeader::n_mtllibs']]],
+  ['n_5fnormals_6',['n_normals',['../structgm3_mesh.html#a1cc2d0641f765d7389716cf5187b623e',1,'gm3Mesh::n_normals'],['../structgm3_baked_mesh_header.html#a48ef0896de8ea49189ab4df2f0ad9e2b',1,'gm3BakedMeshHeader::n_normals']]],
+  ['n_5ftexs_7',['n_texs',['../structgm3_mesh.html#a3d4124b947a3aafca742ad3897f95cd2',1,'gm3Mesh::n_texs'],['../structgm3_baked_mesh_header.html#ae28b34038028a72cac1504591b1071bd',1,'gm3BakedMeshHeader::n_texs']]],
+  ['n_5ftextures_8',['n_textures',['../structgm3_mtl_lib.html#a2712a98443322237768730e7858847a9',1,'gm3MtlLib']]],
+  ['n_5ftriangles_9',['n_triangles',['../structgm3_image.html#ad2a8c2f5d4c3e30c86a8a766dd301609',1,'gm3Image']]],
+  ['n_5fvertices_10',['n_vertices',['../structgm3_image.html#aa0a21c2605e5a0235ebf55566ac0f8fe',1,'gm3Image::n_vertices'],['../structgm3_mesh.html#aacf5338cbc6173562da3fdfb6d4f681d',1,'gm3Mesh::n_vertices'],['../structgm3_baked_mesh_header.html#a61eeda6427fadaa8d5d31c3889aec60e',1,'gm3BakedMeshHeader::n_vertices']]],
+  ['name_11',['name',['../structgm3_material.html#ab9aee025e1583e8ba18c83828c56c181',1,'gm3Material::name'],['../structgm3_mtl_lib.html#a923847a62195ac2415c1864e5b895a74',1,'gm3MtlLib::name'],['../structgm3_obj_line.html#af1b55772776f81a88979372f25f7155d',1,'gm3ObjLine::name']]],
+  ['nan_12',['NAN',['../math_8h.html#a8abfcc76130f3f991d124dd22d7e69bc',1,'math.h']]],
+  ['near_13',['near',['../structgm3_camera.html#a1598ed29343af51bb2c406cf3f8c8378',1,'gm3Camera']]],
+  ['normal_14',['normal',['../structgm3_mesh_face.html#aec4e2510ae6a57a5a725e6ab9bd4206c',1,'gm3MeshFace']]],
+  ['normals_15',['normals',['../structgm3_mesh.html#ad397d2f9badbf55a7e0461fd22232eb6',1,'gm3Mesh::normals'],['../structgm__collision.html#a0baea27643665b55ff27fbdc1389a00b',1,'gm_collision::normals']]]
 ];

@@ -1,76 +1,235 @@
 #!/usr/bin/env -S v -raw-vsh-tmp-prefix tmp run
 
-import os
 import term
+import os
+import cli
 
-fn copy_html_docs() ! {
-	html_source_dir := 'docs/html'
-	static_dest_dir := 'site/static/reference'
-
-	println('Copying HTML docs from ${html_source_dir} to ${static_dest_dir}')
-
-	// Remove existing static reference directory if it exists
-	if os.exists(static_dest_dir) {
-		os.rmdir_all(static_dest_dir) or {} // Don't fail if directory doesn't exist
+mut app := cli.Command{
+	name:        'mng'
+	usage:       './mng <command>'
+	description: 'Gama management script'
+	execute:     fn (_ cli.Command) ! {
+		println('No command specified, run ./mng help for help')
 	}
+	commands:    [
+		cli.Command{
+			name:        'docs'
+			usage:       './mng docs'
+			description: 'Buid the doxygen documentation of lib/gama and integrate it to svelte site'
+			execute:     fn (_ cli.Command) ! {
+				println(term.ok_message('Generating documentation...'))
 
-	// Copy HTML documentation to static directory
-	os.mkdir_all(static_dest_dir)!
+				// Run doxygen to generate HTML and XML
+				result := system('doxygen Doxyfile')
+				if result != 0 {
+					println(term.fail_message('Doxygen failed to run'))
+				}
 
-	// Copy all files from HTML directory to static directory
-	files := os.glob('${html_source_dir}/**') or { []string{} }
-	for file in files {
-		if os.is_file(file) {
-			// Extract relative path by slicing the string after html_source_dir
-			rel_start := html_source_dir.len + 1
-			if file.len > rel_start {
-				relative_path := file[rel_start..]
-				if relative_path.len > 0 { // Make sure it's not empty
-					dest_file := os.join_path(static_dest_dir, relative_path)
+				println(term.ok_message('Documentation generated successfully!'))
+				println(term.ok_message('Moving HTML documentation to static directory...'))
 
-					// Create parent directory if needed
-					parent_dir := os.dir(dest_file)
-					os.mkdir_all(parent_dir)!
+				html_source_dir := 'docs/html'
+				static_dest_dir := 'site/static/reference'
 
-					println(' - Copying ${relative_path}')
-					os.cp(file, dest_file)!
+				println('Copying HTML docs from ${html_source_dir} to ${static_dest_dir}')
+
+				// Remove existing static reference directory if it exists
+				if exists(static_dest_dir) {
+					rmdir_all(static_dest_dir) or {} // Don't fail if directory doesn't exist
+				}
+
+				// Copy HTML documentation to static directory
+				mkdir_all(static_dest_dir)!
+
+				// Copy all files from HTML directory to static directory
+				files := glob('${html_source_dir}/**') or { []string{} }
+				for file in files {
+					if is_file(file) {
+						// Extract relative path by slicing the string after html_source_dir
+						rel_start := html_source_dir.len + 1
+						if file.len > rel_start {
+							relative_path := file[rel_start..]
+							if relative_path.len > 0 { // Make sure it's not empty
+								dest_file := join_path(static_dest_dir, relative_path)
+
+								// Create parent directory if needed
+								parent_dir := dir(dest_file)
+								mkdir_all(parent_dir)!
+
+								println(' - Copying ${relative_path}')
+								cp(file, dest_file)!
+							}
+						}
+					}
+				}
+
+				println(term.ok_message('HTML documentation copied to static/reference!'))
+
+				println(term.ok_message('Documentation integrated into Svelte site!'))
+			}
+		},
+		cli.Command{
+			name:        'build'
+			usage:       './mng build'
+			description: 'Build gama cli tool'
+			execute:     fn (cmd cli.Command) ! {
+				os.mkdir_all('bin') or {}
+				if cmd.args.len == 0 || cmd.args[0] == 'linux' {
+					println('Building gama for linux')
+					result := system('v -cc clang -force-bounds-checking -os linux cli.v -o bin/gama')
+					if result != 0 {
+						println(term.fail_message('linux build failed'))
+					}
+				}
+				if cmd.args.len == 0 || cmd.args[0] == 'windows' {
+					println('Building gama for windows')
+					result := system('v -force-bounds-checking -os windows  cli.v -o bin/gama')
+					if result != 0 {
+						println(term.fail_message('windows build failed'))
+					}
 				}
 			}
-		}
-	}
+		},
+		cli.Command{
+			name:        'package'
+			usage:       './mng package'
+			description: 'Package gama'
+			execute:     fn (_ cli.Command) ! {
+				println('Packaging deb with nfpm')
+				mut result := system('nfpm package -f nfpm/nfpm.yaml -p deb -t bin/')
+				if result != 0 {
+					println(term.fail_message('nfpm deb build failed'))
+				}
+				println('Packaging for arch linux with nfpm')
+				result = system('nfpm package -f nfpm/nfpm.yaml -p archlinux -t bin/')
+				if result != 0 {
+					println(term.fail_message('nfpm archlinux build failed'))
+				}
+				println('Packaging with nsis')
+				result = system('makensis nsis/setup.nsi')
+				if result != 0 {
+					println(term.fail_message('makensis failed: '))
+				}
+			}
+		},
+		cli.Command{
+			name:        'get-zig'
+			usage:       './mng get-zig'
+			description: 'Downloads and sets up the appropriate Zig compiler if not already present.'
 
-	println(term.ok_message('HTML documentation copied to static/reference!'))
+			execute: fn (cmd cli.Command) ! {
+				zig_version := '0.15.2'
+				zig_arch := 'x86_64'
+				os_name := 'windows' // Always target Windows for packaging
+				archive_ext := 'zip'
+				zig_exe_name := 'zig.exe'
+
+				dest_dir := 'compilers/zig/${os_name}'
+				extracted_folder_name := 'zig-${os_name}-${zig_arch}-${zig_version}'
+				zig_exe_full_path := os.join_path(dest_dir, zig_exe_name)
+
+				if os.exists(zig_exe_full_path) {
+					println(term.ok_message('Windows Zig compiler already found at ${zig_exe_full_path}. Skipping download.'))
+					return
+				}
+
+				os.mkdir_all(dest_dir)!
+
+				zig_archive_name := 'zig-${os_name}-${zig_arch}-${zig_version}.${archive_ext}'
+				zig_url := 'https://ziglang.org/download/${zig_version}/${zig_archive_name}'
+				local_archive_path := os.join_path(dest_dir, zig_archive_name)
+
+				if !os.exists(local_archive_path) {
+					println(term.warn_message('Windows Zig compiler not found. Downloading...'))
+					println('  - URL: ${zig_url}')
+
+					mut result := system('curl -L -o ${local_archive_path} ${zig_url}')
+					if result != 0 {
+						println(term.fail_message('  Zig download failed: '))
+						return
+					}
+				} else {
+					println('Found downloaded archive. Extracting...')
+				}
+
+				extracted_root_folder_path := os.join_path(dest_dir, extracted_folder_name)
+				if os.exists(extracted_root_folder_path) {
+					os.rmdir_all(extracted_root_folder_path)!
+				}
+				if os.exists(zig_exe_full_path) {
+					os.rm(zig_exe_full_path)!
+				}
+				println('  Extracting ${local_archive_path} to ${dest_dir}...')
+				mut result := system('unzip -o ${local_archive_path} -d ${dest_dir}')
+				if result != 0 {
+					println(term.fail_message('  Extraction failed: '))
+					return
+				}
+
+				println('  Moving contents from ${extracted_root_folder_path} to ${dest_dir}...')
+				result = system('mv ${extracted_root_folder_path}/* ${dest_dir}/')
+				if result != 0 {
+					println(term.fail_message('  Failed to move extracted contents: '))
+					return
+				}
+
+				os.rmdir(extracted_root_folder_path)!
+				os.rm(local_archive_path) or {}
+
+				println(term.ok_message('Windows Zig compiler setup complete at ${zig_exe_full_path}.'))
+			}
+		},
+		cli.Command{
+			name:        'runner'
+			usage:       './mng runner <name>'
+			description: 'Build one of gama runners'
+			execute:     fn (_ cli.Command) ! {
+				println('You need to specify a runner, like native or web')
+			}
+			commands:    [
+				cli.Command{
+					name:        'native'
+					usage:       './mng runner native'
+					description: 'Build the gama native runner'
+					execute:     fn (_ cli.Command) ! {
+						println('Building vgama for linux')
+						mut result := system('v libvgama/ -cc clang -force-bounds-checking -os linux -shared -enable-globals -o ./runners/native/libvgama')
+						if result != 0 {
+							println(term.fail_message('vgama linux build failed'))
+						}
+						println('Building vgama for windows')
+						result = system('v libvgama -cc clang -os windows -shared -enable-globals -o ./runners/native/libvgama')
+						if result != 0 {
+							println(term.fail_message('vgama windows build failed'))
+						}
+					}
+				},
+				cli.Command{
+					name:        'web'
+					usage:       './mng runner web'
+					description: 'Buid the web runner for gama'
+					execute:     fn (_ cli.Command) ! {
+						println('Running bun install')
+						mut result := system('cd gama.js && bun install')
+						if result != 0 {
+							println(term.warn_message('bun install exited with non-zero code ${result}'))
+						}
+						println('Building gama.js')
+						result = system('cd gama.js && bun run build && cd ..')
+						if result != 0 {
+							println(term.fail_message('gama.js build failed'))
+						}
+						println('  done building gama.js')
+						println('Copying gama.js/dist/gama.js to runners/web')
+						os.cp('gama.js/dist/gama.js', 'runners/web/gama.js') or {
+							println(term.fail_message('Error compying gama.js: ${err}'))
+						}
+					}
+				},
+			]
+		},
+	]
 }
 
-// Get the command from arguments
-mut cmd := 'help'
-if os.args.len > 1 {
-	cmd = os.args[1]
-}
-
-if cmd == 'docs' {
-	// Generate documentation from source
-	println(term.ok_message('Generating documentation...'))
-
-	// Run doxygen to generate HTML and XML
-	result := os.execute('doxygen Doxyfile')
-	if result.exit_code != 0 {
-		println(term.fail_message('Doxygen failed to run: ${result.output}'))
-		return
-	}
-
-	println(term.ok_message('Documentation generated successfully!'))
-	println(term.ok_message('Moving HTML documentation to static directory...'))
-
-	copy_html_docs() or { println(term.fail_message('Error copying HTML docs: ${err}')) }
-
-	println(term.ok_message('Documentation integrated into Svelte site!'))
-} else if cmd == 'help' {
-	println('Gama Documentation Generator')
-	println('Usage: mng build|docs')
-	println('  build/docs - Generate Doxygen documentation and integrate into Svelte site')
-	println('  help       - Show this help message')
-} else {
-	println(term.fail_message('Unknown command: ${cmd}'))
-	println('Run "mng help" for available commands')
-}
+app.setup()
+app.parse(os.args)

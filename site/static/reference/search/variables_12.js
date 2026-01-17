@@ -1,8 +1,13 @@
 var searchData=
 [
-  ['scale_0',['scale',['../structgmw_theme_cache.html#a17156235cd5d246ff53516157a62c335',1,'gmwThemeCache::scale'],['../structgmw_button_theme.html#aa37ebb4d57573d81f4754c29405a8a54',1,'gmwButtonTheme::scale'],['../structgmw_frame_theme.html#a341136d31eb80f2f4f71c4765ba5fdc5',1,'gmwFrameTheme::scale'],['../structgmw_joystick_theme.html#a421af19185af04e97bcffbde1acd42b6',1,'gmwJoystickTheme::scale'],['../structgmw_scale_theme.html#af738b7a544f3d556284576a5453d41a7',1,'gmwScaleTheme::scale'],['../structgmw_switch_theme.html#a0f5b46551d7a6a3179f11d2163c93528',1,'gmwSwitchTheme::scale']]],
-  ['since_1',['since',['../structgm_collision.html#a66f55e550ef604cb60565ea6897a1b3b',1,'gmCollision']]],
-  ['step_2',['step',['../structgmw_scale_theme.html#a5ef3a75f06d57adb8ea21ffeb57d5a8f',1,'gmwScaleTheme']]],
-  ['switch_5f_3',['switch_',['../structgmw_theme_cache.html#a184d15ca4bc01ddfcee572898f5602e9',1,'gmwThemeCache']]],
-  ['sys_4',['sys',['../structgm_collision.html#af18bac9d6b3db9a91ea6123807256017',1,'gmCollision']]]
+  ['scale_0',['scale',['../structgm3_transform.html#aae68047934007fd2160c84b1e3859b93',1,'gm3Transform::scale'],['../structgmw_theme_cache.html#a17156235cd5d246ff53516157a62c335',1,'gmwThemeCache::scale'],['../structgmw_button_theme.html#aa37ebb4d57573d81f4754c29405a8a54',1,'gmwButtonTheme::scale'],['../structgmw_frame_theme.html#a341136d31eb80f2f4f71c4765ba5fdc5',1,'gmwFrameTheme::scale'],['../structgmw_joystick_theme.html#a421af19185af04e97bcffbde1acd42b6',1,'gmwJoystickTheme::scale'],['../structgmw_scale_theme.html#af738b7a544f3d556284576a5453d41a7',1,'gmwScaleTheme::scale'],['../structgmw_switch_theme.html#a0f5b46551d7a6a3179f11d2163c93528',1,'gmwSwitchTheme::scale']]],
+  ['shininess_1',['shininess',['../structgm3_material.html#ac46aee0b0e2bfda3a9cb67edff350d64',1,'gm3Material']]],
+  ['sign_2',['sign',['../structspecial.html#a790c76b4fc4e2d5a6698bfa345ff3feb',1,'special']]],
+  ['since_3',['since',['../structgm__collision.html#a4e95571a8da3cf5437ac0b804d2f9b20',1,'gm_collision']]],
+  ['size_4',['size',['../struct__memory__spot.html#a0d1bfe057de0f97091727d2cdb95b931',1,'_memory_spot']]],
+  ['sort_5fbuf_5',['sort_buf',['../structgm3_image.html#a2f7b7ca68eb228b02d69c9fc58d11587',1,'gm3Image']]],
+  ['specular_6',['specular',['../structgm3_material.html#abe6b44ecd81f8dd044466cdaa01855d9',1,'gm3Material']]],
+  ['step_7',['step',['../structgmw_scale_theme.html#a5ef3a75f06d57adb8ea21ffeb57d5a8f',1,'gmwScaleTheme']]],
+  ['switch_5f_8',['switch_',['../structgmw_theme_cache.html#a184d15ca4bc01ddfcee572898f5602e9',1,'gmwThemeCache']]],
+  ['sys_9',['sys',['../structgm__collision.html#ae7539bba9c1bffeab0985d413bb1e370',1,'gm_collision']]]
 ];

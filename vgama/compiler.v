@@ -1,4 +1,0 @@
-module vgama
-
-interface Compiler {
-}
