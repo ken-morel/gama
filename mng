@@ -100,6 +100,11 @@ mut app := cli.Command{
 				if result.exit_code != 0 {
 					println(term.fail_message(result.output))
 				}
+				println('Packaging for arch linux with nfpm')
+				result = execute('nfpm package -f nfpm/nfpm.yaml -p archlinux -t bin/')
+				if result.exit_code != 0 {
+					println(term.fail_message(result.output))
+				}
 				println('Packaging with nsis')
 				result = execute('makensis nsis/setup.nsi')
 				if result.exit_code != 0 {

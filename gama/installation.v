@@ -16,17 +16,6 @@ pub fn (i Installation) zcc() !string {
 	return '${i.zig_exe()!} cc'
 }
 
-pub fn Installation.folder(repo string) Installation {
-	return Installation{
-		lib:       os.join_path(repo, 'lib')
-		templates: os.join_path(repo, 'templates')
-		runners:   os.join_path(repo, 'runners')
-		assets:    os.join_path(repo, 'assets')
-		tcc:       os.join_path(repo, 'compilers', 'tcc')
-		zig:       os.join_path(repo, 'compilers', 'zig')
-	}
-}
-
 pub fn (i Installation) tcc_exe() !string {
 	return $if windows {
 		os.join_path(i.tcc, 'windows', 'tcc.exe')

@@ -59,10 +59,18 @@ fn get_project() !gama.Project {
 
 fn get_installation() !gama.Installation {
 	mut location := os.dir(os.executable())
-	if location.starts_with('/usr/bin') {
+	lnx := location.starts_with('/usr/bin')
+	if lnx {
 		location = '/usr/share/gama'
 	}
-	return gama.Installation.folder(location)
+	return gama.Installation{
+		lib:       if lnx { '/usr/lib/gama' } else { os.join_path(location, 'lib') }
+		templates: os.join_path(location, 'templates')
+		runners:   os.join_path(location, 'runners')
+		assets:    os.join_path(location, 'assets')
+		tcc:       os.join_path(location, 'compilers', 'tcc')
+		zig:       os.join_path(location, 'compilers', 'zig')
+	}
 }
 
 fn main() {

@@ -2,6 +2,7 @@
 
 ## v0.1.1-dev4
 
+- Packaging support for arch linux.
 - **New compiler api**: the compilées powering gama can be accessed via `gama tcc` , `zig` and `zcc` , where `zcc` is `zig cc`.  this permits you to integrate gama compilées in your workflow especially on windows where it's quite useful.
 
 - **Integrated Compiler Toolchain**: Reworked the entire build process to improve developer experience and portability.
