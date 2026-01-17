@@ -53,22 +53,7 @@
   {/key}
 </svelte:head>
 
-{#if isHomePage}
-  <!-- Full-width layout for home page -->
-  <div class="home-layout">
-    <header class="navbar">
-      <div class="logo">
-        <Button href="/">
-          <img width="100" src="/gama-text.png" alt="gama logo with text" />
-        </Button>
-      </div>
-      <div class="socials">
-        <SocialLink type="gitHub" href="https://github.com/ken-morel/gama" />
-      </div>
-    </header>
-    <slot />
-  </div>
-{:else}
+{#if !isHomePage}
   <!-- Documentation layout for other pages -->
   <KitDocs {meta}>
     <KitDocsLayout {navbar} {sidebar}>
@@ -87,30 +72,11 @@
       <slot />
     </KitDocsLayout>
   </KitDocs>
+{:else}
+  <slot />
 {/if}
 
 <style>
-  .home-layout {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #f8fafc;
-    border-bottom: 1px solid #e2e8f0;
-  }
-
-  :global(.dark) .navbar {
-    background-color: #0f172a;
-    border-bottom: 1px solid #334155;
-  }
-
   .logo :global(a) {
     color: rgb(var(--kd-color-inverse));
     display: flex;
