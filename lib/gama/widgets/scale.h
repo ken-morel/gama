@@ -16,7 +16,8 @@
  * @brief Structure defining the visual theme for a scale (slider) widget.
  */
 typedef struct {
-  int enabled; /**< Whether the scale is enabled for interaction (1) or disabled (0). */
+  int enabled; /**< Whether the scale is enabled for interaction (1) or disabled
+                  (0). */
 
   double scale; /**< Overall widget scale when normal. */
 
@@ -31,13 +32,15 @@ typedef struct {
   struct {
     double scale;   /**< Scale factor when active (being dragged). */
     gmColor border; /**< Border color when active. */
-  } active; /**< Theme properties when the scale is active (mouse button down on it). */
+  } active; /**< Theme properties when the scale is active (mouse button down on
+               it). */
 
   gmColor knob;        /**< Knob color. */
   gmColor knob_border; /**< Knob border color. */
 
   double border_width; /**< Track border thickness. */
-  double step; /**< Step size for discrete values (0.0 means allow any value between 0 and 1). */
+  double step; /**< Step size for discrete values (0.0 means allow any value
+                  between 0 and 1). */
 } gmwScaleTheme;
 
 /**
@@ -73,8 +76,8 @@ gmwScaleTheme gmwScale = {.enabled = 1,
  *        to 1.0). This value is updated by user interaction.
  * @param anim Pointer to a double for the animated visual position of the knob.
  *        If NULL, `value` is used for the knob's position (non-animated).
- * @return 1 if the scale is currently being actively manipulated (mouse button down and hovering),
- *         0 otherwise.
+ * @return 1 if the scale is currently being actively manipulated (mouse button
+ * down and hovering), 0 otherwise.
  */
 int gmw_scale_anim(double x, double y, double width, double height,
                    double *value, double *anim) {
@@ -180,7 +183,7 @@ int gmw_scale_anim(double x, double y, double width, double height,
   // Draw knob
   gm_draw_rectangle(knob_x, knob_y, knob_size, knob_size, gmwScale.knob);
 
-  return active;
+  return hovered;
 }
 
 /**
@@ -197,8 +200,8 @@ int gmw_scale_anim(double x, double y, double width, double height,
  * @param height The height of the scale track.
  * @param value Pointer to a double to store the current scale value (0.0
  *        to 1.0).
- * @return 1 if the scale is currently being actively manipulated (mouse button down and hovering),
- *         0 otherwise.
+ * @return 1 if the scale is currently being actively manipulated (mouse button
+ * down and hovering), 0 otherwise.
  */
 static inline int gmw_scale(double x, double y, double width, double height,
                             double *value) {

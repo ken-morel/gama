@@ -7,7 +7,6 @@ import rand
 pub struct ProjectGamaConf {
 pub:
 	version  Version @[required]
-	compiler string
 }
 
 pub struct ProjectConf {
@@ -31,7 +30,6 @@ pub fn (c ProjectConf) substitute(templ string) string {
 		'uuid':          c.uuid
 		'author':        c.author
 		'gama.version':  c.gama.version.str()
-		'gama.compiler': c.gama.compiler
 	}
 	for key, val in subs {
 		code = code.replace('{{' + key + '}}', val)
@@ -51,7 +49,6 @@ author = "${c.author}"
 [gama]
 
 version = "${c.gama.version.str()}"
-compiler = "${c.gama.compiler}"
 		')!
 	return
 }
@@ -70,7 +67,6 @@ pub fn ProjectConf.load(path string) !ProjectConf {
 		uuid:        uuid
 		gama:        ProjectGamaConf{
 			version:  Version.parse(doc.value('gama.version').string())!
-			compiler: doc.value('gama.compiler').string()
 		}
 	}
 }

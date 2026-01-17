@@ -5,38 +5,17 @@
  * This file declares the interface for platform-specific graphics operations.
  * It provides a set of `gapi_` prefixed functions that are implemented
  * differently for each target platform (e.g., native desktop, WebAssembly).
- * This abstraction allows the core Gama engine code to remain platform-agnostic.
+ * This abstraction allows the core Gama engine code to remain
+ * platform-agnostic.
  */
 #pragma once
 
+#ifdef GM_NO_GAPI
+#error "gapi.h included"
+#endif
+
 #include "color.h"
 #include <stdint.h>
-
-/**
- * @internal
- * @brief Stores the delta time (time since last frame) in seconds.
- * This value is updated by `gapi_yield`.
- */
-double _gm_dt = 0;
-/**
- * @internal
- * @brief Stores the total accumulated time since the engine started, in seconds.
- * This value is updated by `gapi_yield`.
- */
-double _gm_t = 0;
-
-/**
- * @brief Retrieves the delta time (time since the last frame) in seconds.
- * @return The delta time.
- */
-static inline double gm_dt() { return _gm_dt; }
-/**
- * @brief Retrieves the total accumulated time since the engine started, in seconds.
- * @return The total elapsed time.
- */
-static inline double gm_t() { return _gm_t; }
-
-#ifndef GM_NO_GAPI
 
 /**
  * @brief Sets the title of the application window.
@@ -113,7 +92,8 @@ extern int32_t
  * This function should be called at the end of each frame. It handles
  * window events, updates input states, swaps buffers, and calculates `_gm_dt`.
  *
- * @param dt A pointer to a double where the calculated delta time will be stored.
+ * @param dt A pointer to a double where the calculated delta time will be
+ * stored.
  * @return 1 if the application should continue, 0 if it should exit.
  */
 extern int32_t
@@ -130,16 +110,6 @@ extern void
     __attribute__((import_module("gapi"), import_name("quit")))
 #endif
     gapi_quit();
-
-/**
- * @brief Checks if the application is still running.
- * @return 1 if running, 0 if quit was requested.
- */
-extern int32_t
-#ifdef __ZIG_CC__
-    __attribute__((import_module("gapi"), import_name("runs")))
-#endif
-    gapi_runs();
 
 // --- Drawing Primitives ---
 /**
@@ -241,7 +211,8 @@ extern int32_t
 /**
  * @brief Draws a batch of triangles on the screen.
  * @param n_triangles The number of triangles in the batch.
- * @param points An array of `double`s representing the vertices (x1,y1, x2,y2, x3,y3 for each triangle).
+ * @param points An array of `double`s representing the vertices (x1,y1, x2,y2,
+ * x3,y3 for each triangle).
  * @param colors An array of `gmColor`s, one for each triangle.
  * @return 0 on success.
  */
@@ -271,7 +242,8 @@ extern uint32_t
 
 /**
  * @brief Draws an image referenced by its handle on the screen.
- * @param handle The handle of the image to draw, obtained from `gapi_create_image`.
+ * @param handle The handle of the image to draw, obtained from
+ * `gapi_create_image`.
  * @param x The x-coordinate of the center of the image.
  * @param y The y-coordinate of the center of the image.
  * @param width The width to draw the image.
@@ -358,5 +330,3 @@ extern int32_t
     __attribute__((import_module("gapi"), import_name("mouse_get")))
 #endif
     gapi_mouse_get(double *x, double *y);
-
-#endif

@@ -4,20 +4,20 @@
 #endif
 
 #include "../stb/stb_image.h"
+#include "color.h"
 #include <stdint.h>
 #include <string.h>
-#include "color.h"
 
 /**
  * @brief A container for raw, CPU-side image pixel data.
  *
  * This struct holds raw pixel data decoded from an image file. It is typically
  * used as an intermediate step before creating a `gmImage`, which manages the
- * texture on the GPU.
+ * texture.
  */
 typedef struct {
   int32_t width, height; /**< Dimensions of the image in pixels. */
-  unsigned char *data;  /**< Pointer to the raw RGBA pixel data. */
+  unsigned char *data;   /**< Pointer to the raw RGBA pixel data. */
 } gmImageData;
 
 /**
@@ -65,31 +65,30 @@ int32_t gm_image_data_free(gmImageData *d) {
  * @return The average color as a gmColor.
  */
 gmColor gm_image_data_average_color(const gmImageData *data) {
-    if (!data || !data->data || data->width <= 0 || data->height <= 0) {
-        return 0; // Return black for invalid data
-    }
+  if (!data || !data->data || data->width <= 0 || data->height <= 0) {
+    return 0; // Return black for invalid data
+  }
 
-    long long total_r = 0;
-    long long total_g = 0;
-    long long total_b = 0;
-    size_t pixel_count = data->width * data->height;
+  long long total_r = 0;
+  long long total_g = 0;
+  long long total_b = 0;
+  size_t pixel_count = data->width * data->height;
 
-    for (size_t i = 0; i < pixel_count; ++i) {
-        total_r += data->data[i * 4 + 0];
-        total_g += data->data[i * 4 + 1];
-        total_b += data->data[i * 4 + 2];
-    }
+  for (size_t i = 0; i < pixel_count; ++i) {
+    total_r += data->data[i * 4 + 0];
+    total_g += data->data[i * 4 + 1];
+    total_b += data->data[i * 4 + 2];
+  }
 
-    unsigned char avg_r = (unsigned char)(total_r / pixel_count);
-    unsigned char avg_g = (unsigned char)(total_g / pixel_count);
-    unsigned char avg_b = (unsigned char)(total_b / pixel_count);
+  unsigned char avg_r = (unsigned char)(total_r / pixel_count);
+  unsigned char avg_g = (unsigned char)(total_g / pixel_count);
+  unsigned char avg_b = (unsigned char)(total_b / pixel_count);
 
-    return gm_rgb(avg_r, avg_g, avg_b);
+  return gm_rgb(avg_r, avg_g, avg_b);
 }
 
-
 /**
- * @brief A handle to a GPU-managed image or texture.
+ * @brief A handle to a backend-managed image or texture.
  *
  * This struct represents an image that has been uploaded to the graphics
  * hardware for efficient rendering.
@@ -104,7 +103,7 @@ typedef struct {
 #include "gapi.h"
 
 /**
- * @brief Creates a GPU-managed image from a file path.
+ * @brief Creates a backend-managed image from a file path.
  *
  * This function loads an image file from disk, uploads its data to the GPU,
  * and then discards the CPU-side copy.
@@ -124,7 +123,7 @@ gmImage gm_image_create(const char *path) {
 }
 
 /**
- * @brief Creates a GPU-managed image from in-memory data.
+ * @brief Creates a backend-managed image from in-memory data.
  *
  * This function decodes an image from a memory buffer, uploads its data to the
  * GPU, and then discards the CPU-side copy.
@@ -175,4 +174,3 @@ void gm_image_draw_part(gmImage i, int slice_x, int slice_y, int slice_width,
                        y, w, h);
 }
 #endif
-

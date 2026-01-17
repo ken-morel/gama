@@ -4,9 +4,9 @@
 #include "body.h"
 #include "body_list.h"
 #include "collision.h"
-#include "gapi.h"
 #include "position.h"
 #include "system.h"
+#include "t.h"
 
 /**
  * @brief Resolves a collision between two bodies by applying appropriate forces
@@ -23,8 +23,9 @@ void gm_collision_resolve(gmCollision *collision);
  * @brief Updates a single physics body's position and velocity based on applied
  * accelerations and damping.
  *
- * This function integrates the body's motion over a given time step. It accounts
- * for the body's own acceleration and any system-wide acceleration and damping.
+ * This function integrates the body's motion over a given time step. It
+ * accounts for the body's own acceleration and any system-wide acceleration and
+ * damping.
  *
  * @param sys Pointer to the physics system the body belongs to (can be NULL if
  *        no system-wide effects are desired).
@@ -75,7 +76,8 @@ void gm_body_update_dt(gmBody *body, double dt) {
 
 /**
  * @brief Updates a single physics body's position and velocity using the
- * engine's global delta time (`gm_dt()`), without considering a global physics system.
+ * engine's global delta time (`gm_dt()`), without considering a global physics
+ * system.
  * @param body Pointer to the body to update.
  */
 void gm_body_update(gmBody *body) {
@@ -87,8 +89,8 @@ void gm_body_update(gmBody *body) {
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
  * @return A pointer to a `gmCollision` structure if a collision is detected,
- *         otherwise NULL. The returned `gmCollision` must be freed by the caller
- *         if it's not managed by a `gmSystem`.
+ *         otherwise NULL. The returned `gmCollision` must be freed by the
+ * caller if it's not managed by a `gmSystem`.
  */
 gmCollision *gm_collision_detect(gmBody *, gmBody *);
 
@@ -239,9 +241,9 @@ static inline void gm_system_update(gmSystem *sys) {
  * @brief Calculates the penetration depth and optionally the normal vector
  *         for a collision between two bodies.
  *
- * This function handles collision between various collider types (Circle-Circle,
- * Rect-Rect, Circle-Rect). It determines how much the bodies overlap
- * and the direction of the separation.
+ * This function handles collision between various collider types
+ * (Circle-Circle, Rect-Rect, Circle-Rect). It determines how much the bodies
+ * overlap and the direction of the separation.
  *
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
@@ -279,10 +281,12 @@ double gm_collision_penetration_normals(gmBody *a, gmBody *b, double *normal_x,
     double dy = b->position.y - a->position.y;
 
     double overlap_x = (a->width / 2 + b->width / 2) - fabs(dx);
-    if (overlap_x <= 0) return 0; // No overlap in X
+    if (overlap_x <= 0)
+      return 0; // No overlap in X
 
     double overlap_y = (a->height / 2 + b->height / 2) - fabs(dy);
-    if (overlap_y <= 0) return 0; // No overlap in Y
+    if (overlap_y <= 0)
+      return 0; // No overlap in Y
 
     if (normal_x != NULL && normal_y != NULL) {
       if (overlap_x < overlap_y) {

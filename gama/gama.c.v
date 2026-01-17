@@ -7,8 +7,8 @@ module gama
 #include <gama.h>
 #include <gama/debug.h>
 #include <gama/3d.h>
-#include <stdlib.h> // For C.free
-#include <gama/3d/gltf.h> // For gltf loader and mesh serialization
+#include <gama/3d/gltf.h>
+#include <gama/3d/obj.h>
 
 pub fn C.gm3_gltf_load(mesh &C.gm3Mesh, path &char) i32
 

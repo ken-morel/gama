@@ -1,0 +1,93 @@
+module gama
+
+import veb
+import os
+import term
+
+pub struct Context {
+	veb.Context
+}
+
+pub struct RunWebApp {
+	veb.Middleware[Context]
+	veb.StaticHandler
+	build_dir string @[required]
+}
+
+pub fn (mut app RunWebApp) index(mut ctx Context) veb.Result {
+	return ctx.redirect('/index.html')
+}
+
+pub fn (p Project) build_web(inst Installation, reset bool) ! {
+	conf := p.get_conf()!
+
+	p.bake(inst, false) or { println(term.warn_message('Baking failed: ${err}')) }
+	build_dir := p.build_path('web')
+	os.mkdir_all(build_dir) or { return error('failed to create build directory: ${err}') }
+
+	source_files := p.get_src_c_files()
+
+	if source_files.len == 0 {
+		return error('No c source files in src directory')
+	}
+
+	include_path := os.join_path(p.path, 'include')
+	gen_path := p.build_path('gen')
+
+	output := os.join_path(build_dir, '${conf.name}.wasm')
+
+	res := os.execute('zig cc -target wasm32-wasi -g -mexec-model=reactor ${source_files.join(' ')} -I${include_path} -I${gen_path} -lc -lm -Wl,--no-entry -o ${output} -DGM_WEB -D__ZIG_CC__')
+
+	if res.exit_code != 0 {
+		return error('Failed to build app: ${res.output}')
+	} else {
+		println(res.output)
+	}
+}
+
+pub fn (p Project) run_web_build(inst Installation, port int) ! {
+	build_dir := p.build_path('web')
+
+	mut app := &RunWebApp{
+		build_dir: build_dir
+	}
+	app.handle_static(build_dir, true)!
+
+	app.use(
+		handler: fn (mut ctx Context) bool {
+			ctx.res.header.add(.cross_origin_embedder_policy, 'require-corp')
+			ctx.res.header.add(.cross_origin_opener_policy, 'same-origin')
+			return true
+		}
+	)
+
+	veb.run[RunWebApp, Context](mut app, port)
+}
+
+pub fn (p Project) copy_build_web_artifacts(inst Installation, reset bool) ! {
+	conf := p.get_conf()!
+	build_dir := p.build_path('web')
+	runner_path := os.join_path(inst.runners, 'web')
+	os.mkdir_all(build_dir) or {}
+
+	mut warn := false
+	dest_index := os.join_path(build_dir, 'index.html')
+	if !os.exists(dest_index) || reset {
+		os.write_file(dest_index, conf.substitute(os.read_file(os.join_path(runner_path,
+			'index.html')) or {
+			warn = true
+			''
+		})) or { warn = true }
+	}
+	dest_gama := os.join_path(build_dir, 'gama.js')
+	if !os.exists(dest_gama) || reset {
+		os.write_file(dest_gama, conf.substitute(os.read_file(os.join_path(runner_path,
+			'gama.js')) or {
+			warn = true
+			''
+		})) or { warn = true }
+	}
+	if warn {
+		println(term.fail_message('Error copying web build files'))
+	}
+}

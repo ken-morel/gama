@@ -2,7 +2,6 @@
 
 #include "../color.h"
 
-#include "../gapi.h"
 #include "../position.h"
 #include "./position.h"
 #include <stdint.h>
@@ -24,32 +23,37 @@ typedef struct {
   gmPos *vertices;   /**< Array of 2D screen-space vertex positions. */
   gmColor *colors;   /**< Array of colors, one per triangle. */
   size_t *triangles; /**< Array of vertex indices, 3 per triangle. */
-  double *depths;    /**< Array of average Z-depths, one per triangle, used for sorting. */
+  double *depths;    /**< Array of average Z-depths, one per triangle, used for
+                        sorting. */
 
   // Active counts for the current frame
   size_t n_vertices;  /**< Current number of vertices stored. */
-  size_t n_colors;    /**< Current number of colors stored (should match n_triangles). */
+  size_t n_colors;    /**< Current number of colors stored (should match
+                         n_triangles). */
   size_t n_triangles; /**< Current number of triangles stored. */
 
   // Actual allocated memory size (Capacity)
-  size_t cap_vertices;  /**< Allocated capacity for vertices array. */
-  size_t cap_colors;    /**< Allocated capacity for colors array. */
-  size_t cap_triangles; /**< Allocated capacity for triangles (indices) array. */
-  size_t cap_depths;    /**< Allocated capacity for depths array. */
+  size_t cap_vertices; /**< Allocated capacity for vertices array. */
+  size_t cap_colors;   /**< Allocated capacity for colors array. */
+  size_t
+      cap_triangles; /**< Allocated capacity for triangles (indices) array. */
+  size_t cap_depths; /**< Allocated capacity for depths array. */
 
   // --- Optimization: Per-Image Scratch Buffers ---
   // These allow us to reuse memory across frames for THIS specific image
   // without using global variables that break when multiple images exist.
   struct {
-    gm3Pos *world_verts; /**< Temp storage for 3D world coordinates before projection. */
+    gm3Pos *world_verts; /**< Temp storage for 3D world coordinates before
+                            projection. */
     size_t cap_world;    /**< Allocated capacity for world_verts. */
 
-    void *sort_buf; /**< Temp storage for sorting triangles by depth. */
+    void *sort_buf;  /**< Temp storage for sorting triangles by depth. */
     size_t cap_sort; /**< Allocated capacity for sort_buf. */
 
-    double *tri;     /**< Temp storage for sorted triangle vertex data (x1,y1,x2,y2,x3,y3). */
-    gmColor *cols;   /**< Temp storage for sorted triangle colors. */
-    size_t cap_tri;  /**< Allocated capacity for tri and cols. */
+    double *tri;    /**< Temp storage for sorted triangle vertex data
+                       (x1,y1,x2,y2,x3,y3). */
+    gmColor *cols;  /**< Temp storage for sorted triangle colors. */
+    size_t cap_tri; /**< Allocated capacity for tri and cols. */
 
   } _internal; /**< Internal scratch buffers for rendering optimizations. */
 
@@ -110,9 +114,10 @@ void gm3_image_free(gm3Image *i) {
  * @internal
  * @brief Ensures the allocated capacity for `gm3Image` buffers is sufficient.
  *
- * This helper function reallocates internal buffers (vertices, triangles, colors, depths)
- * if the `new_v` (new vertex count) or `new_t` (new triangle count) exceeds
- * the current capacity. It uses a doubling strategy for efficiency.
+ * This helper function reallocates internal buffers (vertices, triangles,
+ * colors, depths) if the `new_v` (new vertex count) or `new_t` (new triangle
+ * count) exceeds the current capacity. It uses a doubling strategy for
+ * efficiency.
  *
  * @param img Pointer to the `gm3Image` to check/resize.
  * @param new_v The minimum required vertex capacity.
@@ -170,7 +175,8 @@ typedef struct {
 
 /**
  * @internal
- * @brief Comparison function for `qsort` to sort `_gmImageDepthEntry` by Z-depth.
+ * @brief Comparison function for `qsort` to sort `_gmImageDepthEntry` by
+ * Z-depth.
  *
  * Sorts triangles from farthest Z to nearest Z (Painter's Algorithm).
  *
@@ -191,8 +197,12 @@ int _gm3_depth_compare(const void *a, const void *b) {
 }
 
 #ifndef GM_NO_GAPI
+
+#include "../gapi.h"
+
 /**
- * @brief Draws the projected 3D scene contained within a `gm3Image` onto the screen.
+ * @brief Draws the projected 3D scene contained within a `gm3Image` onto the
+ * screen.
  *
  * This function sorts the projected triangles by depth (Painter's Algorithm)
  * and then calls the `gapi_draw_triangles` function to render them.
@@ -201,7 +211,8 @@ int _gm3_depth_compare(const void *a, const void *b) {
  * @param x The X-offset for drawing the entire image.
  * @param y The Y-offset for drawing the entire image.
  * @param scale The scaling factor to apply to the projected image.
- * @return 1 on successful drawing, 0 if no triangles to draw, -1 on memory allocation failure.
+ * @return 1 on successful drawing, 0 if no triangles to draw, -1 on memory
+ * allocation failure.
  */
 int gm3_draw_image(gm3Image *img, double x, double y, double scale) {
   if (!img || img->n_triangles == 0)

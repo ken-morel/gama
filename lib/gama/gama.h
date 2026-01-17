@@ -12,6 +12,7 @@
 #include "draw.h"
 #include "gapi.h"
 #include "stdio.h"
+#include "t.h"
 #include "widgets/frame.h"
 
 #ifdef GM_ARGC_MAIN
@@ -22,8 +23,8 @@ int main();
 
 /**
  * @internal
- * @brief Main entry point for the Gama application, called by the platform runner.
- * This function calls the user-defined main().
+ * @brief Main entry point for the Gama application, called by the platform
+ * runner. This function calls the user-defined main().
  */
 int32_t
 #ifdef __ZIG_CC__
@@ -62,20 +63,11 @@ void gm_logo(double x, double y, double s) {
                     y, left_thickness, s, GM_GAMA);
 }
 
-
 /**
  * @brief Logs a message to the platform's console.
  * @param txt The text message to log.
  */
 void gm_log(const char *txt) { return gapi_log(txt); }
-
-/**
- * @brief Checks if the main game loop should continue running.
- * @return 1 if the window is open and the game should continue, 0 otherwise.
- * @deprecated This function is deprecated and will be removed. Use gm_yield()
- * instead.
- */
-static inline int gm_runs() { return gapi_runs(); }
 
 /**
  * @brief Enables or disables the built-in FPS counter display.
@@ -149,7 +141,6 @@ static inline void gm_quit() { return gapi_quit(); }
  * @param c The color to set as the background.
  */
 void gm_background(gmColor c) { return gapi_set_background_color(c); }
-
 
 /**
  * @brief Resizes the application window.
