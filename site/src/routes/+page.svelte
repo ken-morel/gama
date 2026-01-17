@@ -130,9 +130,7 @@ int main() {
       make 2D game development approachable and fun for students and developers.
     </p>
     <div class="hero-buttons">
-      <a href="/docs/getting-started" class="button button-primary"
-        >Get Started</a
-      >
+      <a href="/docs" class="button button-primary">Get Started</a>
       <a
         href="https://github.com/ken-morel/gama"
         class="button button-secondary">View on GitHub</a

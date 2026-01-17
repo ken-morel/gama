@@ -1,8 +1,0 @@
-{
-  "name": "gama-monorepo",
-  "private": true,
-  "workspaces": [
-    "gama.js",
-    "site"
-  ]
-}
