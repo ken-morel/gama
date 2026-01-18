@@ -8,6 +8,7 @@ Gama is a lightweight, cross-platform game engine written in C, designed with si
 
 ![Gama logo](./gama.svg)
 
+
 ## Philosophy
 
 Gama is built on a few core principles to make game development in C more approachable and fun:
@@ -24,8 +25,8 @@ Gama is built on a few core principles to make game development in C more approa
 - **Simple C API**: A clean, beginner-friendly C99 API.
 - **Full Game Loop Control**: You own the `main` loop.
 - **Custom Memory Allocator**: A static-pool-based `malloc` implementation, ideal for controlled memory environments like WASM.
-- **Lightweight**: gama installation is less than `30MB`, tcc compiler is less than `100MB`, and `zig cc`  compiler
-  used to build for web less than `200MB`.
+- **Lightweight**: gama installation is less than 400MB on windows(with zig and tcc toolchains),
+  and less than 50MB on linux(relying on system packages).
 
 ### Rendering
 - **2D Immediate-Mode Graphics**: Simple functions to draw primitive shapes like rectangles, circles, lines, and triangles.
@@ -171,4 +172,3 @@ To contribute to the website or documentation:
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-

@@ -85,6 +85,7 @@ Section "Install gama" SecInstall
 
   SetOutPath "$INSTDIR\runners\native"
   File "..\runners\native\libvgama.dll"
+  File "..\runners\native\libwinpthread-1.dll"
 
   SetOutPath "$INSTDIR\runners\web"
   File "..\runners\web\index.html"

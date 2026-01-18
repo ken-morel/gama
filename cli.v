@@ -103,6 +103,18 @@ fn main() {
 				}
 			},
 			cli.Command{
+				name:        'clean'
+				usage:       'clean'
+				description: 'Delete all build artifacts and generated files without removing the required toolchain'
+				execute:     fn (_ cli.Command) ! {
+					p := get_project()!
+					p.clean() or {
+						pintln(term.fail_message('Error cleaning the project files: ${err}'))
+					}
+					println(term.ok_message('Updated toolchain successfully'))
+				}
+			},
+			cli.Command{
 				name:        'build'
 				usage:       'build [mode] [-r] [-cc name]'
 				description: 'Builds the current gama project'

@@ -6,11 +6,14 @@
  * their geometric and material data into a `gm3Mesh` structure. It uses the
  * `cgltf` library for core glTF parsing.
  */
-#ifndef GM3_GLTF_H_INCLUDED
-#define GM3_GLTF_H_INCLUDED
 
+#include "mesh.h"
+#include "position.h"
 #include <stdio.h>
 #include <string.h>
+
+#ifndef GM3_GLTF_H_INCLUDED
+#define GM3_GLTF_H_INCLUDED
 
 // -- UTILS --
 /**
@@ -41,8 +44,6 @@
   } while (0)
 
 // -- HEADERS --
-#include "mesh.h"
-#include "position.h"
 
 // Forward declarations
 /**

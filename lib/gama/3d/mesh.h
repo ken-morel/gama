@@ -1,18 +1,23 @@
-#ifndef GM3_MESH_H_INCLUDED
-#define GM3_MESH_H_INCLUDED
 #include "mtl.h"
 #include "position.h"
 #include <float.h>
+
+#ifndef GM3_MESH_H_INCLUDED
+#define GM3_MESH_H_INCLUDED
 
 /**
  * @brief Represents a single face (triangle) in a 3D mesh.
  */
 typedef struct {
-  size_t vertices[3];    /**< Indices to the mesh's vertex array (3 per triangle). */
-  long uvs[3];           /**< Indices to the mesh's texture coordinate array (3 per triangle). */
-  int material;          /**< Index to the material within the associated material library. */
-  int material_file;     /**< Index to the material library within the mesh's mtllibs array. */
-  gm3Pos normal;         /**< The calculated geometric normal of this face. */
+  size_t
+      vertices[3]; /**< Indices to the mesh's vertex array (3 per triangle). */
+  long uvs[3];     /**< Indices to the mesh's texture coordinate array (3 per
+                      triangle). */
+  int material;    /**< Index to the material within the associated material
+                      library. */
+  int material_file;     /**< Index to the material library within the mesh's
+                            mtllibs array. */
+  struct gm3_pos normal; /**< The calculated geometric normal of this face. */
 } gm3MeshFace;
 
 /**
@@ -23,29 +28,31 @@ typedef struct {
 } gm3Tex;
 
 /**
- * @brief Represents a 3D mesh composed of vertices, faces, normals, and texture coordinates.
+ * @brief Represents a 3D mesh composed of vertices, faces, normals, and texture
+ * coordinates.
  *
  * This struct stores all geometric and material data for a 3D model.
  */
 typedef struct {
-  gm3Pos *vertices;     /**< Array of vertex positions. */
-  size_t n_vertices;    /**< Number of vertices in the mesh. */
+  gm3Pos *vertices;  /**< Array of vertex positions. */
+  size_t n_vertices; /**< Number of vertices in the mesh. */
 
-  gm3MeshFace *faces;   /**< Array of mesh faces (triangles). */
-  size_t n_faces;       /**< Number of faces in the mesh. */
+  gm3MeshFace *faces; /**< Array of mesh faces (triangles). */
+  size_t n_faces;     /**< Number of faces in the mesh. */
 
-  gm3Pos *normals;      /**< Array of vertex normals. */
-  size_t n_normals;     /**< Number of vertex normals in the mesh. */
+  gm3Pos *normals;  /**< Array of vertex normals. */
+  size_t n_normals; /**< Number of vertex normals in the mesh. */
 
-  gm3Tex *texs;         /**< Array of texture coordinates. */
-  size_t n_texs;        /**< Number of texture coordinates in the mesh. */
+  gm3Tex *texs;  /**< Array of texture coordinates. */
+  size_t n_texs; /**< Number of texture coordinates in the mesh. */
 
-  gm3MtlLib *mtllibs;   /**< Array of material libraries. */
-  size_t n_mtllibs;     /**< Number of material libraries. */
+  gm3MtlLib *mtllibs; /**< Array of material libraries. */
+  size_t n_mtllibs;   /**< Number of material libraries. */
 } gm3Mesh;
 
 /**
- * @brief Frees all dynamically allocated memory associated with a `gm3Mesh` struct.
+ * @brief Frees all dynamically allocated memory associated with a `gm3Mesh`
+ * struct.
  * @param m A pointer to the `gm3Mesh` to free.
  */
 void gm3_mesh_free(gm3Mesh *m) {
@@ -59,7 +66,8 @@ void gm3_mesh_free(gm3Mesh *m) {
     free(m->texs);
   if (m->mtllibs) {
     for (size_t i = 0; i < m->n_mtllibs; ++i) {
-      if (m->mtllibs[i].materials) free(m->mtllibs[i].materials);
+      if (m->mtllibs[i].materials)
+        free(m->mtllibs[i].materials);
       if (m->mtllibs[i].textures) {
         for (size_t j = 0; j < m->mtllibs[i].n_textures; ++j) {
           if (m->mtllibs[i].textures[j].data.data) {
@@ -113,24 +121,29 @@ int gm3_mesh_center(gm3Mesh *m) {
  * @brief Serializes a `gm3Mesh` into a binary buffer.
  *
  * This function converts the mesh data into a compact binary format, suitable
- * for baking into a file or memory. The caller is responsible for freeing `*data`.
+ * for baking into a file or memory. The caller is responsible for freeing
+ * `*data`.
  *
  * @param mesh A pointer to the `gm3Mesh` to serialize.
- * @param data A pointer to a `void*` that will be allocated and filled with the serialized data.
- * @param size A pointer to a `size_t` that will store the size of the serialized data.
+ * @param data A pointer to a `void*` that will be allocated and filled with the
+ * serialized data.
+ * @param size A pointer to a `size_t` that will store the size of the
+ * serialized data.
  * @return 0 on success, -1 on memory allocation failure.
  */
 int gm3_mesh_serialize(const gm3Mesh *mesh, void **data, size_t *size);
 /**
  * @brief Deserializes a `gm3Mesh` from a binary buffer.
  *
- * This function reconstructs a `gm3Mesh` from a binary buffer created by `gm3_mesh_serialize`.
- * The deserialized mesh will have its internal arrays dynamically allocated.
+ * This function reconstructs a `gm3Mesh` from a binary buffer created by
+ * `gm3_mesh_serialize`. The deserialized mesh will have its internal arrays
+ * dynamically allocated.
  *
  * @param mesh A pointer to the `gm3Mesh` to fill with deserialized data.
  * @param data A pointer to the binary buffer containing the serialized data.
  * @param size The size of the binary buffer.
- * @return 0 on success, -1 on failure (e.g., invalid magic, buffer too small, memory allocation failure).
+ * @return 0 on success, -1 on failure (e.g., invalid magic, buffer too small,
+ * memory allocation failure).
  */
 int gm3_mesh_deserialize(gm3Mesh *mesh, const void *data, size_t size);
 
@@ -139,12 +152,13 @@ int gm3_mesh_deserialize(gm3Mesh *mesh, const void *data, size_t size);
  * @brief Header for the baked mesh binary format.
  */
 typedef struct {
-  uint32_t magic;      /**< Magic number to identify the baked mesh format ("GM3M"). */
-  size_t n_vertices;   /**< Number of vertices. */
-  size_t n_faces;      /**< Number of faces. */
-  size_t n_normals;    /**< Number of normals. */
-  size_t n_texs;       /**< Number of texture coordinates. */
-  size_t n_mtllibs;    /**< Number of material libraries. */
+  uint32_t
+      magic; /**< Magic number to identify the baked mesh format ("GM3M"). */
+  size_t n_vertices; /**< Number of vertices. */
+  size_t n_faces;    /**< Number of faces. */
+  size_t n_normals;  /**< Number of normals. */
+  size_t n_texs;     /**< Number of texture coordinates. */
+  size_t n_mtllibs;  /**< Number of material libraries. */
 } gm3BakedMeshHeader;
 /**
  * @brief Magic number for the baked mesh binary format: "GM3M".
@@ -161,9 +175,9 @@ int gm3_mesh_serialize(const gm3Mesh *mesh, void **data, size_t *size) {
       gm3Texture *tex = &lib->textures[j];
       size_t data_size = tex->data.width * tex->data.height * 4;
       total_textures_size += sizeof(int32_t) * 2; // width, height
-      total_textures_size += sizeof(size_t); // size of pixel data
-      total_textures_size += data_size;      // pixel data itself
-      total_textures_size += 256;            // path
+      total_textures_size += sizeof(size_t);      // size of pixel data
+      total_textures_size += data_size;           // pixel data itself
+      total_textures_size += 256;                 // path
     }
   }
 
