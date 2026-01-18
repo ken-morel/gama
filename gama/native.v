@@ -7,7 +7,7 @@ pub fn (p Project) get_src_c_files() []string {
 	mut files := (os.glob(os.join_path(p.path, 'src', '**.c')) or { [] }).filter(it.ends_with('.c'))
 	$if windows { // windows tweak
 		files = files.map(fn [p] (f string) string {
-			println('${f}', os.join_path(p.path, 'src', f))
+			println('${f}' + os.join_path(p.path, 'src', f))
 			return os.join_path(p.path, 'src', f)
 		})
 	}
@@ -70,7 +70,7 @@ pub fn (p Project) build_native(inst Installation, use_cc string) !string {
 
 	include_path := os.join_path(p.path, 'include')
 	gen_path := p.build_path('gen')
-	cmd := "${compiler} -o \"${executable_path}\" ${source_files.join(' ')} \"-I${include_path}\" \"-I${gen_path}\" \"-L${build_dir}\" -Wl,-rpath,'\$ORIGIN' -DGM_NATIVE -lvgama -lm -v"
+	cmd := "${compiler} -o \"${executable_path}\" ${source_files.join(' ')} \"-I${include_path}\" \"-I${gen_path}\" \"-L${build_dir}\" -Wl,-rpath,'\$ORIGIN' -DSTBI_NO_SIMD -DGM_NATIVE -lvgama -lm -v"
 	println('Executing: ${cmd}')
 	res := os.system(cmd)
 	if res != 0 {

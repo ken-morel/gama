@@ -2,14 +2,14 @@
 
 See <a href="/reference/system_8h.html">system.h reference</a>
 
-If you want to add physics processing to your game, 
+If you want to add physics processing to your game,
 you can use gama built in physics.
 
 ## Creating a system
 
 You create a system using <a href="/reference/system_8h.html#r_a12674760bc8132b8a9c64afe03ac7106">`gm_system_create`</a>.
 ```c
-gmSystem world = gm_system_create();
+gmSystem world = gm_system();
 ```
 This creates a new structure of type `gmSystem` which you can configure,
 for properties, you can see <a href="/reference/structgm__system.html">gm_system reference</a>
@@ -93,10 +93,10 @@ you can get and test for a collision with <a href="/reference/physics_8h.html#a2
 ```c
 gmCollision myCollision;
 
-if(gm_collision_detect(&myCollision,&mySystem, &bodyA, &bodyB) 
+if(gm_collision_detect(&myCollision,&mySystem, &bodyA, &bodyB)
     // process the collision
- 
- 
+
+
 // OR if you don't need the collision
 
 if(gm_collision_detect(NULL, &mySystem, &bodyA, &bodyB))

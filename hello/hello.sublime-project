@@ -1,0 +1,8 @@
+
+{
+	"folders": [{"path": "."}],
+	"build_systems": [
+		{"name": "gama dev", "cmd": ["gama","dev"], "working_dir": "$project_path","file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",},
+		{"name": "Build and run", "cmd": ["gama","build","-r"], "working_dir": "$project_path","file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",},
+	]
+}

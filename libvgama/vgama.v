@@ -7,10 +7,10 @@ import rand
 
 // #flag -D_SGL_DEFAULT_MAX_COMMANDS=65536
 // #flag -D_SGL_DEFAULT_MAX_VERTICES=4194304
-// errors:
-// #flag -static
-// #flag -static-libgcc
-// #flag -static-libstdc++
+
+// These flags are only for Windows to reduce external .dll dependencies.
+#flag -static-libgcc
+#flag -static-libstdc++
 
 type GapiTask = fn ()
 
