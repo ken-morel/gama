@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM_T_H_INCLUDED
+#define GM_T_H_INCLUDED
 /**
  * @internal
  * @brief Stores the delta time (time since last frame) in seconds.
@@ -24,3 +24,5 @@ static inline double gm_dt() { return _gm_dt; }
  * @return The total elapsed time.
  */
 static inline double gm_t() { return _gm_t; }
+
+#endif // GM_T_H_INCLUDED

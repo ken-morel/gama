@@ -15,8 +15,8 @@
  *          libraries that expect standard `libc` behavior. This file is
  *          typically included conditionally.
  */
-#pragma once
-
+#ifndef GM_MALLOC_H_INCLUDED
+#define GM_MALLOC_H_INCLUDED
 #include <stdlib.h>
 #ifndef GM_MALLOC
 #define GM_MALLOC
@@ -266,3 +266,5 @@ void *realloc(void *ptr, size_t size) {
   }
   return NULL; // Invalid pointer
 }
+
+#endif // GM_MALLOC_H_INCLUDED

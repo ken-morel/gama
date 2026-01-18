@@ -6,8 +6,8 @@
  * grow as needed, making it suitable for building strings without fixed-size
  * buffer limitations.
  */
-#pragma once
-
+#ifndef GM_STR_H_INCLUDED
+#define GM_STR_H_INCLUDED
 #include "_malloc.h" // Assuming this is where custom malloc/realloc are defined
 
 #include <stddef.h>
@@ -88,3 +88,5 @@ void gm_str_clear(gmStr *str) {
     str->length = 0;
   }
 }
+
+#endif // GM_STR_H_INCLUDED

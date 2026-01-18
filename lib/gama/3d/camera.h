@@ -2,7 +2,8 @@
  * @file camera.h
  * @brief Defines the 3D camera structure for scene projection.
  */
-#pragma once
+#ifndef GM_3D_CAMERA_H_INCLUDED
+#define GM_3D_CAMERA_H_INCLUDED
 
 /**
  * @brief Represents a camera in a 3D scene, used for projection.
@@ -24,3 +25,5 @@ static inline gm3Camera gm3_camera() {
 
   return (gm3Camera){.far_plane = 100, .near_plane = 0.01, .focal = 1.3};
 }
+
+#endif // GM_3D_CAMERA_H_INCLUDED

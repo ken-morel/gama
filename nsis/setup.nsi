@@ -23,8 +23,6 @@ InstallDir "$PROFILE\.gama"
 InstallDirRegKey HKCU "Software\cm.engon.gama" "InstallDir"
 RequestExecutionLevel user
 
-SetCompress off
-
 
 ;--------------------------------
 ; Modern UI Configuration

@@ -5,8 +5,8 @@
  * This file offers utilities to print the state of various Gama data structures
  * to the console, aiding in debugging and development.
  */
-#pragma once
-
+#ifndef GM_DEBUG_H_INCLUDED
+#define GM_DEBUG_H_INCLUDED
 #include "3d/position.h"
 #include "color.h"
 #include "position.h" // For gmPos
@@ -94,3 +94,4 @@ int gmd_mesh(char *s, size_t n, gm3Mesh m) {
       "%zu, ...)",
       m.n_vertices, m.n_faces, m.n_normals, m.n_mtllibs);
 }
+#endif // GM_DEBUG_H_INCLUDED

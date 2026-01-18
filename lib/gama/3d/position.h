@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM_POSITION_H_INCLUDED
+#define GM_POSITION_H_INCLUDED
 #include "../_math.h"
 #include <stddef.h>
 #include <string.h>
@@ -211,3 +211,4 @@ int gmg_pos3(gmStr *str, gm3Pos pos) {
   gm_str_append(str, buffer);
   return 0;
 }
+#endif // GM_POSITION_H_INCLUDED

@@ -6,8 +6,9 @@
  * in .mtl files accompanying .obj models. It includes material properties
  * like colors, shininess, alpha, and references to texture maps.
  */
-#pragma once
 
+ #ifndef GM3_MTL_H_INCLUDED
+ #define GM3_MTL_H_INCLUDED
 #include "../color.h"
 #include "../image.h"
 #include "../str.h"
@@ -242,3 +243,4 @@ void gm3_mtl_free(gm3MtlLib *file) {
     free(file);
   }
 }
+#endif // GM3_MTL_H_INCLUDED

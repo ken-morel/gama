@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GM_MOUSE_INCLUDED
+ #define GM_MOUSE_INCLUDED
 
 #include "position.h"
 #include <stdint.h>
@@ -11,11 +12,14 @@
  */
 struct _gmMouse {
   gmPos position;     /**< The current X,Y coordinates of the mouse. */
-  gmPos lastPosition; /**< The X,Y coordinates of the mouse in the previous frame. */
+  gmPos lastPosition; /**< The X,Y coordinates of the mouse in the previous
+                         frame. */
   gmPos movement;     /**< The change in mouse position since the last frame. */
 
-  uint8_t clicked;    /**< True (1) if the mouse button was just pressed in this frame, otherwise false (0). */
-  uint8_t down;       /**< True (1) if the mouse button is currently held down, otherwise false (0). */
+  uint8_t clicked; /**< True (1) if the mouse button was just pressed in this
+                      frame, otherwise false (0). */
+  uint8_t down;    /**< True (1) if the mouse button is currently held down,
+                      otherwise false (0). */
 };
 
 /**
@@ -36,3 +40,5 @@ struct _gmMouse gm_mouse = {
     .clicked = 0,
     .down = 0,
 };
+
+ #endif // GM_MOUSE_INCLUDED

@@ -1,3 +1,6 @@
+#ifndef GM_3D_H_INCLUDED
+
+#define GM_3D_H_INCLUDED
 /**
  * @file 3d.h
  * @brief Master header file for the Gama 3D engine module.
@@ -23,3 +26,5 @@
 #include "3d/project.h"
 #include "3d/scene.h"
 #include "3d/transform.h"
+
+#endif // GM_3D_H_INCLUDED

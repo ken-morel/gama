@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM3_MESH_H_INCLUDED
+#define GM3_MESH_H_INCLUDED
 #include "mtl.h"
 #include "position.h"
 #include <float.h>
@@ -342,3 +342,4 @@ int gm3_mesh_deserialize(gm3Mesh *mesh, const void *data, size_t size) {
 
   return 0;
 }
+#endif

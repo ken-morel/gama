@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM3_IMAGE_H_INCLUDED
+#define GM3_IMAGE_H_INCLUDED
 #include "../color.h"
 
 #include "../position.h"
@@ -280,3 +280,5 @@ int gm3_draw_image(gm3Image *img, double x, double y, double scale) {
   return 1;
 }
 #endif
+
+#endif // GM3_IMAGE_H_INCLUDED

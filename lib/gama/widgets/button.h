@@ -5,8 +5,8 @@
  * This file provides structures for customizing the appearance of buttons
  * and a function to render an interactive button that responds to mouse input.
  */
-#pragma once
-
+#ifndef GM_BUTTON_H_INCLUDED
+#define GM_BUTTON_H_INCLUDED
 #include "../collision.h"
 #include "../draw.h"
 
@@ -146,3 +146,6 @@ int gmw_button(double x, double y, double width, double height,
 
   return hovered;
 }
+
+#endif // GM_BUTTON_H_INCLUDED
+

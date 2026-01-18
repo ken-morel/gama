@@ -1,11 +1,13 @@
+
+
 #include <gama.h>
 
 int main() {
-  gm_init(500, 500, "skeleton gama application");
+  // gm_init(500, 500, "skeleton gama application");
   // create shapes
   do {
     // do things here
-  } while (gm_yield());
+  } while (1);
   // destroy shapes
   return 0;
 }

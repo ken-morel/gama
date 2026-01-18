@@ -7,8 +7,9 @@
  * lighting calculations, vertex transformation, clipping, backface culling,
  * and triangle assembly for the `gm3Image` output.
  */
-#pragma once
 
+ #ifndef GM3_PROJECT_H_INCLUDED
+ #define GM3_PROJECT_H_INCLUDED
 #include "../color.h"
 #include "../position.h"
 #include "image.h"
@@ -317,3 +318,4 @@ int gm3_project(gm3Image *output, const gm3Mesh *mesh,
   output->n_triangles = t_idx;
   return 0;
 }
+#endif // GM3_PROJECT_H_INCLUDED

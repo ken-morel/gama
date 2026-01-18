@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GM_IMAGE_H_INCLUDED
+#define GM_IMAGE_H_INCLUDED
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif
@@ -174,3 +175,5 @@ void gm_image_draw_part(gmImage i, int slice_x, int slice_y, int slice_width,
                        y, w, h);
 }
 #endif
+
+#endif // GM_IMAGE_H_INCLUDED

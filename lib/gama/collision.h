@@ -6,8 +6,8 @@
  * types of physics bodies (rectangles and circles) and structures to hold
  * collision information.
  */
-#pragma once
-
+#ifndef GM_COLLISION_H_INCLUDED
+#define GM_COLLISION_H_INCLUDED
 #include "body.h"
 #include "system.h" // For gmSystem
 #include <math.h>
@@ -185,3 +185,4 @@ int gm_mouse_in_circle(const double x, const double y, const double r) {
   return pow(gm_mouse.position.x - x, 2) + pow(gm_mouse.position.y - y, 2) <
          pow(r, 2);
 }
+#endif // GM_COLLISION_H_INCLUDED

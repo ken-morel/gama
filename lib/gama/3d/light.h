@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM3_LIGHT_H_INCLUDED
+#define GM3_LIGHT_H_INCLUDED
 #include "../color.h"
 #include "position.h"
 
@@ -34,3 +34,4 @@ static inline gm3Light gm3_light() {
       .ambient = 0.5,
   };
 }
+#endif // GM3_LIGHT_H_INCLUDED

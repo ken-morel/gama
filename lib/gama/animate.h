@@ -16,7 +16,8 @@
  *             A smaller `t` generally results in a faster or more "springy"
  * animation.
  */
-#pragma once
+ #ifndef GM_ANIMATE_H_INCLUDED
+ #define GM_ANIMATE_H_INCLUDED
 
 #include "_math.h"
 #include "t.h"
@@ -157,3 +158,4 @@ static inline double gm_anim_cos(double center, double radius, double speed,
                                  double offset) {
   return center + (radius * cos(speed * (gm_t() + offset) * M_PI * 2));
 }
+#endif // GM_ANIMATE_H_INCLUDED

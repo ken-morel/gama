@@ -6,8 +6,8 @@
  * formatting functions (e.g., `gmg_color`, `gmg_pos3`) to convert Gama data
  * structures into human-readable strings for debugging purposes.
  */
-#pragma once
-
+#ifndef GMG_H_INCLUDED
+#define GMG_H_INCLUDED
 /**
  * @def gmg(type, obj)
  * @brief Generic macro to get a string representation of a Gama type for debugging.
@@ -20,3 +20,5 @@
  * @param obj The object instance to convert to a string.
  */
 #define gmg(type, obj) gmg_##type(obj)
+
+#endif // GMG_H_INCLUDED

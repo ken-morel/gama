@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM_COLOR_H_INCLUDED
+#define GM_COLOR_H_INCLUDED
 #include "str.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -909,3 +909,4 @@ static inline gmColor gm_scale_color(gmColor col, double factor) {
 /**
  * @}
  */
+ #endif // GM_COLOR_H_INCLUDED

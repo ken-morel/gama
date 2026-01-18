@@ -7,8 +7,9 @@
  * of a 3D rendering environment, making it easier to pass scene context
  * to projection and rendering functions.
  */
-#pragma once
 
+ #ifndef GM3_SCENE_H_INCLUDED
+ #define GM3_SCENE_H_INCLUDED
 #include "../position.h"
 #include "camera.h"
 #include "light.h"
@@ -51,3 +52,4 @@ int gm3_scene_free(gm3Scene *s) {
   (void)s;
   return 0;
 }
+#endif

@@ -5,7 +5,8 @@
  * This file provides utilities for creating animated sprites from sprite sheets,
  * controlling their animation, and drawing them to the screen.
  */
-#pragma once
+#ifndef GM_SPRITE_H_INCLUDED
+#define GM_SPRITE_H_INCLUDED
 #include "image.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -153,3 +154,5 @@ void gm_sprite_draw(gmSprite *sprite, double x, double y, double width,
   gm_image_draw_part(sprite->image, im_w * sprite->_frame, 0, im_w,
                      sprite->image.height, x, y, width, height);
 }
+
+#endif // GM_SPRITE_H_INCLUDED
