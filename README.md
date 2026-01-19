@@ -20,7 +20,7 @@ Gama is built on a few core principles to make game development in C more approa
 ## Features
 
 ### Core Engine
-- **Cross-Platform**: Build and run your games on **Linux**, **Windows**, and the **Web** (via WebAssembly).
+- **Cross-Platform**: Build and run your games on **Linux**, **Windows**, and the **Web** (via WebAssembly). Gama foundations in C make even more different domains available, but that's additional work to be done as needed
 - **Simple C API**: A clean, beginner-friendly C99 API.
 - **Full Game Loop Control**: You own the `main` loop.
 - **Custom Memory Allocator**: A static-pool-based `malloc` implementation, ideal for controlled memory environments like WASM.
