@@ -109,7 +109,7 @@ fn main() {
 				execute:     fn (_ cli.Command) ! {
 					p := get_project()!
 					p.clean() or {
-						pintln(term.fail_message('Error cleaning the project files: ${err}'))
+						println(term.fail_message('Error cleaning the project files: ${err}'))
 					}
 					println(term.ok_message('Updated toolchain successfully'))
 				}

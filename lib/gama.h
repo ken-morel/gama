@@ -12,11 +12,10 @@
 
 #ifndef GM_NO_GAPI
 #include "gama/gama.h"
-// #include "gama/sprite.h"
+#include "gama/sprite.h"
 #endif
 
-// #include "gama/3d.h"
-// #include "gama/animate.h"
-// #include "gama/key.h"
-// #include "gama/physics.h"
-// #include "gama/system.h"
+#include "gama/animate.h"
+#include "gama/key.h"
+#include "gama/physics.h"
+#include "gama/system.h"
