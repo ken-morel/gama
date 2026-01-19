@@ -1,13 +1,7 @@
-#pragma once
-
-/**
- * @def gnothing
- * @brief Macro representing a NULL pointer, for use where a generic null is needed.
- */
-#define gnothing NULL
+#ifndef GM_BODY_H_INCLUDED
+#define GM_BODY_H_INCLUDED
 
 #include "mouse.h"
-#include "position.h"
 #include <stdint.h>
 
 /**
@@ -403,3 +397,4 @@ static inline int8_t gm_body_bound_bounce(gmBody *body, double bx, double ex,
   }
   return exited;
 }
+#endif

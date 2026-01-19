@@ -4,9 +4,9 @@
 #include "body.h"
 #include "body_list.h"
 #include "collision.h"
-#include "gapi.h"
 #include "position.h"
 #include "system.h"
+#include "t.h"
 
 /**
  * @brief Resolves a collision between two bodies by applying appropriate forces
@@ -20,11 +20,17 @@ void gm_collision_resolve(gmCollision *collision);
 // ---------------------------------------------------------------------------
 
 /**
- * @brief Updates a single body in the system by integrating its position and
- * velocity over time.
- * @param sys Pointer to the system containing the body (can be NULL).
+ * @brief Updates a single physics body's position and velocity based on applied
+ * accelerations and damping.
+ *
+ * This function integrates the body's motion over a given time step. It
+ * accounts for the body's own acceleration and any system-wide acceleration and
+ * damping.
+ *
+ * @param sys Pointer to the physics system the body belongs to (can be NULL if
+ *        no system-wide effects are desired).
  * @param body Pointer to the body to update.
- * @param dt The time step for the update.
+ * @param dt The time step (delta time) for the update.
  */
 void gm_system_update_body_dt(gmSystem *sys, gmBody *body, double dt) {
   if (body->is_static || body == NULL || (sys != NULL && !sys->is_active) ||
@@ -59,8 +65,8 @@ void gm_system_update_body_dt(gmSystem *sys, gmBody *body, double dt) {
 }
 
 /**
- * @brief Updates a single body by integrating its position and
- * velocity over time.
+ * @brief Updates a single physics body's position and velocity using a
+ * specified time step, without considering a global physics system.
  * @param body Pointer to the body to update.
  * @param dt The time step for the update.
  */
@@ -69,8 +75,9 @@ void gm_body_update_dt(gmBody *body, double dt) {
 }
 
 /**
- * @brief Updates a single body by integrating its position and
- * velocity over time.
+ * @brief Updates a single physics body's position and velocity using the
+ * engine's global delta time (`gm_dt()`), without considering a global physics
+ * system.
  * @param body Pointer to the body to update.
  */
 void gm_body_update(gmBody *body) {
@@ -78,17 +85,23 @@ void gm_body_update(gmBody *body) {
 }
 
 /**
- * @brief Detects collision between two bodies.
+ * @brief Detects a collision between two physics bodies.
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
- * @return A pointer to a gmCollision structure if collision occurs, NULL
- * otherwise.
+ * @return A pointer to a `gmCollision` structure if a collision is detected,
+ *         otherwise NULL. The returned `gmCollision` must be freed by the
+ * caller if it's not managed by a `gmSystem`.
  */
 gmCollision *gm_collision_detect(gmBody *, gmBody *);
 
 /**
- * @brief Checks if two bodies are involved in a collision.
- * @param c Pointer to the collision to check.
+ * @brief Checks if two given bodies are involved in the specified collision.
+ *
+ * This function determines if the provided collision object (`c`) involves
+ * the two specified bodies (`a` and `b`), regardless of their order within the
+ * collision object.
+ *
+ * @param c Pointer to the collision object to check.
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
  * @return 1 if the bodies are involved in the collision, 0 otherwise.
@@ -100,11 +113,16 @@ static inline int gm_collision_bodies_are(gmCollision *c, gmBody *a,
 }
 
 /**
- * @brief Updates the physics system with collision detection at specified time
- * intervals.
+ * @brief Updates a physics system over a given total time step,
+ * performing sub-steps for stable collision detection and resolution.
+ *
+ * This is the main update function for a physics system. It integrates
+ * the motion of all bodies, detects new collisions, resolves them, and
+ * manages the lifecycle of collision objects.
+ *
  * @param sys Pointer to the system to update.
- * @param unit The time unit for sub-step calculations.
- * @param dt The total time step to simulate.
+ * @param unit The duration of each sub-step for physics integration.
+ * @param dt The total time duration to simulate in this update.
  */
 void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
   if (sys == NULL || !sys->is_active)
@@ -165,11 +183,16 @@ void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
 
 /**
  * @brief Gets the collision information for two specific bodies in a system.
- * @param collision Pointer to the collision where to copy the result, or NULL.
+ *
+ * This function searches the system's active collisions to find one involving
+ * the two specified bodies.
+ *
+ * @param collision Pointer to a `gmCollision` struct where the found collision
+ *        data will be copied. Can be NULL if only checking for existence.
  * @param sys Pointer to the system to search in.
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
- * @return 1 if it found a collision else 0.
+ * @return 1 if a collision involving `a` and `b` is found, 0 otherwise.
  */
 int gm_system_get_collision(gmCollision *collision, gmSystem *sys, gmBody *a,
                             gmBody *b) {
@@ -185,7 +208,8 @@ int gm_system_get_collision(gmCollision *collision, gmSystem *sys, gmBody *a,
 }
 
 /**
- * @brief Updates the physics system with a specified time unit.
+ * @brief Updates the physics system using a specified time unit and the
+ * engine's global delta time (`gm_dt()`).
  * @param sys Pointer to the system to update.
  * @param unit The time unit for sub-step calculations.
  */
@@ -195,11 +219,14 @@ static inline void gm_system_update_unit(gmSystem *sys, double unit) {
 
 /**
  * @brief Default time step for physics system frame updates.
+ *
+ * This value determines the granularity of physics calculations per frame.
+ * A smaller value leads to more accurate (and potentially slower) simulations.
  */
 double gm_system_frame_time = 0.001; // ~15 updates per frame.
 
 /**
- * @brief Updates the physics system using the default frame time.
+ * @brief Updates the physics system using the default `gm_system_frame_time`.
  * @param sys Pointer to the system to update.
  */
 static inline void gm_system_update(gmSystem *sys) {
@@ -211,19 +238,26 @@ static inline void gm_system_update(gmSystem *sys) {
 // ---------------------------------------------------------------------------
 
 /**
- * @brief Calculates the penetration depth and normal vector for a collision
- * between two bodies.
+ * @brief Calculates the penetration depth and optionally the normal vector
+ *         for a collision between two bodies.
+ *
+ * This function handles collision between various collider types
+ * (Circle-Circle, Rect-Rect, Circle-Rect). It determines how much the bodies
+ * overlap and the direction of the separation.
+ *
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
  * @param normal_x Pointer to store the x component of the collision normal (can
- * be NULL).
+ *        be NULL if not needed). The normal points from body `a` to body `b`.
  * @param normal_y Pointer to store the y component of the collision normal (can
- * be NULL).
- * @return The penetration depth between the bodies.
+ *        be NULL if not needed). The normal points from body `a` to body `b`.
+ * @return The penetration depth between the bodies. A positive value indicates
+ *         overlap.
  */
 double gm_collision_penetration_normals(gmBody *a, gmBody *b, double *normal_x,
                                         double *normal_y) {
-  double penetration_depth;
+  double penetration_depth = 0; // Initialize to 0
+
   // CASE: Circle vs Circle
   if (a->collider_type == GM_COLLIDER_CIRCLE &&
       b->collider_type == GM_COLLIDER_CIRCLE) {
@@ -244,27 +278,31 @@ double gm_collision_penetration_normals(gmBody *a, gmBody *b, double *normal_x,
   else if (a->collider_type == GM_COLLIDER_RECT &&
            b->collider_type == GM_COLLIDER_RECT) {
     double dx = b->position.x - a->position.x;
+    double dy = b->position.y - a->position.y;
+
     double overlap_x = (a->width / 2 + b->width / 2) - fabs(dx);
-    if (overlap_x > 0) {
-      double dy = b->position.y - a->position.y;
-      double overlap_y = (a->height / 2 + b->height / 2) - fabs(dy);
-      if (overlap_y > 0) {
-        if (normal_x != NULL && normal_y != NULL) {
-          if (overlap_x < overlap_y) {
-            penetration_depth = overlap_x;
-            *normal_x = (dx < 0) ? -1 : 1;
-            *normal_y = 0;
-          } else {
-            penetration_depth = overlap_y;
-            *normal_x = 0;
-            *normal_y = (dy < 0) ? -1 : 1;
-          }
-        }
+    if (overlap_x <= 0)
+      return 0; // No overlap in X
+
+    double overlap_y = (a->height / 2 + b->height / 2) - fabs(dy);
+    if (overlap_y <= 0)
+      return 0; // No overlap in Y
+
+    if (normal_x != NULL && normal_y != NULL) {
+      if (overlap_x < overlap_y) {
+        penetration_depth = overlap_x;
+        *normal_x = (dx < 0) ? -1 : 1;
+        *normal_y = 0;
+      } else {
+        penetration_depth = overlap_y;
+        *normal_x = 0;
+        *normal_y = (dy < 0) ? -1 : 1;
       }
     }
   }
   // CASE: Circle vs Rectangle
   else {
+    // Determine which is circle and which is rect
     gmBody *circle = (a->collider_type == GM_COLLIDER_CIRCLE) ? a : b;
     gmBody *rect = (a->collider_type == GM_COLLIDER_RECT) ? a : b;
 
@@ -295,7 +333,7 @@ double gm_collision_penetration_normals(gmBody *a, gmBody *b, double *normal_x,
         *normal_y = dy / distance;
         penetration_depth = circle->radius - distance;
       }
-      // Sub-case B: Center is INSIDE the rectangle
+      // Sub-case B: Center is INSIDE the rectangle (special handling)
       else {
         // Calculate distance to all 4 edges to find the shortest path out
         double left_pen = circle->position.x - (rect->position.x - half_w);
@@ -322,9 +360,9 @@ double gm_collision_penetration_normals(gmBody *a, gmBody *b, double *normal_x,
       }
 
       // --- CRITICAL FIX ---
-      // The logic above calculates a normal pointing Rect -> Circle.
-      // We must ensure the final 'normal' used for resolution points from A ->
-      // B.
+      // The logic above calculates a normal pointing from the rectangle surface
+      // towards the circle center. We must ensure the final 'normal' used for
+      // resolution points from body A to body B.
       if (a == circle) {
         // Current normal is B(Rect) -> A(Circle). We want A -> B. Invert.
         *normal_x = -*normal_x;
@@ -338,12 +376,17 @@ double gm_collision_penetration_normals(gmBody *a, gmBody *b, double *normal_x,
 
 /**
  * @brief Calculates the penetration depth for a collision between two bodies.
+ *
+ * This function is a simplified version of `gm_collision_penetration_normals`
+ * that only returns the depth and does not calculate the normal vector.
+ *
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
- * @return The penetration depth between the bodies.
+ * @return The penetration depth between the bodies. A positive value indicates
+ *         overlap.
  */
 double gm_collision_penetration(gmBody *a, gmBody *b) {
-  return gm_collision_penetration_normals(a, a, NULL, NULL);
+  return gm_collision_penetration_normals(a, b, NULL, NULL);
 }
 
 /**

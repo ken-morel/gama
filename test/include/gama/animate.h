@@ -1,27 +1,39 @@
+/**
+ * @file animate.h
+ * @brief Provides utility functions for animating numerical values using
+ * various easing effects.
+ *
+ * This file contains a collection of inline functions designed to smoothly
+ * transition a `double` `value` towards a `target` value over time,
+ * using different animation curves (easing functions). These are commonly
+ * used for UI transitions, movement, and other visual effects.
+ *
+ * General notes on animation functions:
+ * - `value`:  A pointer to the variable to be animated. This variable is
+ * modified directly.
+ * - `target`: The target value that `value` will animate towards.
+ * - `t`:      The approximate time constant for the animation (in seconds).
+ *             A smaller `t` generally results in a faster or more "springy"
+ * animation.
+ */
 #pragma once
 
 #include "_math.h"
-#include "gapi.h"
+#include "t.h"
 #include <stdlib.h>
 
 /**
- * @file animate.h
- * @brief Functions for animating values with various easing functions.
+ * @brief Animates a value towards a target with a smooth, ease-out effect.
  *
- * General notes on animation functions:
- * - value:  A pointer to the variable to be animated.
- * - target: The target value to animate towards.
- * - t:      The approximate time the animation should take (in seconds). It
- * acts as a time constant.
- */
-
-/**
- * @brief Moves a value towards a target with spring-like motion (exponential
- * ease-out).
- * @param value A pointer to the double value to animate.
+ * This function creates a spring-like motion that quickly moves towards the
+ * target and then gradually settles. The `t` parameter controls the speed
+ * and "stiffness" of the spring.
+ *
+ * @param value A pointer to the double value to animate. This value is updated
+ * in place.
  * @param target The target value to animate towards.
- * @param t The animation's approximate duration. A smaller 't' results in a
- * faster animation.
+ * @param t The animation's approximate duration (time constant). A smaller 't'
+ * results in a faster, more immediate animation.
  */
 void gm_anim_spring(double *value, double target, double t) {
   if (value == NULL || t <= 0)
@@ -36,11 +48,14 @@ void gm_anim_spring(double *value, double target, double t) {
 }
 
 /**
- * @brief Starts fast and decelerates quadratically to the target. More
- * pronounced than spring.
+ * @brief Animates a value towards a target with a quadratic ease-out effect.
+ *
+ * The animation starts fast and decelerates quadratically as it approaches
+ * the target.
+ *
  * @param value A pointer to the double value to animate.
  * @param target The target value to animate towards.
- * @param t The animation's approximate duration.
+ * @param t The animation's approximate duration (time constant).
  */
 void gm_anim_ease_out_quad(double *value, const double target, double t) {
   if (value == NULL || t <= 0)
@@ -57,11 +72,15 @@ void gm_anim_ease_out_quad(double *value, const double target, double t) {
 }
 
 /**
- * @brief Starts very fast and decelerates cubically to the target. More
- * pronounced than quad.
+ * @brief Animates a value towards a target with a cubic ease-out effect.
+ *
+ * The animation starts very fast and decelerates cubically as it approaches
+ * the target, providing a more pronounced ease-out than
+ * `gm_anim_ease_out_quad`.
+ *
  * @param value A pointer to the double value to animate.
  * @param target The target value to animate towards.
- * @param t The animation's approximate duration.
+ * @param t The animation's approximate duration (time constant).
  */
 void gm_anim_ease_out_cubic(double *value, double target, double t) {
   if (value == NULL || t <= 0)
@@ -78,10 +97,14 @@ void gm_anim_ease_out_cubic(double *value, double target, double t) {
 }
 
 /**
- * @brief Starts slow and accelerates quadratically towards the target.
+ * @brief Animates a value towards a target with a quadratic ease-in effect.
+ *
+ * The animation starts slow and accelerates quadratically as it approaches
+ * the target.
+ *
  * @param value A pointer to the double value to animate.
  * @param target The target value to animate towards.
- * @param t The animation's approximate duration.
+ * @param t The animation's approximate duration (time constant).
  */
 void gm_anim_ease_in_quad(double *value, double target, double t) {
   if (value == NULL || t <= 0)
@@ -108,7 +131,8 @@ void gm_anim_ease_in_quad(double *value, double target, double t) {
 }
 
 /**
- * @brief Returns a sinusoidal animation value based on time.
+ * @brief Returns a sinusoidal animation value based on the global engine time
+ * (`gm_t()`).
  * @param center The center value around which the animation oscillates.
  * @param radius The amplitude of the oscillation.
  * @param speed The speed of the oscillation.
@@ -121,7 +145,8 @@ static inline double gm_anim_sin(double center, double radius, double speed,
 }
 
 /**
- * @brief Returns a cosine animation value based on time.
+ * @brief Returns a cosine animation value based on the global engine time
+ * (`gm_t()`).
  * @param center The center value around which the animation oscillates.
  * @param radius The amplitude of the oscillation.
  * @param speed The speed of the oscillation.

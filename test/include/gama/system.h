@@ -1,40 +1,42 @@
+/**
+ * @file system.h
+ * @brief Manages physics bodies, their interactions, and collision detection within a simulation.
+ *
+ * This file defines the `gmSystem` structure and functions for creating,
+ * populating, and destroying a physics simulation environment.
+ */
 #pragma once
 
 #include "body.h"
 #include "body_list.h"
 #include "position.h"
 
-/**
- * @brief Structure representing a collision between two bodies.
- */
-typedef struct {
-  struct gm_system
-      *sys;           /**< Pointer to the system where the collision occurred */
-  gmBody *bodies[2];  /**< Array containing the two colliding bodies */
-  double penetration; /**< Depth of penetration between the bodies */
-  double since;       /**< Time since the collision began */
-  gmPos normals;      /**< Normal vector of the collision */
-} gmCollision;
+struct gm_collision ;
 
 /**
  * @brief Structure representing a physics system containing bodies and
  * collision information.
  */
 typedef struct gm_system {
-  int is_active;   /**< Whether the system is active */
-  gmBodies bodies; /**< List of bodies in the system */
+  int is_active;   /**< Whether the system is active and should be updated. */
+  gmBodies bodies; /**< List of pointers to bodies currently managed by this system. */
 
-  gmCollision **collisions; /**< Array of collision information */
+  struct gm_collision **collisions; /**< Array of active collision information objects. */
 
-  gmPos velocity;     /**< Velocity applied to all bodies in the system */
-  gmPos acceleration; /**< Acceleration applied to all bodies in the system */
+  gmPos velocity;     /**< Global velocity applied to all bodies in the system (e.g., wind). */
+  gmPos acceleration; /**< Global acceleration applied to all bodies (e.g., gravity). */
 
-  double damping; /**< Damping factor applied to all bodies in the system */
+  double damping; /**< Global damping factor applied to all bodies (reduces velocity over time). */
 } gmSystem;
 
+#include "collision.h" // Include collision.h for gmCollision definition
 /**
  * @brief Creates a new physics system with default values.
- * @return A new gmSystem instance.
+ *
+ * Initializes a `gmSystem` with no bodies, zero global velocity/acceleration,
+ * and a damping factor of 0.
+ *
+ * @return A new `gmSystem` instance.
  */
 gmSystem gm_system_create() {
   gmSystem sys = {.is_active = 1,
@@ -48,8 +50,12 @@ gmSystem gm_system_create() {
 
 /**
  * @brief Adds a body to the physics system.
- * @param sys Pointer to the system to add to.
- * @param body Pointer to the body to add.
+ *
+ * This function adds a pointer to a `gmBody` to the system's internal list.
+ * The caller remains responsible for allocating and freeing the `gmBody` itself.
+ *
+ * @param sys Pointer to the system to add the body to.
+ * @param body Pointer to the `gmBody` to add.
  */
 static inline void gm_system_push(gmSystem *sys, gmBody *body) {
   sys->bodies = gm_bodies_push(sys->bodies, body);
@@ -117,8 +123,8 @@ static inline void gm_system_push5(gmSystem *sys, gmBody *a, gmBody *b,
 /**
  * @brief Adds an array of bodies to the physics system.
  * @param sys Pointer to the system to add to.
- * @param number The number of bodies to add.
- * @param bodies Pointer to the array of bodies to add.
+ * @param number The number of bodies in the array.
+ * @param bodies Pointer to the array of `gmBody` instances to add.
  */
 static inline void gm_system_push_array(gmSystem *sys, size_t number,
                                         gmBody *bodies) {
@@ -127,7 +133,10 @@ static inline void gm_system_push_array(gmSystem *sys, size_t number,
 }
 
 /**
- * @brief Removes the last body from the physics system.
+ * @brief Removes the last body pointer from the physics system's internal list.
+ *
+ * This function only removes the pointer; it does NOT free the `gmBody` itself.
+ *
  * @param sys Pointer to the system to remove from.
  */
 static inline void gm_system_pop(gmSystem *sys) {
@@ -135,7 +144,7 @@ static inline void gm_system_pop(gmSystem *sys) {
 }
 
 /**
- * @brief Gets the number of bodies in the system.
+ * @brief Gets the number of bodies currently managed by the physics system.
  * @param sys Pointer to the system to check.
  * @return The number of bodies in the system.
  */
@@ -144,7 +153,12 @@ static inline size_t gm_system_size(gmSystem *sys) {
 }
 
 /**
- * @brief Destroy the system and free memory.
+ * @brief Destroys the physics system and frees its internal memory.
+ *
+ * This function frees the memory allocated for the system's internal collision
+ * list and the list of body pointers. It does NOT free the `gmBody` instances
+ * themselves, which must be managed by the caller.
+ *
  * @param sys Pointer to the system to destroy.
  */
 void gm_system_destroy(gmSystem *sys) {
@@ -154,4 +168,7 @@ void gm_system_destroy(gmSystem *sys) {
     }
     free(sys->collisions);
   }
+  // Also clear the bodies list itself
+  gm_bodies_clear(sys->bodies);
+  // Do not free individual gmBody pointers, as they are owned by the caller.
 }

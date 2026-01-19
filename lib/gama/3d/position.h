@@ -1,14 +1,15 @@
-#pragma once
-
 #include "../_math.h"
+#include "../str.h"
 #include <stddef.h>
 #include <string.h>
 
-#include "../str.h"
+#ifndef GM3_POSITION_H_INCLUDED
+#define GM3_POSITION_H_INCLUDED
+
 /**
  * @brief Represents a 3D position or vector.
  */
-typedef struct {
+typedef struct gm3_pos {
   double x, y, z; /**< The X, Y, and Z coordinates. */
 } gm3Pos;
 
@@ -211,3 +212,18 @@ int gmg_pos3(gmStr *str, gm3Pos pos) {
   gm_str_append(str, buffer);
   return 0;
 }
+
+#include <stdio.h>
+
+/**
+ * @brief Formats a `gm3Pos` (3D position) into a human-readable string for
+ * debugging.
+ * @param s The buffer to write the formatted string into.
+ * @param n The size of the buffer.
+ * @param p The `gm3Pos` to format.
+ * @return The number of characters written to the buffer.
+ */
+int gmd_pos3(char *s, size_t n, gm3Pos p) {
+  return snprintf(s, n, "gm3Pos(x: %.lf, y: %.lf, z: %.lf)", p.x, p.y, p.z);
+}
+#endif // GM3_POSITION_H_INCLUDED

@@ -1,3 +1,11 @@
+/**
+ * @file widgets/scale.h
+ * @brief Defines the theme and functionality for a scale (slider) widget.
+ *
+ * This file provides structures for customizing the appearance of a slider
+ * control and a function to render an interactive slider that allows users
+ * to select a value within a range.
+ */
 #pragma once
 
 #include "../animate.h"
@@ -8,28 +16,31 @@
  * @brief Structure defining the visual theme for a scale (slider) widget.
  */
 typedef struct {
-  int enabled; /**< Whether the scale is enabled */
+  int enabled; /**< Whether the scale is enabled for interaction (1) or disabled
+                  (0). */
 
-  double scale; /**< Overall widget scale */
+  double scale; /**< Overall widget scale when normal. */
 
-  gmColor background; /**< Track background color */
-  gmColor border;     /**< Track border color */
-
-  struct {
-    double scale;   /**< Scale factor when focused/hovered */
-    gmColor border; /**< Border color when focused/hovered */
-  } focussed;
+  gmColor background; /**< Track background color when normal. */
+  gmColor border;     /**< Track border color when normal. */
 
   struct {
-    double scale;   /**< Scale factor when active pressed */
-    gmColor border; /**< Border color when active pressed */
-  } active;
+    double scale;   /**< Scale factor when focused/hovered. */
+    gmColor border; /**< Border color when focused/hovered. */
+  } focussed; /**< Theme properties when the scale is focused or hovered. */
 
-  gmColor knob;        /**< Knob color */
-  gmColor knob_border; /**< Knob border color */
+  struct {
+    double scale;   /**< Scale factor when active (being dragged). */
+    gmColor border; /**< Border color when active. */
+  } active; /**< Theme properties when the scale is active (mouse button down on
+               it). */
 
-  double border_width; /**< Track border thickness */
-  double step; /**< Step size for discrete values (0 = allow any value) */
+  gmColor knob;        /**< Knob color. */
+  gmColor knob_border; /**< Knob border color. */
+
+  double border_width; /**< Track border thickness. */
+  double step; /**< Step size for discrete values (0.0 means allow any value
+                  between 0 and 1). */
 } gmwScaleTheme;
 
 /**
@@ -53,16 +64,20 @@ gmwScaleTheme gmwScale = {.enabled = 1,
 /**
  * @brief Creates and renders an animated scale (slider) widget that can be
  * manipulated with the mouse.
+ *
+ * This function draws a slider, tracks mouse interaction to update its value,
+ * and animates the knob's position.
+ *
  * @param x The x-coordinate of the scale's center.
  * @param y The y-coordinate of the scale's center.
  * @param width The width of the scale track.
  * @param height The height of the scale track.
  * @param value Pointer to a double to store the current scale value (0.0
- * to 1.0).
- * @param anim Pointer to a double for animated visual position (can be NULL to
- * use value).
- * @return 1 if the scale is currently being actively manipulated (mouse down),
- * 0 otherwise.
+ *        to 1.0). This value is updated by user interaction.
+ * @param anim Pointer to a double for the animated visual position of the knob.
+ *        If NULL, `value` is used for the knob's position (non-animated).
+ * @return 1 if the scale is currently being actively manipulated (mouse button
+ * down and hovering), 0 otherwise.
  */
 int gmw_scale_anim(double x, double y, double width, double height,
                    double *value, double *anim) {
@@ -168,20 +183,25 @@ int gmw_scale_anim(double x, double y, double width, double height,
   // Draw knob
   gm_draw_rectangle(knob_x, knob_y, knob_size, knob_size, gmwScale.knob);
 
-  return active;
+  return hovered;
 }
 
 /**
  * @brief Creates and renders a scale (slider) widget that can be manipulated
- * with the mouse.
+ * with the mouse (non-animated version).
+ *
+ * This is a simplified wrapper around `gmw_scale_anim` that does not use
+ * a separate animated visual position, causing the knob to snap to the
+ * current value.
+ *
  * @param x The x-coordinate of the scale's center.
  * @param y The y-coordinate of the scale's center.
  * @param width The width of the scale track.
  * @param height The height of the scale track.
  * @param value Pointer to a double to store the current scale value (0.0
- * to 1.0).
- * @return 1 if the scale is currently being actively manipulated (mouse down),
- * 0 otherwise.
+ *        to 1.0).
+ * @return 1 if the scale is currently being actively manipulated (mouse button
+ * down and hovering), 0 otherwise.
  */
 static inline int gmw_scale(double x, double y, double width, double height,
                             double *value) {

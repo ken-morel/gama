@@ -7,7 +7,7 @@ pub fn (p Project) get_src_c_files() []string {
 	mut files := (os.glob(os.join_path(p.path, 'src', '**.c')) or { [] }).filter(it.ends_with('.c'))
 	$if windows { // windows tweak
 		files = files.map(fn [p] (f string) string {
-			println('${f}', os.join_path(p.path, 'src', f))
+			println('${f}' + os.join_path(p.path, 'src', f))
 			return os.join_path(p.path, 'src', f)
 		})
 	}
@@ -18,10 +18,24 @@ pub fn (p Project) copy_build_native_artifacts(inst Installation, reset bool) ! 
 	build_dir := p.build_path('native')
 	runner_path := os.join_path(inst.runners, 'native')
 	os.mkdir_all(build_dir) or {}
-	src := os.join_path(runner_path, libvgama_name())
-	dest := os.join_path(build_dir, libvgama_name())
+	mut src := os.join_path(runner_path, libvgama_name())
+	mut dest := os.join_path(build_dir, libvgama_name())
+
 	if !os.exists(dest) || reset {
 		os.cp(src, dest) or { return error('Failed to copy libvgama: ${err}') }
+	}
+
+	$if windows {
+		dest = os.join_path(build_dir, 'vgama.dll')
+		if !os.exists(dest) || reset {
+			os.cp(src, dest) or { return error('Failed to copy vgama.dll: ${err}') }
+		}
+		libwin := 'libwinpthread-1.dll'
+		src = os.join_path(runner_path, libwin)
+		dest = os.join_path(build_dir, libwin)
+		if !os.exists(dest) || reset {
+			os.cp(src, dest) or { return error('Failed to copy libwinpthread: ${err}') }
+		}
 	}
 }
 
@@ -70,7 +84,7 @@ pub fn (p Project) build_native(inst Installation, use_cc string) !string {
 
 	include_path := os.join_path(p.path, 'include')
 	gen_path := p.build_path('gen')
-	cmd := "${compiler} -o \"${executable_path}\" ${source_files.join(' ')} \"-I${include_path}\" \"-I${gen_path}\" \"-L${build_dir}\" -Wl,-rpath,'\$ORIGIN' -DGM_NATIVE -lvgama -lm -v"
+	cmd := "${compiler} -o \"${executable_path}\" ${source_files.join(' ')} \"-I${include_path}\" \"-I${gen_path}\" \"-L${build_dir}\" -Wl,-rpath,'\$ORIGIN' -DSTBI_NO_SIMD -DGM_NATIVE -lvgama -lm -v"
 	println('Executing: ${cmd}')
 	res := os.system(cmd)
 	if res != 0 {

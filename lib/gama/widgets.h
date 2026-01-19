@@ -6,8 +6,8 @@
  * for caching and restoring widget themes, allowing for easy styling changes
  * and scoped theme modifications.
  */
-#pragma once
-
+#ifndef GM_WIDGETS_H_INCLUDED
+#define GM_WIDGETS_H_INCLUDED
 #include "widgets/button.h"
 #include "widgets/frame.h"
 #include "widgets/joystick.h"
@@ -81,3 +81,5 @@ void gmw_restore() {
   gmwFrame = _theme_cache[gm_theme_cache_index].frame;
   gm_theme_cache_index--;
 }
+
+#endif // GM_WIDGETS_H_INCLUDED

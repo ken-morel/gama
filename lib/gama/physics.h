@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM_PHYSICS_H_INCLUDED
+#define GM_PHYSICS_H_INCLUDED
 #include "_math.h"
 #include "body.h"
 #include "body_list.h"
@@ -457,3 +457,5 @@ void gm_collision_resolve(gmCollision *coll) {
     b->position.y += inv_mass_b * correction_y;
   }
 }
+
+#endif // GM_PHYSICS_H_INCLUDED

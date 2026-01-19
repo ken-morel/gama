@@ -8,8 +8,8 @@
  * This abstraction allows the core Gama engine code to remain
  * platform-agnostic.
  */
-#pragma once
-
+#ifndef GM_GAPI_H_INCLUDED
+#define GM_GAPI_H_INCLUDED
 #ifdef GM_NO_GAPI
 #error "gapi.h included"
 #endif
@@ -330,3 +330,5 @@ extern int32_t
     __attribute__((import_module("gapi"), import_name("mouse_get")))
 #endif
     gapi_mouse_get(double *x, double *y);
+
+    #endif // GM_GAPI_H_INCLUDED

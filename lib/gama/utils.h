@@ -5,8 +5,8 @@
  * This file contains miscellaneous helper functions that are not directly
  * related to a specific Gama module but are useful across the engine.
  */
-#pragma once
-
+#ifndef GM_UTILS_H_INCLUDED
+#define GM_UTILS_H_INCLUDED
 #include "_malloc.h" // For custom malloc/free
 #include <ctype.h>
 #include <stdio.h>
@@ -136,3 +136,5 @@ static inline void gm3u_str_copy_eol(char *dest, const char *src,
     dest[--i] = '\0';
   }
 }
+
+#endif // GM_UTILS_H_INCLUDED

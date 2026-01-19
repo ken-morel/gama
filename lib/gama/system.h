@@ -5,8 +5,8 @@
  * This file defines the `gmSystem` structure and functions for creating,
  * populating, and destroying a physics simulation environment.
  */
-#pragma once
-
+#ifndef GM_SYSTEM_H_INCLUDED
+#define GM_SYSTEM_H_INCLUDED
 #include "body.h"
 #include "body_list.h"
 #include "position.h"
@@ -172,3 +172,5 @@ void gm_system_destroy(gmSystem *sys) {
   gm_bodies_clear(sys->bodies);
   // Do not free individual gmBody pointers, as they are owned by the caller.
 }
+
+#endif // GM_SYSTEM_H_INCLUDED

@@ -5,12 +5,22 @@ import term
 import os
 import rand
 
+// Use a more compatible graphics backend for Sokol on Windows.
+
+// #flag -Wl,-Bstatic
+
 // #flag -D_SGL_DEFAULT_MAX_COMMANDS=65536
 // #flag -D_SGL_DEFAULT_MAX_VERTICES=4194304
-// errors:
-// #flag -static
-// #flag -static-libgcc
-// #flag -static-libstdc++
+
+// These flags are only for Windows to reduce external .dll dependencies.
+#flag -static-libgcc
+#flag -static-libstdc++
+
+$if windows {
+	// Force Sokol to use its legacy OpenGL context for maximum compatibility on Windows,
+	// especially in VMs with basic graphics drivers.
+	#flag -DSOKOL_GL_FORCE_LEGACY
+}
 
 type GapiTask = fn ()
 

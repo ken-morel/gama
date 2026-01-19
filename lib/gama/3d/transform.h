@@ -6,7 +6,8 @@
  * translation, rotation, and scaling of 3D objects, along with helper
  * functions to apply these transformations to 3D points and vectors.
  */
-#pragma once
+ #ifndef GM3_TRANSFORM_H_INCLUDED
+ #define GM3_TRANSFORM_H_INCLUDED
 
 #include "position.h"
 
@@ -86,3 +87,4 @@ gm3Transform gm3_transform() {
   t.scale.z = 1;
   return t;
 }
+#endif // GM3_TRANSFORM_H_INCLUDED

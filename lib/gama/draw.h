@@ -7,8 +7,8 @@
  * (`gmBody`). All coordinates are in world space.
  */
 
-#pragma once
-
+#ifndef GM_DRAW_H_INCLUDED
+#define GM_DRAW_H_INCLUDED
 #include "body.h"
 #include "color.h"
 #include "gapi.h"
@@ -343,3 +343,5 @@ void gm_draw_text_bodies(const gmBody *bodies, size_t number, const char *text,
   for (size_t i = 0; i < number; i++)
     gm_draw_text_body(&bodies[i], text, font, font_size, c);
 }
+
+#endif // GM_DRAW_H_INCLUDED

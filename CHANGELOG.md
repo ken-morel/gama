@@ -1,6 +1,10 @@
 # gama changelog
 
-## v0.1.1-dev4
+## v0.1.1-dev5
+
+- Added `gama clean` and fixed `gama update` commands.
+
+## v0.1.1-dev4 || v0.1.1-rc1
 
 - Packaging support for arch linux.
 - **New compiler api**: the compilées powering gama can be accessed via `gama tcc` , `zig` and `zcc` , where `zcc` is `zig cc`.  this permits you to integrate gama compilées in your workflow especially on windows where it's quite useful.

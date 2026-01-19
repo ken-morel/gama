@@ -19,7 +19,12 @@
 // ------------------------- Immediate-Mode Primitives -----------------------
 // ---------------------------------------------------------------------------
 
+/**
+ * @internal
+ * @brief Toggles a cache state. Currently unused.
+ */
 int gm_cache(unsigned int id) {
+  (void)id; // Parameter is unused for now.
   static int on = 0;
   on = !on;
   return on;
@@ -41,9 +46,9 @@ int32_t gm_draw_line(double x1, double y1, double x2, double y2,
 }
 
 /**
- * @brief Draws a rectangle.
- * @param x The x-coordinate of the top-left corner.
- * @param y The y-coordinate of the top-left corner.
+ * @brief Draws a rectangle centered at a point.
+ * @param x The x-coordinate of the center of the rectangle.
+ * @param y The y-coordinate of the center of the rectangle.
  * @param w The width of the rectangle.
  * @param h The height of the rectangle.
  * @param c The color of the rectangle.
@@ -54,9 +59,9 @@ int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c) {
 }
 
 /**
- * @brief Draws a rectangle with rounded corners.
- * @param x The x-coordinate of the top-left corner.
- * @param y The y-coordinate of the top-left corner.
+ * @brief Draws a rectangle with rounded corners centered at a point.
+ * @param x The x-coordinate of the center of the rectangle.
+ * @param y The y-coordinate of the center of the rectangle.
  * @param w The width of the rectangle.
  * @param h The height of the rectangle.
  * @param r The corner radius.
@@ -82,11 +87,11 @@ int32_t gm_draw_circle(double center_x, double center_y, double radius,
 }
 
 /**
- * @brief Draws an ellipse.
- * @param x The x-coordinate of the top-left corner of the bounding box.
- * @param y The y-coordinate of the top-left corner of the bounding box.
- * @param w The width of the ellipse.
- * @param h The height of the ellipse.
+ * @brief Draws an ellipse centered at a point.
+ * @param x The x-coordinate of the center of the ellipse.
+ * @param y The y-coordinate of the center of the ellipse.
+ * @param w The total width of the ellipse.
+ * @param h The total height of the ellipse.
  * @param c The color of the ellipse.
  * @return An identifier for the drawing command.
  */
@@ -111,10 +116,10 @@ int32_t gm_draw_triangle(double x1, double y1, double x2, double y2, double x3,
 }
 
 /**
- * @brief Draws an image.
+ * @brief Draws an image centered at a point.
  * @param img The image to draw.
- * @param x The x-coordinate of the top-left corner.
- * @param y The y-coordinate of the top-left corner.
+ * @param x The x-coordinate of the center of the image.
+ * @param y The y-coordinate of the center of the image.
  * @param w The width to draw the image.
  * @param h The height to draw the image.
  * @return An identifier for the drawing command.
@@ -123,11 +128,11 @@ int32_t gm_draw_image(gmImage img, double x, double y, double w, double h) {
   return gapi_draw_image(img.handle, x, y, w, h);
 }
 /**
- * @brief Draws text.
- * @param x The x-coordinate for the text position.
- * @param y The y-coordinate for the text position.
+ * @brief Draws text centered at a point.
+ * @param x The x-coordinate for the center of the text.
+ * @param y The y-coordinate for the center of the text.
  * @param text The null-terminated string to draw.
- * @param font The null-terminated font name to use.
+ * @param font The null-terminated font name to use (can be empty for default).
  * @param font_size The size of the font.
  * @param c The color of the text.
  * @return An identifier for the drawing command.

@@ -2,14 +2,18 @@
  * @file gltf.h
  * @brief Implements a glTF 3D model file loader.
  *
- * This file provides functionality to parse glTF (.gltf, .glb) files and load their
- * geometric and material data into a `gm3Mesh` structure. It uses the `cgltf`
- * library for core glTF parsing.
+ * This file provides functionality to parse glTF (.gltf, .glb) files and load
+ * their geometric and material data into a `gm3Mesh` structure. It uses the
+ * `cgltf` library for core glTF parsing.
  */
-#pragma once
 
+#include "mesh.h"
+#include "position.h"
 #include <stdio.h>
 #include <string.h>
+
+#ifndef GM3_GLTF_H_INCLUDED
+#define GM3_GLTF_H_INCLUDED
 
 // -- UTILS --
 /**
@@ -33,15 +37,13 @@
 #define GM_DYN_ARRAY_APPEND(arr, count, capacity, item)                        \
   do {                                                                         \
     if ((count) >= (capacity)) {                                               \
-      (capacity) = (capacity) == 0 ? GM_DYN_ARRAY_INIT_CAP : (capacity)*2;     \
-      (arr) = realloc((arr), (capacity) * sizeof(*(arr)));                      \
+      (capacity) = (capacity) == 0 ? GM_DYN_ARRAY_INIT_CAP : (capacity) * 2;   \
+      (arr) = realloc((arr), (capacity) * sizeof(*(arr)));                     \
     }                                                                          \
     (arr)[(count)++] = (item);                                                 \
   } while (0)
 
 // -- HEADERS --
-#include "mesh.h"
-#include "position.h"
 
 // Forward declarations
 /**
@@ -137,7 +139,8 @@ static void transform_pos(gm3Pos *dst, const gm3Pos *src,
 
 /**
  * @internal
- * @brief Transforms a 3D normal vector by a 4x4 matrix (applying only rotation).
+ * @brief Transforms a 3D normal vector by a 4x4 matrix (applying only
+ * rotation).
  * @param dst A pointer to the `gm3Pos` to store the transformed normal.
  * @param src A pointer to the source `gm3Pos` normal vector.
  * @param m A pointer to the 4x4 transformation matrix (column-major).
@@ -246,10 +249,9 @@ int gm3_gltf_load(gm3Mesh *mesh, const char *path) {
 
         } else {
           // Fallback to base color factor if no texture
-          dmat->diffuse =
-              gm_rgb(pbr->base_color_factor[0] * 255,
-                     pbr->base_color_factor[1] * 255,
-                     pbr->base_color_factor[2] * 255);
+          dmat->diffuse = gm_rgb(pbr->base_color_factor[0] * 255,
+                                 pbr->base_color_factor[1] * 255,
+                                 pbr->base_color_factor[2] * 255);
         }
       }
     }
@@ -350,3 +352,4 @@ int gm3_gltf_load(gm3Mesh *mesh, const char *path) {
   cgltf_free(data);
   return 0;
 }
+#endif // GM3_GLTF_H_INCLUDED

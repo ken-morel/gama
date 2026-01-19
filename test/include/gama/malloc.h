@@ -1,3 +1,20 @@
+/**
+ * @file malloc.h
+ * @brief Custom memory allocation functions (`malloc`, `free`, `calloc`, `realloc`)
+ *        using a fixed-size static memory pool.
+ *
+ * This file provides an alternative memory management system for Gama,
+ * primarily for environments where dynamic system `malloc` might be
+ * unavailable or undesirable (e.g., embedded systems, WebAssembly with specific
+ * memory requirements). It pre-allocates a large static buffer and manages
+ * memory chunks within it.
+ *
+ * @warning This implementation redefines standard C library functions (`malloc`,
+ *          `free`, `calloc`, `realloc`). Care must be taken to ensure this
+ *          does not conflict with system-level memory allocation or other
+ *          libraries that expect standard `libc` behavior. This file is
+ *          typically included conditionally.
+ */
 #pragma once
 
 #include <stdlib.h>
@@ -6,29 +23,72 @@
 #endif
 
 #include <stddef.h>
+/**
+ * @def MEMORY
+ * @internal
+ * @brief Defines the size of the main memory pool in megabytes.
+ * Default is 10MB if not otherwise defined.
+ */
 #ifndef MEMORY
 // default memory to 10MB
 #define MEMORY 10
 
 #endif
+/**
+ * @def MEMORY_B
+ * @internal
+ * @brief Defines an additional size for the memory pool in bytes.
+ * Default is 0 bytes if not otherwise defined.
+ */
 #ifndef MEMORY_B
 #define MEMORY_B 0
 #endif
+/**
+ * @def MEMORY_TOTAL
+ * @internal
+ * @brief Total size of the memory pool in bytes.
+ */
 #define MEMORY_TOTAL ((MEMORY << 20) + MEMORY_B)
+/**
+ * @def MEMORY_SPOTS
+ * @internal
+ * @brief Maximum number of memory blocks (spots) that can be tracked.
+ * Calculated as `MEMORY_TOTAL / 100`.
+ */
 #ifndef MEMORY_SPOTS
 #define MEMORY_SPOTS (MEMORY_TOTAL / 100)
 #endif
 
 #define _MALLOC_H 1
 
+/**
+ * @internal
+ * @brief Represents a block of memory within the static pool.
+ */
 struct _memory_spot {
-  size_t index; // Start index in memory pool
-  size_t size;  // Size of this block (0 = free)
+  size_t index; /**< Starting index (offset) in the `_memory` pool. */
+  size_t size;  /**< Size of this block (0 indicates a free block). */
 };
-// Main memory pool and bookkeeping
+/**
+ * @internal
+ * @brief The main static memory pool buffer.
+ */
 static char _memory[MEMORY_TOTAL];
+/**
+ * @internal
+ * @brief Array to keep track of allocated and free memory spots.
+ */
 static struct _memory_spot _memory_spots[MEMORY_SPOTS];
+/**
+ * @internal
+ * @brief Current number of active memory spots being tracked.
+ */
 static size_t _memory_spot_size = 0;
+/**
+ * @internal
+ * @brief Removes a memory spot from the `_memory_spots` array.
+ * @param index The index of the spot to remove.
+ */
 static void _remove_memory_spot(size_t index) {
   for (size_t i = index; i < _memory_spot_size - 1; i++) {
     _memory_spots[i] = _memory_spots[i + 1];
@@ -37,11 +97,18 @@ static void _remove_memory_spot(size_t index) {
     _memory_spot_size--;
   }
 }
+/**
+ * @internal
+ * @brief Adds a new memory spot to the `_memory_spots` array, maintaining sorted order.
+ * @param index The starting index of the new spot.
+ * @param size The size of the new spot.
+ * @return The newly added `_memory_spot` struct.
+ */
 static struct _memory_spot _add_memory_spot(size_t index, size_t size) {
   if (_memory_spot_size >= MEMORY_SPOTS) {
     // gapi_log("OOM: sorry kid, memory's finish, no _spots left, try "
     // "https://gama.rbs.cm/faq#oom");
-    exit(100);
+    exit(100); // Exits if no more spots are available
     return (struct _memory_spot){0, 0};
   }
   // Find new spot
@@ -64,6 +131,16 @@ static struct _memory_spot _add_memory_spot(size_t index, size_t size) {
 
   return _memory_spots[insert_pos];
 }
+
+/**
+ * @brief Custom implementation of `malloc` using a static memory pool.
+ *
+ * Allocates a block of `size` bytes from the predefined static memory pool.
+ *
+ * @param size The number of bytes to allocate.
+ * @return A pointer to the allocated memory block, or `NULL` if allocation fails
+ *         (e.g., out of memory or no suitable spot).
+ */
 void *malloc(size_t size) {
   if (size == 0)
     return NULL;
@@ -101,6 +178,14 @@ void *malloc(size_t size) {
   }
   return NULL; // Out of memory
 }
+
+/**
+ * @brief Custom implementation of `free` for memory allocated by `malloc` (this custom version).
+ *
+ * Frees a previously allocated memory block, making it available for future allocations.
+ *
+ * @param ptr A pointer to the memory block to free. If `ptr` is `NULL`, no operation is performed.
+ */
 void free(void *ptr) {
   if (!ptr)
     return;
@@ -116,6 +201,17 @@ void free(void *ptr) {
     }
   }
 }
+
+/**
+ * @brief Custom implementation of `calloc` using a static memory pool.
+ *
+ * Allocates a block of memory for an array of `count` elements, each of `size` bytes,
+ * and initializes all bytes in the allocated block to zero.
+ *
+ * @param count The number of elements to allocate.
+ * @param size The size of each element in bytes.
+ * @return A pointer to the allocated and zero-initialized memory, or `NULL` if allocation fails.
+ */
 void *calloc(size_t count, size_t size) {
   size_t total_size = count * size;
   void *ptr = malloc(total_size);
@@ -127,6 +223,16 @@ void *calloc(size_t count, size_t size) {
   }
   return ptr;
 }
+
+/**
+ * @brief Custom implementation of `realloc` for memory allocated by `malloc` (this custom version).
+ *
+ * Resizes a previously allocated memory block.
+ *
+ * @param ptr A pointer to the memory block to reallocate. If `ptr` is `NULL`, behaves like `malloc`.
+ * @param size The new size for the memory block. If `size` is `0`, behaves like `free`.
+ * @return A pointer to the reallocated memory block, or `NULL` if reallocation fails.
+ */
 void *realloc(void *ptr, size_t size) {
   if (!ptr)
     return malloc(size);

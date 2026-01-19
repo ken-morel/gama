@@ -7,8 +7,8 @@
  * basic window operations.
  */
 
-#pragma once
-
+#ifndef GM_GAMA_H_INCLUDED
+#define GM_GAMA_H_INCLUDED
 #include "draw.h"
 #include "gapi.h"
 #include "stdio.h"
@@ -193,3 +193,5 @@ void gm_sleep(int milliseconds) { Sleep(milliseconds); }
 void gm_sleep(int milliseconds) { usleep(milliseconds * 1000); }
 #endif
 #endif
+
+#endif // GM_GAMA_H_INCLUDED

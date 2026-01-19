@@ -36,5 +36,8 @@ pub fn Project.generate(inst Installation, conf ProjectConf, template GamaTempla
 	project.copy_build_web_artifacts(inst, true) or {
 		println(term.warn_message('Error copying ubild artifacts: ${err}'))
 	}
+	project.bake(inst, false) or {
+		println(term.warn_message('Error baking initial assets: ${err}'))
+	}
 	return project
 }

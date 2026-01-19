@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GM_POSITION_H_INCLUDED
+#define GM_POSITION_H_INCLUDED
 
 #include "_math.h"
 
@@ -75,3 +76,5 @@ double gm_triangle_area(gmPos a, gmPos b, gmPos c) {
   double ac_y = c.y - a.y;
   return 0.5 * fabs(ab_x * ac_y - ab_y * ac_x);
 }
+
+#endif // GM_POSITION_H_INCLUDED

@@ -11,7 +11,8 @@
  *       original list pointer to prevent memory leaks. Specifically, `gm_ptr_list_pop_at`
  *       uses `malloc` internally to create a new list.
  */
-#pragma once
+ #ifndef GM_BODY_LIST_H_INCLUDED
+ #define GM_BODY_LIST_H_INCLUDED
 
 #include "body.h"
 #include <stdlib.h>
@@ -362,3 +363,5 @@ static inline void gm_bodies_clear(gmBodies list) {
  */
 #define gm_bodies_for_each(item, list)                                         \
   for (size_t i = 0; (list != NULL) && (item = list[i]) != NULL; i++)
+
+  #endif // GM_BODY_LIST_H_INCLUDED

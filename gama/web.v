@@ -38,7 +38,7 @@ pub fn (p Project) build_web(inst Installation, reset bool) ! {
 
 	compiler := inst.zcc()!
 
-	cmd := '${compiler} -target wasm32-wasi -g -mexec-model=reactor ${source_files.join(' ')} -I${include_path} -I${gen_path} -lc -lm -Wl,--no-entry -o ${output} -DGM_WEB -D__ZIG_CC__'
+	cmd := '${compiler} -target wasm32-wasi -g -mexec-model=reactor ${source_files.join(' ')} -I${include_path} -I${gen_path} -lc -lm -Wl,--no-entry -o ${output} -DSTBI_NO_SIMD -DGM_WEB -D__ZIG_CC__'
 	println('Running: ${cmd}')
 	res := os.system(cmd)
 
