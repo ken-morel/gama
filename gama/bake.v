@@ -122,6 +122,9 @@ pub fn bake_data(path string, fname string) !string {
 	flag := 'GM_ASSET_DATA_${fname.to_upper()}_INCLUDED'
 
 	byte_str := generate_c_bytearray(data.data, u64(data.compressed))
+	defer {
+		C.gm_compressed_free(data)
+	}
 
 	return '
 #ifndef ${flag}
@@ -253,9 +256,6 @@ pub fn (p Project) bake(inst Installation, clean bool) ! {
 				if should_build_to(src_path, dest_path) {
 					files_to_bake << AssetToBake{handler.kind, src_path, dest_path, handler}
 				}
-				break
-			} else {
-				println(term.warn_message('No handler for file: ${file}'))
 			}
 		}
 	}
