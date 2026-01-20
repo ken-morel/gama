@@ -3,6 +3,7 @@
 /build/
 /docs
 /bin
-/compilers/zig/*
+/compilers/zig/windows/*
 /node_modules
 node_modules
+/runners/web/gama.js

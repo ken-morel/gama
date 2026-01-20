@@ -9,3 +9,9 @@ v.mod linguist-language=V
 .vdocignore linguist-language=ignore
 
 /site/static/reference/* linguist-vendored
+/contrib/* linguist-vendored
+/lib/stb/* linguist-vendored
+/lib/cgltf.h linguist-vendored
+/lib/lzav.h linguist-vendored
+/test/* linguist-vendored
+/compilers/* linguist-vendored
