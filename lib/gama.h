@@ -1,7 +1,10 @@
 #pragma once
 
-#define STB_IMAGE_IMPLEMENTATION
+
+
+#ifndef STBI_NO_SIMD
 #define STBI_NO_SIMD
+#endif // STBI_NO_SIMD
 
 // NOTE: The order is important, major, minor, patch
 #define GAMA_VERSION_MAJOR 0

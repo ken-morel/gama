@@ -230,11 +230,19 @@ fn main() {
 			},
 			cli.Command{
 				name:        'dev'
-				usage:       'dev [cc]'
+				usage:       'dev [-cc <path|.zcc|.tcc>]'
 				description: 'Build and re-run the project on code changes using compiler [cc]'
-
-				execute: fn (cmd cli.Command) ! {
-					cc := cmd.args[0] or { '.tcc' }
+				flags:       [
+					cli.Flag{
+						flag:        .string
+						name:        'cc'
+						abbrev:      'cc'
+						description: 'Use an alternative compiler'
+						required:    false
+					},
+				]
+				execute:     fn (cmd cli.Command) ! {
+					cc := cmd.flags.get_string('cc') or { '.tcc' }
 					inst := get_installation()!
 					project := get_project()!
 

@@ -26,6 +26,11 @@ type GapiTask = fn ()
 
 const draw_instruction_count = 10000
 
+enum GapiWinsizeMode {
+	auto
+	fixed
+}
+
 __global (
 	gapi_ctx__          &gg.Context
 	gapi_bg_color__     gg.Color
@@ -36,7 +41,6 @@ __global (
 	gapi_queue__        chan []GapiTask
 	gapi_buff__         []GapiTask
 	gapi_end_frame__    chan bool
-	gapi_isfullscreen__ bool
 	gapi_images__       map[u32]gg.Image
 	gapi_image_count__  u32
 	// viewport
@@ -52,7 +56,14 @@ __global (
 	gapi_mouse_down__   bool
 	// files
 	gapi_dir__          string
+	gapi_winsize_mode__ GapiWinsizeMode
 )
+
+fn update_dimensions() {
+	size := gapi_ctx__.window_size()
+	gapi_width__ = size.width
+	gapi_height__ = size.height
+}
 
 fn update_virtual_dimensions() {
 	if gapi_width__ < gapi_height__ {
@@ -148,6 +159,7 @@ fn gapi_yield(dt &f64) i32 {
 
 fn run_gg_loop() {
 	gapi_ctx__ = gg.new_context(
+		fullscreen:   gapi_winsize_mode__ == .auto
 		width:        gapi_width__
 		height:       gapi_height__
 		window_title: gapi_title__
@@ -183,6 +195,10 @@ fn run_gg_loop() {
 		cleanup_fn:   fn (data voidptr) {
 			gapi_gama_runs__ = false
 		}
+		init_fn:      fn (data voidptr) {
+			update_dimensions()
+			update_virtual_dimensions()
+		}
 	)
 
 	println(term.cyan('[vgama] Starting app'))
@@ -200,18 +216,23 @@ fn run_gg_loop() {
 @[export: 'gapi_init']
 @[unsafe]
 fn gapi_init(width int, height int, title &char) i32 {
+	if width * height == 0 {
+		gapi_winsize_mode__ = .auto
+		size := gg.screen_size()
+		gapi_width__ = size.width
+		gapi_height__ = size.height
+	} else {
+		gapi_winsize_mode__ = .fixed
+		gapi_height__ = height
+		gapi_width__ = width
+	}
 	println(term.cyan('[vgama]: gapi_init() called'))
-	gapi_isfullscreen__ = false
 	gapi_image_count__ = 1
-	gapi_height__ = height
-	gapi_width__ = width
 	gapi_title__ = title.vstring()
 
 	gapi_dir__ = os.join_path(os.temp_dir(), rand.uuid_v7())
 	os.mkdir_all(gapi_dir__) or { term.warn_message('Could not create app temporary directory') }
 	println(term.cyan('\n[vgama] Using temporary directory: ${gapi_dir__}'))
-
-	update_virtual_dimensions()
 
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
 
@@ -262,12 +283,10 @@ fn gapi_set_bg_color(col GmColor) {
 @[export: 'gapi_fullscreen']
 fn gapi_fullscreen(fc i32) {
 	queue_fn(fn [fc] () {
-		if fc == 1 && !gapi_isfullscreen__ {
+		if fc == 1 && !gg.is_fullscreen() {
 			gg.toggle_fullscreen()
-			gapi_isfullscreen__ = true
-		} else if fc == 0 && gapi_isfullscreen__ {
+		} else if fc == 0 && gg.is_fullscreen() {
 			gg.toggle_fullscreen()
-			gapi_isfullscreen__ = false
 		}
 	})
 }
