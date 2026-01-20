@@ -9,6 +9,7 @@ module gama
 #include <gama/3d.h>
 #include <gama/3d/gltf.h>
 #include <gama/3d/obj.h>
+#include <gama/compress.h>
 
 pub fn C.gm3_gltf_load(mesh &C.gm3Mesh, path &char) i32
 
@@ -17,7 +18,7 @@ pub fn C.gm3_mesh_serialize(mesh &C.gm3Mesh, data &&C.void, size &u64) i32
 pub fn C.gm3_mesh_free(m &C.gm3Mesh)
 
 @[typedef]
-struct C.gmImageData {
+pub struct C.gmImageData {
 	width  i32
 	height i32
 	data   &u8
@@ -40,10 +41,10 @@ pub fn load_image(path string) !C.gmImageData {
 }
 
 @[typedef]
-struct C.gm3Mesh {}
+pub struct C.gm3Mesh {}
 
 @[typedef]
-struct C.gmStr {
+pub struct C.gmStr {
 	length  usize
 	content &char = unsafe { nil }
 }
@@ -61,3 +62,16 @@ pub fn load_mesh(path string, mtldir string) !C.gm3Mesh {
 	}
 	return mesh
 }
+
+// gama/compress.h
+
+@[typedef]
+struct C.gmCompressed {
+	compressed u64
+	original   u64
+	data       &u8
+}
+
+pub fn C.gm_compressed_free(compressed &C.gmCompressed)
+pub fn C.gm_compress(data &u8, data_len u64) &C.gmCompressed
+pub fn C.gm_decompress(compressed &C.gmCompressed) &u8

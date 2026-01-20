@@ -3,6 +3,7 @@
 ## v0.1.1-dev5
 
 - Added `gama clean` and fixed `gama update` commands.
+- Added support for backing normal files.
 
 ## v0.1.1-dev4 || v0.1.1-rc1
 

@@ -5,7 +5,23 @@ import term
 import time
 
 @[unsafe]
+fn generate_c_bytearray(data_ptr &u8, data_size u64) string {
+	mut byte_str := ''
+
+	for i in 0 .. data_size {
+		b := data_ptr[i]
+		byte_str += '0x${b.hex()}, '
+		if (i + 1) % 16 == 0 {
+			byte_str += '\n\t'
+		}
+	}
+	return byte_str
+}
+
+@[unsafe]
 fn bake_mesh_data(mesh C.gm3Mesh, path string, fname string) !string {
+	flag := 'GM_ASSET_MESH_${fname.to_upper()}_INCLUDED'
+
 	// 1. Serialize mesh in C
 	mut data_ptr := &u8(unsafe { nil }) // Correct Vlang syntax for C pointer
 	mut data_size := u64(0)
@@ -17,19 +33,13 @@ fn bake_mesh_data(mesh C.gm3Mesh, path string, fname string) !string {
 	}
 
 	// 2. Format bytes into C array string by directly indexing the C pointer
-	mut byte_str := ''
-
-	for i in 0 .. data_size {
-		b := data_ptr[i]
-		byte_str += '0x${b.hex()}, '
-		if (i + 1) % 16 == 0 {
-			byte_str += '\n\t'
-		}
-	}
+	byte_str := generate_c_bytearray(data_ptr, u64(data_size))
 
 	// 3. Return the generated code
 	return '
-#pragma once
+#ifndef ${flag}
+#define ${flag}
+
 #include <gama/3d/mesh.h> // Contains the deserialization function
 
 // Baked mesh data for ${os.file_name(path)}
@@ -46,6 +56,7 @@ static inline gm3Mesh ${fname}() {
 	gm3_mesh_deserialize(&mesh, _${fname}_data, _${fname}_len);
 	return mesh;
 }
+#endif // ${flag}
 '
 }
 
@@ -73,20 +84,17 @@ pub fn bake_gltf(path string, fname string) !string {
 	return bake_mesh_data(mesh, path, fname)
 }
 
+@[unsafe]
 pub fn bake_img(path string, fname string) !string {
 	bytes := os.read_bytes(path)!
 
-	mut byte_str := ''
-	for i in 0 .. bytes.len {
-		b := bytes[i]
-		byte_str += '0x${b.hex()}, '
-		if (i + 1) % 16 == 0 {
-			byte_str += '\n\t'
-		}
-	}
+	byte_str := generate_c_bytearray(bytes.data, u64(bytes.len))
+
+	flag := 'GM_ASSET_IMAGE_${fname.to_upper()}_INCLUDED'
 
 	return '
-#pragma once
+#ifndef ${flag}
+#define ${flag}
 #include <gama/image.h>
 
 // Baked image data for ${os.file_name(path)}
@@ -101,6 +109,48 @@ static const unsigned char _${fname}_data[] = {
 static inline gmImage ${fname}() {
 	return gm_image_create_from_memory(_${fname}_data, _${fname}_len);
 }
+
+#endif // ${flag}
+'
+}
+
+@[unsafe]
+pub fn bake_data(path string, fname string) !string {
+	bytes := os.read_bytes(path)!
+
+	data := C.gm_compress(bytes.data, bytes.len)
+	flag := 'GM_ASSET_DATA_${fname.to_upper()}_INCLUDED'
+
+	byte_str := generate_c_bytearray(data.data, u64(data.compressed))
+	defer {
+		C.gm_compressed_free(data)
+	}
+
+	return '
+#ifndef ${flag}
+#define ${flag}
+
+#include <gama/compress.h>
+
+
+static const unsigned char ${fname}_data_compressed[${data.compressed}] = {
+	${byte_str}
+};
+
+static unsigned char ${fname}_data[${data.original}] = {0};
+
+static inline unsigned char* ${fname}(size_t* size) {
+	static int decompressed = 0;
+	*size = ${data.original};
+	if(!decompressed) {
+		gm_decompress_to(${fname}_data_compressed, ${data.compressed}, ${fname}_data, ${data.original});
+		decompressed = 1;
+	}
+	return ${fname}_data;
+}
+
+
+#endif // ${flag}
 '
 }
 
@@ -121,27 +171,64 @@ fn format_size(bytes i64) string {
 	return val.str() + ' GB'
 }
 
+@[heap]
 struct AssetHandler {
-	kind       string   // e.g. 'Model', 'Image'
-	scan_dir   string   // e.g. 'assets/gltf'
-	extensions []string // e.g. ['.gltf', '.glb']
+	kind       string
+	scan_dir   string
+	extensions []string
+	handler    fn (string, string) !string @[required]
+	suffix     string
 }
 
 struct AssetToBake {
 	handler_kind string
 	src_path     string
 	dest_path    string
+	handler      AssetHandler
 }
 
-// get_baker returns the correct baking function for a given file extension
-fn get_baker(ext string) (fn (string, string) !string, string) {
-	match ext {
-		'.obj' { return bake_obj, '_mesh' }
-		'.gltf', '.glb' { return bake_gltf, '_mesh' }
-		'.png', '.jpg', '.jpeg', '.bmp' { return bake_img, '_image' }
-		else { panic('No baker for extension: ${ext}') }
+fn (a AssetHandler) handles_file(file string) bool {
+	if a.extensions.len == 0 {
+		return true
 	}
+	for ext in a.extensions {
+		if file.ends_with(ext) {
+			return true
+		}
+	}
+	return false
 }
+
+const asset_handlers = [
+	AssetHandler{
+		kind:       'Model'
+		suffix:     '_mesh'
+		scan_dir:   'gltf'
+		extensions: ['.gltf', '.glb']
+		handler:    bake_gltf
+	},
+	AssetHandler{
+		kind:       'Model'
+		suffix:     '_mesh'
+		scan_dir:   'obj'
+		extensions: ['.obj']
+		handler:    bake_obj
+	},
+	AssetHandler{
+		kind:       'Image'
+		suffix:     '_image'
+		scan_dir:   'images'
+		extensions: ['.png', '.jpg', '.jpeg', '.bmp']
+		handler:    bake_img
+	},
+	AssetHandler{
+		kind:       'Data'
+		suffix:     '_data'
+		scan_dir:   'data'
+		extensions: []
+		handler:    bake_data
+	},
+]
 
 pub fn (p Project) bake(inst Installation, clean bool) ! {
 	assets_dir := os.join_path(p.path, 'assets')
@@ -152,43 +239,22 @@ pub fn (p Project) bake(inst Installation, clean bool) ! {
 		}
 	}
 
-	handlers := [
-		AssetHandler{
-			kind:       'Model'
-			scan_dir:   'gltf'
-			extensions: ['.gltf', '.glb']
-		},
-		AssetHandler{
-			kind:       'Model'
-			scan_dir:   'obj'
-			extensions: ['.obj']
-		},
-		AssetHandler{
-			kind:       'Image'
-			scan_dir:   'images'
-			extensions: ['.png', '.jpg', '.jpeg', '.bmp']
-		},
-	]
-
 	mut files_to_bake := []AssetToBake{}
 
 	// --- Pass 1: Collect files that need to be baked ---
-	for handler in handlers {
+	for handler in asset_handlers {
 		scan_path := os.join_path(assets_dir, handler.scan_dir)
 		if !os.exists(scan_path) {
 			continue
 		}
 		files := os.ls(scan_path) or { continue }
 		for file in files {
-			for ext in handler.extensions {
-				if file.ends_with(ext) {
-					src_path := os.join_path(scan_path, file)
-					rel_path := os.join_path(handler.scan_dir, file)
-					dest_path := os.join_path(gen_dir, rel_path + '.h')
-					if should_build_to(src_path, dest_path) {
-						files_to_bake << AssetToBake{handler.kind, src_path, dest_path}
-					}
-					break
+			if handler.handles_file(file) {
+				src_path := os.join_path(scan_path, file)
+				rel_path := os.join_path(handler.scan_dir, file)
+				dest_path := os.join_path(gen_dir, rel_path + '.h')
+				if should_build_to(src_path, dest_path) {
+					files_to_bake << AssetToBake{handler.kind, src_path, dest_path, handler}
 				}
 			}
 		}
@@ -213,7 +279,8 @@ pub fn (p Project) bake(inst Installation, clean bool) ! {
 		stdout.flush()
 
 		ext := os.file_ext(asset.src_path)
-		baker, suffix := get_baker(ext)
+		baker := asset.handler.handler
+		suffix := asset.handler.suffix
 
 		base_name := os.file_name(asset.src_path)[0..os.file_name(asset.src_path).len - ext.len]
 		var_name := base_name.replace('-', '_').replace('.', '_') + suffix
