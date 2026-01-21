@@ -10,8 +10,9 @@
  */
 #ifndef GM_GAPI_H_INCLUDED
 #define GM_GAPI_H_INCLUDED
+
 #ifdef GM_NO_GAPI
-#error "gapi.h included"
+#error "gapi.h included but GM_NO_GAPI was defined"
 #endif
 
 #include "color.h"
@@ -331,4 +332,69 @@ extern int32_t
 #endif
     gapi_mouse_get(double *x, double *y);
 
-    #endif // GM_GAPI_H_INCLUDED
+// --- Audio Functions ---
+
+/**
+ * @brief Opaque handle to an audio resource in the backend.
+ */
+typedef struct {
+  uint32_t handle;
+} gmAudio;
+
+/**
+ * @brief Creates a platform-specific audio resource from raw PCM data.
+ *
+ * This function is used to upload decoded audio data to the audio backend
+ * where it can be played by `gapi_audio_play`.
+ *
+ * @param data A pointer to the decoded float audio data.
+ * @param frame_count The total number of PCM frames.
+ * @param channels The number of audio channels (e.g., 1 for mono, 2 for
+ * stereo).
+ * @param sample_rate The sample rate of the audio (e.g., 48000).
+ * @return A unique handle (ID) for the created audio resource on success, 0 on
+ * failure.
+ */
+extern uint32_t
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("create_audio")))
+#endif
+    gapi_create_audio(const float *data, uint64_t frame_count,
+                      uint32_t channels, uint32_t sample_rate);
+
+/**
+ * @brief Plays the audio resource associated with the handle.
+ *
+ * @param handle The handle of the audio resource to play.
+ * @param loop Whether the audio should loop continuously (1 for true, 0 for
+ * false).
+ */
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("play_audio")))
+#endif
+    gapi_play_audio(uint32_t handle, int32_t loop);
+
+/**
+ * @brief Stops the audio resource associated with the handle.
+ *
+ * @param handle The handle of the audio resource to stop.
+ */
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("stop_audio")))
+#endif
+    gapi_stop_audio(uint32_t handle);
+
+/**
+ * @brief Frees the audio resource in the backend.
+ *
+ * @param handle The handle of the audio resource to free.
+ */
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("free_audio")))
+#endif
+    gapi_free_audio(uint32_t handle);
+
+#endif // GM_GAPI_H_INCLUDED

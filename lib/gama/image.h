@@ -41,7 +41,8 @@ int32_t gm_image_data_load(gmImageData *data, const char *path) {
  * @return 0 on success, -1 on failure.
  */
 int32_t gm_image_data_load_from_memory(gmImageData *data,
-                                       const unsigned char *buffer, int len) {
+                                       const unsigned char *buffer,
+                                       size_t len) {
   memset(data, 0, sizeof(gmImageData));
   data->data =
       stbi_load_from_memory(buffer, len, &data->width, &data->height, NULL, 4);
