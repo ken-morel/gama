@@ -138,7 +138,7 @@ export default class Gama {
     const wasmDataBuffer = await fetchResponse.arrayBuffer();
     const worker = new Worker(WORKER_URL, { type: 'module' });
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       worker.onerror = (e) => {
         reject(e);
       };
@@ -208,6 +208,7 @@ export default class Gama {
         Atomics.notify(this.#buffer32, 0);
 
         writeYieldResult(this.buffer, 1, this.yielding);
+        this.yielding.keyboard.down.clear();
         // and then wait till we finish drawing, and since two functions
         // dont run at the same time...
         await gen.next();
@@ -555,10 +556,7 @@ export default class Gama {
   public bindKeyboard(elt: EventTarget): void {
     elt.addEventListener('keydown', e => {
       this.yielding.keyboard.down.add(getKeyCode((e as KeyboardEvent).key));
-    });
-    elt.addEventListener('keyup', e => {
-      const code = getKeyCode((e as KeyboardEvent).key);
-      this.yielding.keyboard.down.delete(code);
+      console.log("Key down!", (e as KeyboardEvent).key);
     });
   }
 
