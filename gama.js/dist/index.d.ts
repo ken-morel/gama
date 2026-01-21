@@ -1,4 +1,7 @@
 import { GmColor } from "./color";
+/**
+ * Represents a 2D position with x and y coordinates.
+ */
 type Pos = {
     x: number;
     y: number;
@@ -75,9 +78,26 @@ export default class Gama {
      * and after attaching the instance to an HTMLCanvasElement.
      */
     start(): Promise<void>;
+    /**
+     * Handles messages received from the Web Worker.
+     * Dispatches commands for resizing, drawing, input, etc.
+     * @param msg The MessageEvent received from the worker.
+     */
     private handleWorkerMessage;
+    /**
+     * Handles errors occurring in the Web Worker.
+     * @param e The ErrorEvent from the worker.
+     */
     private workerError;
+    /**
+     * Generator function that controls the main rendering loop on the main thread.
+     * It handles double buffering, frame rate capping, and rendering updates.
+     */
     private yield;
+    /**
+     * Executes a drawing command received from the Web Worker.
+     * @param _cmd The drawing command array.
+     */
     private drawCmd;
     /**
      * Sets the stroke style for drawing operations.
@@ -167,6 +187,11 @@ export default class Gama {
      */
     updateSize(): void;
     bindKeyboard(elt: EventTarget): void;
+    /**
+     * Binds mouse and touch event listeners to an HTMLElement (typically the canvas).
+     * Updates the internal mouse state (position, clicks) for the Web Worker.
+     * @param elt The HTMLElement to bind listeners to.
+     */
     bindMouse(elt: HTMLElement): void;
 }
 export {};
