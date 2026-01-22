@@ -335,13 +335,6 @@ extern int32_t
 // --- Audio Functions ---
 
 /**
- * @brief Opaque handle to an audio resource in the backend.
- */
-typedef struct {
-  uint32_t handle;
-} gmAudio;
-
-/**
  * @brief Creates a platform-specific audio resource from raw PCM data.
  *
  * This function is used to upload decoded audio data to the audio backend
@@ -369,7 +362,7 @@ extern uint32_t
  * @param loop Whether the audio should loop continuously (1 for true, 0 for
  * false).
  */
-extern void
+extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("play_audio")))
 #endif
@@ -380,7 +373,7 @@ extern void
  *
  * @param handle The handle of the audio resource to stop.
  */
-extern void
+extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("stop_audio")))
 #endif
@@ -391,7 +384,7 @@ extern void
  *
  * @param handle The handle of the audio resource to free.
  */
-extern void
+extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("free_audio")))
 #endif

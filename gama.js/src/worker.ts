@@ -52,8 +52,9 @@ const d: {
     down: Set<GmKeyCode>
   }
   last_t: number,
-  image_counter: number
-} = { mod: null, inst: null, buff: null, cmds: [], size: [500, 500], mem: null, running: true, mouse: { x: 0, y: 0, down: false }, last_t: 0, keyboard: { down: new Set<GmKeyCode> }, image_counter: 1, buff32: null };
+  image_counter: number,
+  audio_counter: number,
+} = { mod: null, inst: null, buff: null, cmds: [], size: [500, 500], mem: null, running: true, mouse: { x: 0, y: 0, down: false }, last_t: 0, keyboard: { down: new Set<GmKeyCode> }, image_counter: 1, buff32: null, audio_counter: 1 };
 
 
 let state: number = 1;
@@ -97,29 +98,7 @@ self.onmessage = (msg: MessageEvent<any>) => {
   }
 }
 
-
-
-const gapi = {
-  init: (width: number, height: number, title: CharPtr) => {
-    self.postMessage({
-      type: 'resize',
-      size: [width, height],
-    });
-    const txt = takeString(d.mem!, title);
-    self.postMessage({
-      type: 'set-title',
-      title: txt,
-    });
-    d.last_t = Date.now();
-    console.info(`gm_init called, with dimensions ${width}x${height} and title: \`${txt}\``)
-  },
-  log: function(txt: CharPtr) {
-    console.log(takeString(d.mem!, txt));
-  },
-  quit: () => {
-    d.running = false;
-    console.info("gm_quit called");
-  },
+const draw_gapi = {
   draw_line: (x1: number, y1: number, x2: number, y2: number, size: number, c: GmColor) => {
     d.cmds.push(['line', x1, y1, x2, y2, size, c],);
   },
@@ -164,29 +143,28 @@ const gapi = {
       col as GmColor,
     ]);
   },
-  set_background_color: (col: GmColor) => {
-    self.postMessage({
-      type: 'set-background-color',
-      color: col,
-    });
-  },
-  mouse_get: (x_ptr: DoublePtr, y_ptr: DoublePtr) => {
-    setDoublePtr(d.mem!, x_ptr, [d.mouse.x]);
-    setDoublePtr(d.mem!, y_ptr, [d.mouse.y]);
-    return 0;
-  },
-  mouse_down: () => d.mouse.down ? 1 : 0,
+  draw_triangles: (ntriangles: number, points_ptr: Ptr, colors_ptr: Ptr) => {
+    const triangles: Triangle[] = [];
+    const points = getDoublePtr(d.mem!, points_ptr, ntriangles * 6);
+    const colors = getGmColorPtr(d.mem!, colors_ptr, ntriangles);
 
-  resize: (width: number, height: number) => {
-    self.postMessage({ type: 'resize', size: [width, height] });
+    for (let i = 0; i < ntriangles; i++) {
+      const p_off = i * 6;
+      triangles.push({
+        a: [points[p_off + 0], points[p_off + 1]],
+        b: [points[p_off + 2], points[p_off + 3]],
+        c: [points[p_off + 4], points[p_off + 5]],
+        col: colors[i],
+      });
+    }
+    d.cmds.push([
+      'triangles',
+      triangles,
+    ]);
   },
-  fullscreen: (full: number) => {
-    self.postMessage({ type: 'fullscreen', fullscreen: full != 0 });
-  },
-  runs: () => d.running ? 1 : 0,
-  key_down: (t: number, k: number) => {
-    return d.keyboard.down.has(String.fromCodePoint(t, k)) ? 1 : 0;
-  },
+};
+
+const image_gapi = {
   create_image: (data_ptr: CharPtr, width: number, height: number) => {
     if (data_ptr * width * height == 0) return 1;
 
@@ -217,25 +195,89 @@ const gapi = {
       x, y, w, h,
     ]);
   },
-  draw_triangles: (ntriangles: number, points_ptr: Ptr, colors_ptr: Ptr) => {
-    const triangles: Triangle[] = [];
-    const points = getDoublePtr(d.mem!, points_ptr, ntriangles * 6);
-    const colors = getGmColorPtr(d.mem!, colors_ptr, ntriangles);
+};
 
-    for (let i = 0; i < ntriangles; i++) {
-      const p_off = i * 6;
-      triangles.push({
-        a: [points[p_off + 0], points[p_off + 1]],
-        b: [points[p_off + 2], points[p_off + 3]],
-        c: [points[p_off + 4], points[p_off + 5]],
-        col: colors[i],
-      });
-    }
-    d.cmds.push([
-      'triangles',
-      triangles,
-    ]);
+const audio_gapi = {
+  create_audio: (data_ptr: Ptr, frame_count: number, channels: number, sample_rate: number): number => {
+    const handle = d.audio_counter++;
+
+    const wasm_buffer = (d.inst!.exports.memory as WebAssembly.Memory).buffer;
+    const pcm_data_view = new Float32Array(wasm_buffer, data_ptr, frame_count * channels);
+    const pcm_data_copy = pcm_data_view.slice();
+    self.postMessage({
+      type: 'create-audio',
+      handle,
+      pcm_data: pcm_data_copy,
+      channels,
+      sample_rate,
+      frame_count,
+    });
+
+    return handle;
   },
+  play_audio: (handle: number, loop: number): number => {
+    self.postMessage({ type: 'play-audio', handle, loop: loop !== 0 });
+    return 0;
+  },
+  stop_audio: (handle: number): number => {
+    self.postMessage({ type: 'stop-audio', handle });
+    return 0;
+  },
+  free_audio: (handle: number): number => {
+    self.postMessage({ type: 'free-audio', handle });
+    return 0;
+  },
+};
+
+const gapi = {
+  ...draw_gapi,
+  ...image_gapi,
+  ...audio_gapi,
+  init: (width: number, height: number, title: CharPtr) => {
+    self.postMessage({
+      type: 'resize',
+      size: [width, height],
+    });
+    const txt = takeString(d.mem!, title);
+    self.postMessage({
+      type: 'set-title',
+      title: txt,
+    });
+    d.last_t = Date.now();
+    console.info(`gm_init called, with dimensions ${width}x${height} and title: \`${txt}\``)
+  },
+  log: function(txt: CharPtr) {
+    console.log(takeString(d.mem!, txt));
+  },
+  quit: () => {
+    d.running = false;
+    console.info("gm_quit called");
+  },
+
+  set_background_color: (col: GmColor) => {
+    self.postMessage({
+      type: 'set-background-color',
+      color: col,
+    });
+  },
+  mouse_get: (x_ptr: DoublePtr, y_ptr: DoublePtr) => {
+    setDoublePtr(d.mem!, x_ptr, [d.mouse.x]);
+    setDoublePtr(d.mem!, y_ptr, [d.mouse.y]);
+    return 0;
+  },
+  mouse_down: () => d.mouse.down ? 1 : 0,
+
+  resize: (width: number, height: number) => {
+    self.postMessage({ type: 'resize', size: [width, height] });
+  },
+  fullscreen: (full: number) => {
+    self.postMessage({ type: 'fullscreen', fullscreen: full != 0 });
+  },
+  runs: () => d.running ? 1 : 0,
+  key_down: (t: number, k: number) => {
+    return d.keyboard.down.has(String.fromCodePoint(t, k)) ? 1 : 0;
+  },
+
   yield: (dt_ptr: CharPtr) => {
     self.postMessage({
       type: 'draw',
@@ -262,4 +304,5 @@ const gapi = {
     d.last_t = now;
     return d.running ? 1 : 0;
   },
+
 };
