@@ -3,19 +3,29 @@ module gama
 import os
 import term
 import time
+import strings
 
 @[unsafe]
 fn generate_c_bytearray(data_ptr &u8, data_size u64) string {
-	mut byte_str := ''
+	mut byte_str := strings.new_builder(int(data_size) * 7)
+	mut p1k := data_size / 1000
+	if p1k < 10 {
+		p1k = 10
+	}
 
 	for i in 0 .. data_size {
 		b := data_ptr[i]
-		byte_str += '0x${b.hex()}, '
+		byte_str.write_string('0x${b.hex()}, ')
 		if (i + 1) % 16 == 0 {
-			byte_str += '\n\t'
+			byte_str.write_string('\n\t')
+		}
+		if i != 0 && i % p1k == 0 {
+			percent := (f64(i) / f64(data_size)) * f64(100)
+			print('\r[${percent:5}%]')
 		}
 	}
-	return byte_str
+	print('\r[100.00%]')
+	return byte_str.str()
 }
 
 @[unsafe]
@@ -273,7 +283,7 @@ pub fn (p Project) bake(inst Installation, clean bool) ! {
 	for asset in files_to_bake {
 		baked_count++
 		percentage := (baked_count * 100) / files_to_bake.len
-		progress_bar := '[${percentage:3}%] Baking ${asset.handler_kind}: ${os.file_name(asset.src_path)}'
+		progress_bar := '[00.00%] [${percentage:3}%] Baking ${asset.handler_kind}: ${os.file_name(asset.src_path)}'
 		print('\r' + left_justify(progress_bar, 80, ' '))
 		mut stdout := os.stdout()
 		stdout.flush()
