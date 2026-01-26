@@ -127,8 +127,7 @@ static inline int gm_load_audio(gmAudio *audio, const char *path) {
       gapi_create_audio(audio_data.data, audio_data.n_frames,
                         audio_data.n_channels, audio_data.sample_rate);
 
-  // Free the intermediate CPU-side data buffer now that it's in the backend.
-  gm_audio_data_free(&audio_data);
+  // gm_audio_data_free(&audio_data);
   audio->handle = handle;
 
   return 0;

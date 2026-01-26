@@ -1,3 +1,5 @@
+#!/usr/bin/env -S v -cc clang crun
+
 module main
 
 import cli
@@ -87,7 +89,7 @@ fn main() {
 		commands:    [
 			cli.Command{
 				name:        'create'
-				usage:       'create'
+				usage:       'create [name]'
 				description: 'Create a new gama project with the assistant'
 				execute:     generator_assistant
 			},
@@ -376,12 +378,11 @@ fn main() {
 					println(term.fail_message('Error launching the app build executable: ${err}'))
 				}
 			}
-			else {
-				app.setup()
-				app.parse(os.args)
-			}
+			else {}
 		}
 	}
+	app.setup()
+	app.parse(os.args)
 }
 
 @[unsafe]
@@ -397,16 +398,18 @@ fn generator_assistant(cmd cli.Command) ! {
 		return err
 	}
 	println(term.ok_message('Loaded installation with gama version ${gama_version} and ${templates.len} templates'))
-	mut name := ''
+	mut name := cmd.args[0] or { '' }
 	nameloop: for {
-		println('Enter the project name, the project name should only contain lowercase letters, numbers, and underscores')
 		mut rm := false
-		for c in os.input(term.blue('> ')).runes() {
-			n := if c >= `A` && c <= `Z` { c - (`A` - `a`) } else { c } // convert to lower
-			if (n >= `a` && n <= `z`) || (n >= `0` && n <= `9`) || n == `_` {
-				name += n.str()
-			} else {
-				rm = true
+		if name == '' {
+			println('Enter the project name, the project name should only contain lowercase letters, numbers, and underscores')
+			for c in os.input(term.blue('> ')).runes() {
+				n := if c >= `A` && c <= `Z` { c - (`A` - `a`) } else { c } // convert to lower
+				if (n >= `a` && n <= `z`) || (n >= `0` && n <= `9`) || n == `_` {
+					name += n.str()
+				} else {
+					rm = true
+				}
 			}
 		}
 		if rm {

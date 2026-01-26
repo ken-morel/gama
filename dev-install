@@ -1,0 +1,4 @@
+#!/usr/bin/fish
+#
+echo '#!/usr/bin/env /home/engon/gama/gama/cli.v' | tee /usr/bin/gama
+chmod +x /usr/bin/gama

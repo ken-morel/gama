@@ -1,6 +1,12 @@
 #ifndef GM_POSITION_H_INCLUDED
 #define GM_POSITION_H_INCLUDED
 
+#define gm_pos_plus(a, b) gmpos(a.x + b.x, a.y + b.y)
+#define gm_pos_minus(a, b) gmpos(a.x - b.x, a.y - b.y)
+#define gm_pos_scalar(a, f) gmpos(a.x *f, a.y *f)
+#define gm_pos_mul(a, b) gmpos(a.x *b.x, a.y *b.y)
+#define gm_pos_dot(a, b) (a.x * b.x + a.y * b.y)
+
 #include "_math.h"
 
 /**
@@ -46,7 +52,7 @@ static inline void gm_pos_reset(gmPos *p) {
  * @param p The `gmPos` vector.
  * @return The magnitude of the vector.
  */
-static inline double gm_pos_magniture(gmPos p) {
+static inline double gm_pos_magnitude(gmPos p) {
   return sqrt(p.x * p.x + p.y * p.y);
 }
 

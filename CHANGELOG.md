@@ -2,6 +2,7 @@
 
 ## v0.1.1-dev5
 
+- You can now use `gama create 'project name'` Thanks to a little trick
 - Added `gama clean` and fixed `gama update` commands.
 - Added support for backing normal files.
 

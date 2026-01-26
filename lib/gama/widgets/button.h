@@ -14,35 +14,36 @@
  * @brief Structure defining the visual theme for a button widget.
  */
 typedef struct {
-  int enabled;              /**< Whether the button is interactive (1) or disabled (0). */
+  int enabled; /**< Whether the button is interactive (1) or disabled (0). */
 
-  double scale;             /**< Default scale of the button. */
-  gmColor background;       /**< Background color when normal. */
-  gmColor border;           /**< Border color when normal. */
-  gmColor text;             /**< Text color when normal. */
+  double scale;       /**< Default scale of the button. */
+  gmColor background; /**< Background color when normal. */
+  gmColor border;     /**< Border color when normal. */
+  gmColor text;       /**< Text color when normal. */
 
   struct {
-    gmColor background;     /**< Background color when focused/hovered. */
-    gmColor border;         /**< Border color when focused/hovered. */
-    double scale;           /**< Scale when focused/hovered. */
-    gmColor text;           /**< Text color when focused/hovered. */
+    gmColor background; /**< Background color when focused/hovered. */
+    gmColor border;     /**< Border color when focused/hovered. */
+    double scale;       /**< Scale when focused/hovered. */
+    gmColor text;       /**< Text color when focused/hovered. */
   } focussed; /**< Theme properties when the button is focused or hovered. */
 
   struct {
-    gmColor background;     /**< Background color when active/pressed. */
-    gmColor border;         /**< Border color when active/pressed. */
-    double scale;           /**< Scale when active/pressed. */
-    gmColor text;           /**< Text color when active/pressed. */
-  } active; /**< Theme properties when the button is active (mouse button down on it). */
+    gmColor background; /**< Background color when active/pressed. */
+    gmColor border;     /**< Border color when active/pressed. */
+    double scale;       /**< Scale when active/pressed. */
+    gmColor text;       /**< Text color when active/pressed. */
+  } active; /**< Theme properties when the button is active (mouse button down
+               on it). */
 
   struct {
-    gmColor background;     /**< Background color when disabled. */
-    gmColor border;         /**< Border color when disabled. */
-    gmColor text;           /**< Text color when disabled. */
-  } disabled; /**< Theme properties when the button is disabled. */
+    gmColor background; /**< Background color when disabled. */
+    gmColor border;     /**< Border color when disabled. */
+    gmColor text;       /**< Text color when disabled. */
+  } disabled;           /**< Theme properties when the button is disabled. */
 
-  double border_thickness;  /**< Thickness of the button border. */
-  const char *font;         /**< Font used for button text. */
+  double border_thickness; /**< Thickness of the button border. */
+  const char *font;        /**< Font used for button text. */
 } gmwButtonTheme;
 
 /**
@@ -83,7 +84,7 @@ gmwButtonTheme gmwButton = {.enabled = 1,
                                 },
 
                             .border_thickness = 0.01,
-                            .font = "default-ui"};
+                            .font = ""};
 
 /**
  * @brief Creates and renders an interactive button widget.
@@ -148,4 +149,3 @@ int gmw_button(double x, double y, double width, double height,
 }
 
 #endif // GM_BUTTON_H_INCLUDED
-
