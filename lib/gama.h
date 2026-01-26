@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #ifndef STBI_NO_SIMD
 #define STBI_NO_SIMD
 #endif // STBI_NO_SIMD
@@ -22,3 +20,10 @@
 #include "gama/key.h"
 #include "gama/physics.h"
 #include "gama/system.h"
+
+#ifdef __ZIG_CC__
+#include <assert.h>
+#define gm_static_assert static_assert
+#else
+#define gm_static_assert(expr, msg)
+#endif

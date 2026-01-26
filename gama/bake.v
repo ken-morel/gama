@@ -5,6 +5,8 @@ import term
 import time
 import strings
 
+const bkmsg = 'Baked data has invalid size. Sorry. Try building again and contacting gama'
+
 @[unsafe]
 fn generate_c_bytearray(data_ptr &u8, data_size u64) string {
 	mut byte_str := strings.new_builder(int(data_size) * 7)
@@ -51,6 +53,7 @@ fn bake_mesh_data(mesh C.gm3Mesh, path string, fname string) !string {
 #define ${flag}
 
 #include <gama/3d/mesh.h> // Contains the deserialization function
+#include <assert.h>
 
 // Baked mesh data for ${os.file_name(path)}
 static const unsigned char _${fname}_data[];
@@ -58,13 +61,19 @@ static const unsigned int _${fname}_len;
 static inline gm3Mesh ${fname}();
 //////////
 static const unsigned int _${fname}_len = ${data_size};
-static const unsigned char _${fname}_data[] = {
+static const unsigned char _${fname}_data[${data_size}] = {
 	${byte_str}
 };
+gm3Mesh _${fname}_mesh;
+
+gm_static_assert(sizeof(_${fname}_data) == _${fname}_len, "${bkmsg}");
 static inline gm3Mesh ${fname}() {
-	gm3Mesh mesh;
-	gm3_mesh_deserialize(&mesh, _${fname}_data, _${fname}_len);
-	return mesh;
+	static int loaded = 0;
+	if(!done) {
+		gm3_mesh_deserialize(&_${fname}_mesh, _${fname}_data, _${fname}_len);
+		loaded = 1;
+	}
+	return _${fname}_mesh;
 }
 #endif // ${flag}
 '
@@ -106,6 +115,7 @@ pub fn bake_img(path string, fname string) !string {
 #ifndef ${flag}
 #define ${flag}
 #include <gama/image.h>
+#include <assert.h>
 
 // Baked image data for ${os.file_name(path)}
 static const unsigned char _${fname}_data[];
@@ -116,8 +126,15 @@ static const unsigned int _${fname}_len = ${bytes.len};
 static const unsigned char _${fname}_data[] = {
 	${byte_str}
 };
+gmImage _${fname}_image;
+gm_static_assert(sizeof(_${fname}_data) == _${fname}_len, "${bkmsg}");
 static inline gmImage ${fname}() {
-	return gm_image_create_from_memory(_${fname}_data, _${fname}_len);
+	static int loaded = 0;
+	if(!loaded) {
+		_${fname}_image = gm_image_create_from_memory(_${fname}_data, _${fname}_len);
+		loaded = 1;
+	}
+	return _${fname}_image;
 }
 
 #endif // ${flag}
@@ -143,12 +160,13 @@ pub fn bake_data(path string, fname string) !string {
 #include <gama/compress.h>
 
 
-static const unsigned char ${fname}_data_compressed[${data.compressed}] = {
+static const unsigned char ${fname}_data_compressed[] = {
 	${byte_str}
 };
 
 static unsigned char ${fname}_data[${data.original}] = {0};
 
+gm_static_assert(sizeof(_${fname}_data_compressed) == ${data.compressed}, "${bkmsg}");
 static inline unsigned char* ${fname}(size_t* size) {
 	static int decompressed = 0;
 	*size = ${data.original};

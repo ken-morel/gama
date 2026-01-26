@@ -142,7 +142,8 @@ int gmw_button(double x, double y, double width, double height,
 
   // Text (already center-based)
   if (text) {
-    gm_draw_text(x, y, text, gmwButton.font, fontsize * scale, fg);
+    gm_draw_text(x, y - fontsize / 10, text, gmwButton.font, fontsize * scale,
+                 fg);
   }
 
   return hovered;
