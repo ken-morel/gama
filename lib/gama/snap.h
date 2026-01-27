@@ -41,10 +41,7 @@ void gm_unsnap(int id) {
 
 void gm_snaped_cancel() { _gm_snapping = 0; }
 
-int32_t gm_snap(gmImage *img, int handle) {
-  img->handle = handle;
-  return gapi_snap(handle, &img->width, &img->height);
-}
+int32_t gm_snap(int handle) { return gapi_snap(handle); }
 
 int gm_snaped(int id) {
   if (id == 0)
@@ -67,7 +64,7 @@ int gm_snaped(int id) {
     return 1;
   } else if (_gm_snapping == id) {
     gmImage snap;
-    if (0 == gm_snap(&snap, id)) {
+    if (0 == gm_snap(id)) {
       int found = 0;
       for (size_t i = 0; i < GM_MAX_SNAPS; i++) {
         if (_gm_snaped[i] == 0) {

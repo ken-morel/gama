@@ -412,7 +412,7 @@ extern int32_t
 #ifdef __ZIG_CC__
     __attribute((import_module("gapi"), import_name("snap")))
 #endif
-    gapi_snap(int32_t handle, int32_t *width, int32_t *height);
+    gapi_snap(int32_t handle);
 
 extern int32_t
 #ifdef __ZIG_CC__

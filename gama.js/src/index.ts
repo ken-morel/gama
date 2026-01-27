@@ -194,6 +194,7 @@ export default class Gama {
         } else {
           this.sizemode = "fixed";
           this.resize(w, h);
+          this.updateSize();
         }
         break;
       case 'set-title':
@@ -317,6 +318,13 @@ export default class Gama {
             this.audioPlaying.delete(handle);
           }
           this.audioBuffers.delete(handle);
+        }
+        break;
+      case 'quit':
+        {
+          this.#worker.terminate();
+          this.ctx.front.clearRect(0, 0, this.ctx.front.canvas.width, this.ctx.front.canvas.height);
+          this.ctx.back.clearRect(0, 0, this.ctx.back.canvas.width, this.ctx.back.canvas.height);
         }
         break;
     }
@@ -462,6 +470,16 @@ export default class Gama {
       } case 'image-part': {
         const [handle, sx, sy, sw, sh, x, y, w, h] = args as [number, number, number, number, number, number, number, number, number, number];
         ctx.drawImage(this.images[handle], sx, sy, sw, sh, ...this._c_rect(x, y, w, h));
+        break;
+      } case 'clear': {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        break;
+      } case 'snap': {
+        const [handle] = args as [number];
+        const canv = new OffscreenCanvas(ctx.canvas.width, ctx.canvas.height);
+        const cctx = canv.getContext('2d')!;
+        cctx.drawImage(ctx.canvas, 0, 0);
+        this.images[handle] = canv;
         break;
       }
     }
@@ -625,7 +643,7 @@ export default class Gama {
   public attach(canv: HTMLCanvasElement): void {
     this.output = canv.getContext('2d');
 
-    const cb = () => { if (this.sizemode == "natural") this.updateSize(); };
+    const cb = () => { this.updateSize(); };
 
     try {
       window.addEventListener('resize', cb);
@@ -640,10 +658,12 @@ export default class Gama {
    * Used when `sizemode` is "natural".
    */
   public updateSize(): void {
-    if (this.output) {
-      const rect = this.output.canvas.getBoundingClientRect();
-      this.resize(rect.width, rect.height);
-    }
+    if (this.sizemode == "natural") {
+      if (this.output) {
+        const rect = this.output.canvas.getBoundingClientRect();
+        this.resize(rect.width, rect.height);
+      }
+    } else if (this.sizemode == "fixed") { }
   }
 
 
@@ -673,7 +693,7 @@ export default class Gama {
       this.yielding.mouse.y = coords[1];
       this.yielding.mouse.down = true;
     });
-    elt.addEventListener('mouseup', e => {
+    window.addEventListener('mouseup', e => {
       const r = elt.getBoundingClientRect();
       const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
       this.yielding.mouse.x = coords[0];

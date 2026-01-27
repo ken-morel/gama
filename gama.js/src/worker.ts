@@ -1,7 +1,7 @@
 import { GmColor } from "./color";
 import GamaWASI from "./wasi.js";
 
-import { CharPtr, DoublePtr, getDoublePtr, getGmColorPtr, Ptr, setDoublePtr, takeString } from "./wasm-utils";
+import { CharPtr, DoublePtr, U32Ptr, getDoublePtr, getGmColorPtr, Ptr, setDoublePtr, takeString, setU32Ptr } from "./wasm-utils";
 import { readYieldResult } from "./sab";
 import { GmKeyCode } from "./keyboard";
 
@@ -162,6 +162,12 @@ const draw_gapi = {
       triangles,
     ]);
   },
+  clear: () => {
+    d.cmds.push(['clear']);
+  },
+  snap: (handle: number) => {
+    d.cmds.push(['snap', handle]);
+  }
 };
 
 const image_gapi = {
@@ -246,12 +252,21 @@ const gapi = {
     d.last_t = Date.now();
     console.info(`gm_init called, with dimensions ${width}x${height} and title: \`${txt}\``)
   },
-  log: function(txt: CharPtr) {
+  log: (txt: CharPtr) => {
     console.log(takeString(d.mem!, txt));
+  },
+  log_error: (txt: CharPtr) => {
+    console.error(takeString(d.mem!, txt));
+  },
+  log_warning: (txt: CharPtr) => {
+    console.warn(takeString(d.mem!, txt));
   },
   quit: () => {
     d.running = false;
     console.info("gm_quit called");
+    self.postMessage({
+      type: 'quit',
+    });
   },
 
   set_background_color: (col: GmColor) => {
@@ -259,6 +274,10 @@ const gapi = {
       type: 'set-background-color',
       color: col,
     });
+  },
+  get_size: (width: U32Ptr, height: U32Ptr) => {
+    setU32Ptr(d.mem!, width, [d.size[0]]);
+    setU32Ptr(d.mem!, height, [d.size[1]]);
   },
   mouse_get: (x_ptr: DoublePtr, y_ptr: DoublePtr) => {
     setDoublePtr(d.mem!, x_ptr, [d.mouse.x]);
