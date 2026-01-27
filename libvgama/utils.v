@@ -44,3 +44,15 @@ fn get_time() f64 {
 fn gapi_log(message &char) {
 	println(term.gray('[log]: ${message.vstring()}'))
 }
+
+@[export: 'gapi_log_error']
+@[unsafe]
+fn gapi_log_error(message &char) {
+	println(term.fail_message('[error]: ${message.vstring()}'))
+}
+
+@[export: 'gapi_log_warning']
+@[unsafe]
+fn gapi_log_warning(message &char) {
+	println(term.warn_message('[warning]: ${message.vstring()}'))
+}
