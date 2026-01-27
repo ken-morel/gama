@@ -86,7 +86,7 @@ fn gapi_draw_image_part(handle i32, sx u32, sy u32, sw u32, sh u32, x f64, y f64
 fn gapi_snap(handle i32, width &u32, height &u32) i32 {
 	mut ret := -3
 	mut retptr := &ret
-	gapi_wait_queue()
+	gapi_sync()
 	queue_fn(fn [handle, width, height, mut retptr] () {
 		path := os.join_path(gapi_dir__, 'screenshot${handle}.png')
 		sapp.screenshot_png(path) or {
@@ -109,7 +109,7 @@ fn gapi_snap(handle i32, width &u32, height &u32) i32 {
 		}
 		println(term.ok_message('[vgama]: Snapped ${handle} to ${path}'))
 	})
-	gapi_wait_queue()
+	gapi_sync()
 	return ret
 }
 
@@ -117,6 +117,7 @@ fn gapi_snap(handle i32, width &u32, height &u32) i32 {
 fn gapi_clear() i32 {
 	queue_fn(fn () {
 		gapi_ctx__.end(how: .clear)
+		gapi_ctx__.begin()
 	})
 	return 0
 }

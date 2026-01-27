@@ -426,4 +426,10 @@ extern int32_t
 #endif
     gapi_clear();
 
+extern void // wait for all drawing operations in the queue to finish
+#ifdef __ZIG_CC__
+    __attribute((import_module("gapi"), import_name("sync")))
+#endif
+    gapi_sync();
+
 #endif // GM_GAPI_H_INCLUDED

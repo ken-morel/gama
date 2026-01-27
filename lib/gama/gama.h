@@ -144,7 +144,10 @@ static inline void gm_quit() { return gapi_quit(); }
  * @brief Sets the background color of the window.
  * @param c The color to set as the background.
  */
-void gm_background(gmColor c) { return gapi_set_background_color(c); }
+void gm_background(gmColor c) {
+  gmWindow.background = c;
+  gapi_set_background_color(c);
+}
 
 /**
  * @brief Resizes the application window.
@@ -169,6 +172,7 @@ void gm_init(int width, int height, const char *title) {
   gmWindow.height = height;
   gmWindow.prevHeight = height;
   gmWindow.prevWidth = width;
+  gmWindow.background = GM_BLACK;
   char msg[100];
   if (code != 0) {
     snprintf(msg, sizeof(msg),

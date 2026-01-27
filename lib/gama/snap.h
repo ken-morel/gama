@@ -3,6 +3,7 @@
 
 #include "draw.h"
 #include "log.h"
+#include "window.h"
 #include <stdio.h>
 #ifndef GM_MAX_SNAPS
 #define GM_MAX_SNAPS 50
@@ -11,6 +12,8 @@
 #include "image.h"
 #include "position.h"
 #ifndef GM_NO_GAPI
+
+void gm_background(gmColor c);
 
 int _gm_snaped[GM_MAX_SNAPS];
 int _gm_snapping = 0;
@@ -55,7 +58,12 @@ int gm_snaped(int id) {
   if (_gm_snapping == 0 || _gm_snapping != id) {
     // clears previous snap
     _gm_snapping = id; // clear and record next frame
-    gm_clear();
+    // gapi_set_background_color(GM_TRANSPARENT);
+    gapi_sync();
+    gapi_clear();
+    gapi_sync();
+    gapi_set_background_color(gmWindow.background);
+    // gapi_sync();
     return 1;
   } else if (_gm_snapping == id) {
     gmImage snap;
@@ -73,11 +81,9 @@ int gm_snaped(int id) {
         _gm_order_snaps();
         _gm_snaped[GM_MAX_SNAPS - 1] = id;
       }
-      _gm_snapping = 0;
-      return 0;
-    } else {
-      return 1;
     }
+    _gm_snapping = 0;
+    return 0;
   } else {
     gm_log_error("This should not happen! unexpected gm_snaped branch");
     return -1;
