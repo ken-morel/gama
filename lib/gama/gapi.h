@@ -69,6 +69,24 @@ extern void
     __attribute__((import_module("gapi"), import_name("log")))
 #endif
     gapi_log(const char *message);
+/**
+ * @brief Logs a message to the platform's console.
+ * @param message The null-terminated string to log.
+ */
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("log_error")))
+#endif
+    gapi_log_error(const char *message);
+/**
+ * @brief Logs a message to the platform's console.
+ * @param message The null-terminated string to log.
+ */
+extern void
+#ifdef __ZIG_CC__
+    __attribute__((import_module("gapi"), import_name("log_warning")))
+#endif
+    gapi_log_warning(const char *message);
 
 // --- Game Loop ---
 /**
@@ -234,7 +252,7 @@ extern int32_t
  * @param height The height of the image.
  * @return A unique handle (ID) for the created image on success, 0 on failure.
  */
-extern uint32_t
+extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("create_image")))
 #endif
@@ -255,7 +273,7 @@ extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("draw_image")))
 #endif
-    gapi_draw_image(uint32_t handle, double x, double y, double width,
+    gapi_draw_image(int32_t handle, double x, double y, double width,
                     double height);
 /**
  * @brief Draws a part of an image referenced by its handle on the screen.
@@ -274,7 +292,7 @@ extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("draw_image_part")))
 #endif
-    gapi_draw_image_part(uint32_t handle, uint32_t slice_x, uint32_t slice_y,
+    gapi_draw_image_part(int32_t handle, uint32_t slice_x, uint32_t slice_y,
                          uint32_t slice_width, uint32_t slice_height, double x,
                          double y, double width, double height);
 
@@ -348,7 +366,7 @@ extern int32_t
  * @return A unique handle (ID) for the created audio resource on success, 0 on
  * failure.
  */
-extern uint32_t
+extern int32_t
 #ifdef __ZIG_CC__
     __attribute__((import_module("gapi"), import_name("create_audio")))
 #endif
@@ -389,5 +407,29 @@ extern int32_t
     __attribute__((import_module("gapi"), import_name("free_audio")))
 #endif
     gapi_free_audio(uint32_t handle);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute((import_module("gapi"), import_name("snap")))
+#endif
+    gapi_snap(int32_t handle, int32_t *width, int32_t *height);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute((import_module("gapi"), import_name("get_size")))
+#endif
+    gapi_get_size(uint32_t *width, uint32_t *height);
+
+extern int32_t
+#ifdef __ZIG_CC__
+    __attribute((import_module("gapi"), import_name("clear")))
+#endif
+    gapi_clear();
+
+extern void // wait for all drawing operations in the queue to finish
+#ifdef __ZIG_CC__
+    __attribute((import_module("gapi"), import_name("sync")))
+#endif
+    gapi_sync();
 
 #endif // GM_GAPI_H_INCLUDED

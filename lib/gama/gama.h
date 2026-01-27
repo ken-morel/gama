@@ -11,9 +11,11 @@
 #define GM_GAMA_H_INCLUDED
 #include "draw.h"
 #include "gapi.h"
+#include "snap.h"
 #include "stdio.h"
 #include "t.h"
 #include "widgets/frame.h"
+#include "window.h"
 
 #ifdef GM_ARGC_MAIN
 int main(int, char **);
@@ -62,13 +64,6 @@ void gm_logo(double x, double y, double s) {
   gm_draw_rectangle(x + (-s / 2) + (left_thickness / 2) + (s / 2 * (1 - ratio)),
                     y, left_thickness, s, GM_GAMA);
 }
-
-/**
- * @brief Logs a message to the platform's console.
- * @param txt The text message to log.
- */
-void gm_log(const char *txt) { return gapi_log(txt); }
-
 /**
  * @brief Enables or disables the built-in FPS counter display.
  * @param show Boolean flag to show (1) or hide (0) the FPS counter.
@@ -110,6 +105,14 @@ static inline int gm_yield() {
     _display_fps = _fps;
   }
 
+  gmWindow.prevHeight = gmWindow.height;
+  gmWindow.prevWidth = gmWindow.width;
+  gapi_get_size(&gmWindow.width, &gmWindow.height);
+  gmWindow.resized = gmWindow.prevHeight != gmWindow.height ||
+                     gmWindow.prevWidth != gmWindow.width;
+  if (gmWindow.resized)
+    gm_unsnap(0);
+
   if (__gm_show_fps) {
     char fps_text[20] = {0}; // ERROR: use fps
     snprintf(fps_text, sizeof(fps_text), "fps: %.2f", _display_fps);
@@ -140,7 +143,10 @@ static inline void gm_quit() { return gapi_quit(); }
  * @brief Sets the background color of the window.
  * @param c The color to set as the background.
  */
-void gm_background(gmColor c) { return gapi_set_background_color(c); }
+void gm_background(gmColor c) {
+  gmWindow.background = c;
+  gapi_set_background_color(c);
+}
 
 /**
  * @brief Resizes the application window.
@@ -161,13 +167,17 @@ void gm_resize(int width, int height) { return gapi_resize(width, height); }
  */
 void gm_init(int width, int height, const char *title) {
   int code = gapi_init(width, height, title);
+  gmWindow.width = width;
+  gmWindow.height = height;
+  gmWindow.prevHeight = height;
+  gmWindow.prevWidth = width;
+  gmWindow.background = GM_BLACK;
   char msg[100];
-
   if (code != 0) {
     snprintf(msg, sizeof(msg),
              "Error starting gama, initialization exited with non zero code %d",
              code);
-    gapi_log(msg);
+    gapi_log_error(msg);
   }
   gm_background(GM_BLACK);
 }

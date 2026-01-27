@@ -2,9 +2,19 @@
 
 ## v0.1.1-dev5
 
+
 - You can now use `gama create 'project name'` Thanks to a little trick
 - Added `gama clean` and fixed `gama update` commands.
 - Added support for backing normal files.
+- Implemented caching and snaping of the canvas, it's slow but overall performance increased,
+  especially in cached 3d apps. Also added cache invalidation on resize.
+
+
+### gapi
+
+- added logging functions `gm_log`, `gm_log_error` and `gm_log_warning`
+- finally created `gm_get_size`
+- Added back `gm_sync`
 
 ## v0.1.1-dev4 || v0.1.1-rc1
 
