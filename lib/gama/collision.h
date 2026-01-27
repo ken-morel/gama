@@ -1,6 +1,7 @@
 /**
  * @file collision.h
- * @brief Defines collision structures and provides functions for 2D collision detection.
+ * @brief Defines collision structures and provides functions for 2D collision
+ * detection.
  *
  * This file contains the core logic for detecting collisions between different
  * types of physics bodies (rectangles and circles) and structures to hold
@@ -9,20 +10,25 @@
 #ifndef GM_COLLISION_H_INCLUDED
 #define GM_COLLISION_H_INCLUDED
 #include "body.h"
-#include "system.h" // For gmSystem
 #include <math.h>
+#include <string.h>
 
 /**
- * @brief Structure to store detailed information about a collision between two bodies.
+ * @brief Structure to store detailed information about a collision between two
+ * bodies.
  */
 typedef struct gm_collision {
-  gmBody *bodies[2]; /**< Pointers to the two bodies involved in the collision. */
-  gmPos normals;     /**< The normal vector of the collision, pointing from bodies[0] to bodies[1]. */
-  double penetration; /**< The penetration depth of the collision (how much bodies overlap). */
-  double since;       /**< The total time the bodies have been in collision (for continuous collision detection). */
-  gmSystem *sys;     /**< Pointer to the physics system managing this collision (can be NULL). */
+  gmBody
+      *bodies[2]; /**< Pointers to the two bodies involved in the collision. */
+  gmPos normals;  /**< The normal vector of the collision, pointing from
+                     bodies[0] to bodies[1]. */
+  double penetration; /**< The penetration depth of the collision (how much
+                         bodies overlap). */
+  double since;       /**< The total time the bodies have been in collision (for
+                         continuous collision detection). */
+  struct gm_system *sys; /**< Pointer to the physics system managing this
+                    collision (can be NULL). */
 } gmCollision;
-
 
 // ---------------------------------------------------------------------------
 // ----------------------------- Collision Detection -------------------------
@@ -70,7 +76,8 @@ static inline int gm_circle_vs_circle(gmBody *a, gmBody *b) {
 }
 /**
  * @internal
- * @brief Checks for collision between a circle and an Axis-Aligned Bounding Box (AABB).
+ * @brief Checks for collision between a circle and an Axis-Aligned Bounding Box
+ * (AABB).
  * @param circle Pointer to the circular body.
  * @param rect Pointer to the rectangular body.
  * @return 1 if the circle and rectangle overlap, 0 otherwise.
@@ -96,19 +103,22 @@ static inline int gm_circle_vs_aabb(const gmBody *circle, const gmBody *rect) {
 
 // Main collision detection dispatcher
 /**
- * @brief Detects a collision between two physics bodies based on their collider types.
+ * @brief Detects a collision between two physics bodies based on their collider
+ * types.
  *
  * This function dispatches to specific collision tests (e.g., AABB vs AABB,
- * Circle vs Circle, Circle vs AABB) based on the `collider_type` of the input bodies.
+ * Circle vs Circle, Circle vs AABB) based on the `collider_type` of the input
+ * bodies.
  *
  * @param a Pointer to the first body.
  * @param b Pointer to the second body.
- * @return A dynamically allocated `gmCollision` structure if a collision occurs,
- *         otherwise NULL. The caller is responsible for freeing the returned
+ * @return A dynamically allocated `gmCollision` structure if a collision
+ * occurs, otherwise NULL. The caller is responsible for freeing the returned
  *         `gmCollision` object if it's not managed by a `gmSystem`.
  */
-gmCollision *gm_collision_detect(gmBody *a, gmBody *b) {
+int gm_collision_detect(gmCollision *c, gmBody *a, gmBody *b) {
   int collided = 0;
+  memset(c, 0, sizeof(*c));
   if (a->collider_type == GM_COLLIDER_RECT &&
       b->collider_type == GM_COLLIDER_RECT) {
     collided = gm_aabb_vs_aabb(a, b);
@@ -126,15 +136,14 @@ gmCollision *gm_collision_detect(gmBody *a, gmBody *b) {
     collided = gm_circle_vs_aabb(b, a);
   }
   if (!collided)
-    return NULL; // No collision for other combinations
-  gmCollision *collision = malloc(sizeof(gmCollision));
-  collision->bodies[0] = a;
-  collision->bodies[1] = b;
-  collision->normals = gmpos(0, 0); // Initialize to zero
-  collision->penetration = 0;      // Initialize to zero
-  collision->since = 0;
-  collision->sys = NULL;
-  return collision;
+    return 0; // No collision for other combinations
+  c->bodies[0] = a;
+  c->bodies[1] = b;
+  c->normals = gmpos(0, 0); // Initialize to zero
+  c->penetration = 0;       // Initialize to zero
+  c->since = 0;
+  c->sys = NULL;
+  return 1;
 }
 
 /**
@@ -162,7 +171,8 @@ int gm_body_contains(gmBody *body, double x, double y) {
 }
 
 /**
- * @brief Checks if the mouse cursor is currently within a given rectangular area.
+ * @brief Checks if the mouse cursor is currently within a given rectangular
+ * area.
  * @param x The x-coordinate of the center of the rectangle.
  * @param y The y-coordinate of the center of the rectangle.
  * @param w The width of the rectangle.

@@ -6,13 +6,12 @@
  * This file defines the `gmSystem` structure and functions for creating,
  * populating, and destroying a physics simulation environment.
  */
+
 #ifndef GM_SYSTEM_H_INCLUDED
 #define GM_SYSTEM_H_INCLUDED
 #include "body.h"
 #include "body_list.h"
 #include "position.h"
-
-struct gm_collision;
 
 /**
  * @brief Structure representing a physics system containing bodies and
