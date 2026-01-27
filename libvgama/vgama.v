@@ -41,8 +41,8 @@ __global (
 	gapi_queue__        chan []GapiTask
 	gapi_buff__         []GapiTask
 	gapi_end_frame__    chan bool
-	gapi_images__       map[u32]gg.Image
-	gapi_image_count__  u32
+	gapi_images__       map[i32]gg.Image
+	gapi_image_count__  u16
 	// viewport
 	gapi_game_w__       int
 	gapi_game_h__       int
@@ -270,6 +270,14 @@ fn gapi_resize(w i32, h i32) {
 	queue_fn(fn [w, h] () {
 		gapi_ctx__.resize(w, h)
 	})
+}
+
+@[export: 'gapi_get_size']
+@[unsafe]
+fn gapi_get_size(w &u32, h &u32) {
+	size := gapi_ctx__.window_size()
+	*w = u32(size.width)
+	*h = u32(size.height)
 }
 
 @[export: 'gapi_set_background_color']

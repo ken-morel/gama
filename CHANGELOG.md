@@ -2,9 +2,19 @@
 
 ## v0.1.1-dev5
 
+
 - You can now use `gama create 'project name'` Thanks to a little trick
 - Added `gama clean` and fixed `gama update` commands.
 - Added support for backing normal files.
+
+### gama.h
+
+Implemented caching, snapping and screenshots.
+
+### gapi
+
+- added logging functions `gm_log`, `gm_log_error` and `gm_log_warning`
+- finally created `gm_get_size`
 
 ## v0.1.1-dev4 || v0.1.1-rc1
 
