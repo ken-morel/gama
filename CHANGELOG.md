@@ -10,7 +10,6 @@
   especially in cached 3d apps. Also added cache invalidation on resize.
 
 
-
 ### gapi
 
 - added logging functions `gm_log`, `gm_log_error` and `gm_log_warning`
