@@ -63,7 +63,7 @@ int gm_snaped(int id) {
     gapi_clear();
     gapi_sync();
     gapi_set_background_color(gmWindow.background);
-    // gapi_sync();
+    gapi_sync();
     return 1;
   } else if (_gm_snapping == id) {
     gmImage snap;

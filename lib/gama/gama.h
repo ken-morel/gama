@@ -11,7 +11,6 @@
 #define GM_GAMA_H_INCLUDED
 #include "draw.h"
 #include "gapi.h"
-#include "log.h"
 #include "snap.h"
 #include "stdio.h"
 #include "t.h"
