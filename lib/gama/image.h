@@ -150,10 +150,16 @@ gmImage gm_image_create_from_memory(const unsigned char *buffer, int len) {
  * @param i The image to draw.
  * @param x The x-coordinate of the center of the image.
  * @param y The y-coordinate of the center of the image.
- * @param w The width to draw the image.
- * @param h The height to draw the image.
+ * @param w The width to draw the image use 0 for automatic width.
+ * @param h The height to draw the image use 0 for automatic height.
  */
 void gm_image_draw(gmImage i, double x, double y, double w, double h) {
+  if (h == 0 && w == 0)
+    h = 1;
+  if (h == 0)
+    h = ((double)i.height / i.width) * w;
+  else if (w == 0)
+    w = ((double)i.width / i.height) * h;
   gapi_draw_image(i.handle, x, y, w, h);
 }
 
