@@ -13,6 +13,7 @@
 #define MA_NO_RESOURCE_MANAGER
 #define MA_NO_THREADING
 #define MA_NO_ENGINE
+#define MA_NO_FLAC
 
 #include "../miniaudio.h"
 
@@ -21,7 +22,7 @@
  */
 typedef struct {
   uint32_t handle;
-} gmAudio;
+} gmSound;
 
 #include <stdbool.h>
 
@@ -122,7 +123,7 @@ void gm_audio_data_free(gmAudioData *audio_data) {
  * @param path The file path to the audio file (e.g., .wav, .ogg, .mp3).
  * @return A gmAudio object. The handle will be 0 if loading fails.
  */
-static inline int gm_load_audio(gmAudio *audio, const char *path) {
+static inline int gm_load_sound(gmSound *audio, const char *path) {
   audio->handle = 0;
   gmAudioData audio_data;
   int ret;
@@ -141,7 +142,7 @@ static inline int gm_load_audio(gmAudio *audio, const char *path) {
   return 0;
 }
 
-static inline int gm_load_audio_from_memory(gmAudio *audio,
+static inline int gm_load_sound_from_memory(gmSound *audio,
                                             const unsigned char *data,
                                             size_t len) {
   audio->handle = 0;
@@ -168,7 +169,7 @@ static inline int gm_load_audio_from_memory(gmAudio *audio,
  * @param audio The gmAudio object to play.
  * @param loop If true, the sound will play continuously until stopped.
  */
-static inline int gm_play_audio(gmAudio audio, bool loop) {
+static inline int gm_play_sound(gmSound audio, bool loop) {
   if (audio.handle > 0) {
     return gapi_play_audio(audio.handle, loop);
   } else {
@@ -181,7 +182,7 @@ static inline int gm_play_audio(gmAudio audio, bool loop) {
  *
  * @param audio The gmAudio object to stop.
  */
-static inline int gm_stop_audio(gmAudio audio) {
+static inline int gm_stop_sound(gmSound audio) {
   if (audio.handle > 0) {
     return gapi_stop_audio(audio.handle);
   } else {
@@ -196,7 +197,7 @@ static inline int gm_stop_audio(gmAudio audio) {
  *
  * @param audio The gmAudio object to free.
  */
-static inline int gm_free_audio(gmAudio audio) {
+static inline int gm_free_sound(gmSound audio) {
   if (audio.handle > 0) {
     return gapi_free_audio(audio.handle);
   } else {

@@ -465,11 +465,19 @@ export default class Gama {
         break;
       } case 'image': {
         const [handle, x, y, w, h] = args as [number, number, number, number, number];
-        ctx.drawImage(this.images[handle], ...this._c_rect(x, y, w, h));
+        let rect = this._c_rect(x, y, w, h);
+        if (rect[2] == 0 && rect[3] == 0)
+          rect = [0, 0, ctx.canvas.width, ctx.canvas.height]
+
+        if (handle in this.images)
+          ctx.drawImage(this.images[handle], ...rect);
+        else console.warn("Image ", handle, " does not exits")
         break;
       } case 'image-part': {
         const [handle, sx, sy, sw, sh, x, y, w, h] = args as [number, number, number, number, number, number, number, number, number, number];
-        ctx.drawImage(this.images[handle], sx, sy, sw, sh, ...this._c_rect(x, y, w, h));
+        if (handle in this.images)
+          ctx.drawImage(this.images[handle], sx, sy, sw, sh, ...this._c_rect(x, y, w, h));
+        else console.warn("Image ", handle, "does not exist");
         break;
       } case 'clear': {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -480,6 +488,7 @@ export default class Gama {
         const cctx = canv.getContext('2d')!;
         cctx.drawImage(ctx.canvas, 0, 0);
         this.images[handle] = canv;
+        console.log("screenshoted canvas as ", handle)
         break;
       }
     }

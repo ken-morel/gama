@@ -9,7 +9,6 @@ import term
 import time
 import rand
 
-#flag -std=c99
 #flag -DWIN32_FULL
 #flag -static
 #flag -static-libgcc

@@ -180,6 +180,10 @@ void gm_init(int width, int height, const char *title) {
     gapi_log_error(msg);
   }
   gm_background(GM_BLACK);
+  for (size_t i = 0; i < 5; i++) {
+    gm_logo(0, 0, 1);
+    gm_yield();
+  }
 }
 
 /**

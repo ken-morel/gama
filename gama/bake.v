@@ -72,12 +72,10 @@ static const unsigned int _${fname}_len;
 static inline gm3Mesh ${fname}();
 //////////
 static const unsigned int _${fname}_len = ${data_size};
-static const unsigned char _${fname}_data[${data_size}] = {
-	${byte_str}
-};
+static const unsigned char _${fname}_data[${data_size}] = ${byte_str};
 gm3Mesh _${fname}_mesh;
 
-gm_static_assert(sizeof(_${fname}_data) == _${fname}_len, "${bkmsg}");
+gm_static_assert(sizeof(_${fname}_data) == _${fname}_len + 1, "${bkmsg}");
 static inline gm3Mesh ${fname}() {
 	static int loaded = 0;
 	if(!done) {
@@ -134,18 +132,57 @@ static const unsigned int _${fname}_len;
 static inline gmImage ${fname}();
 //////////
 static const unsigned int _${fname}_len = ${bytes.len};
-static const unsigned char _${fname}_data[] = {
-	${byte_str}
-};
-gmImage _${fname}_image;
-gm_static_assert(sizeof(_${fname}_data) == _${fname}_len, "${bkmsg}");
+static const unsigned char _${fname}_data[] = ${byte_str};
+gmImage ${fname}_image;
+gm_static_assert(sizeof(_${fname}_data) == _${fname}_len + 1, "${bkmsg}");
 static inline gmImage ${fname}() {
 	static int loaded = 0;
 	if(!loaded) {
-		_${fname}_image = gm_image_create_from_memory(_${fname}_data, _${fname}_len);
+		${fname}_image = gm_image_create_from_memory(_${fname}_data, _${fname}_len);
 		loaded = 1;
 	}
-	return _${fname}_image;
+	return ${fname}_image;
+}
+
+#endif // ${flag}
+'
+}
+
+@[unsafe]
+pub fn bake_sound(path string, fname string) !string {
+	bytes := os.read_bytes(path)!
+
+	data := C.gm_compress(bytes.data, bytes.len)
+	flag := 'GM_ASSET_SOUND_${fname.to_upper()}_INCLUDED'
+
+	byte_str := generate_c_bytearray(data.data, u64(data.compressed))
+	defer {
+		C.gm_compressed_free(data)
+	}
+
+	return '
+#ifndef ${flag}
+#define ${flag}
+
+#include <gama/compress.h>
+#include <gama/sound.h>
+#include <gama/assert.h>
+#include <gama/log.h>
+
+
+static const unsigned char _${fname}_data_compressed[] = ${byte_str};
+static unsigned char _${fname}_data[${data.original}] = {0};
+gm_static_assert(sizeof(_${fname}_data_compressed) == ${data.compressed} + 1, "${bkmsg}");
+static gmSound ${fname}_sound = {0};
+
+static inline gmSound ${fname}() {
+	static int loaded = 0;
+	if(!loaded) {
+		gm_decompress_to(_${fname}_data_compressed, ${data.compressed}, _${fname}_data, ${data.original});
+		if (gm_load_sound_from_memory(&${fname}_sound, _${fname}_data, ${data.original}))
+		    gm_log_error("Error loading audio");
+	}
+	return ${fname}_sound;
 }
 
 #endif // ${flag}
@@ -176,7 +213,7 @@ static const unsigned char _${fname}_data_compressed[] = ${byte_str};
 
 static unsigned char _${fname}_data[${data.original}] = {0};
 
-gm_static_assert(sizeof(_${fname}_data_compressed) == ${data.compressed}, "${bkmsg}");
+gm_static_assert(sizeof(_${fname}_data_compressed) == ${data.compressed} + 1, "${bkmsg}");
 static inline unsigned char* ${fname}(size_t* size) {
 	static int decompressed = 0;
 	*size = ${data.original};
@@ -253,6 +290,13 @@ const asset_handlers = [
 		handler:    bake_obj
 	},
 	AssetHandler{
+		kind:       'Sound'
+		suffix:     '_sound'
+		scan_dir:   'sounds'
+		extensions: ['.wav', '.mp3', '.ogg']
+		handler:    bake_sound
+	},
+	AssetHandler{
 		kind:       'Image'
 		suffix:     '_image'
 		scan_dir:   'images'
@@ -321,7 +365,7 @@ pub fn (p Project) bake(inst Installation, clean bool) ! {
 		suffix := asset.handler.suffix
 
 		base_name := os.file_name(asset.src_path)[0..os.file_name(asset.src_path).len - ext.len]
-		var_name := base_name.replace('-', '_').replace('.', '_') + suffix
+		var_name := base_name.replace('-', '_').replace('.', '_').replace(' ', '_') + suffix
 
 		content := unsafe {
 			baker(asset.src_path, var_name) or {

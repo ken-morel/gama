@@ -204,7 +204,8 @@ const image_gapi = {
 };
 
 const audio_gapi = {
-  create_audio: (data_ptr: Ptr, frame_count: number, channels: number, sample_rate: number): number => {
+  create_audio: (data_ptr: Ptr, frame_count_bigint: bigint, channels: number, sample_rate: number): number => {
+    const frame_count = Number(frame_count_bigint);
     const handle = d.audio_counter++;
 
     const wasm_buffer = (d.inst!.exports.memory as WebAssembly.Memory).buffer;

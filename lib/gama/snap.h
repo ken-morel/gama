@@ -43,6 +43,8 @@ void gm_snaped_cancel() { _gm_snapping = 0; }
 
 int32_t gm_snap(int handle) { return gapi_snap(handle); }
 
+int32_t gm_draw_snap(int handle) { return gapi_draw_image(handle, 0, 0, 0, 0); }
+
 int gm_snaped(int id) {
   if (id == 0)
     return 0;

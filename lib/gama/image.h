@@ -162,6 +162,9 @@ void gm_image_draw(gmImage i, double x, double y, double w, double h) {
     w = ((double)i.width / i.height) * h;
   gapi_draw_image(i.handle, x, y, w, h);
 }
+void gm_image_draw_id(int id, double x, double y, double w, double h) {
+  gapi_draw_image(id, x, y, w, h);
+}
 
 /**
  * @brief Draws a rectangular sub-region of an image.
