@@ -6,6 +6,14 @@
 #include <stdlib.h> // For malloc and free
 
 #define MINIAUDIO_IMPLEMENTATION
+#define MA_NO_DEVICE_IO
+#define MA_ENABLE_NULL
+#define MA_ENABLE_ONLY_SPECIFIC_BACKENDS
+// BUG: bug source, not knowing the use
+#define MA_NO_RESOURCE_MANAGER
+#define MA_NO_THREADING
+#define MA_NO_ENGINE
+
 #include "../miniaudio.h"
 
 /**
@@ -119,6 +127,27 @@ static inline int gm_load_audio(gmAudio *audio, const char *path) {
   gmAudioData audio_data;
   int ret;
   ret = gm_audio_data_load(&audio_data, path);
+  if (ret != 0) {
+    return ret;
+  }
+
+  uint32_t handle =
+      gapi_create_audio(audio_data.data, audio_data.n_frames,
+                        audio_data.n_channels, audio_data.sample_rate);
+
+  // gm_audio_data_free(&audio_data);
+  audio->handle = handle;
+
+  return 0;
+}
+
+static inline int gm_load_audio_from_memory(gmAudio *audio,
+                                            const unsigned char *data,
+                                            size_t len) {
+  audio->handle = 0;
+  gmAudioData audio_data;
+  int ret;
+  ret = gm_audio_data_load_from_memory(&audio_data, data, len);
   if (ret != 0) {
     return ret;
   }

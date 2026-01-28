@@ -14,18 +14,29 @@ fn generate_c_bytearray(data_ptr &u8, data_size u64) string {
 	if p1k < 10 {
 		p1k = 10
 	}
+	byte_str.write_string('"')
+	mut llen := 0
 
 	for i in 0 .. data_size {
 		b := data_ptr[i]
-		byte_str.write_string('0x${b.hex()}, ')
-		if (i + 1) % 16 == 0 {
-			byte_str.write_string('\n\t')
+		if false && b >= 32 && b <= 126 {
+			byte_str.write_byte(b)
+			llen++
+		} else {
+			// convert to u8 to have 0 padding
+			byte_str.write_string('\\x${b.hex()}')
+			llen += 4
+		}
+		if llen >= 100 {
+			byte_str.write_string('"\n\t"')
+			llen = 0
 		}
 		if i != 0 && i % p1k == 0 {
 			percent := (f64(i) / f64(data_size)) * f64(100)
 			print('\r[${percent:5}%]')
 		}
 	}
+	byte_str.write_string('"')
 	print('\r[100.00%]')
 	return byte_str.str()
 }
@@ -53,7 +64,7 @@ fn bake_mesh_data(mesh C.gm3Mesh, path string, fname string) !string {
 #define ${flag}
 
 #include <gama/3d/mesh.h> // Contains the deserialization function
-#include <assert.h>
+#include <gama/assert.h>
 
 // Baked mesh data for ${os.file_name(path)}
 static const unsigned char _${fname}_data[];
@@ -115,7 +126,7 @@ pub fn bake_img(path string, fname string) !string {
 #ifndef ${flag}
 #define ${flag}
 #include <gama/image.h>
-#include <assert.h>
+#include <gama/assert.h>
 
 // Baked image data for ${os.file_name(path)}
 static const unsigned char _${fname}_data[];
@@ -158,23 +169,22 @@ pub fn bake_data(path string, fname string) !string {
 #define ${flag}
 
 #include <gama/compress.h>
+#include <gama/assert.h>
 
 
-static const unsigned char ${fname}_data_compressed[] = {
-	${byte_str}
-};
+static const unsigned char _${fname}_data_compressed[] = ${byte_str};
 
-static unsigned char ${fname}_data[${data.original}] = {0};
+static unsigned char _${fname}_data[${data.original}] = {0};
 
 gm_static_assert(sizeof(_${fname}_data_compressed) == ${data.compressed}, "${bkmsg}");
 static inline unsigned char* ${fname}(size_t* size) {
 	static int decompressed = 0;
 	*size = ${data.original};
 	if(!decompressed) {
-		gm_decompress_to(${fname}_data_compressed, ${data.compressed}, ${fname}_data, ${data.original});
+		gm_decompress_to(_${fname}_data_compressed, ${data.compressed}, _${fname}_data, ${data.original});
 		decompressed = 1;
 	}
-	return ${fname}_data;
+	return _${fname}_data;
 }
 
 

@@ -13,7 +13,7 @@ pub:
 }
 
 pub fn (i Installation) zcc() !string {
-	return '${i.zig_exe()!} cc'
+	return '${i.zig_exe()!} cc -D__ZIG_CC__'
 }
 
 pub fn (i Installation) tcc_exe() !string {
