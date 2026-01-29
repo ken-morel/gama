@@ -12,20 +12,33 @@ fn gapi_create_image(data &u8, width u32, height u32) i32 {
 	gapi_image_count__ += 1
 	idx := gapi_image_count__ - 1
 
+	mut ret := 0
+	mut retptr := &ret
+
 	path := os.join_path(gapi_dir__, 'image-${idx}.bmp')
 
 	stbi.stbi_write_bmp(path, int(width), int(height), 4, data) or {
 		println(term.warn_message('Failed to cache image(${idx}:${width}x${height}) data to file ${path}: ${err}'))
 		return 0
 	}
-
-	img := gapi_ctx__.create_image(path) or {
-		println(term.warn_message('Failed to create gg image from cached file: ${err}'))
-		return 0
-	}
-
-	gapi_images__[idx] = img
-	return idx
+	println('Loadin written image at ${path}')
+	queue_fn(fn [path, idx, mut retptr] () {
+		println('Creating image in queue')
+		img := gapi_ctx__.create_image(path) or {
+			println(term.warn_message('Failed to create gg image from cached file: ${err}'))
+			unsafe {
+				*retptr = 0
+			}
+			return
+		}
+		gapi_images__[idx] = img
+		unsafe {
+			*retptr = idx
+		}
+	})
+	gapi_sync()
+	println('registering image')
+	return ret
 }
 
 @[export: 'gapi_draw_image']
@@ -84,10 +97,13 @@ fn gapi_draw_image_part(handle i32, sx u32, sy u32, sw u32, sh u32, x f64, y f64
 @[export: 'gapi_snap']
 @[unsafe]
 fn gapi_snap(handle i32) i32 {
+	println('Snapping to handle ${handle}')
 	mut ret := -3
 	mut retptr := &ret
-	queue_fn(fn [handle, width, height, mut retptr] () {
+	queue_fn(fn [handle, mut retptr] () {
+		println('snap worker running')
 		path := os.join_path(gapi_dir__, 'screenshot${handle}.png')
+		println('Screenshoting to ${path}')
 		sapp.screenshot_png(path) or {
 			println(term.fail_message('Error screenshoting to ${path}: ${err}'))
 			unsafe {
@@ -95,6 +111,7 @@ fn gapi_snap(handle i32) i32 {
 			}
 			return
 		}
+		println('loading screenshot file')
 		img := gapi_ctx__.create_image(path) or {
 			println(term.warn_message('Failed to create gg image from cached file: ${err}'))
 			unsafe {
@@ -102,6 +119,7 @@ fn gapi_snap(handle i32) i32 {
 			}
 			return
 		}
+		println('registering screen shot image')
 		gapi_images__[handle] = img
 		unsafe {
 			*retptr = 0

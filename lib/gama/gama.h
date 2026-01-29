@@ -29,7 +29,7 @@ int main();
  * runner. This function calls the user-defined main().
  */
 int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
     __attribute__((export_name("gama_run")))
 #endif
     gama_run() {
@@ -196,7 +196,7 @@ void gm_init(int width, int height, const char *title) {
  */
 void gm_sleep(int milliseconds);
 
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
 void gm_sleep(int m) {};
 #else
 #ifdef _WIN32

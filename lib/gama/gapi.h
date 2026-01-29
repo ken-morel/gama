@@ -23,8 +23,10 @@
  * @param title The null-terminated string for the new window title.
  */
 extern void
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("set_title")))
+#endif
 #endif
     gapi_set_title(const char *title);
 
@@ -34,8 +36,10 @@ extern void
  * @param height The new height of the window in pixels.
  */
 extern void
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("resize")))
+#endif
 #endif
     gapi_resize(const int32_t width, const int32_t height);
 
@@ -44,8 +48,10 @@ extern void
  * @param background The `gmColor` to set as the background.
  */
 extern void
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("set_background_color")))
+#endif
 #endif
     gapi_set_background_color(const gmColor background);
 
@@ -54,8 +60,10 @@ extern void
  * @param fullscreen 1 to enable fullscreen, 0 to disable.
  */
 extern void
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("fullscreen")))
+#endif
 #endif
     gapi_fullscreen(const int32_t fullscreen);
 
@@ -65,8 +73,10 @@ extern void
  * @param message The null-terminated string to log.
  */
 extern void
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("log")))
+#endif
 #endif
     gapi_log(const char *message);
 /**
@@ -74,8 +84,10 @@ extern void
  * @param message The null-terminated string to log.
  */
 extern void
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("log_error")))
+#endif
 #endif
     gapi_log_error(const char *message);
 /**
@@ -83,8 +95,10 @@ extern void
  * @param message The null-terminated string to log.
  */
 extern void
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("log_warning")))
+#endif
 #endif
     gapi_log_warning(const char *message);
 
@@ -100,8 +114,10 @@ extern void
  * @return 0 on success, non-zero on failure.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("init")))
+#endif
 #endif
     gapi_init(const int32_t width, const int32_t height, const char *title);
 
@@ -116,8 +132,10 @@ extern int32_t
  * @return 1 if the application should continue, 0 if it should exit.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("yield")))
+#endif
 #endif
     gapi_yield(double *dt); // Changed to int32_t return type
 
@@ -125,8 +143,10 @@ extern int32_t
  * @brief Requests the application to quit.
  */
 extern void
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("quit")))
+#endif
 #endif
     gapi_quit();
 
@@ -142,8 +162,10 @@ extern void
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_line")))
+#endif
 #endif
     gapi_draw_line(double x1, double y1, double x2, double y2, double thickness,
                    gmColor col);
@@ -157,8 +179,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_rect")))
+#endif
 #endif
     gapi_draw_rect(double x, double y, double w, double h, gmColor col);
 
@@ -173,8 +197,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_rounded_rect")))
+#endif
 #endif
     gapi_draw_rounded_rect(double x, double y, double w, double h, double r,
                            gmColor col);
@@ -188,8 +214,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_circle")))
+#endif
 #endif
     gapi_draw_circle(double center_x, double center_y, double radius,
                      gmColor col);
@@ -204,8 +232,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_ellipse")))
+#endif
 #endif
     gapi_draw_ellipse(double x, double y, double w, double h, gmColor col);
 
@@ -221,8 +251,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_triangle")))
+#endif
 #endif
     gapi_draw_triangle(double x1, double y1, double x2, double y2, double x3,
                        double y3, gmColor col);
@@ -236,8 +268,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_triangles")))
+#endif
 #endif
     gapi_draw_triangles(uint32_t n_triangles, double *points, gmColor *colors);
 
@@ -253,8 +287,10 @@ extern int32_t
  * @return A unique handle (ID) for the created image on success, 0 on failure.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("create_image")))
+#endif
 #endif
     gapi_create_image(const unsigned char *data, uint32_t width,
                       uint32_t height);
@@ -270,8 +306,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_image")))
+#endif
 #endif
     gapi_draw_image(int32_t handle, double x, double y, double width,
                     double height);
@@ -289,8 +327,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_image_part")))
+#endif
 #endif
     gapi_draw_image_part(int32_t handle, uint32_t slice_x, uint32_t slice_y,
                          uint32_t slice_width, uint32_t slice_height, double x,
@@ -309,8 +349,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("draw_text")))
+#endif
 #endif
     gapi_draw_text(double x, double y, double height, const char *txt,
                    const char *font, uint8_t style, gmColor col);
@@ -323,8 +365,10 @@ extern int32_t
  * @return 1 if the key is down, 0 otherwise.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("key_down")))
+#endif
 #endif
     gapi_key_down(char t, char k);
 
@@ -333,8 +377,10 @@ extern int32_t
  * @return 1 if the mouse button is down, 0 otherwise.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("mouse_down")))
+#endif
 #endif
     gapi_mouse_down();
 
@@ -345,8 +391,10 @@ extern int32_t
  * @return 0 on success.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("mouse_get")))
+#endif
 #endif
     gapi_mouse_get(double *x, double *y);
 
@@ -367,8 +415,10 @@ extern int32_t
  * failure.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("create_audio")))
+#endif
 #endif
     gapi_create_audio(const float *data, uint64_t frame_count,
                       uint32_t channels, uint32_t sample_rate);
@@ -381,8 +431,10 @@ extern int32_t
  * false).
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("play_audio")))
+#endif
 #endif
     gapi_play_audio(uint32_t handle, int32_t loop);
 
@@ -392,8 +444,10 @@ extern int32_t
  * @param handle The handle of the audio resource to stop.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("stop_audio")))
+#endif
 #endif
     gapi_stop_audio(uint32_t handle);
 
@@ -403,32 +457,42 @@ extern int32_t
  * @param handle The handle of the audio resource to free.
  */
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute__((import_module("gapi"), import_name("free_audio")))
+#endif
 #endif
     gapi_free_audio(uint32_t handle);
 
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute((import_module("gapi"), import_name("snap")))
+#endif
 #endif
     gapi_snap(int32_t handle);
 
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute((import_module("gapi"), import_name("get_size")))
+#endif
 #endif
     gapi_get_size(uint32_t *width, uint32_t *height);
 
 extern int32_t
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute((import_module("gapi"), import_name("clear")))
+#endif
 #endif
     gapi_clear();
 
 extern void // wait for all drawing operations in the queue to finish
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
+#ifdef GM_WEB
     __attribute((import_module("gapi"), import_name("sync")))
+#endif
 #endif
     gapi_sync();
 

@@ -1,7 +1,7 @@
 #ifndef GAMA_ASSERT_H_INCLUDED
 #define GAMA_ASSERT_H_INCLUDED
 
-#ifdef __ZIG_CC__
+#ifdef GM_ZIG
 #include <assert.h>
 #define gm_static_assert static_assert
 #else
