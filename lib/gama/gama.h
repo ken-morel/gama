@@ -9,6 +9,7 @@
 
 #ifndef GM_GAMA_H_INCLUDED
 #define GM_GAMA_H_INCLUDED
+#include "color.h"
 #include "draw.h"
 #include "gapi.h"
 #include "snap.h"
@@ -137,7 +138,11 @@ static inline int gm_yield() {
 /**
  * @brief Closes the window and terminates the Gama engine.
  */
-static inline void gm_quit() { return gapi_quit(); }
+static inline void gm_quit() {
+  gm_clear();
+  gm_draw_text(0, 0, "bye", "", 0.3, GM_GAMA);
+  return gapi_quit();
+}
 
 /**
  * @brief Sets the background color of the window.
@@ -182,6 +187,7 @@ void gm_init(int width, int height, const char *title) {
   gm_background(GM_BLACK);
   for (size_t i = 0; i < 5; i++) {
     gm_logo(0, 0, 1);
+    gm_draw_text(0, -0.8, "Loading...", "", 0.2, GM_GAMA);
     gm_yield();
   }
 }
