@@ -15,6 +15,15 @@ struct C.ma_engine_config {}
 @[typedef]
 struct C.ma_sound {}
 
+@[typedef]
+struct C.ma_resource_manager {}
+
+@[typedef]
+struct C.ma_resource_manager_config {}
+
+@[typedef]
+struct C.ma_resource_manager_data_buffer {}
+
 pub enum MaResult {
 	success = 0
 	error   = -1 // A generic error.
@@ -34,3 +43,10 @@ pub fn C.ma_sound_start(pSound &C.ma_sound) MaResult
 pub fn C.ma_sound_stop(pSound &C.ma_sound) MaResult
 pub fn C.ma_sound_set_looping(pSound &C.ma_sound, isLooping bool)
 pub fn C.ma_sound_is_playing(pSound &C.ma_sound) bool
+
+// Resource Manager functions
+pub fn C.ma_resource_manager_init(pConfig &C.ma_resource_manager_config, ppResourceManager &&C.ma_resource_manager) MaResult
+pub fn C.ma_resource_manager_uninit(pResourceManager &C.ma_resource_manager)
+
+// Data Source functions
+pub fn C.ma_resource_manager_data_buffer_init(pResourceManager &C.ma_resource_manager, pData &C.void, dataSize u64, pBuffer &&C.ma_resource_manager_data_buffer) MaResult
