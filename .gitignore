@@ -1,9 +1,9 @@
 /cli
-/bin
+/bin/
 /build/
-/docs
-/bin
-/compilers/zig/windows/*
-/node_modules
+/docs/
+/compilers/zig/windows/
 node_modules
 /runners/web/gama.js
+.vercel/
+.svelte-kit/
