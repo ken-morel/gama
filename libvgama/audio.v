@@ -11,18 +11,20 @@ __global (
 )
 
 // Initializes the miniaudio engine.
-@[unsafe]
+@[manualfree; unsafe]
 pub fn audio_init() {
 	gapi_audio_engine__ = &C.ma_engine(nil)
 	res := C.ma_engine_init(unsafe { nil }, &gapi_audio_engine__)
-	if res != .success {
-		println(term.fail_message('[vgama] Failed to initialize miniaudio engine: ${res}'))
-		return
+	if res == .success {
+		println(term.ok_message('[vgama] Miniaudio engine initialized.'))
+	} else {
+		println(term.fail_message('[vgama] Failed to initialize miniaudio engine'))
+		println('ma_engine_init returned result ${res}')
 	}
-	println(term.ok_message('[vgama] Miniaudio engine initialized.'))
 }
 
 // Uninitializes the miniaudio engine and frees all sound resources.
+@[manualfree]
 pub fn audio_deinit() {
 	for _, sound in gapi_sounds__ {
 		C.ma_sound_uninit(sound)
@@ -38,7 +40,7 @@ pub fn audio_deinit() {
 }
 
 @[export: 'gapi_create_audio']
-@[unsafe]
+@[manualfree; unsafe]
 fn gapi_create_audio(data &f32, frame_count u64, channels u32, sample_rate u32) u32 {
 	if gapi_audio_engine__ == unsafe { nil } {
 		println(term.fail_message('[vgama.audio] Miniaudio engine not initialized.'))

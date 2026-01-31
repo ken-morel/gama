@@ -6,9 +6,86 @@ module vgama
 #include <miniaudio.h>
 
 // --- V-to-C Enums and Constants ---
-pub enum MaResult {
-	success = 0
-	error   = -1
+pub enum MaResult as i32 {
+	success                       = 0
+	error                         = -1 // A generic error.
+	invalid_args                  = -2
+	invalid_operation             = -3
+	out_of_memory                 = -4
+	out_of_range                  = -5
+	access_denied                 = -6
+	does_not_exist                = -7
+	already_exists                = -8
+	too_many_open_files           = -9
+	invalid_file                  = -10
+	too_big                       = -11
+	path_too_long                 = -12
+	name_too_long                 = -13
+	not_directory                 = -14
+	is_directory                  = -15
+	directory_not_empty           = -16
+	at_end                        = -17
+	no_space                      = -18
+	busy                          = -19
+	io_error                      = -20
+	interrupt                     = -21
+	unavailable                   = -22
+	already_in_use                = -23
+	bad_address                   = -24
+	bad_seek                      = -25
+	bad_pipe                      = -26
+	deadlock                      = -27
+	too_many_links                = -28
+	not_implemented               = -29
+	no_message                    = -30
+	bad_message                   = -31
+	no_data_available             = -32
+	invalid_data                  = -33
+	timeout                       = -34
+	no_network                    = -35
+	not_unique                    = -36
+	not_socket                    = -37
+	no_address                    = -38
+	bad_protocol                  = -39
+	protocol_unavailable          = -40
+	protocol_not_supported        = -41
+	protocol_family_not_supported = -42
+	address_family_not_supported  = -43
+	socket_not_supported          = -44
+	connection_reset              = -45
+	already_connected             = -46
+	not_connected                 = -47
+	connection_refused            = -48
+	no_host                       = -49
+	in_progress                   = -50
+	cancelled                     = -51
+	memory_already_mapped         = -52
+
+	// General non-standard errors.
+	crc_mismatch = -100
+
+	// General miniaudio-specific errors.
+	format_not_supported      = -200
+	device_type_not_supported = -201
+	share_mode_not_supported  = -202
+	no_backend                = -203
+	no_device                 = -204
+	api_not_found             = -205
+	invalid_device_config     = -206
+	loop                      = -207
+	backend_not_enabled       = -208
+
+	// State errors.
+	device_not_initialized     = -300
+	device_already_initialized = -301
+	device_not_started         = -302
+	device_not_stopped         = -303
+
+	// Operation errors.
+	failed_to_init_backend         = -400
+	failed_to_open_backend_device  = -401
+	failed_to_start_backend_device = -402
+	failed_to_stop_backend_device  = -403
 }
 pub const ma_format_f32 = 3 // Corresponds to `ma_format_f32`
 

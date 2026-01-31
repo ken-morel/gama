@@ -31,7 +31,9 @@ int main();
  */
 int32_t
 #ifdef GM_ZCC
+#ifdef GM_WEB
     __attribute__((export_name("gama_run")))
+#endif
 #endif
     gama_run() {
 #ifdef GM_ARGC_MAIN
