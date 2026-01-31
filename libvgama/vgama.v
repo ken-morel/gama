@@ -5,7 +5,6 @@ import term
 import os
 import rand
 
-// Define miniaudio C types and declare functions
 // Use a more compatible graphics backend for Sokol on Windows.
 // #flag -Wl,-Bstatic
 // #flag -D_SGL_DEFAULT_MAX_COMMANDS=65536
@@ -193,16 +192,21 @@ fn run_gg_loop() {
 		}
 		cleanup_fn:   fn (data voidptr) {
 			gapi_gama_runs__ = false
-			// Uninitialize miniaudio engine
-			audio_deinit()
+			unsafe {
+				audio_deinit()
+			}
 		}
 		init_fn:      fn (data voidptr) {
 			update_dimensions()
 			update_virtual_dimensions()
+			unsafe {
+				audio_init()
+			}
 		}
 	)
 
 	println(term.cyan('[vgama] Starting app'))
+
 	gapi_ctx__.run()
 	println(term.cyan('[vgama] App quited'))
 	gapi_gama_runs__ = false
@@ -242,8 +246,6 @@ fn gapi_init(width int, height int, title &char) i32 {
 	gapi_end_frame__ = chan bool{cap: 0}
 	gapi_queue_wait__ = &sync.Mutex{}
 	gapi_queue_wait__.lock()
-
-	audio_init()
 
 	// Spawn the graphics thread.
 	spawn run_gg_loop()

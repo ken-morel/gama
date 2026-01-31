@@ -3,9 +3,16 @@ module vgama
 #flag -I @VMODROOT/../lib
 
 #flag -DMINIAUDIO_IMPLEMENTATION
-// Miniaudio C Interop
 #include <miniaudio.h>
 
+// --- V-to-C Enums and Constants ---
+pub enum MaResult {
+	success = 0
+	error   = -1
+}
+pub const ma_format_f32 = 3 // Corresponds to `ma_format_f32`
+
+// --- C Struct Definitions for V ---
 @[typedef]
 struct C.ma_engine {}
 
@@ -16,37 +23,25 @@ struct C.ma_engine_config {}
 struct C.ma_sound {}
 
 @[typedef]
-struct C.ma_resource_manager {}
+struct C.ma_decoder {}
 
 @[typedef]
-struct C.ma_resource_manager_config {}
+struct C.ma_decoder_config {}
 
-@[typedef]
-struct C.ma_resource_manager_data_buffer {}
+// --- C Function Declarations for V ---
 
-pub enum MaResult {
-	success = 0
-	error   = -1 // A generic error.
-}
-
-// Declared in vgama.v, but need it here too to access the global engine
+// Engine
 pub fn C.ma_engine_init(pConfig &C.ma_engine_config, ppEngine &&C.ma_engine) MaResult
 pub fn C.ma_engine_uninit(pEngine &C.ma_engine)
 
-// Miniaudio Sound API
-pub fn C.ma_sound_init_from_data_source(pEngine &C.ma_engine, pDataSource &C.ma_data_source, flags u32, pDataSourceGroup &C.ma_data_source_group, pSound &&C.ma_sound) MaResult
-pub fn C.ma_sound_init_from_file(pEngine &C.ma_engine, pFilePath &char, flags u32, pDataSourceGroup &C.ma_data_source_group, pSound &&C.ma_sound) MaResult
-pub fn C.ma_sound_init_from_memory(pEngine &C.ma_engine, pData &C.void, dataSize u64, flags u32, pDataSourceGroup &C.ma_data_source_group, pSound &&C.ma_sound) MaResult
+// Decoder (as a Data Source)
+pub fn C.ma_decoder_config_init(outputFormat u32, outputChannels u32, outputSampleRate u32) C.ma_decoder_config
+pub fn C.ma_decoder_init_memory(pData &u8, dataSize u64, pConfig &C.ma_decoder_config, ppDecoder &&C.ma_decoder) MaResult
+pub fn C.ma_decoder_uninit(pDecoder &C.ma_decoder)
 
+// Sound
+pub fn C.ma_sound_init_from_data_source(pEngine &C.ma_engine, pDataSource &C.void, flags u32, pGroup &C.void, ppSound &&C.ma_sound) MaResult
 pub fn C.ma_sound_uninit(pSound &C.ma_sound)
 pub fn C.ma_sound_start(pSound &C.ma_sound) MaResult
 pub fn C.ma_sound_stop(pSound &C.ma_sound) MaResult
 pub fn C.ma_sound_set_looping(pSound &C.ma_sound, isLooping bool)
-pub fn C.ma_sound_is_playing(pSound &C.ma_sound) bool
-
-// Resource Manager functions
-pub fn C.ma_resource_manager_init(pConfig &C.ma_resource_manager_config, ppResourceManager &&C.ma_resource_manager) MaResult
-pub fn C.ma_resource_manager_uninit(pResourceManager &C.ma_resource_manager)
-
-// Data Source functions
-pub fn C.ma_resource_manager_data_buffer_init(pResourceManager &C.ma_resource_manager, pData &C.void, dataSize u64, pBuffer &&C.ma_resource_manager_data_buffer) MaResult
