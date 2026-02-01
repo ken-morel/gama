@@ -24,6 +24,13 @@ type GapiTask = fn ()
 
 const draw_instruction_count = 10000
 
+fn breakpoint() {
+	unsafe {
+		// asm amd64 {
+		// }
+	}
+}
+
 enum GapiWinsizeMode {
 	auto
 	fixed
@@ -78,6 +85,7 @@ fn update_virtual_dimensions() {
 }
 
 fn frame(mut _ gg.Context) {
+	println('FRAME')
 	gapi_ctx__.begin()
 	gapi_ctx__.end(how: .clear)
 
@@ -164,6 +172,7 @@ fn run_gg_loop() {
 		frame_fn:     frame
 		bg_color:     gapi_bg_color__
 		fail_fn:      fn (msg string, _ voidptr) {
+			println(term.fail_message('[vgama] Application failed'))
 			println(term.fail_message(msg))
 		}
 		resized_fn:   fn (e &gg.Event, _ voidptr) {
@@ -197,16 +206,17 @@ fn run_gg_loop() {
 			}
 		}
 		init_fn:      fn (data voidptr) {
+			println('Initializing sokol')
 			update_dimensions()
 			update_virtual_dimensions()
-			unsafe {
-				audio_init()
-			}
+			// audio_init
+
+			println('    done initializing sokol')
+			breakpoint()
 		}
 	)
 
 	println(term.cyan('[vgama] Starting app'))
-
 	gapi_ctx__.run()
 	println(term.cyan('[vgama] App quited'))
 	gapi_gama_runs__ = false
@@ -239,6 +249,10 @@ fn gapi_init(width int, height int, title &char) i32 {
 	os.mkdir_all(gapi_dir__) or { term.warn_message('Could not create app temporary directory') }
 	println(term.cyan('\n[vgama] Using temporary directory: ${gapi_dir__}'))
 
+	unsafe {
+		println('Initializing miniaudio on main thread')
+		audio_init()
+	}
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
 
 	gapi_queue__ = chan []GapiTask{cap: 1000}

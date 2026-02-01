@@ -4,28 +4,29 @@ import term
 
 // Global state for the audio system
 __global (
-	gapi_sounds__       map[u32]&C.ma_sound
-	gapi_decoders__     map[u32]&C.ma_decoder // We MUST keep the decoder alive while the sound uses it
-	gapi_sound_count__  u32
-	gapi_audio_engine__ &C.ma_engine
+	gapi_sounds__            map[u32]&C.ma_sound
+	gapi_decoders__          map[u32]&C.ma_decoder // We MUST keep the decoder alive while the sound uses it
+	gapi_sound_count__       u32
+	gapi_audio_engine__      C.ma_engine
+	gapi_audio_initialized__ bool
 )
 
 // Initializes the miniaudio engine.
-@[manualfree; unsafe]
+@[unsafe]
 pub fn audio_init() {
-	gapi_audio_engine__ = &C.ma_engine(nil)
-	res := C.ma_engine_init(unsafe { nil }, &gapi_audio_engine__)
-	if res == .success {
-		println(term.ok_message('[vgama] Miniaudio engine initialized.'))
-	} else {
-		println(term.fail_message('[vgama] Failed to initialize miniaudio engine'))
-		println('ma_engine_init returned result ${res}')
+	println('Initializing audio engine')
+
+	gapi_audio_engine__ = create_audio_engine() or {
+		println(term.fail_message('[vgama] Failed to initialize miniaudio engine: ${err}'))
+		return
 	}
+	println(term.ok_message('[vgama] Miniaudio engine initialized.'))
+	gapi_audio_initialized__ = true
 }
 
 // Uninitializes the miniaudio engine and frees all sound resources.
-@[manualfree]
 pub fn audio_deinit() {
+	println('Deinitializing audio engine')
 	for _, sound in gapi_sounds__ {
 		C.ma_sound_uninit(sound)
 	}
@@ -35,14 +36,16 @@ pub fn audio_deinit() {
 	gapi_sounds__.clear()
 	gapi_decoders__.clear()
 
-	C.ma_engine_uninit(gapi_audio_engine__)
+	C.ma_engine_uninit(&gapi_audio_engine__)
+	println('   done')
 	println(term.ok_message('[vgama] Miniaudio engine uninitialized.'))
 }
 
 @[export: 'gapi_create_audio']
-@[manualfree; unsafe]
+@[unsafe]
 fn gapi_create_audio(data &f32, frame_count u64, channels u32, sample_rate u32) u32 {
-	if gapi_audio_engine__ == unsafe { nil } {
+	println('Creating audio data')
+	if !gapi_audio_initialized__ {
 		println(term.fail_message('[vgama.audio] Miniaudio engine not initialized.'))
 		return 0
 	}
@@ -62,7 +65,7 @@ fn gapi_create_audio(data &f32, frame_count u64, channels u32, sample_rate u32) 
 
 	// 3. Initialize a sound from the decoder (which acts as a data source)
 	mut sound := &C.ma_sound(nil)
-	res_sound := C.ma_sound_init_from_data_source(gapi_audio_engine__, unsafe { &C.void(decoder) },
+	res_sound := C.ma_sound_init_from_data_source(&gapi_audio_engine__, unsafe { &C.void(decoder) },
 		0, unsafe { nil }, &sound)
 	if res_sound != .success {
 		println(term.fail_message('[vgama.audio] Failed to init sound from data source: ${res_sound}'))
@@ -74,17 +77,19 @@ fn gapi_create_audio(data &f32, frame_count u64, channels u32, sample_rate u32) 
 	gapi_sound_count__ += 1
 	gapi_sounds__[gapi_sound_count__] = sound
 	gapi_decoders__[gapi_sound_count__] = decoder
-
+	println('    done creating audio')
 	return gapi_sound_count__
 }
 
 @[export: 'gapi_play_audio']
 fn gapi_play_audio(handle u32, loop_flag i32) i32 {
+	println('Playing audio')
 	if sound := gapi_sounds__[handle] {
 		C.ma_sound_set_looping(sound, loop_flag != 0)
 		res := C.ma_sound_start(sound)
 		return if res == .success { 0 } else { 1 }
 	}
+	println('    done')
 	return 1
 }
 
@@ -99,6 +104,10 @@ fn gapi_stop_audio(handle u32) i32 {
 
 @[export: 'gapi_free_audio']
 fn gapi_free_audio(handle u32) i32 {
+	println('Freeing audio')
+	defer {
+		println('    done')
+	}
 	if sound := gapi_sounds__[handle] {
 		C.ma_sound_uninit(sound)
 		gapi_sounds__.delete(handle)

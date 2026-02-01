@@ -2,11 +2,23 @@ module vgama
 
 #flag -I @VMODROOT/../lib
 
+// Configure miniaudio for Linux with engine functionality
+#flag -DMA_ENABLE_PLAYBACK
+#flag -DMA_ENABLE_CAPTURE
+#flag -DMA_ENABLE_DUPLEX
+#flag -DMA_ENABLE_RESOURCE_MANAGER
+#flag -DMA_ENABLE_ENGINE
+#flag -DMA_ENABLE_EFFECTS
+#flag -DMA_ENABLE_SDL
+#flag -DMA_ENABLE_ALSA
+#flag -DMA_ENABLE_PULSEAUDIO
+#flag -DMA_ENABLE_JACK
+#flag -DMA_ENABLE_NULL
 #flag -DMINIAUDIO_IMPLEMENTATION
 #include <miniaudio.h>
 
 // --- V-to-C Enums and Constants ---
-pub enum MaResult as i32 {
+pub enum MaResult {
 	success                       = 0
 	error                         = -1 // A generic error.
 	invalid_args                  = -2
@@ -108,8 +120,20 @@ struct C.ma_decoder_config {}
 // --- C Function Declarations for V ---
 
 // Engine
-pub fn C.ma_engine_init(pConfig &C.ma_engine_config, ppEngine &&C.ma_engine) MaResult
+pub fn C.ma_engine_init(pConfig &C.ma_engine_config, ppEngine &C.ma_engine) MaResult
+pub fn C.ma_engine_config_init() C.ma_engine_config
 pub fn C.ma_engine_uninit(pEngine &C.ma_engine)
+
+pub fn create_audio_engine() !C.ma_engine {
+	engine := C.ma_engine{}
+	config := C.ma_engine_config_init()
+	result := C.ma_engine_init(&config, &engine)
+	return if result == .success {
+		engine
+	} else {
+		error('${result}')
+	}
+}
 
 // Decoder (as a Data Source)
 pub fn C.ma_decoder_config_init(outputFormat u32, outputChannels u32, outputSampleRate u32) C.ma_decoder_config

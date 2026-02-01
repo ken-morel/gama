@@ -186,6 +186,9 @@ void gm_init(int width, int height, const char *title) {
              code);
     gapi_log_error(msg);
   }
+}
+
+void gm_loading() {
   gm_background(GM_BLACK);
   for (size_t i = 0; i < 5; i++) {
     gm_logo(0, 0, 1);

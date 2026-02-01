@@ -193,12 +193,12 @@ mut app := cli.Command{
 					description: 'Build the gama native runner'
 					execute:     fn (_ cli.Command) ! {
 						println('Building vgama for linux')
-						mut result := system('v libvgama/ -cc clang -g -os linux -shared -enable-globals -o ./runners/native/libvgama')
+						mut result := system('v libvgama/ -cc clang -showcc -g -os linux -shared -enable-globals -o ./runners/native/libvgama.so')
 						if result != 0 {
 							println(term.fail_message('vgama linux build failed'))
 						}
 						println('Building vgama for windows')
-						result = system('v libvgama -cc clang -g -os windows -shared -enable-globals -o ./runners/native/libvgama')
+						result = system('v libvgama -showcc -g -os windows -shared -enable-globals -o ./runners/native/libvgama.dll')
 						if result != 0 {
 							println(term.fail_message('vgama windows build failed'))
 						}
