@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h> // For malloc and free
+#include <stdio.h>  // For printf debugging
 
 // ==============================================================================
 // NATIVE AUDIO IMPLEMENTATION (when GM_NATIVE is defined)
@@ -24,12 +25,15 @@ static bool g_gm_audio_engine_initialized = false;
  */
 static inline int gm_audio_init() {
     if (g_gm_audio_engine_initialized) {
+        printf("[GMAUDIO] Audio engine already initialized.\n");
         return 0;
     }
     ma_result result = ma_engine_init(NULL, &g_gm_audio_engine);
     if (result != MA_SUCCESS) {
+        printf("[GMAUDIO:ERROR] Failed to initialize audio engine. Code: %d\n", result);
         return -1;
     }
+    printf("[GMAUDIO] Audio engine initialized successfully.\n");
     g_gm_audio_engine_initialized = true;
     return 0;
 }
@@ -41,6 +45,7 @@ static inline void gm_audio_uninit() {
     if (g_gm_audio_engine_initialized) {
         ma_engine_uninit(&g_gm_audio_engine);
         g_gm_audio_engine_initialized = false;
+        printf("[GMAUDIO] Audio engine uninitialized.\n");
     }
 }
 
@@ -61,16 +66,25 @@ typedef struct {
  * @return 0 on success, non-zero on failure.
  */
 static inline int gm_load_sound(gmSound *audio, const char *path) {
-    if (!audio || !g_gm_audio_engine_initialized) return -1;
+    if (!audio) {
+        printf("[GMAUDIO:ERROR] gm_load_sound: audio pointer is NULL.\n");
+        return -1;
+    }
+    if (!g_gm_audio_engine_initialized) {
+        printf("[GMAUDIO:ERROR] gm_load_sound: audio engine not initialized.\n");
+        return -1;
+    }
     audio->initialized = false;
     audio->pDecoder = NULL; // Not used when loading from file
 
-    // ma_sound_init_from_file handles all decoding and resource management internally.
+    printf("[GMAUDIO] Loading sound from file: %s\n", path);
     ma_result result = ma_sound_init_from_file(&g_gm_audio_engine, path, 0, NULL, NULL, &audio->sound);
     if (result != MA_SUCCESS) {
+        printf("[GMAUDIO:ERROR] Failed to load sound from file. Code: %d\n", result);
         return -2;
     }
     audio->initialized = true;
+    printf("[GMAUDIO] Sound loaded successfully.\n");
     return 0;
 }
 
@@ -85,30 +99,32 @@ static inline int gm_load_sound_from_memory(gmSound *audio, const unsigned char 
     if (!audio || !g_gm_audio_engine_initialized) return -1;
     audio->initialized = false;
 
-    // We need to heap-allocate the decoder because the sound will hold a pointer to it.
     audio->pDecoder = (ma_decoder*)malloc(sizeof(ma_decoder));
     if (audio->pDecoder == NULL) {
-        return -2; // Malloc failed
+        printf("[GMAUDIO:ERROR] Failed to allocate memory for decoder.\n");
+        return -2;
     }
 
-    // 1. Initialize a decoder from the in-memory file data.
+    printf("[GMAUDIO] Loading sound from memory (%zu bytes)\n", len);
     ma_result result = ma_decoder_init_memory(data, len, NULL, audio->pDecoder);
     if (result != MA_SUCCESS) {
+        printf("[GMAUDIO:ERROR] Failed to init decoder from memory. Code: %d\n", result);
         free(audio->pDecoder);
         audio->pDecoder = NULL;
-        return -3; // Failed to init decoder
+        return -3;
     }
 
-    // 2. Initialize a sound from the decoder, which acts as a data source.
     result = ma_sound_init_from_data_source(&g_gm_audio_engine, audio->pDecoder, 0, NULL, &audio->sound);
     if (result != MA_SUCCESS) {
+        printf("[GMAUDIO:ERROR] Failed to init sound from data source. Code: %d\n", result);
         ma_decoder_uninit(audio->pDecoder);
         free(audio->pDecoder);
         audio->pDecoder = NULL;
-        return -4; // Failed to init sound from data source
+        return -4;
     }
 
     audio->initialized = true;
+    printf("[GMAUDIO] Sound loaded from memory successfully.\n");
     return 0;
 }
 
@@ -119,8 +135,8 @@ static inline int gm_load_sound_from_memory(gmSound *audio, const unsigned char 
  */
 static inline int gm_free_sound(gmSound audio) {
   if (audio.initialized) {
+    printf("[GMAUDIO] Freeing sound.\n");
     ma_sound_uninit(&audio.sound);
-    // If it was loaded from memory, we also need to free the decoder.
     if (audio.pDecoder != NULL) {
         ma_decoder_uninit(audio.pDecoder);
         free(audio.pDecoder);
@@ -138,10 +154,20 @@ static inline int gm_free_sound(gmSound audio) {
  */
 static inline int gm_play_sound(gmSound audio, bool loop) {
   if (audio.initialized) {
+    printf("[GMAUDIO] Playing sound (loop: %d)...\n", loop);
     ma_sound_set_looping(&audio.sound, loop);
-    ma_sound_start(&audio.sound);
+    ma_result result = ma_sound_start(&audio.sound);
+    if (result != MA_SUCCESS) {
+        printf("[GMAUDIO:ERROR] Failed to start sound. Code: %d\n", result);
+        return 1;
+    }
+    // Check state immediately after starting
+    bool isPlaying = ma_sound_is_playing(&audio.sound);
+    bool isAtEnd = ma_sound_at_end(&audio.sound);
+    printf("[GMAUDIO] Sound state after start: isPlaying=%d, isAtEnd=%d\n", isPlaying, isAtEnd);
     return 0;
   }
+  printf("[GMAUDIO:WARN] Attempted to play uninitialized sound.\n");
   return 1;
 }
 
@@ -152,6 +178,7 @@ static inline int gm_play_sound(gmSound audio, bool loop) {
  */
 static inline int gm_stop_sound(gmSound audio) {
   if (audio.initialized) {
+    printf("[GMAUDIO] Stopping sound.\n");
     ma_sound_stop(&audio.sound);
     return 0;
   }
