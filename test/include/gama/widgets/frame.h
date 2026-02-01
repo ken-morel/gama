@@ -6,7 +6,8 @@
  * (panels) and a function to render them. Frames are typically used as
  * containers for other UI elements or for displaying information.
  */
-#pragma once
+#ifndef GAMA_WIDGETS_FRAME_H_INCLUDED
+#define GAMA_WIDGETS_FRAME_H_INCLUDED
 
 #include "../collision.h"
 #include "../draw.h"
@@ -98,3 +99,5 @@ int gmw_frame(double x, double y, double width, double height) {
   gm_draw_rectangle(x, y, sw, sh, bg);
   return hovered;
 }
+
+#endif // GAMA_WIDGETS_FRAME_H_INCLUDED

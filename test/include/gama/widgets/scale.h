@@ -6,7 +6,8 @@
  * control and a function to render an interactive slider that allows users
  * to select a value within a range.
  */
-#pragma once
+#ifndef GAMA_WIDGETS_SCALE_H_INCLUDED
+#define GAMA_WIDGETS_SCALE_H_INCLUDED
 
 #include "../animate.h"
 #include "../collision.h"
@@ -207,3 +208,5 @@ static inline int gmw_scale(double x, double y, double width, double height,
                             double *value) {
   return gmw_scale_anim(x, y, width, height, value, NULL);
 }
+
+#endif // GAMA_WIDGETS_SCALE_H_INCLUDED

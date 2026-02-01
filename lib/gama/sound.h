@@ -23,19 +23,18 @@ static ma_engine g_gm_audio_engine;
  * @return 0 on success, non-zero on failure.
  */
 static inline int gm_audio_init() {
-    ma_result result = ma_engine_init(NULL, &g_gm_audio_engine);
-    if (result != MA_SUCCESS) {
-        return -1;
-    }
-    return 0;
+  ma_result result = ma_engine_init(NULL, &g_gm_audio_engine);
+  if (result != MA_SUCCESS) {
+    return -1;
+  }
+  return 0;
 }
 
 /**
- * @brief Uninitializes the native audio engine. Must be called once at shutdown.
+ * @brief Uninitializes the native audio engine. Must be called once at
+ * shutdown.
  */
-static inline void gm_audio_uninit() {
-    ma_engine_uninit(&g_gm_audio_engine);
-}
+static inline void gm_audio_uninit() { ma_engine_uninit(&g_gm_audio_engine); }
 
 /**
  * @brief Represents a playable sound. For native builds, this is a direct
@@ -53,14 +52,16 @@ typedef struct {
  * @return 0 on success, non-zero on failure.
  */
 static inline int gm_load_sound(gmSound *audio, const char *path) {
-    if (!audio) return -1;
-    audio->initialized = false;
-    ma_result result = ma_sound_init_from_file(&g_gm_audio_engine, path, 0, NULL, NULL, &audio->sound);
-    if (result != MA_SUCCESS) {
-        return -2;
-    }
-    audio->initialized = true;
-    return 0;
+  if (!audio)
+    return -1;
+  audio->initialized = false;
+  ma_result result = ma_sound_init_from_file(&g_gm_audio_engine, path, 0, NULL,
+                                             NULL, &audio->sound);
+  if (result != MA_SUCCESS) {
+    return -2;
+  }
+  audio->initialized = true;
+  return 0;
 }
 
 /**
@@ -70,15 +71,19 @@ static inline int gm_load_sound(gmSound *audio, const char *path) {
  * @param len The length of the data in bytes.
  * @return 0 on success, non-zero on failure.
  */
-static inline int gm_load_sound_from_memory(gmSound *audio, const unsigned char *data, size_t len) {
-    if (!audio) return -1;
-    audio->initialized = false;
-    ma_result result = ma_sound_init_from_memory(&g_gm_audio_engine, data, len, 0, NULL, &audio->sound);
-    if (result != MA_SUCCESS) {
-        return -2;
-    }
-    audio->initialized = true;
-    return 0;
+static inline int gm_load_sound_from_memory(gmSound *audio,
+                                            const unsigned char *data,
+                                            size_t len) {
+  if (!audio)
+    return -1;
+  audio->initialized = false;
+  ma_result result = ma_sound_init_from_memory(&g_gm_audio_engine, data, len, 0,
+                                               NULL, &audio->sound);
+  if (result != MA_SUCCESS) {
+    return -2;
+  }
+  audio->initialized = true;
+  return 0;
 }
 
 /**
@@ -122,7 +127,6 @@ static inline int gm_free_sound(gmSound audio) {
   return 1;
 }
 
-
 // ==============================================================================
 // WEB (GAPI) AUDIO IMPLEMENTATION
 // ==============================================================================
@@ -149,21 +153,25 @@ typedef struct {
   ma_uint32 sample_rate;
 } gmAudioData;
 
-static inline int gm_audio_data_load(gmAudioData *audio_data, const char *path) {
-    ma_decoder decoder;
-    ma_decoder_config config = ma_decoder_config_init(ma_format_f32, 2, 48000);
-    if (ma_decoder_init_file(path, &config, &decoder) != MA_SUCCESS) return -1;
-    ma_decoder_get_length_in_pcm_frames(&decoder, &audio_data->n_frames);
-    audio_data->data = (ma_float*)malloc(audio_data->n_frames * decoder.outputChannels * sizeof(ma_float));
-    if (audio_data->data == NULL) {
-        ma_decoder_uninit(&decoder);
-        return -2;
-    }
-    ma_decoder_read_pcm_frames(&decoder, audio_data->data, audio_data->n_frames, NULL);
-    audio_data->n_channels = decoder.outputChannels;
-    audio_data->sample_rate = decoder.outputSampleRate;
+static inline int gm_audio_data_load(gmAudioData *audio_data,
+                                     const char *path) {
+  ma_decoder decoder;
+  ma_decoder_config config = ma_decoder_config_init(ma_format_f32, 2, 48000);
+  if (ma_decoder_init_file(path, &config, &decoder) != MA_SUCCESS)
+    return -1;
+  ma_decoder_get_length_in_pcm_frames(&decoder, &audio_data->n_frames);
+  audio_data->data = (ma_float *)malloc(
+      audio_data->n_frames * decoder.outputChannels * sizeof(ma_float));
+  if (audio_data->data == NULL) {
     ma_decoder_uninit(&decoder);
-    return 0;
+    return -2;
+  }
+  ma_decoder_read_pcm_frames(&decoder, audio_data->data, audio_data->n_frames,
+                             NULL);
+  audio_data->n_channels = decoder.outputChannels;
+  audio_data->sample_rate = decoder.outputSampleRate;
+  ma_decoder_uninit(&decoder);
+  return 0;
 }
 
 static inline int gm_load_sound(gmSound *audio, const char *path) {
@@ -172,7 +180,9 @@ static inline int gm_load_sound(gmSound *audio, const char *path) {
   if (gm_audio_data_load(&audio_data, path) != 0) {
     return -1;
   }
-  audio->handle = gapi_create_audio(audio_data.data, audio_data.n_frames, audio_data.n_channels, audio_data.sample_rate);
+  audio->handle =
+      gapi_create_audio(audio_data.data, audio_data.n_frames,
+                        audio_data.n_channels, audio_data.sample_rate);
   free(audio_data.data);
   return audio->handle == 0 ? -1 : 0;
 }

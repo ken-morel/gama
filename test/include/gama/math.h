@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM_MATH_H_INCLUDED
+#define GM_MATH_H_INCLUDED
 #ifndef GM_MATH
 #define GM_MATH
 #define _MATH_H
@@ -434,3 +434,5 @@ int max(int a, int b) { return a < b ? b : a; }
  * @return The larger of a and b.
  */
 double fmax(double a, double b) { return a < b ? b : a; }
+
+#endif // GM_MATH_H_INCLUDED

@@ -14,22 +14,15 @@ import rand
 #flag -static-libgcc
 #flag -static-libstdc++
 
-$if windows {
-	// Force Sokol to use its legacy OpenGL context for maximum compatibility on Windows,
-	// especially in VMs with basic graphics drivers.
-	#flag -DSOKOL_GL_FORCE_LEGACY
-}
+// $if windows {
+// 	// Force Sokol to use its legacy OpenGL context for maximum compatibility on Windows,
+// 	// especially in VMs with basic graphics drivers.
+// 	#flag -DSOKOL_GL_FORCE_LEGACY
+// }
 
 type GapiTask = fn ()
 
 const draw_instruction_count = 10000
-
-fn breakpoint() {
-	unsafe {
-		// asm amd64 {
-		// }
-	}
-}
 
 enum GapiWinsizeMode {
 	auto
@@ -85,7 +78,6 @@ fn update_virtual_dimensions() {
 }
 
 fn frame(mut _ gg.Context) {
-	println('FRAME')
 	gapi_ctx__.begin()
 	gapi_ctx__.end(how: .clear)
 
@@ -179,6 +171,7 @@ fn run_gg_loop() {
 			gapi_width__ = e.window_width
 			gapi_height__ = e.window_height
 			update_virtual_dimensions()
+			println(term.bg_cyan('[vgama] App resized to ${gapi_width__}x${gapi_height__}'))
 		}
 		keydown_fn:   fn (code gg.KeyCode, _ gg.Modifier, _ voidptr) {
 			if key := keys[code] {
@@ -201,13 +194,12 @@ fn run_gg_loop() {
 		}
 		cleanup_fn:   fn (data voidptr) {
 			gapi_gama_runs__ = false
+			println(term.ok_message('[vgama] Succesfull app cleanup'))
 		}
 		init_fn:      fn (data voidptr) {
-			println('Initializing sokol')
 			update_dimensions()
 			update_virtual_dimensions()
-			println('    done initializing sokol')
-			breakpoint()
+			println(term.ok_message('[vgama] Succesfull app initialization'))
 		}
 	)
 
@@ -217,7 +209,7 @@ fn run_gg_loop() {
 	gapi_gama_runs__ = false
 	gapi_queue__.close() // cancel remaining draw operaions
 	gapi_end_frame__.close()
-	println(term.cyan('[vgama] bye'))
+	println(term.bg_cyan('[vgama] bye'))
 	gapi_queue_wait__.unlock()
 
 	gapi_end_frame__ <- true or {} // close the current frame
