@@ -17,6 +17,9 @@
 #include "t.h"
 #include "widgets/frame.h"
 #include "window.h"
+#ifdef GM_NATIVE
+#include "sound.h"
+#endif
 
 #ifdef GM_ARGC_MAIN
 int main(int, char **);
@@ -173,19 +176,23 @@ void gm_resize(int width, int height) { return gapi_resize(width, height); }
  * @param title The title of the window.
  */
 void gm_init(int width, int height, const char *title) {
+
   int code = gapi_init(width, height, title);
-  gmWindow.width = width;
-  gmWindow.height = height;
-  gmWindow.prevHeight = height;
-  gmWindow.prevWidth = width;
-  gmWindow.background = GM_BLACK;
-  char msg[100];
   if (code != 0) {
+    char msg[100];
     snprintf(msg, sizeof(msg),
              "Error starting gama, initialization exited with non zero code %d",
              code);
     gapi_log_error(msg);
   }
+#ifdef GM_NATIVE
+  gm_audio_init();
+#endif
+  gmWindow.width = width;
+  gmWindow.height = height;
+  gmWindow.prevHeight = height;
+  gmWindow.prevWidth = width;
+  gmWindow.background = GM_BLACK;
 }
 
 void gm_loading() {

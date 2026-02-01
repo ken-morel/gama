@@ -11,37 +11,46 @@
 // ==============================================================================
 #ifdef GM_NATIVE
 
-// Use the full miniaudio implementation, not the decoding-only one.
 #define MINIAUDIO_IMPLEMENTATION
 #include "../miniaudio.h"
 
 // Global audio engine, managed by this header
 static ma_engine g_gm_audio_engine;
+static bool g_gm_audio_engine_initialized = false;
 
 /**
  * @brief Initializes the native audio engine. Must be called once at startup.
  * @return 0 on success, non-zero on failure.
  */
 static inline int gm_audio_init() {
-  ma_result result = ma_engine_init(NULL, &g_gm_audio_engine);
-  if (result != MA_SUCCESS) {
-    return -1;
-  }
-  return 0;
+    if (g_gm_audio_engine_initialized) {
+        return 0;
+    }
+    ma_result result = ma_engine_init(NULL, &g_gm_audio_engine);
+    if (result != MA_SUCCESS) {
+        return -1;
+    }
+    g_gm_audio_engine_initialized = true;
+    return 0;
 }
 
 /**
- * @brief Uninitializes the native audio engine. Must be called once at
- * shutdown.
+ * @brief Uninitializes the native audio engine. Must be called once at shutdown.
  */
-static inline void gm_audio_uninit() { ma_engine_uninit(&g_gm_audio_engine); }
+static inline void gm_audio_uninit() {
+    if (g_gm_audio_engine_initialized) {
+        ma_engine_uninit(&g_gm_audio_engine);
+        g_gm_audio_engine_initialized = false;
+    }
+}
 
 /**
- * @brief Represents a playable sound. For native builds, this is a direct
- *        wrapper around a miniaudio sound object.
+ * @brief Represents a playable sound. For native builds, this is a wrapper
+ *        around miniaudio objects.
  */
 typedef struct {
   ma_sound sound;
+  ma_decoder* pDecoder; // Required for sounds loaded from memory
   bool initialized;
 } gmSound;
 
@@ -52,38 +61,73 @@ typedef struct {
  * @return 0 on success, non-zero on failure.
  */
 static inline int gm_load_sound(gmSound *audio, const char *path) {
-  if (!audio)
-    return -1;
-  audio->initialized = false;
-  ma_result result = ma_sound_init_from_file(&g_gm_audio_engine, path, 0, NULL,
-                                             NULL, &audio->sound);
-  if (result != MA_SUCCESS) {
-    return -2;
-  }
-  audio->initialized = true;
-  return 0;
+    if (!audio || !g_gm_audio_engine_initialized) return -1;
+    audio->initialized = false;
+    audio->pDecoder = NULL; // Not used when loading from file
+
+    // ma_sound_init_from_file handles all decoding and resource management internally.
+    ma_result result = ma_sound_init_from_file(&g_gm_audio_engine, path, 0, NULL, NULL, &audio->sound);
+    if (result != MA_SUCCESS) {
+        return -2;
+    }
+    audio->initialized = true;
+    return 0;
 }
 
 /**
- * @brief Loads an audio file from memory and prepares it for playback.
+ * @brief Loads an audio file from an in-memory buffer and prepares it for playback.
  * @param audio Pointer to the gmSound object to initialize.
- * @param data Pointer to the file data in memory.
+ * @param data Pointer to the file data in memory (e.g., contents of a .wav file).
  * @param len The length of the data in bytes.
  * @return 0 on success, non-zero on failure.
  */
-static inline int gm_load_sound_from_memory(gmSound *audio,
-                                            const unsigned char *data,
-                                            size_t len) {
-  if (!audio)
-    return -1;
-  audio->initialized = false;
-  ma_result result = ma_sound_init_from_memory(&g_gm_audio_engine, data, len, 0,
-                                               NULL, &audio->sound);
-  if (result != MA_SUCCESS) {
-    return -2;
+static inline int gm_load_sound_from_memory(gmSound *audio, const unsigned char *data, size_t len) {
+    if (!audio || !g_gm_audio_engine_initialized) return -1;
+    audio->initialized = false;
+
+    // We need to heap-allocate the decoder because the sound will hold a pointer to it.
+    audio->pDecoder = (ma_decoder*)malloc(sizeof(ma_decoder));
+    if (audio->pDecoder == NULL) {
+        return -2; // Malloc failed
+    }
+
+    // 1. Initialize a decoder from the in-memory file data.
+    ma_result result = ma_decoder_init_memory(data, len, NULL, audio->pDecoder);
+    if (result != MA_SUCCESS) {
+        free(audio->pDecoder);
+        audio->pDecoder = NULL;
+        return -3; // Failed to init decoder
+    }
+
+    // 2. Initialize a sound from the decoder, which acts as a data source.
+    result = ma_sound_init_from_data_source(&g_gm_audio_engine, audio->pDecoder, 0, NULL, &audio->sound);
+    if (result != MA_SUCCESS) {
+        ma_decoder_uninit(audio->pDecoder);
+        free(audio->pDecoder);
+        audio->pDecoder = NULL;
+        return -4; // Failed to init sound from data source
+    }
+
+    audio->initialized = true;
+    return 0;
+}
+
+/**
+ * @brief Frees a loaded audio resource.
+ * @param audio The gmSound object to free.
+ * @return 0 on success.
+ */
+static inline int gm_free_sound(gmSound audio) {
+  if (audio.initialized) {
+    ma_sound_uninit(&audio.sound);
+    // If it was loaded from memory, we also need to free the decoder.
+    if (audio.pDecoder != NULL) {
+        ma_decoder_uninit(audio.pDecoder);
+        free(audio.pDecoder);
+    }
+    return 0;
   }
-  audio->initialized = true;
-  return 0;
+  return 1;
 }
 
 /**
@@ -114,18 +158,6 @@ static inline int gm_stop_sound(gmSound audio) {
   return 1;
 }
 
-/**
- * @brief Frees a loaded audio resource.
- * @param audio The gmSound object to free.
- * @return 0 on success.
- */
-static inline int gm_free_sound(gmSound audio) {
-  if (audio.initialized) {
-    ma_sound_uninit(&audio.sound);
-    return 0;
-  }
-  return 1;
-}
 
 // ==============================================================================
 // WEB (GAPI) AUDIO IMPLEMENTATION
@@ -142,7 +174,6 @@ typedef struct {
 // The decoding part still happens in C, even for web builds.
 #define MINIAUDIO_IMPLEMENTATION
 #define MA_NO_DEVICE_IO
-#define MA_ENABLE_NULL
 #define MA_NO_ENGINE
 #include "../miniaudio.h"
 
@@ -153,25 +184,21 @@ typedef struct {
   ma_uint32 sample_rate;
 } gmAudioData;
 
-static inline int gm_audio_data_load(gmAudioData *audio_data,
-                                     const char *path) {
-  ma_decoder decoder;
-  ma_decoder_config config = ma_decoder_config_init(ma_format_f32, 2, 48000);
-  if (ma_decoder_init_file(path, &config, &decoder) != MA_SUCCESS)
-    return -1;
-  ma_decoder_get_length_in_pcm_frames(&decoder, &audio_data->n_frames);
-  audio_data->data = (ma_float *)malloc(
-      audio_data->n_frames * decoder.outputChannels * sizeof(ma_float));
-  if (audio_data->data == NULL) {
+static inline int gm_audio_data_load(gmAudioData *audio_data, const char *path) {
+    ma_decoder decoder;
+    ma_decoder_config config = ma_decoder_config_init(ma_format_f32, 2, 48000);
+    if (ma_decoder_init_file(path, &config, &decoder) != MA_SUCCESS) return -1;
+    ma_decoder_get_length_in_pcm_frames(&decoder, &audio_data->n_frames);
+    audio_data->data = (ma_float*)malloc(audio_data->n_frames * decoder.outputChannels * sizeof(ma_float));
+    if (audio_data->data == NULL) {
+        ma_decoder_uninit(&decoder);
+        return -2;
+    }
+    ma_decoder_read_pcm_frames(&decoder, audio_data->data, audio_data->n_frames, NULL);
+    audio_data->n_channels = decoder.outputChannels;
+    audio_data->sample_rate = decoder.outputSampleRate;
     ma_decoder_uninit(&decoder);
-    return -2;
-  }
-  ma_decoder_read_pcm_frames(&decoder, audio_data->data, audio_data->n_frames,
-                             NULL);
-  audio_data->n_channels = decoder.outputChannels;
-  audio_data->sample_rate = decoder.outputSampleRate;
-  ma_decoder_uninit(&decoder);
-  return 0;
+    return 0;
 }
 
 static inline int gm_load_sound(gmSound *audio, const char *path) {
@@ -180,12 +207,18 @@ static inline int gm_load_sound(gmSound *audio, const char *path) {
   if (gm_audio_data_load(&audio_data, path) != 0) {
     return -1;
   }
-  audio->handle =
-      gapi_create_audio(audio_data.data, audio_data.n_frames,
-                        audio_data.n_channels, audio_data.sample_rate);
+  audio->handle = gapi_create_audio(audio_data.data, audio_data.n_frames, audio_data.n_channels, audio_data.sample_rate);
   free(audio_data.data);
   return audio->handle == 0 ? -1 : 0;
 }
+
+// NOTE: gm_load_sound_from_memory for web would be similar, decoding and then passing raw data to gapi_create_audio.
+// This is left unimplemented for now as the native path is the focus.
+static inline int gm_load_sound_from_memory(gmSound *audio, const unsigned char *data, size_t len) {
+    audio->handle = 0;
+    return -99; // Not implemented for web yet
+}
+
 
 static inline int gm_play_sound(gmSound audio, bool loop) {
   return audio.handle > 0 ? gapi_play_audio(audio.handle, loop) : 1;
