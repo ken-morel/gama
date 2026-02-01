@@ -398,6 +398,7 @@ extern int32_t
 #endif
     gapi_mouse_get(double *x, double *y);
 
+#ifndef GM_NATIVE
 // --- Audio Functions ---
 
 /**
@@ -463,6 +464,7 @@ extern int32_t
 #endif
 #endif
     gapi_free_audio(uint32_t handle);
+#endif // GM_NATIVE
 
 extern int32_t
 #ifdef GM_ZCC

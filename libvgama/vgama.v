@@ -201,16 +201,11 @@ fn run_gg_loop() {
 		}
 		cleanup_fn:   fn (data voidptr) {
 			gapi_gama_runs__ = false
-			unsafe {
-				audio_deinit()
-			}
 		}
 		init_fn:      fn (data voidptr) {
 			println('Initializing sokol')
 			update_dimensions()
 			update_virtual_dimensions()
-			// audio_init
-
 			println('    done initializing sokol')
 			breakpoint()
 		}
@@ -249,10 +244,6 @@ fn gapi_init(width int, height int, title &char) i32 {
 	os.mkdir_all(gapi_dir__) or { term.warn_message('Could not create app temporary directory') }
 	println(term.cyan('\n[vgama] Using temporary directory: ${gapi_dir__}'))
 
-	unsafe {
-		println('Initializing miniaudio on main thread')
-		audio_init()
-	}
 	gapi_bg_color__ = gg.rgb(100, 100, 100)
 
 	gapi_queue__ = chan []GapiTask{cap: 1000}
