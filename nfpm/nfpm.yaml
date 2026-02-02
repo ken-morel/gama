@@ -57,7 +57,8 @@ contents:
   - src: /usr/lib/libvgama.so
     dst: /usr/share/gama/runners/native/libvgama.so
     type: symlink
-
+  - src: ./runners/native/libvgama.dll
+    dst: /usr/share/gama/runners/native/libvgama.dll
   - src: ./runners/web
     dst: /usr/share/gama/runners/web
 scripts:

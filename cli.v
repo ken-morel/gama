@@ -100,7 +100,6 @@ fn main() {
 					inst := get_installation()!
 					p := get_project()!
 					p.update_toolchain(inst)!
-					println(term.ok_message('Updated toolchain successfully'))
 				}
 			},
 			cli.Command{
@@ -112,7 +111,6 @@ fn main() {
 					p.clean() or {
 						println(term.fail_message('Error cleaning the project files: ${err}'))
 					}
-					println(term.ok_message('Updated toolchain successfully'))
 				}
 			},
 			cli.Command{

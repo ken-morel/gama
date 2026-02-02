@@ -3,6 +3,8 @@
 ## v0.1.1-dev5
 
 
+- Gama bundles setups and data for both linux and windows platforms, so that new projects
+  are created with both binaries.
 - You can now use `gama create 'project name'` Thanks to a little trick
 - Added `gama clean` and fixed `gama update` commands.
 - Added support for backing normal files.

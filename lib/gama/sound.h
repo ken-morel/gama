@@ -34,6 +34,14 @@ static inline int gm_audio_init() {
         return -1;
     }
     printf("[GMAUDIO] Audio engine initialized successfully.\n");
+
+    // DEBUG: Check and set master volume.
+    float initial_volume = ma_engine_get_volume(&g_gm_audio_engine);
+    printf("[GMAUDIO:DEBUG] Initial master volume: %f\n", initial_volume);
+    ma_engine_set_volume(&g_gm_audio_engine, 1.0f);
+    printf("[GMAUDIO:DEBUG] Master volume explicitly set to 1.0\n");
+
+
     g_gm_audio_engine_initialized = true;
     return 0;
 }
@@ -137,6 +145,7 @@ static inline int gm_free_sound(gmSound audio) {
   if (audio.initialized) {
     printf("[GMAUDIO] Freeing sound.\n");
     ma_sound_uninit(&audio.sound);
+    // If it was loaded from memory, we also need to free the decoder.
     if (audio.pDecoder != NULL) {
         ma_decoder_uninit(audio.pDecoder);
         free(audio.pDecoder);
