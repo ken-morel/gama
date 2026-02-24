@@ -173,9 +173,30 @@ fn run_gg_loop() {
 			update_virtual_dimensions()
 			println(term.bg_cyan('[vgama] App resized to ${gapi_width__}x${gapi_height__}'))
 		}
-		keydown_fn:   fn (code gg.KeyCode, _ gg.Modifier, _ voidptr) {
+		keydown_fn:   fn (code gg.KeyCode, m gg.Modifier, _ voidptr) {
+			match m {
+				.ctrl {
+					gapi_pressed_keys__ << 'mc'
+				}
+				.alt {
+					gapi_pressed_keys__ << 'ma'
+				}
+				.shift {
+					gapi_pressed_keys__ << 'ms'
+				}
+				.super {
+					gapi_pressed_keys__ << 'mS'
+				}
+				else {}
+			}
 			if key := keys[code] {
-				gapi_pressed_keys__ << key
+				if m == .shift {
+					if shiftkey := shift_keys[key] {
+						gapi_pressed_keys__ << shiftkey
+					}
+				} else {
+					gapi_pressed_keys__ << key
+				}
 			}
 		}
 		move_fn:      fn (x f32, y f32, _ voidptr) {

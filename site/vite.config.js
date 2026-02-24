@@ -18,5 +18,6 @@ export default defineConfig({
       'Cross-Origin-Opener-Policy': 'same-origin',
       'Cross-Origin-Embedder-Policy': 'require-corp',
     },
+    allowedHosts: ['jealomy', 'jealomy.local', 'localhost', 'gama.rbs.cm'],
   },
 });
