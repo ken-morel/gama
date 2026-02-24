@@ -1,18 +1,20 @@
 /**
  * @file transform.h
- * @brief Defines structures and functions for 3D transformations (position, rotation, scale).
+ * @brief Defines structures and functions for 3D transformations (position,
+ * rotation, scale).
  *
  * This file provides the `gm3Transform` structure to encapsulate the
  * translation, rotation, and scaling of 3D objects, along with helper
  * functions to apply these transformations to 3D points and vectors.
  */
- #ifndef GM3_TRANSFORM_H_INCLUDED
- #define GM3_TRANSFORM_H_INCLUDED
+#ifndef GM3_TRANSFORM_H_INCLUDED
+#define GM3_TRANSFORM_H_INCLUDED
 
 #include "position.h"
 
 /**
- * @brief Represents a 3D transformation, including position, rotation, and scale.
+ * @brief Represents a 3D transformation, including position, rotation, and
+ * scale.
  */
 typedef struct {
   gm3Pos position; /**< Translation vector. */
@@ -26,8 +28,8 @@ typedef struct {
  * Initializes a transform with default position `{0, 0, 20}`, no rotation,
  * and uniform scale `{1, 1, 1}`.
  */
-const gm3Transform gm3_default_transform = {
-    .position = {0, 0, 20}, .rotation = {0}, .scale = {1, 1, 1}};
+#define gm3_default_transform                                                  \
+  (gm3Transform) { .position = {0, 0, 20}, .rotation = {0}, .scale = {1, 1, 1} }
 
 /**
  * @brief Rotates a `gm3Pos` vector by the given Euler angles (X, Y, Z).
@@ -35,7 +37,8 @@ const gm3Transform gm3_default_transform = {
  * The rotation is applied sequentially around the X, then Y, then Z axes.
  *
  * @param res A pointer to the `gm3Pos` vector to rotate (modified in place).
- * @param rot A pointer to a `gm3Pos` containing the Euler angles (radians) for rotation around X, Y, and Z axes.
+ * @param rot A pointer to a `gm3Pos` containing the Euler angles (radians) for
+ * rotation around X, Y, and Z axes.
  */
 void gm3_pos_rotate(gm3Pos *res, const gm3Pos *rot) {
   if (!res || !rot)
@@ -60,7 +63,8 @@ void gm3_pos_rotate(gm3Pos *res, const gm3Pos *rot) {
 /**
  * @brief Applies a `gm3Transform` to a `gm3Pos` vector.
  *
- * The transformation is applied in the order: scale, then rotate, then translate.
+ * The transformation is applied in the order: scale, then rotate, then
+ * translate.
  *
  * @param p A pointer to the `gm3Pos` vector to transform (modified in place).
  * @param t A pointer to the `gm3Transform` to apply.
@@ -78,13 +82,6 @@ void gm3_transform_pos(gm3Pos *p, const gm3Transform *t) {
  *
  * @return A new identity `gm3Transform` instance.
  */
-gm3Transform gm3_transform() {
-  gm3Transform t;
-  gm3_pos_reset(&t.position);
-  gm3_pos_reset(&t.rotation);
-  t.scale.x = 1;
-  t.scale.y = 1;
-  t.scale.z = 1;
-  return t;
-}
+#define gm3_transform() gm3_default_transform
+
 #endif // GM3_TRANSFORM_H_INCLUDED

@@ -16,14 +16,14 @@ typedef struct {
                  than this are clipped. */
 } gm3Camera;
 
+const gm3Camera gm3_default_camera =
+    (gm3Camera){.far_plane = 100, .near_plane = 0.01, .focal = 1.3};
+
 /**
  * @brief A default `gm3Camera` instance.
  *
  * Initializes a camera with a typical focal length and clipping planes.
  */
-static inline gm3Camera gm3_camera() {
-
-  return (gm3Camera){.far_plane = 100, .near_plane = 0.01, .focal = 1.3};
-}
+static inline gm3Camera gm3_camera() { return gm3_default_camera; }
 
 #endif // GM_3D_CAMERA_H_INCLUDED
