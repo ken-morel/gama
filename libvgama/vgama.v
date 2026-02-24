@@ -190,11 +190,14 @@ fn run_gg_loop() {
 				else {}
 			}
 			if key := keys[code] {
+				mut added := false
 				if m == .shift {
 					if shiftkey := shift_keys[key] {
 						gapi_pressed_keys__ << shiftkey
+						added = true
 					}
-				} else {
+				}
+				if !added {
 					gapi_pressed_keys__ << key
 				}
 			}
