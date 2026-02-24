@@ -1,0 +1,14 @@
+
+CompileFlags:
+  Add:
+    - -I../include/
+    - -Iinclude/
+    - -I../build/gen/
+    - -Ibuild/gen/
+---
+If:
+  PathMatch: .*\.h$
+CompileFlags:
+  Add:
+    - -x
+    - c
