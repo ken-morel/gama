@@ -7,3 +7,4 @@
 /node_modules
 node_modules
 /runners/web/gama.js
+/gama.js/dist

@@ -78,7 +78,7 @@ gm3Mesh _${fname}_mesh;
 gm_static_assert(sizeof(_${fname}_data) == _${fname}_len + 1, "${bkmsg}");
 static inline gm3Mesh ${fname}() {
 	static int loaded = 0;
-	if(!done) {
+	if(!loaded) {
 		gm3_mesh_deserialize(&_${fname}_mesh, _${fname}_data, _${fname}_len);
 		loaded = 1;
 	}
