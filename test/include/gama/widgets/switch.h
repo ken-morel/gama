@@ -6,7 +6,8 @@
  * toggle switch and a function to render an interactive switch that allows
  * users to toggle a boolean state.
  */
-#pragma once
+#ifndef GAMA_WIDGETS_SWITCH_H_INCLUDED
+#define GAMA_WIDGETS_SWITCH_H_INCLUDED
 
 #include "../animate.h"
 #include "../collision.h"
@@ -182,3 +183,5 @@ int gmw_switch_anim(double x, double y, double width, double height, int *value,
 int gmw_switch(double x, double y, double width, double height, int *value) {
   return gmw_switch_anim(x, y, width, height, value, NULL);
 }
+
+#endif // GAMA_WIDGETS_SWITCH_H_INCLUDED

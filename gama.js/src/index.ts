@@ -73,6 +73,12 @@ export default class Gama {
   #buffer32: Int32Array;
   /** The main canvas's 2D rendering context that displays the final output. */
   output: CanvasRenderingContext2D | null = null;
+  /** AudioContext for Web Audio API. */
+  audioContext: AudioContext | null = null;
+  /** Stores decoded AudioBuffers by their handle. */
+  audioBuffers: Map<number, AudioBuffer> = new Map();
+  /** Stores currently playing AudioBufferSourceNodes by their handle. */
+  audioPlaying: Map<number, AudioBufferSourceNode> = new Map();
 
   /** Stores input state (keyboard, mouse) to be sent to the Web Worker. */
   private yielding: YieldResult;
@@ -164,6 +170,10 @@ export default class Gama {
    */
   public async start(): Promise<void> {
     this.#worker.onmessage = (e) => this.handleWorkerMessage(e);
+
+    if (!this.audioContext) {
+      this.audioContext = new AudioContext();
+    }
     this.#worker.postMessage({
       buffer: this.buffer,
     } as WorkerStartMessage);
@@ -184,6 +194,7 @@ export default class Gama {
         } else {
           this.sizemode = "fixed";
           this.resize(w, h);
+          this.updateSize();
         }
         break;
       case 'set-title':
@@ -223,6 +234,97 @@ export default class Gama {
           ctx.putImageData(imdata, 0, 0);
 
           this.images[id] = canv;
+        }
+        break;
+      case 'create-audio':
+        {
+          if (!this.audioContext) {
+            console.error("AudioContext not initialized.");
+            break;
+          }
+          const { handle, pcm_data, channels, sample_rate, frame_count } = msg.data;
+          const audioBuffer = this.audioContext.createBuffer(
+            channels,
+            frame_count,
+            sample_rate
+          );
+
+          // Copy PCM data to the AudioBuffer
+          if (audioBuffer.copyToChannel) { // Modern way
+            for (let i = 0; i < channels; i++) {
+              audioBuffer.copyToChannel(pcm_data.slice(i * frame_count, (i + 1) * frame_count), i);
+            }
+          } else { // Fallback for older browsers
+            for (let i = 0; i < channels; i++) {
+              const channelData = audioBuffer.getChannelData(i);
+              for (let j = 0; j < frame_count; j++) {
+                channelData[j] = pcm_data[j * channels + i]; // Interleaved data
+              }
+            }
+          }
+
+          this.audioBuffers.set(handle, audioBuffer);
+        }
+        break;
+      case 'play-audio':
+        {
+          if (!this.audioContext) {
+            console.error("AudioContext not initialized.");
+            break;
+          }
+          const { handle, loop } = msg.data;
+          const audioBuffer = this.audioBuffers.get(handle);
+
+          if (!audioBuffer) {
+            console.warn(`Attempted to play unknown audio handle: ${handle}`);
+            break;
+          }
+
+          const source = this.audioContext.createBufferSource();
+          source.buffer = audioBuffer;
+          source.loop = loop;
+          source.connect(this.audioContext.destination);
+          source.start(0);
+
+          if (loop) { // Store looping sounds to be able to stop them
+            this.audioPlaying.set(handle, source);
+          } else { // Automatically remove non-looping sounds when they finish
+            source.onended = () => {
+              source.disconnect();
+              // If it was a one-shot and not explicitly stopped, it won't be in audioPlaying Map
+            };
+          }
+        }
+        break;
+      case 'stop-audio':
+        {
+          const { handle } = msg.data;
+          const source = this.audioPlaying.get(handle);
+          if (source) {
+            source.stop();
+            source.disconnect();
+            this.audioPlaying.delete(handle);
+          }
+        }
+        break;
+      case 'free-audio':
+        {
+          const { handle } = msg.data;
+          // Stop any currently playing instances of this audio
+          const playingSource = this.audioPlaying.get(handle);
+          if (playingSource) {
+            playingSource.stop();
+            playingSource.disconnect();
+            this.audioPlaying.delete(handle);
+          }
+          this.audioBuffers.delete(handle);
+        }
+        break;
+      case 'quit':
+        {
+          this.#worker.terminate();
+          this.ctx.front.clearRect(0, 0, this.ctx.front.canvas.width, this.ctx.front.canvas.height);
+          this.ctx.back.clearRect(0, 0, this.ctx.back.canvas.width, this.ctx.back.canvas.height);
         }
         break;
     }
@@ -363,11 +465,30 @@ export default class Gama {
         break;
       } case 'image': {
         const [handle, x, y, w, h] = args as [number, number, number, number, number];
-        ctx.drawImage(this.images[handle], ...this._c_rect(x, y, w, h));
+        let rect = this._c_rect(x, y, w, h);
+        if (rect[2] == 0 && rect[3] == 0)
+          rect = [0, 0, ctx.canvas.width, ctx.canvas.height]
+
+        if (handle in this.images)
+          ctx.drawImage(this.images[handle], ...rect);
+        else console.warn("Image ", handle, " does not exits")
         break;
       } case 'image-part': {
         const [handle, sx, sy, sw, sh, x, y, w, h] = args as [number, number, number, number, number, number, number, number, number, number];
-        ctx.drawImage(this.images[handle], sx, sy, sw, sh, ...this._c_rect(x, y, w, h));
+        if (handle in this.images)
+          ctx.drawImage(this.images[handle], sx, sy, sw, sh, ...this._c_rect(x, y, w, h));
+        else console.warn("Image ", handle, "does not exist");
+        break;
+      } case 'clear': {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        break;
+      } case 'snap': {
+        const [handle] = args as [number];
+        const canv = new OffscreenCanvas(ctx.canvas.width, ctx.canvas.height);
+        const cctx = canv.getContext('2d')!;
+        cctx.drawImage(ctx.canvas, 0, 0);
+        this.images[handle] = canv;
+        console.log("screenshoted canvas as ", handle)
         break;
       }
     }
@@ -531,7 +652,7 @@ export default class Gama {
   public attach(canv: HTMLCanvasElement): void {
     this.output = canv.getContext('2d');
 
-    const cb = () => { if (this.sizemode == "natural") this.updateSize(); };
+    const cb = () => { this.updateSize(); };
 
     try {
       window.addEventListener('resize', cb);
@@ -546,17 +667,18 @@ export default class Gama {
    * Used when `sizemode` is "natural".
    */
   public updateSize(): void {
-    if (this.output) {
-      const rect = this.output.canvas.getBoundingClientRect();
-      this.resize(rect.width, rect.height);
-    }
+    if (this.sizemode == "natural") {
+      if (this.output) {
+        const rect = this.output.canvas.getBoundingClientRect();
+        this.resize(rect.width, rect.height);
+      }
+    } else if (this.sizemode == "fixed") { }
   }
 
 
   public bindKeyboard(elt: EventTarget): void {
     elt.addEventListener('keydown', e => {
       this.yielding.keyboard.down.add(getKeyCode((e as KeyboardEvent).key));
-      console.log("Key down!", (e as KeyboardEvent).key);
     });
   }
 
@@ -580,7 +702,7 @@ export default class Gama {
       this.yielding.mouse.y = coords[1];
       this.yielding.mouse.down = true;
     });
-    elt.addEventListener('mouseup', e => {
+    window.addEventListener('mouseup', e => {
       const r = elt.getBoundingClientRect();
       const coords = this._js_coord(e.clientX - r.x, e.clientY - r.y);
       this.yielding.mouse.x = coords[0];

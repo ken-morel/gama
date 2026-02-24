@@ -13,14 +13,14 @@ pub:
 }
 
 pub fn (i Installation) zcc() !string {
-	return '${i.zig_exe()!} cc'
+	return '${i.zig_exe()!} cc -DGM_ZCC'
 }
 
 pub fn (i Installation) tcc_exe() !string {
 	return $if windows {
-		'"' + os.join_path(i.tcc, 'windows', 'tcc.exe') + '"'
+		'"' + os.join_path(i.tcc, 'windows', 'tcc.exe') + '" -DGM_ZCC'
 	} $else {
-		'tcc'
+		'tcc -DGM_TCC'
 	}
 }
 

@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #ifndef STBI_NO_SIMD
 #define STBI_NO_SIMD
 #endif // STBI_NO_SIMD

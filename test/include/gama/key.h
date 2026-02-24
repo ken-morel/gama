@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef GM_KEY_H_INCLUDED
+#define GM_KEY_H_INCLUDED
 /**
  * @brief Converts a character to lowercase if it's an uppercase letter.
  * @param k The character to convert.
@@ -119,3 +119,5 @@ int gm_key(char key) {
 }
 
 #endif
+
+#endif // GM_KEY_H_INCLUDED

@@ -8,8 +8,8 @@
  * and triangle assembly for the `gm3Image` output.
  */
 
- #ifndef GM3_PROJECT_H_INCLUDED
- #define GM3_PROJECT_H_INCLUDED
+#ifndef GM3_PROJECT_H_INCLUDED
+#define GM3_PROJECT_H_INCLUDED
 #include "../color.h"
 #include "../position.h"
 #include "image.h"
@@ -21,6 +21,8 @@
 #include "transform.h"
 #include <stddef.h>
 #include <stdlib.h>
+
+#include <math.h>
 
 // --- Optimized Lighting ---
 
@@ -187,12 +189,17 @@ static inline gmColor gm3_calculate_lighting(gm3Pos norm, gm3Pos face_center,
  */
 int gm3_project(gm3Image *output, const gm3Mesh *mesh,
                 const gm3Transform *transform, const gm3Scene *scene) {
-  gm3Scene _s = gm3_scene();
+  gm3Transform _t;
+  gm3Scene _s;
 
-  if (transform == NULL)
-    transform = &gm3_default_transform;
-  if (scene == NULL)
+  if (transform == NULL) {
+    _t = gm3_transform();
+    transform = &_t;
+  }
+  if (scene == NULL) {
+    _s = gm3_scene();
     scene = &_s;
+  }
 
   if (!mesh || mesh->n_vertices == 0)
     return 0;

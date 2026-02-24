@@ -18,23 +18,18 @@ pub fn (p Project) copy_build_native_artifacts(inst Installation, reset bool) ! 
 	build_dir := p.build_path('native')
 	runner_path := os.join_path(inst.runners, 'native')
 	os.mkdir_all(build_dir) or {}
-	mut src := os.join_path(runner_path, libvgama_name())
-	mut dest := os.join_path(build_dir, libvgama_name())
+	files := [
+		'libvgama.dll',
+		'libwinpthread-1.dll',
+		'libvgama.so',
+	]
 
-	if !os.exists(dest) || reset {
-		os.cp(src, dest) or { return error('Failed to copy libvgama: ${err}') }
-	}
+	for file in files {
+		mut src := os.join_path(runner_path, file)
+		mut dest := os.join_path(build_dir, file)
 
-	$if windows {
-		dest = os.join_path(build_dir, 'vgama.dll')
 		if !os.exists(dest) || reset {
-			os.cp(src, dest) or { return error('Failed to copy vgama.dll: ${err}') }
-		}
-		libwin := 'libwinpthread-1.dll'
-		src = os.join_path(runner_path, libwin)
-		dest = os.join_path(build_dir, libwin)
-		if !os.exists(dest) || reset {
-			os.cp(src, dest) or { return error('Failed to copy libwinpthread: ${err}') }
+			os.cp(src, dest) or { return error('Failed to copy ${file}: ${err}') }
 		}
 	}
 }

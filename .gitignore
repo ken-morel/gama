@@ -7,3 +7,4 @@ node_modules
 /runners/web/gama.js
 .vercel/
 .svelte-kit/
+/gama.js/dist

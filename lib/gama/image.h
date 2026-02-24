@@ -41,7 +41,8 @@ int32_t gm_image_data_load(gmImageData *data, const char *path) {
  * @return 0 on success, -1 on failure.
  */
 int32_t gm_image_data_load_from_memory(gmImageData *data,
-                                       const unsigned char *buffer, int len) {
+                                       const unsigned char *buffer,
+                                       size_t len) {
   memset(data, 0, sizeof(gmImageData));
   data->data =
       stbi_load_from_memory(buffer, len, &data->width, &data->height, NULL, 4);
@@ -149,11 +150,20 @@ gmImage gm_image_create_from_memory(const unsigned char *buffer, int len) {
  * @param i The image to draw.
  * @param x The x-coordinate of the center of the image.
  * @param y The y-coordinate of the center of the image.
- * @param w The width to draw the image.
- * @param h The height to draw the image.
+ * @param w The width to draw the image use 0 for automatic width.
+ * @param h The height to draw the image use 0 for automatic height.
  */
 void gm_image_draw(gmImage i, double x, double y, double w, double h) {
+  if (h == 0 && w == 0)
+    h = 1;
+  if (h == 0)
+    h = ((double)i.height / i.width) * w;
+  else if (w == 0)
+    w = ((double)i.width / i.height) * h;
   gapi_draw_image(i.handle, x, y, w, h);
+}
+void gm_image_draw_id(int id, double x, double y, double w, double h) {
+  gapi_draw_image(id, x, y, w, h);
 }
 
 /**

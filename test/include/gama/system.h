@@ -1,17 +1,17 @@
 /**
  * @file system.h
- * @brief Manages physics bodies, their interactions, and collision detection within a simulation.
+ * @brief Manages physics bodies, their interactions, and collision detection
+ * within a simulation.
  *
  * This file defines the `gmSystem` structure and functions for creating,
  * populating, and destroying a physics simulation environment.
  */
-#pragma once
 
+#ifndef GM_SYSTEM_H_INCLUDED
+#define GM_SYSTEM_H_INCLUDED
 #include "body.h"
 #include "body_list.h"
 #include "position.h"
-
-struct gm_collision ;
 
 /**
  * @brief Structure representing a physics system containing bodies and
@@ -19,14 +19,19 @@ struct gm_collision ;
  */
 typedef struct gm_system {
   int is_active;   /**< Whether the system is active and should be updated. */
-  gmBodies bodies; /**< List of pointers to bodies currently managed by this system. */
+  gmBodies bodies; /**< List of pointers to bodies currently managed by this
+                      system. */
 
-  struct gm_collision **collisions; /**< Array of active collision information objects. */
+  struct gm_collision *
+      *collisions; /**< Array of active collision information objects. */
 
-  gmPos velocity;     /**< Global velocity applied to all bodies in the system (e.g., wind). */
-  gmPos acceleration; /**< Global acceleration applied to all bodies (e.g., gravity). */
+  gmPos velocity;     /**< Global velocity applied to all bodies in the system
+                         (e.g., wind). */
+  gmPos acceleration; /**< Global acceleration applied to all bodies (e.g.,
+                         gravity). */
 
-  double damping; /**< Global damping factor applied to all bodies (reduces velocity over time). */
+  double damping; /**< Global damping factor applied to all bodies (reduces
+                     velocity over time). */
 } gmSystem;
 
 #include "collision.h" // Include collision.h for gmCollision definition
@@ -38,7 +43,7 @@ typedef struct gm_system {
  *
  * @return A new `gmSystem` instance.
  */
-gmSystem gm_system_create() {
+gmSystem gm_system() {
   gmSystem sys = {.is_active = 1,
                   .bodies = NULL,
                   .velocity = {0, 0},
@@ -52,7 +57,8 @@ gmSystem gm_system_create() {
  * @brief Adds a body to the physics system.
  *
  * This function adds a pointer to a `gmBody` to the system's internal list.
- * The caller remains responsible for allocating and freeing the `gmBody` itself.
+ * The caller remains responsible for allocating and freeing the `gmBody`
+ * itself.
  *
  * @param sys Pointer to the system to add the body to.
  * @param body Pointer to the `gmBody` to add.
@@ -172,3 +178,5 @@ void gm_system_destroy(gmSystem *sys) {
   gm_bodies_clear(sys->bodies);
   // Do not free individual gmBody pointers, as they are owned by the caller.
 }
+
+#endif // GM_SYSTEM_H_INCLUDED

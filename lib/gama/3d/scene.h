@@ -8,8 +8,8 @@
  * to projection and rendering functions.
  */
 
- #ifndef GM3_SCENE_H_INCLUDED
- #define GM3_SCENE_H_INCLUDED
+#ifndef GM3_SCENE_H_INCLUDED
+#define GM3_SCENE_H_INCLUDED
 #include "../position.h"
 #include "camera.h"
 #include "light.h"
@@ -30,13 +30,13 @@ typedef struct {
  * values.
  * @return A new `gm3Scene` instance.
  */
-static inline gm3Scene gm3_scene() {
-  return (gm3Scene){
-      .viewport = {2, 2},
-      .light = gm3_light(),
-      .camera = gm3_camera(),
-  };
-}
+
+#define gm3_default_scene                                                      \
+  (gm3Scene) {                                                                 \
+    .viewport = {2, 2}, .light = gm3_default_light,                            \
+    .camera = gm3_default_camera,                                              \
+  }
+#define gm3_scene() gm3_default_scene
 
 /**
  * @brief Frees any dynamically allocated memory associated with a `gm3Scene`.

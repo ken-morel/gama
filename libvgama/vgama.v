@@ -6,9 +6,7 @@ import os
 import rand
 
 // Use a more compatible graphics backend for Sokol on Windows.
-
 // #flag -Wl,-Bstatic
-
 // #flag -D_SGL_DEFAULT_MAX_COMMANDS=65536
 // #flag -D_SGL_DEFAULT_MAX_VERTICES=4194304
 
@@ -16,11 +14,11 @@ import rand
 #flag -static-libgcc
 #flag -static-libstdc++
 
-$if windows {
-	// Force Sokol to use its legacy OpenGL context for maximum compatibility on Windows,
-	// especially in VMs with basic graphics drivers.
-	#flag -DSOKOL_GL_FORCE_LEGACY
-}
+// $if windows {
+// 	// Force Sokol to use its legacy OpenGL context for maximum compatibility on Windows,
+// 	// especially in VMs with basic graphics drivers.
+// 	#flag -DSOKOL_GL_FORCE_LEGACY
+// }
 
 type GapiTask = fn ()
 
@@ -41,8 +39,8 @@ __global (
 	gapi_queue__        chan []GapiTask
 	gapi_buff__         []GapiTask
 	gapi_end_frame__    chan bool
-	gapi_images__       map[u32]gg.Image
-	gapi_image_count__  u32
+	gapi_images__       map[i32]gg.Image
+	gapi_image_count__  u16
 	// viewport
 	gapi_game_w__       int
 	gapi_game_h__       int
@@ -115,8 +113,8 @@ fn queue_fn(func GapiTask) {
 	}
 }
 
-@[export: 'gapi_wait_queue']
-fn gapi_wait_queue() {
+@[export: 'gapi_sync']
+fn gapi_sync() {
 	queue_fn(fn () {
 		gapi_queue_wait__.unlock()
 	})
@@ -130,7 +128,7 @@ fn gapi_yield(dt &f64) i32 {
 	if !gapi_gama_runs__ {
 		return 0
 	}
-	gapi_wait_queue() // wait it processes other events before sending stop
+	gapi_sync() // wait it processes other events before sending stop
 	gapi_end_frame__ <- true or { return 0 } // close the current frame
 
 	gapi_pressed_keys__ = []
@@ -166,16 +164,39 @@ fn run_gg_loop() {
 		frame_fn:     frame
 		bg_color:     gapi_bg_color__
 		fail_fn:      fn (msg string, _ voidptr) {
+			println(term.fail_message('[vgama] Application failed'))
 			println(term.fail_message(msg))
 		}
 		resized_fn:   fn (e &gg.Event, _ voidptr) {
 			gapi_width__ = e.window_width
 			gapi_height__ = e.window_height
 			update_virtual_dimensions()
+			println(term.bg_cyan('[vgama] App resized to ${gapi_width__}x${gapi_height__}'))
 		}
-		keydown_fn:   fn (code gg.KeyCode, _ gg.Modifier, _ voidptr) {
+		keydown_fn:   fn (code gg.KeyCode, m gg.Modifier, _ voidptr) {
+			match m {
+				.ctrl {
+					gapi_pressed_keys__ << 'mc'
+				}
+				.alt {
+					gapi_pressed_keys__ << 'ma'
+				}
+				.shift {
+					gapi_pressed_keys__ << 'ms'
+				}
+				.super {
+					gapi_pressed_keys__ << 'mS'
+				}
+				else {}
+			}
 			if key := keys[code] {
-				gapi_pressed_keys__ << key
+				if m == .shift {
+					if shiftkey := shift_keys[key] {
+						gapi_pressed_keys__ << shiftkey
+					}
+				} else {
+					gapi_pressed_keys__ << key
+				}
 			}
 		}
 		move_fn:      fn (x f32, y f32, _ voidptr) {
@@ -194,10 +215,12 @@ fn run_gg_loop() {
 		}
 		cleanup_fn:   fn (data voidptr) {
 			gapi_gama_runs__ = false
+			println(term.ok_message('[vgama] Succesfull app cleanup'))
 		}
 		init_fn:      fn (data voidptr) {
 			update_dimensions()
 			update_virtual_dimensions()
+			println(term.ok_message('[vgama] Succesfull app initialization'))
 		}
 	)
 
@@ -207,7 +230,7 @@ fn run_gg_loop() {
 	gapi_gama_runs__ = false
 	gapi_queue__.close() // cancel remaining draw operaions
 	gapi_end_frame__.close()
-	println(term.cyan('[vgama] bye'))
+	println(term.bg_cyan('[vgama] bye'))
 	gapi_queue_wait__.unlock()
 
 	gapi_end_frame__ <- true or {} // close the current frame
@@ -270,6 +293,14 @@ fn gapi_resize(w i32, h i32) {
 	queue_fn(fn [w, h] () {
 		gapi_ctx__.resize(w, h)
 	})
+}
+
+@[export: 'gapi_get_size']
+@[unsafe]
+fn gapi_get_size(w &u32, h &u32) {
+	size := gapi_ctx__.window_size()
+	*w = u32(size.width)
+	*h = u32(size.height)
 }
 
 @[export: 'gapi_set_background_color']

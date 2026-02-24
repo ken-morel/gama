@@ -5,7 +5,6 @@
 Gama is a lightweight, cross-platform game engine written in C, designed with simplicity and education in mind. It aims to provide a convenient and powerful way for students and beginners to create 2D games(and some real-time graphical applications) while learning the fundamentals of C programming. The engine prioritizes a minimal, clean C API, control over the game loop, and a stack-first memory philosophy.
 
 
-
 ![Gama logo](./gama.svg)
 
 

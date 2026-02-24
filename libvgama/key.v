@@ -2,6 +2,58 @@ module vgama
 
 import gg
 
+const shift_keys = {
+	// uppercase keys
+	'ca':  'cA'
+	'cb':  'cB'
+	'cc':  'cC'
+	'cd':  'cD'
+	'ce':  'cE'
+	'cf':  'cF'
+	'cg':  'cG'
+	'ch':  'cH'
+	'ci':  'cI'
+	'cj':  'cJ'
+	'ck':  'cK'
+	'cl':  'cL'
+	'cm':  'cM'
+	'cn':  'cN'
+	'co':  'cO'
+	'cp':  'cP'
+	'cq':  'cQ'
+	'cr':  'cR'
+	'cs':  'cS'
+	'ct':  'cT'
+	'cu':  'cU'
+	'cv':  'cV'
+	'cw':  'cW'
+	'cx':  'cX'
+	'cy':  'cY'
+	'cz':  'cZ'
+	// modified keys
+	'c,':  'c<'
+	'c.':  'c>'
+	'c/':  'c?'
+	'c;':  'c:'
+	"c'":  'c"'
+	'c\\': 'c|'
+	'c[':  'c{'
+	'c]':  'c}'
+	'c-':  'c_'
+	'c=':  'c+'
+	// numbers too
+	'c0':  'c)'
+	'c1':  'c!'
+	'c2':  'c@'
+	'c3':  'c#'
+	'c4':  'c\$'
+	'c5':  'c%'
+	'c6':  'c^'
+	'c7':  'c&'
+	'c8':  'c*'
+	'c9':  'c('
+}
+
 const keys = {
 	gg.KeyCode.invalid:       '  '
 	// Direction keys -> 'd' class (direction)

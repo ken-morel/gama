@@ -19,19 +19,17 @@ typedef struct {
   double ambient;   /**< The ambient light contribution (0.0 to 1.0). */
 } gm3Light;
 
+#define gm3_default_light                                                      \
+  (gm3Light) {                                                                 \
+    .position = {0, 1, 0}, .direction = {0, -1, 1}, .color = 0xCCCCCCFF,       \
+    .intensity = 0.5, .ambient = 0.5,                                          \
+  }
+
 /**
  * @brief A default `gm3Light` instance.
  *
  * Initializes a light source at `{0, 1, 0}` pointing towards `{0, -1, 1}`,
  * with a white color, medium intensity, and some ambient light.
  */
-static inline gm3Light gm3_light() {
-  return (gm3Light){
-      .position = {0, 1, 0},
-      .direction = {0, -1, 1},
-      .color = 0xCCCCCCFF,
-      .intensity = 0.5,
-      .ambient = 0.5,
-  };
-}
+#define gm3_light() gm3_default_light
 #endif // GM3_LIGHT_H_INCLUDED

@@ -85,16 +85,6 @@ void gm_body_update(gmBody *body) {
 }
 
 /**
- * @brief Detects a collision between two physics bodies.
- * @param a Pointer to the first body.
- * @param b Pointer to the second body.
- * @return A pointer to a `gmCollision` structure if a collision is detected,
- *         otherwise NULL. The returned `gmCollision` must be freed by the
- * caller if it's not managed by a `gmSystem`.
- */
-gmCollision *gm_collision_detect(gmBody *, gmBody *);
-
-/**
  * @brief Checks if two given bodies are involved in the specified collision.
  *
  * This function determines if the provided collision object (`c`) involves
@@ -131,14 +121,13 @@ void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
   gmCollision **newCollisions = NULL;
   gmCollision **prevCollisions = sys->collisions;
 
-  const unsigned int subSteps = (dt / unit) + 1;
-  const double sub_dt = gm_dt() / subSteps;
-  const unsigned count = gm_system_size(sys);
+  const size_t subSteps = fmax(dt / unit, 1);
+  const size_t count = gm_system_size(sys);
+  const double subdt = dt / (double)subSteps;
 
   for (int i = 0; i < subSteps; i++) {
-    for (int j = 0; j < count; j++) {
-      gm_system_update_body_dt(sys, sys->bodies[j], sub_dt);
-    }
+    for (int j = 0; j < count; j++)
+      gm_system_update_body_dt(sys, sys->bodies[j], subdt);
 
     for (int j = 0; j < count; j++) {
       for (int k = j + 1; k < count; k++) {
@@ -146,9 +135,8 @@ void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
           continue;
         }
 
-        gmCollision *collision =
-            gm_collision_detect(sys->bodies[j], sys->bodies[k]);
-        if (collision != NULL) {
+        gmCollision *collision = malloc(sizeof(gmCollision));
+        if (gm_collision_detect(collision, sys->bodies[j], sys->bodies[k])) {
           collision->sys = sys;
           gm_collision_resolve(collision);
           newCollisions = (gmCollision **)gm_ptr_list_push(
@@ -168,13 +156,10 @@ void gm_system_update_dt(gmSystem *sys, double unit, double dt) {
         break;
       }
     }
-    // Only free previous collisions that are not in the new list
     if (!found)
       free(prevC);
   }
 
-  // Free the previous list container, not its elements which are either freed
-  // or carried over
   if (prevCollisions)
     free(prevCollisions);
 

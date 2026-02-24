@@ -1,52 +1,39 @@
+/**
+ * @fileoverview A simplified WASI (WebAssembly System Interface) implementation for Gama.
+ * This module provides a basic WASI environment for WebAssembly modules running in a Web Worker,
+ * focusing on `stdin`, `stdout`, `stderr` and common system calls.
+ * All file system and network access is deliberately stubbed to enhance security and simplify the environment.
+ */
+/**
+ * Implements a simplified WASI environment for a WebAssembly instance.
+ * It stubs many WASI functions to `ENOSYS` and provides basic `stdin`, `stdout`, `stderr` support.
+ */
 export default class GamaWASI {
+    /** The WebAssembly instance associated with this WASI implementation. */
     instance: WebAssembly.Instance | null;
+    /** Getter for the WebAssembly memory buffer. */
     mem: () => ArrayBuffer;
+    /** Getter for a DataView of the WebAssembly memory buffer. */
     view: () => DataView;
+    /**
+     * Creates a new GamaWASI instance.
+     */
     constructor();
+    /**
+     * Sets the WebAssembly instance and memory accessor functions once the WASM module is instantiated.
+     * @param inst The instantiated WebAssembly instance.
+     */
     setInstance(inst: WebAssembly.Instance): void;
-    get importObject(): {
-        args_sizes_get: (argc_ptr: number, argv_buf_size_ptr: number) => number;
-        args_get: (argv: number, argv_buf: number) => number;
-        environ_sizes_get: (count_ptr: number, buf_size_ptr: number) => number;
-        environ_get: (environ: number, environ_buf: number) => number;
-        clock_time_get: (id: number, precision: bigint, time_ptr: number) => number;
-        proc_exit: (code: number) => void;
-        random_get: (buf: number, len: number) => number;
-        sched_yield: () => number;
-        fd_write: (fd: number, iovs_ptr: number, iovs_len: number, nwritten_ptr: number) => 0 | 8;
-        fd_read: (fd: number, iovs_ptr: number, iovs_len: number, nread_ptr: number) => 0 | 8;
-        fd_fdstat_get: (fd: number, buf_ptr: number) => 0 | 8;
-        fd_close: (fd: number) => 0 | 52;
-        fd_seek: () => number;
-        fd_tell: () => number;
-        fd_sync: () => number;
-        fd_datasync: () => number;
-        fd_filestat_get: () => number;
-        fd_prestat_get: () => number;
-        fd_prestat_dir_name: () => number;
-        path_open: () => number;
-        path_filestat_get: () => number;
-        path_unlink_file: () => number;
-        fd_pwrite: () => number;
-        fd_pread: () => number;
-        fd_renumber: () => number;
-        fd_allocate: () => number;
-        fd_advise: () => number;
-        fd_readdir: () => number;
-        fd_filestat_set_size: () => number;
-        fd_filestat_set_times: () => number;
-        fd_fdstat_set_flags: () => number;
-        path_create_directory: () => number;
-        path_filestat_set_times: () => number;
-        path_link: () => number;
-        path_readlink: () => number;
-        path_remove_directory: () => number;
-        path_rename: () => number;
-        path_symlink: () => number;
-        poll_oneoff: () => number;
-        sock_recv: () => number;
-        sock_send: () => number;
-        sock_shutdown: () => number;
-    };
+    /**
+     * Provides the WASI import object to be passed to `WebAssembly.instantiate`.
+     * This object contains the implementations for all WASI functions.
+     */
+    get importObject(): WebAssembly.Imports;
+    /**
+     * Reads an array of WASI I/O vectors from WebAssembly memory.
+     * @param iovs_ptr Pointer to the array of `wasi_iovec_t` structures.
+     * @param iovs_len Number of `wasi_iovec_t` structures.
+     * @returns An array of objects, each containing a `Uint8Array` view of the buffer and its offset.
+     */
     private readIOVs;
 }

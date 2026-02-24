@@ -7,28 +7,21 @@
  * (`gmBody`). All coordinates are in world space.
  */
 
-#pragma once
-
+#ifndef GM_DRAW_H_INCLUDED
+#define GM_DRAW_H_INCLUDED
 #include "body.h"
 #include "color.h"
 #include "gapi.h"
 #include "image.h" // For gmImage
+#include "shape.h"
+
 #include <stdint.h>
+
+int32_t gm_clear() { return gapi_clear(); }
 
 // ---------------------------------------------------------------------------
 // ------------------------- Immediate-Mode Primitives -----------------------
 // ---------------------------------------------------------------------------
-
-/**
- * @internal
- * @brief Toggles a cache state. Currently unused.
- */
-int gm_cache(unsigned int id) {
-  (void)id; // Parameter is unused for now.
-  static int on = 0;
-  on = !on;
-  return on;
-}
 
 /**
  * @brief Draws a line segment.
@@ -40,9 +33,13 @@ int gm_cache(unsigned int id) {
  * @param c The color of the line.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_line(double x1, double y1, double x2, double y2,
-                     double thickness, gmColor c) {
+static inline int32_t gm_draw_line(double x1, double y1, double x2, double y2,
+                                   double thickness, gmColor c) {
   return gapi_draw_line(x1, y1, x2, y2, thickness, c);
+}
+static inline int32_t gm_line(gmPos start, gmPos stop, double thickness,
+                              gmColor color) {
+  return gm_draw_line(start.x, start.y, stop.x, stop.y, thickness, color);
 }
 
 /**
@@ -54,8 +51,15 @@ int32_t gm_draw_line(double x1, double y1, double x2, double y2,
  * @param c The color of the rectangle.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c) {
+static inline int32_t gm_draw_rect(double x, double y, double w, double h,
+                                   gmColor c) {
   return gapi_draw_rect(x, y, w, h, c);
+}
+// backwards compatibility
+// TODO: remove in 0.1.2
+#define gm_draw_rectangle(x, y, w, h, c) gm_draw_rect(x, y, w, h, c)
+static inline int32_t gm_rect(gmRect r, gmColor c) {
+  return gm_draw_rect(r.pos.x, r.pos.y, r.size.x, r.size.y, c);
 }
 
 /**
@@ -68,10 +72,16 @@ int32_t gm_draw_rectangle(double x, double y, double w, double h, gmColor c) {
  * @param c The color of the rectangle.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_rounded_rectangle(double x, double y, double w, double h,
-                                  double r, gmColor c) {
+static inline int32_t gm_draw_roundrect(double x, double y, double w, double h,
+                                        double r, gmColor c) {
   return gapi_draw_rounded_rect(x, y, w, h, r, c);
 }
+static inline int32_t gm_roundrect(gmRect rect, double r, gmColor c) {
+  return gm_draw_roundrect(rect.pos.x, rect.pos.y, rect.size.x, rect.size.y, r,
+                           c);
+}
+#define gm_draw_rounded_rectangle(x, y, w, h, r, c)                            \
+  gm_draw_roundrect(x, y, w, h, r, c)
 
 /**
  * @brief Draws a circle.
@@ -81,9 +91,12 @@ int32_t gm_draw_rounded_rectangle(double x, double y, double w, double h,
  * @param c The color of the circle.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_circle(double center_x, double center_y, double radius,
-                       gmColor c) {
+static inline int32_t gm_draw_circle(double center_x, double center_y,
+                                     double radius, gmColor c) {
   return gapi_draw_circle(center_x, center_y, radius, c);
+}
+static inline int32_t gm_circle(gmCirc c, gmColor color) {
+  return gm_draw_circle(c.pos.x, c.pos.y, c.r, color);
 }
 
 /**
@@ -95,8 +108,12 @@ int32_t gm_draw_circle(double center_x, double center_y, double radius,
  * @param c The color of the ellipse.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_ellipse(double x, double y, double w, double h, gmColor c) {
+static inline int32_t gm_draw_ellipse(double x, double y, double w, double h,
+                                      gmColor c) {
   return gapi_draw_ellipse(x, y, w, h, c);
+}
+static inline int32_t gm_ellipse(gmRect r, gmColor c) {
+  return gm_draw_ellipse(r.pos.x, r.pos.y, r.size.x, r.size.y, c);
 }
 
 /**
@@ -110,9 +127,13 @@ int32_t gm_draw_ellipse(double x, double y, double w, double h, gmColor c) {
  * @param c The color of the triangle.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_triangle(double x1, double y1, double x2, double y2, double x3,
-                         double y3, gmColor c) {
+static inline int32_t gm_draw_triangle(double x1, double y1, double x2,
+                                       double y2, double x3, double y3,
+                                       gmColor c) {
   return gapi_draw_triangle(x1, y1, x2, y2, x3, y3, c);
+}
+static inline int32_t gm_triangle(gmPos a, gmPos b, gmPos c, gmColor col) {
+  return gm_draw_triangle(a.x, a.y, b.x, b.y, c.x, c.y, col);
 }
 
 /**
@@ -124,9 +145,14 @@ int32_t gm_draw_triangle(double x1, double y1, double x2, double y2, double x3,
  * @param h The height to draw the image.
  * @return An identifier for the drawing command.
  */
-int32_t gm_draw_image(gmImage img, double x, double y, double w, double h) {
+static inline int32_t gm_draw_image(gmImage img, double x, double y, double w,
+                                    double h) {
   return gapi_draw_image(img.handle, x, y, w, h);
 }
+static inline int32_t gm_image(gmImage img, gmRect r) {
+  return gm_draw_image(img, r.pos.x, r.pos.y, r.size.x, r.size.y);
+}
+
 /**
  * @brief Draws text centered at a point.
  * @param x The x-coordinate for the center of the text.
@@ -343,3 +369,5 @@ void gm_draw_text_bodies(const gmBody *bodies, size_t number, const char *text,
   for (size_t i = 0; i < number; i++)
     gm_draw_text_body(&bodies[i], text, font, font_size, c);
 }
+
+#endif // GM_DRAW_H_INCLUDED

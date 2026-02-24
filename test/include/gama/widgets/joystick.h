@@ -6,7 +6,8 @@
  * joystick and a function to render an interactive joystick that responds
  * to mouse input, outputting its normalized position.
  */
-#pragma once
+#ifndef GAMA_WIDGETS_JOYSTICK_H_INCLUDED
+#define GAMA_WIDGETS_JOYSTICK_H_INCLUDED
 
 #include "../animate.h"
 #include "../draw.h"
@@ -145,3 +146,5 @@ int gm_joystick_anim(double x, double y, double radius, gmPos *pos,
 int gmw_joystick(double x, double y, double radius, gmPos *pos) {
   return gm_joystick_anim(x, y, radius, pos, NULL);
 }
+
+#endif // GAMA_WIDGETS_JOYSTICK_H_INCLUDED

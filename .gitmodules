@@ -1,3 +1,6 @@
 [submodule "contrib/lzav"]
 	path = contrib/lzav
 	url = https://github.com/avaneev/lzav
+[submodule "contrib/miniaudio"]
+	path = contrib/miniaudio
+	url = https://github.com/mackron/miniaudio

@@ -46,6 +46,12 @@ export default class Gama {
     buffer: SharedArrayBuffer;
     /** The main canvas's 2D rendering context that displays the final output. */
     output: CanvasRenderingContext2D | null;
+    /** AudioContext for Web Audio API. */
+    audioContext: AudioContext | null;
+    /** Stores decoded AudioBuffers by their handle. */
+    audioBuffers: Map<number, AudioBuffer>;
+    /** Stores currently playing AudioBufferSourceNodes by their handle. */
+    audioPlaying: Map<number, AudioBufferSourceNode>;
     /** Stores input state (keyboard, mouse) to be sent to the Web Worker. */
     private yielding;
     /** Determines how the canvas resizes ("natural" for aspect ratio, "fixed" for specific dimensions). */
