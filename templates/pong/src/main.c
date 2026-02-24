@@ -2,7 +2,8 @@
 
 int main() {
   gm_init(500, 500, "Gama test application");
-  gmSystem sys = gm_system_create();
+
+  gmSystem sys = gm_system();
 
   gmBody ball_body = gm_circle_body(100, 0, 0, 0.2);
   ball_body.velocity.y = 0.4;
