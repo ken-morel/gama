@@ -498,4 +498,23 @@ extern void // wait for all drawing operations in the queue to finish
 #endif
     gapi_sync();
 
+/**
+ * @brief Blits a pixel buffer to the screen.
+ * @param data Pointer to the raw RGB pixel data (3 bytes per pixel).
+ * @param width Width of the pixel buffer.
+ * @param height Height of the pixel buffer.
+ * @param x Center X coordinate for the blit (centered).
+ * @param y Center Y coordinate for the blit (centered).
+ * @param target_width Target width to draw (0 for natural size).
+ * @param target_height Target height to draw (0 for natural size).
+ */
+extern void
+#ifdef GM_ZCC
+#ifdef GM_WEB
+    __attribute__((import_module("gapi"), import_name("blit")))
+#endif
+#endif
+    gapi_blit(const uint8_t *data, int32_t width, int32_t height, double x,
+              double y, double target_width, double target_height);
+
 #endif // GM_GAPI_H_INCLUDED
