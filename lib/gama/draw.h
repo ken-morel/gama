@@ -13,11 +13,25 @@
 #include "color.h"
 #include "gapi.h"
 #include "image.h" // For gmImage
+#include "renderer.h"
 #include "shape.h"
 
 #include <stdint.h>
 
-int32_t gm_clear() { return gapi_clear(); }
+#ifdef GM_BUILTIN_RENDERER
+extern gmScreen _gm_screen;
+#endif
+
+static inline int32_t gm_clear() {
+#ifdef GM_BUILTIN_RENDERER
+  gmsc_clear(&_gm_screen, GM_BLACK); // Default clear to black in software mode
+  return 0;
+#elif !defined(GM_NO_GAPI_DRAW)
+  return gapi_clear();
+#else
+  return -1;
+#endif
+}
 
 // ---------------------------------------------------------------------------
 // ------------------------- Immediate-Mode Primitives -----------------------
@@ -25,18 +39,19 @@ int32_t gm_clear() { return gapi_clear(); }
 
 /**
  * @brief Draws a line segment.
- * @param x1 The x-coordinate of the starting point.
- * @param y1 The y-coordinate of the starting point.
- * @param x2 The x-coordinate of the ending point.
- * @param y2 The y-coordinate of the ending point.
- * @param thickness The thickness of the line in pixels.
- * @param c The color of the line.
- * @return An identifier for the drawing command.
  */
 static inline int32_t gm_draw_line(double x1, double y1, double x2, double y2,
                                    double thickness, gmColor c) {
+#ifdef GM_BUILTIN_RENDERER
+  gmsc_draw_line(&_gm_screen, c, (int)x1, (int)y1, (int)x2, (int)y2);
+  return 0;
+#elif !defined(GM_NO_GAPI_DRAW)
   return gapi_draw_line(x1, y1, x2, y2, thickness, c);
+#else
+  return -1;
+#endif
 }
+
 static inline int32_t gm_line(gmPos start, gmPos stop, double thickness,
                               gmColor color) {
   return gm_draw_line(start.x, start.y, stop.x, stop.y, thickness, color);
@@ -44,128 +59,123 @@ static inline int32_t gm_line(gmPos start, gmPos stop, double thickness,
 
 /**
  * @brief Draws a rectangle centered at a point.
- * @param x The x-coordinate of the center of the rectangle.
- * @param y The y-coordinate of the center of the rectangle.
- * @param w The width of the rectangle.
- * @param h The height of the rectangle.
- * @param c The color of the rectangle.
- * @return An identifier for the drawing command.
  */
 static inline int32_t gm_draw_rect(double x, double y, double w, double h,
                                    gmColor c) {
+#ifdef GM_BUILTIN_RENDERER
+  gmsc_fill_rect(&_gm_screen, c, (int)x, (int)y, (int)w, (int)h);
+  return 0;
+#elif !defined(GM_NO_GAPI_DRAW)
   return gapi_draw_rect(x, y, w, h, c);
+#else
+  return -1;
+#endif
 }
-// backwards compatibility
-// TODO: remove in 0.1.2
 #define gm_draw_rectangle(x, y, w, h, c) gm_draw_rect(x, y, w, h, c)
+
 static inline int32_t gm_rect(gmRect r, gmColor c) {
   return gm_draw_rect(r.pos.x, r.pos.y, r.size.x, r.size.y, c);
 }
 
 /**
  * @brief Draws a rectangle with rounded corners centered at a point.
- * @param x The x-coordinate of the center of the rectangle.
- * @param y The y-coordinate of the center of the rectangle.
- * @param w The width of the rectangle.
- * @param h The height of the rectangle.
- * @param r The corner radius.
- * @param c The color of the rectangle.
- * @return An identifier for the drawing command.
  */
 static inline int32_t gm_draw_roundrect(double x, double y, double w, double h,
                                         double r, gmColor c) {
+#ifdef GM_BUILTIN_RENDERER
+  // Fallback to regular rect if not implemented in software renderer yet
+  gmsc_fill_rect(&_gm_screen, c, (int)x, (int)y, (int)w, (int)h);
+  return 0;
+#elif !defined(GM_NO_GAPI_DRAW)
   return gapi_draw_rounded_rect(x, y, w, h, r, c);
-}
-static inline int32_t gm_roundrect(gmRect rect, double r, gmColor c) {
-  return gm_draw_roundrect(rect.pos.x, rect.pos.y, rect.size.x, rect.size.y, r,
-                           c);
+#else
+  return -1;
+#endif
 }
 #define gm_draw_rounded_rectangle(x, y, w, h, r, c)                            \
   gm_draw_roundrect(x, y, w, h, r, c)
 
 /**
  * @brief Draws a circle.
- * @param center_x The x-coordinate of the center of the circle.
- * @param center_y The y-coordinate of the center of the circle.
- * @param radius The radius of the circle.
- * @param c The color of the circle.
- * @return An identifier for the drawing command.
  */
 static inline int32_t gm_draw_circle(double center_x, double center_y,
                                      double radius, gmColor c) {
+#ifdef GM_BUILTIN_RENDERER
+  gmsc_fill_circle(&_gm_screen, c, (int)center_x, (int)center_y, (int)radius);
+  return 0;
+#elif !defined(GM_NO_GAPI_DRAW)
   return gapi_draw_circle(center_x, center_y, radius, c);
+#else
+  return -1;
+#endif
 }
+
 static inline int32_t gm_circle(gmCirc c, gmColor color) {
   return gm_draw_circle(c.pos.x, c.pos.y, c.r, color);
 }
 
 /**
  * @brief Draws an ellipse centered at a point.
- * @param x The x-coordinate of the center of the ellipse.
- * @param y The y-coordinate of the center of the ellipse.
- * @param w The total width of the ellipse.
- * @param h The total height of the ellipse.
- * @param c The color of the ellipse.
- * @return An identifier for the drawing command.
  */
 static inline int32_t gm_draw_ellipse(double x, double y, double w, double h,
                                       gmColor c) {
+#ifdef GM_BUILTIN_RENDERER
+  // Fallback to circle or rect for now
+  gmsc_fill_circle(&_gm_screen, c, (int)x, (int)y, (int)(w > h ? w : h) / 2);
+  return 0;
+#elif !defined(GM_NO_GAPI_DRAW)
   return gapi_draw_ellipse(x, y, w, h, c);
-}
-static inline int32_t gm_ellipse(gmRect r, gmColor c) {
-  return gm_draw_ellipse(r.pos.x, r.pos.y, r.size.x, r.size.y, c);
+#else
+  return -1;
+#endif
 }
 
 /**
  * @brief Draws a triangle.
- * @param x1 The x-coordinate of the first vertex.
- * @param y1 The y-coordinate of the first vertex.
- * @param x2 The x-coordinate of the second vertex.
- * @param y2 The y-coordinate of the second vertex.
- * @param x3 The x-coordinate of the third vertex.
- * @param y3 The y-coordinate of the third vertex.
- * @param c The color of the triangle.
- * @return An identifier for the drawing command.
  */
 static inline int32_t gm_draw_triangle(double x1, double y1, double x2,
                                        double y2, double x3, double y3,
                                        gmColor c) {
+#ifdef GM_BUILTIN_RENDERER
+  gmsc_fill_triangle(&_gm_screen, c, (int)x1, (int)y1, (int)x2, (int)y2, (int)x3,
+                     (int)y3);
+  return 0;
+#elif !defined(GM_NO_GAPI_DRAW)
   return gapi_draw_triangle(x1, y1, x2, y2, x3, y3, c);
-}
-static inline int32_t gm_triangle(gmPos a, gmPos b, gmPos c, gmColor col) {
-  return gm_draw_triangle(a.x, a.y, b.x, b.y, c.x, c.y, col);
+#else
+  return -1;
+#endif
 }
 
 /**
  * @brief Draws an image centered at a point.
- * @param img The image to draw.
- * @param x The x-coordinate of the center of the image.
- * @param y The y-coordinate of the center of the image.
- * @param w The width to draw the image.
- * @param h The height to draw the image.
- * @return An identifier for the drawing command.
  */
 static inline int32_t gm_draw_image(gmImage img, double x, double y, double w,
                                     double h) {
+#ifdef GM_BUILTIN_RENDERER
+  // Software image drawing not yet implemented in renderer.h
+  return -1;
+#elif !defined(GM_NO_GAPI_DRAW)
   return gapi_draw_image(img.handle, x, y, w, h);
-}
-static inline int32_t gm_image(gmImage img, gmRect r) {
-  return gm_draw_image(img, r.pos.x, r.pos.y, r.size.x, r.size.y);
+#else
+  return -1;
+#endif
 }
 
 /**
  * @brief Draws text centered at a point.
- * @param x The x-coordinate for the center of the text.
- * @param y The y-coordinate for the center of the text.
- * @param text The null-terminated string to draw.
- * @param font The null-terminated font name to use (can be empty for default).
- * @param font_size The size of the font.
- * @param c The color of the text.
- * @return An identifier for the drawing command.
  */
-int32_t gm_draw_text(double x, double y, const char *text, const char *font,
-                     double font_size, gmColor c) {
+static inline int32_t gm_draw_text(double x, double y, const char *text,
+                                   const char *font, double font_size,
+                                   gmColor c) {
+#ifdef GM_BUILTIN_RENDERER
+  // Software text drawing not yet implemented
+  return -1;
+#elif !defined(GM_NO_GAPI_DRAW)
   return gapi_draw_text(x, y, font_size, text, font, 0, c);
+#else
+  return -1;
+#endif
 }
 
 // ---------------------------------------------------------------------------

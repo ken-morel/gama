@@ -491,8 +491,22 @@ export default class Gama {
         console.log("screenshoted canvas as ", handle)
         break;
       }
+      case 'blit': {
+        const [rgba, w, h, x, y, tw, th] = args as [Uint8ClampedArray, number, number, number, number, number, number];
+        const imdata = new ImageData(rgba as any, w, h);
+        const canv = new OffscreenCanvas(w, h);
+        canv.getContext('2d')!.putImageData(imdata, 0, 0);
+
+        let rect = this._c_rect(x, y, tw, th);
+        if (rect[2] == 0 && rect[3] == 0)
+          rect = [0, 0, ctx.canvas.width, ctx.canvas.height]
+
+        ctx.drawImage(canv, ...rect);
+        break;
+      }
     }
   }
+
 
   /**
    * Sets the stroke style for drawing operations.

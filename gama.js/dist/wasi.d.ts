@@ -28,7 +28,7 @@ export default class GamaWASI {
      * Provides the WASI import object to be passed to `WebAssembly.instantiate`.
      * This object contains the implementations for all WASI functions.
      */
-    get importObject(): WebAssembly.Imports;
+    get importObject(): Record<string, WebAssembly.ImportValue>;
     /**
      * Reads an array of WASI I/O vectors from WebAssembly memory.
      * @param iovs_ptr Pointer to the array of `wasi_iovec_t` structures.

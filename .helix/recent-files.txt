@@ -1,0 +1,5 @@
+"/home/engon/gama/gama/gama.js/src/index.ts"
+"/home/engon/gama/gama/gama.js/src/sab.ts"
+"/home/engon/gama/gama/gama.js/src/worker.ts"
+"/home/engon/gama/gama/gama.js/build.mjs"
+"/home/engon/.config/helix/config.toml"

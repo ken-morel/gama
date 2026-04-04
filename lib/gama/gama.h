@@ -12,6 +12,7 @@
 #include "color.h"
 #include "draw.h"
 #include "gapi.h"
+#include "renderer.h"
 #include "snap.h"
 #include "stdio.h"
 #include "t.h"
@@ -19,6 +20,10 @@
 #include "window.h"
 #ifdef GM_NATIVE
 #include "sound.h"
+#endif
+
+#ifdef GM_BUILTIN_RENDERER
+gmScreen _gm_screen;
 #endif
 
 #ifdef GM_ARGC_MAIN
@@ -126,6 +131,10 @@ static inline int gm_yield() {
     gm_draw_text(0.9, -0.9, fps_text, "", 0.1, GM_WHITE);
   }
 
+#ifdef GM_BUILTIN_RENDERER
+  gapi_blit(_gm_screen.data, _gm_screen.width, _gm_screen.height, 0, 0, 0, 0);
+#endif
+
   const int ret = gapi_yield(&_gm_dt);
   _gm_t += _gm_dt;
   gm_mouse.lastPosition = gm_mouse.position;
@@ -185,6 +194,15 @@ void gm_init(int width, int height, const char *title) {
              code);
     gapi_log_error(msg);
   }
+
+#ifdef GM_BUILTIN_RENDERER
+  uint32_t w, h;
+  gapi_get_size(&w, &h);
+  _gm_screen.width = w;
+  _gm_screen.height = h;
+  _gm_screen.data = (uint8_t *)malloc(w * h * 3);
+#endif
+
 #ifdef GM_NATIVE
   gm_audio_init();
 #endif

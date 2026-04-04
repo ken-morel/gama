@@ -135,7 +135,7 @@ self.onmessage = (msg: MessageEvent<any>): void => {
     const wasmImports = { wasi_snapshot_preview1: wasi.importObject, gapi: gapi };
 
     WebAssembly.instantiate(data.wasmData, wasmImports).then(
-      function ({ module: mod, instance: inst }) {
+      function({ module: mod, instance: inst }) {
         d.mod = mod;
         d.inst = inst;
         d.mem = inst.exports.memory as WebAssembly.Memory;
@@ -237,6 +237,26 @@ const draw_gapi = {
       col,
     ]);
   },
+
+  /**
+   * Draws a triangle.
+   * @param x1 Vertex 1 X coordinate.
+   * @param y1 Vertex 1 Y coordinate.
+   * @param x2 Vertex 2 X coordinate.
+   * @param y2 Vertex 2 Y coordinate.
+   * @param x3 Vertex 3 X coordinate.
+   * @param y3 Vertex 3 Y coordinate.
+   * @param col Color.
+   */
+  draw_text: (x: number, y: number, h: number, txt: CharPtr, font: CharPtr, style: number, color: GmColor): void => {
+    d.cmds.push([
+      'text',
+      x, y, h,
+      takeString(d.mem!, txt), takeString(d.mem!, font),
+      style, color
+    ]);
+  },
+
   /** Draws multiple triangles.
    * @param ntriangles Number of triangles.
    * @param points_ptr Pointer to the array of vertex coordinates (x1,y1,x2,y2,x3,y3).
@@ -272,6 +292,38 @@ const draw_gapi = {
    */
   snap: (handle: number): void => {
     d.cmds.push(['snap', handle]);
+  },
+  /**
+   * Blits a raw RGB pixel buffer to the screen.
+   * @param data_ptr Pointer to the RGB data in WASM memory.
+   * @param width Width of the buffer.
+   * @param height Height of the buffer.
+   * @param x Center X coordinate.
+   * @param y Center Y coordinate.
+   * @param tw Target width (0 for natural).
+   * @param th Target height (0 for natural).
+   */
+  blit: (
+    data_ptr: Ptr,
+    width: number,
+    height: number,
+    x: number,
+    y: number,
+    tw: number,
+    th: number,
+  ): void => {
+    const buffer = d.mem!.buffer;
+    const size = width * height * 3;
+    const bytes = new Uint8Array(buffer, data_ptr, size);
+    // Convert RGB to RGBA for ImageData
+    const rgba = new Uint8ClampedArray(width * height * 4);
+    for (let i = 0; i < width * height; i++) {
+      rgba[i * 4 + 0] = bytes[i * 3 + 0];
+      rgba[i * 4 + 1] = bytes[i * 3 + 1];
+      rgba[i * 4 + 2] = bytes[i * 3 + 2];
+      rgba[i * 4 + 3] = 255;
+    }
+    d.cmds.push(['blit', rgba, width, height, x, y, tw, th]);
   },
 };
 
@@ -422,7 +474,7 @@ const gapi = {
       title: txt,
     });
     d.last_t = Date.now();
-    console.info(`gm_init called, with dimensions ${width}x${height} and title: 
+    console.info(`gm_init called, with dimensions ${width}x${height} and title:
 ${txt}
 `);
   },

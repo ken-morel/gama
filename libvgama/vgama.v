@@ -41,6 +41,9 @@ __global (
 	gapi_end_frame__    chan bool
 	gapi_images__       map[i32]gg.Image
 	gapi_image_count__  u16
+	gapi_blit_handle__  i32
+	gapi_blit_w__       int
+	gapi_blit_h__       int
 	// viewport
 	gapi_game_w__       int
 	gapi_game_h__       int
@@ -311,6 +314,45 @@ fn gapi_set_bg_color(col GmColor) {
 	c := col.to_gg()
 	queue_fn(fn [c] () {
 		gapi_ctx__.set_bg_color(c)
+	})
+}
+
+@[export: 'gapi_blit']
+@[unsafe]
+fn gapi_blit(data &u8, width i32, height i32, x f64, y f64, target_width f64, target_height f64) {
+	// 1. Convert RGB to RGBA
+	size := width * height
+	mut rgba := unsafe { malloc(size * 4) }
+	for i in 0 .. size {
+		unsafe {
+			rgba[i * 4 + 0] = data[i * 3 + 0]
+			rgba[i * 4 + 1] = data[i * 3 + 1]
+			rgba[i * 4 + 2] = data[i * 3 + 2]
+			rgba[i * 4 + 3] = 255
+		}
+	}
+
+	gx, gy, gw, gh := c_redimension_rect(x, y, target_width, target_height)
+
+	queue_fn(fn [rgba, width, height, gx, gy, gw, gh] () {
+		if gapi_blit_handle__ == 0 || gapi_blit_w__ != width || gapi_blit_h__ != height {
+			// Recreate streaming image if dimensions changed or first time
+			gapi_blit_handle__ = gapi_ctx__.new_streaming_image(width, height, 4, gg.StreamingImageConfig{})
+			gapi_blit_w__ = width
+			gapi_blit_h__ = height
+		}
+
+		gapi_ctx__.update_pixel_data(gapi_blit_handle__, rgba)
+		img := gapi_ctx__.get_cached_image_by_idx(gapi_blit_handle__)
+
+		mut rw := gw
+		mut rh := gh
+		if rw == 0 && rh == 0 {
+			rw = f32(width)
+			rh = f32(height)
+		}
+		gapi_ctx__.draw_image(gx, gy, rw, rh, img)
+		unsafe { free(rgba) }
 	})
 }
 
